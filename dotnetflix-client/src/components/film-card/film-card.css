@@ -1,0 +1,22 @@
+a {
+    text-decoration: none;
+}
+
+.film-card {
+    color: white;
+    margin: 12px;
+}
+
+.film-poster {
+    width: 170px;
+    border-radius: 10px;
+}
+
+.film-card:hover > .film-poster {
+    width: 180px;
+    transition: width 0.2s;
+}
+
+.film-title {
+    font-weight: 600;
+}
