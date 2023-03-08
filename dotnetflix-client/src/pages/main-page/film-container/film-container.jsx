@@ -3,9 +3,9 @@ import './film-container.css'
 
 const FilmContainer = ({ genre, films }) => {
     return (
-        <div className='body'>
+        <div className='container'>
             <div className='genre-header'>{ genre }</div> 
-            <div className='film-container'>
+            <div className='films'>
                 { films.map(film => <FilmCard key={ film.id } film={ film } />) }
             </div>
         </div>

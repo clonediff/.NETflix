@@ -1,0 +1,109 @@
+@import url(../../../constants.css);
+
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--header-bg-color);
+}
+
+.logo {
+    color: red;
+    font-weight: 700;
+    font-size: 44px;
+    text-decoration: none;
+}
+
+.links {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 100px;
+}
+
+.header-link {
+    margin-left: 12px;
+    margin-right: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    color: white;
+}
+
+.header-link:hover {
+    color: red;
+}
+
+.search {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: start;
+    width: 250px;
+    background-color: var(--search-bg-color);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 4px;
+    border-radius: 8px;
+    cursor: text;
+}
+
+.search-glass {
+    height: 32px;
+    width: 32px;
+}
+
+.search input {
+    background: transparent;
+    font-size: 16px;
+    color: white;
+    border-style: none;
+}
+
+.search input:focus-visible {
+    height: 100%;
+    width: 100%;
+    padding-left: 8px;
+    color: white;
+    border-radius: 8px;
+    outline: none;
+}
+
+.search input:focus-visible + .search-glass {
+    display: none;
+}
+
+.search ~ a {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+::-webkit-input-placeholder {
+    color: var(--placeholder-color);
+    font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+    .logo {
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .search {
+        padding-left: 0px;
+        width: 100px;
+    }
+    .links {
+        display: none;
+    }
+    .search input {
+        width: 80px;
+        font-size: 10px;
+        margin: 0px;
+    }
+    ::-webkit-input-placeholder {
+        font-size: 10px;
+    }
+    .search-glass {
+        width: 16px;
+        height: 16px;
+    }
+}

@@ -1,0 +1,49 @@
+.container {
+    width: 1358px;
+    padding-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.genre-header {
+    color: white;
+    margin-left: 12px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.films {
+    display: flex;
+    overflow-x: scroll;
+}
+
+.films::-webkit-scrollbar {
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 970px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .genre-header {
+        font-size: 18px;
+    }
+    .container {
+        padding-top: 32px;
+        width: 696px;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .genre-header {
+        margin-left: 4px;
+        font-size: 14px;
+    }
+    .container {
+        width: 372px;
+    }
+}

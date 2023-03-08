@@ -1,4 +1,6 @@
 :root {
     --header-bg-color: #001424;
     --main-bg-color: rgb(0, 30, 54);
+    --search-bg-color: rgb(0, 52, 94);
+    --placeholder-color: #c0c0c0;
 }

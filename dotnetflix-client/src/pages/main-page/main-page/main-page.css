@@ -1,0 +1,5 @@
+@import url(../../../constants.css);
+
+.main-page {
+    background-color: var(--main-bg-color);
+}
