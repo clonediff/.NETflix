@@ -3,7 +3,7 @@ import './header.css'
 const Header = () => {
     return (
         <div className='flex-container'>
-            <div className='flex-container'>
+            <div className='flex-container align-items'>
                 <a href='/' className='logo'>.Netflix</a>
                 <div className='links'>
                     <a className='header-link' href='#'>Фильмы</a>

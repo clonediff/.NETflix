@@ -34,7 +34,7 @@ a {
     display: flex;
     flex-direction: row;
     margin-top: 4px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .star {
@@ -42,50 +42,74 @@ a {
     height: 24px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1460px) {
     .film-card {
         margin: 8px;
     }
     .film-card:hover > .film-poster {
         margin-bottom: 8px;
     }
-    .film-poster {
-        width: 100px;
-    }
-    .film-title {
-        font-size: 14px;
-        font-weight: 500;
-        width: 100px;
-    }
-    .film-rating {
-        font-size: 14px;
-    }
-    .star {
-        width: 18px;
-        height: 18px;
+    .film-poster, .film-title {
+        width: 150px;
     }
 }
 
-@media screen and (max-width: 426px) {
+@media screen and (max-width: 1260px) {
     .film-card {
-        width: 60px;
+        margin: 6px;
+    }
+    .film-card:hover > .film-poster {
+        margin-bottom: 6px;
+    }
+    .film-poster, .film-title {
+        width: 125px;
+    }
+}
+
+@media screen and (max-width: 910px) {
+    .film-poster, .film-title {
+        width: 100px;
+    }
+    .film-title, .film-rating {
+        font-size: 14px;
+    }
+    .star {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .film-card {
         margin: 4px;
     }
     .film-card:hover > .film-poster {
         margin-bottom: 4px;
     }
-    .film-poster {
+    .film-poster, .film-title {
+        width: 80px;
+    }
+    .film-title, .film-rating {
+        font-size: 12px;
+    }
+    .star {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .film-card {
+        margin: 3px;
+    }
+    .film-poster, .film-title {
         width: 60px;
     }
-    .film-title {
-        font-size: 10px;
-        width: 60px;
-    }
-    .film-rating {
+    .film-title, .film-rating {
         font-size: 10px;
     }
     .star {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
     }
 }

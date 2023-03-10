@@ -6,6 +6,10 @@
     background-color: var(--header-bg-color);
 }
 
+.align-items {
+    align-items: center;
+}
+
 .logo {
     color: red;
     font-weight: 700;
@@ -37,9 +41,10 @@
     align-items: center;
     justify-content: start;
     width: 250px;
+    height: 70%;
     background-color: var(--search-bg-color);
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
     padding-left: 4px;
     border-radius: 8px;
     cursor: text;
@@ -80,30 +85,51 @@
     font-size: 16px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 910px) {
     .logo {
         font-size: 32px;
     }
-}
-
-@media screen and (max-width: 426px) {
     .search {
-        padding-left: 0px;
-        width: 100px;
-    }
-    .links {
-        display: none;
+        width: 200px;
     }
     .search input {
         width: 80px;
-        font-size: 10px;
-        margin: 0px;
-    }
-    ::-webkit-input-placeholder {
-        font-size: 10px;
     }
     .search-glass {
-        width: 16px;
-        height: 16px;
+        height: 26px;
+        width: 26px;
+    }
+    ::-webkit-input-placeholder {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .links {
+        display: none;
+    }
+    .search ~ a {
+        font-size: 14px;
+    }
+    .search input {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .logo {
+        font-size: 24px;
+    }
+    .search {
+        width: 100px;
+    }
+    .search ~ a {
+        font-size: 12px;
+    }
+    .search input {
+        font-size: 12px;
+    }
+    ::-webkit-input-placeholder {
+        font-size: 12px;
     }
 }
