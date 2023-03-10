@@ -16,6 +16,30 @@ namespace BackendAPI
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+			// Integer check constraints
+			modelBuilder.Entity<CurrencyValue>()
+				.ToTable(t =>
+					t.HasCheckConstraint($"CK_{nameof(CurrencyValue)}_{nameof(CurrencyValue.Value)}", 
+						$"{nameof(CurrencyValue.Value)} > 0"));
+			modelBuilder.Entity<SeasonsInfo>()
+				.ToTable(t =>
+				{
+					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.Number)}", 
+						$"{nameof(SeasonsInfo.Number)} > 0");
+					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.EpisodesCount)}", 
+						$"{nameof(SeasonsInfo.EpisodesCount)} >= 0");
+				});
+			modelBuilder.Entity<MovieInfo>()
+				.ToTable(t =>
+				{
+					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.Year)}", 
+						$"{nameof(MovieInfo.Year)} >= 1900");
+					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.Rating)}", 
+						$"0 <= {nameof(MovieInfo.Rating)} AND {nameof(MovieInfo.Rating)} <= 10");
+					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.MovieLength)}",
+						$"{nameof(MovieInfo.MovieLength)} > 0");
+				});
+			// Many to many
 			modelBuilder.Entity<MovieInfo>()
 				.HasMany(m => m.Countries)
 				.WithMany();

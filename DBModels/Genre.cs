@@ -2,8 +2,8 @@
 {
 	public class Genre
 	{
-		public uint Id { get; set; }
-		public string Name { get; set; }
-		public string Slug { get; set; }
+		public int Id { get; set; }
+		public string Name { get; set; }	// maxLength = 20
+		public string Slug { get; set; }	// maxLength = 20
 	}
 }

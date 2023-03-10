@@ -9,9 +9,9 @@ namespace DBModels
 	public class PersonProffessionInMovie
 	{
 		public Person Person { get; set; }
-		public uint PersonId { get; set; }
+		public int PersonId { get; set; }
 		public MovieInfo Movie { get; set; }
-		public uint MovieId { get; set; }
-		public string Proffession { get; set; }
+		public int MovieId { get; set; }
+		public string Proffession { get; set; }	// maxLength = 15
 	}
 }
