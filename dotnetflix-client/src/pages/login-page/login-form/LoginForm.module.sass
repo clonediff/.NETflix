@@ -1,0 +1,29 @@
+@use "../../../constants.css"
+@use "../../../mixins.sass"
+
+.login_form_div
+    display: flex
+    flex-direction: row
+    align-content: center
+    justify-content: center
+    flex-wrap: wrap
+    max-width: 400px
+    margin: 20px
+    
+    .login
+        padding-top: 20px
+        display: flex
+        flex-direction: column
+        align-content: start
+        justify-content: start
+        flex-wrap: wrap
+        label
+            color: white
+        .item
+            width: 200px
+            @include mixins.respond-to(handhelds)
+                width: 150px
+            
+        
+        
+
