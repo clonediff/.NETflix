@@ -36,7 +36,7 @@
 }
 
 .arrow-container:hover > .arrow path {
-    fill: #c0c0c0;
+    fill: #909090;
 }
 
 .arrow-container:active > .arrow {
@@ -123,6 +123,7 @@
 
 @media screen and (max-width: 600px) {
     .container {
+        padding-top: 20px;
         width: 446px;
     }
     .genre-header {

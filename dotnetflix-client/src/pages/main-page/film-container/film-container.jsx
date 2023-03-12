@@ -1,16 +1,21 @@
+import { useState, useEffect } from 'react'
 import FilmCard from '../film-card/film-card'
 import './film-container.css'
 
 const FilmContainer = ({ genre, films }) => {
 
+    const [filmList, setFilmList] = useState({})
+
+    useEffect(() => {
+        setFilmList(document.getElementById(genre))
+    }, [genre])
+
     const moveFilmsRight = () => {
-        const films = document.getElementById(genre)
-        films.scrollBy({ left: films.clientWidth, behavior: 'smooth' })
+        filmList.scrollBy({ left: filmList.clientWidth, behavior: 'smooth' })
     }
 
     const moveFilmsLeft = () => {
-        const films = document.getElementById(genre)
-        films.scrollBy({ left: -films.clientWidth, behavior: 'smooth' })
+        filmList.scrollBy({ left: -filmList.clientWidth, behavior: 'smooth' })
     }
 
     return (
