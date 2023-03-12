@@ -2,22 +2,21 @@
 @use "../../../mixins.sass"
 
 
-.login_page
+.registration_page
     display: flex
     flex-direction: column
     justify-content: center
+    align-content: space-between
     background-image: url("./../../../../public/dotnetflix-bgi.jpg")
 
-.login
+.registration
     display: flex
-    margin-top: 10em
-    margin-bottom: 20em
+    margin-top: 50px
+    margin-bottom: 100px
     justify-content: center
     align-items: center
     flex-wrap: wrap
     align-content: center
-    @include mixins.respond-to(handhelds)
-        height: 25em
     &_wrapper
         display: flex
         flex-wrap: wrap
@@ -37,7 +36,7 @@
         @include mixins.respond-to(medium-screens) 
             width: 20em
         @include mixins.respond-to(wide-screens) 
-            width: 40em
+            width: 30em
         p
             color: white
         span

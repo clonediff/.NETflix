@@ -1,13 +1,9 @@
-/*import { useState } from "react";*/
 import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from 'antd';
 import styles from "./LoginForm.module.sass"
 import { axiosInstance } from "../../../AxiosInstance"; 
 
 export const LoginForm = () => {
-    /*const [login, setLogin] = useState("");
-    const [password, setPassword] = useState("");
-    const [remember, setRemember] = useState(false);*/
     const navigate = useNavigate();
 
     const onFinish = (values) => {
@@ -15,9 +11,9 @@ export const LoginForm = () => {
         let username = values.username;
         let password = values.password;
         let remember = values.remember;
-        axiosInstance.post("/login", {username, password, remember})
+        /*axiosInstance.post("/login", {username, password, remember})
         .then((response) => alert(response))
-        .catch(error => alert(error));
+        .catch(error => alert(error));*/
         //send request to server
         //navigate, if ok
     };
@@ -26,9 +22,9 @@ export const LoginForm = () => {
 
     };
 
-    return(<div className={styles.login_form_div}>
+    return(<div className={styles.login}>
       <Form
-      className={styles.login}
+      className={styles.login__form}
         layout="horizontal"
         name="netflix"
         labelCol={{
@@ -50,7 +46,7 @@ export const LoginForm = () => {
           rules={[
             {
               required: true,
-              message: 'Пожалуйста введите ваш логин!',
+              message: 'Пожалуйста, введите ваш логин!',
             },
           ]}
         >
@@ -63,7 +59,7 @@ export const LoginForm = () => {
           rules={[
             {
               required: true,
-              message: 'Пожалуйста введите ваш пароль!',
+              message: 'Пожалуйста, введите ваш пароль!',
             },
           ]}
         >
