@@ -102,6 +102,9 @@ a {
     .film-card {
         margin: 3px;
     }
+    .film-card:hover > .film-poster {
+        margin-bottom: 3px;
+    }
     .film-poster, .film-title {
         width: 60px;
     }
