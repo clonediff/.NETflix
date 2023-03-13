@@ -54,7 +54,7 @@ namespace BackendAPI
 			modelBuilder.Entity<Person>()
 				.HasMany(p => p.Proffessions);
 			modelBuilder.Entity<PersonProffessionInMovie>()
-				.HasKey(p => new { p.MovieId, p.PersonId });
+				.HasKey(p => new { p.MovieInfoId, p.PersonId, p.Proffession });
 		}
 	}
 }
