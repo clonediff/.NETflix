@@ -1,0 +1,34 @@
+@use "../../../constants.css"
+@use "../../../mixins.sass"
+
+.registration
+    display: flex
+    flex-direction: row
+    align-content: center
+    justify-content: center
+    flex-wrap: wrap
+    max-width: 20em
+    margin: 20px
+    .registration__form
+        padding-top: 20px
+        display: flex
+        flex-direction: column
+        align-content: start
+        justify-content: start
+        flex-wrap: wrap
+        transition: 0.4s
+        label
+            color: white
+        .button
+            display: flex
+            justify-content: center
+        .item
+            width: 20em
+            margin-bottom: 10px
+            @include mixins.respond-to(handhelds)
+                width: 15em
+                
+            
+        
+        
+

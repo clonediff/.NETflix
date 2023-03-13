@@ -1,0 +1,50 @@
+@use "../../../constants.css"
+@use "../../../mixins.sass"
+
+
+.registration_page
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-content: space-between
+    background-image: url("./../../../../public/dotnetflix-bgi.jpg")
+
+.registration
+    display: flex
+    margin-top: 50px
+    margin-bottom: 100px
+    justify-content: center
+    align-items: center
+    flex-wrap: wrap
+    align-content: center
+    &_wrapper
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
+        align-content: center
+        max-width: 25em
+        background-color: rgba(0,0,0,0.6)
+        border-radius: 10px
+        padding-bottom: 20px
+        transition: 0.4s
+        @include mixins.respond-to(handhelds) 
+            width: 15em
+            p
+                font-size: 12px
+            span
+                font-size: 12px
+        @include mixins.respond-to(medium-screens) 
+            width: 20em
+        @include mixins.respond-to(wide-screens) 
+            width: 30em
+        p
+            color: white
+        span
+            color: white
+        label
+            color: white
+        .link
+            color: white
+            text-decoration: underline
+            &:hover
+                color: red

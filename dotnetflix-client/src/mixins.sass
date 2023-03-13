@@ -1,0 +1,15 @@
+$medium: 768px
+$small: 425px
+
+@mixin respond-to($media)
+  @if $media == handhelds 
+      @media only screen and (max-width: $small)
+        @content
+        
+  @else if $media == medium-screens 
+    @media only screen and (min-width: $small + 1) and (max-width: $medium - 1)  
+      @content
+
+  @else if $media == wide-screens 
+    @media only screen and (min-width: $medium) 
+      @content
