@@ -1,16 +1,22 @@
 .container {
-    width: 1358px;
     padding-top: 64px;
+    width: 1454px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .genre-header {
     color: white;
-    margin-left: 12px;
+    margin-left: 60px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 24px;
     font-weight: 600;
+}
+
+.films-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
 }
 
 .films {
@@ -18,32 +24,132 @@
     overflow-x: scroll;
 }
 
+.arrow-container {
+    cursor: pointer;
+}
+
+.arrow {
+    width: 48px;
+    height: 48px;
+    margin-top: 106px;
+    transition: 0.3s;
+}
+
+.arrow-container:hover > .arrow path {
+    fill: #909090;
+}
+
+.arrow-container:active > .arrow {
+    width: 40px;
+    height: 40px;
+    margin-left: 8px;
+}
+
 .films::-webkit-scrollbar {
     display: none;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1460px) {
     .container {
-        width: 970px;
+        width: 1260px;
+    }
+    .genre-header {
+        margin-left: 54px;
+    }
+    .arrow {
+        margin-top: 90px;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1260px) {
+    .container {
+        padding-top: 48px;
+        width: 1039px;
+    }
+    .genre-header {
+        margin-left: 48px;
+        margin-bottom: 4px;
+    }
+    .arrow {
+        width: 40px;
+        height: 40px;
+        margin-top: 76px;
+    }
+    .arrow-container:active > .arrow {
+        width: 36px;
+        height: 36px;
+        margin-left: 4px;
+    }
+}
+
+@media screen and (max-width: 1040px) {
+    .container {
+        width: 902px;
+    }
+}
+
+@media screen and (max-width: 910px) {
+    .container {
+        width: 752px;
+    }
     .genre-header {
         font-size: 18px;
     }
-    .container {
-        padding-top: 32px;
-        width: 696px;
+    .arrow {
+        margin-top: 60px;
     }
 }
 
-@media screen and (max-width: 426px) {
-    .genre-header {
-        margin-left: 4px;
-        font-size: 14px;
-    }
+@media screen and (max-width: 760px) {
     .container {
-        width: 372px;
+        padding-top: 40px;
+        width: 588px;
+    }
+    .genre-header {
+        font-size: 14px;
+        margin-left: 34px;
+    }
+    .arrow {
+        width: 30px;
+        height: 30px;
+        margin-top: 46px;
+    }
+    .arrow-container:active > .arrow {
+        width: 26px;
+        height: 26px;
+        margin-left: 4px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        padding-top: 20px;
+        width: 446px;
+    }
+    .genre-header {
+        font-size: 12px;
+        margin-left: 29px;
+    }
+    .arrow {
+        width: 25px;
+        height: 25px;
+        margin-top: 30px;
+    }
+    .arrow-container:active > .arrow {
+        width: 20px;
+        height: 20px;
+        margin-left: 5px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .container {
+        width: 380px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .container {
+        width: 314px;
     }
 }
