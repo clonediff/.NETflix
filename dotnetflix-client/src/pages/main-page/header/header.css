@@ -1,0 +1,157 @@
+@import url(../../../constants.css);
+
+.flex-container {
+    display: flex;
+    position: relative;
+    height: 60px;
+    justify-content: space-around;
+    background-color: var(--header-bg-color);
+    z-index: 1;
+}
+
+.align-items {
+    align-items: center;
+}
+
+.logo {
+    color: red;
+    font-weight: 700;
+    font-size: 44px;
+    text-decoration: none;
+}
+
+.links {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.header-link {
+    margin-left: 12px;
+    margin-right: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    color: white;
+}
+
+.header-link:hover {
+    color: red;
+}
+
+.search {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    width: 250px;
+    height: 70%;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-left: 4px;
+    background-color: var(--search-bg-color);
+    border-radius: 8px;
+    cursor: text;
+}
+
+.search-glass {
+    height: 32px;
+    width: 32px;
+}
+
+.search input {
+    background: transparent;
+    width: 90%;
+    font-size: 16px;
+    color: white;
+    border-style: none;
+}
+
+.search input:focus-visible {
+    height: 100%;
+    width: 100%;
+    padding-left: 8px;
+    color: white;
+    border-radius: 8px;
+    outline: none;
+}
+
+.search input:focus-visible + .search-glass {
+    display: none;
+}
+
+.search ~ a {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+::-webkit-input-placeholder {
+    color: var(--placeholder-color);
+    font-size: 16px;
+}
+
+@media screen and (max-width: 910px) {
+    .flex-container {
+        height: 40px;
+    }
+    .logo {
+        font-size: 32px;
+    }
+    .header-link {
+        font-size: 12px;
+    }
+    .search {
+        width: 200px;
+    }
+    .search-glass {
+        height: 26px;
+        width: 26px;
+    }
+    ::-webkit-input-placeholder {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .links {
+        display: none;
+    }
+    .search ~ a {
+        font-size: 14px;
+    }
+    .search input {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .flex-container {
+        height: 28px;
+    }
+    .logo {
+        font-size: 24px;
+    }
+    .search {
+        width: 100px;
+    }
+    .search ~ a {
+        font-size: 12px;
+    }
+    .search input {
+        font-size: 12px;
+    }
+    .search-glass {
+        height: 20px;
+        width: 20px;
+    }
+    ::-webkit-input-placeholder {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .flex-container {
+        justify-content: space-evenly;
+    }
+    .search {
+        width: 70px;
+    }
+}

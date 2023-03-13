@@ -1,0 +1,2737 @@
+[
+  {
+    "rating": {
+      "kp": 8.805,
+      "imdb": 8.5,
+      "filmCritics": 6.8,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "id": 535341,
+    "name": "1+1",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/535341.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_535341.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "биография"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.537,
+      "imdb": 7.8,
+      "filmCritics": 6.5,
+      "russianFilmCritics": 86.3636,
+      "await": 97.92
+    },
+    "id": 1143242,
+    "name": "Джентльмены",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1143242.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1143242.jpg"
+    },
+    "genres": [
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "боевик"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.961,
+      "imdb": 8.2,
+      "filmCritics": 7.8,
+      "russianFilmCritics": 77.4194,
+      "await": 96.62
+    },
+    "id": 462682,
+    "name": "Волк с Уолл-стрит",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/462682.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_462682.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "биография"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.579,
+      "imdb": 7.1,
+      "filmCritics": 6.3,
+      "russianFilmCritics": 72.973,
+      "await": 98.09
+    },
+    "id": 1318972,
+    "name": "Гнев человеческий",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1318972.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1318972.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      }
+    ]
+  },
+  {
+    "id": 41519,
+    "name": "Брат",
+    "rating": {
+      "kp": 8.29,
+      "imdb": 7.8,
+      "filmCritics": 7.6,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/41519.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_41519.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "боевик"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.275,
+      "imdb": 7.7,
+      "filmCritics": 5.8,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 8124,
+    "name": "Один дома",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/8124.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_8124.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.968,
+      "imdb": 7.9,
+      "filmCritics": 7.4,
+      "russianFilmCritics": 75,
+      "await": 85.93
+    },
+    "id": 251733,
+    "name": "Аватар",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/251733.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_251733.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.662,
+      "imdb": 8.8,
+      "filmCritics": 8.1,
+      "russianFilmCritics": 80.9524,
+      "await": 87.61
+    },
+    "id": 447301,
+    "name": "Начало",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/447301.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_447301.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 9.108,
+      "imdb": 9.3,
+      "filmCritics": 8.4,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 326,
+    "name": "Побег из Шоушенка",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/326.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_326.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.317,
+      "imdb": 8,
+      "filmCritics": 8.1,
+      "russianFilmCritics": 100,
+      "await": 95.49
+    },
+    "id": 775276,
+    "name": "Зверополис",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/775276.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_775276.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "детектив"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "id": 42664,
+    "name": "Иван Васильевич меняет профессию",
+    "rating": {
+      "kp": 8.785,
+      "imdb": 8.2,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/42664.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_42664.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 9.071,
+      "imdb": 8.6,
+      "filmCritics": 6.8,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 435,
+    "name": "Зеленая миля",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/435.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_435.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.373,
+      "imdb": 8.1,
+      "filmCritics": 7.1,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 4374,
+    "name": "Пираты Карибского моря: Проклятие Черной жемчужины",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/4374.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_4374.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "id": 464963,
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "приключения"
+      }
+    ],
+    "name": "Игра престолов",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/464963.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_464963.jpg"
+    },
+    "rating": {
+      "kp": 8.98,
+      "imdb": 9.2,
+      "filmCritics": 0,
+      "russianFilmCritics": 90,
+      "await": 90.77
+    }
+  },
+  {
+    "rating": {
+      "kp": 8.618,
+      "imdb": 8.6,
+      "filmCritics": 7.1,
+      "russianFilmCritics": 80.6452,
+      "await": 97.55
+    },
+    "id": 258687,
+    "name": "Интерстеллар",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/258687.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_258687.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.261,
+      "imdb": 7.6,
+      "filmCritics": 7.1,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 689,
+    "name": "Гарри Поттер и философский камень",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/689.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_689.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.079,
+      "imdb": 7.9,
+      "filmCritics": 8.3,
+      "russianFilmCritics": 90,
+      "await": 98.96
+    },
+    "id": 1188529,
+    "name": "Достать ножи",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1188529.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1188529.jpg"
+    },
+    "genres": [
+      {
+        "name": "детектив"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "id": 41520,
+    "name": "Брат 2",
+    "rating": {
+      "kp": 8.174,
+      "imdb": 7.7,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/41520.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_41520.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.986,
+      "imdb": 9.1,
+      "filmCritics": 0,
+      "russianFilmCritics": 87.5,
+      "await": 0
+    },
+    "id": 685246,
+    "name": "Рик и Морти",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/685246.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_685246.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.916,
+      "imdb": 8.8,
+      "filmCritics": 7.5,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 448,
+    "name": "Форрест Гамп",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/448.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_448.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "история"
+      },
+      {
+        "name": "военный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.707,
+      "imdb": 8.5,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 42782,
+    "name": "Операция «Ы» и другие приключения Шурика",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/42782.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_42782.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.654,
+      "imdb": 8.8,
+      "filmCritics": 7.4,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 361,
+    "name": "Бойцовский клуб",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/361.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_361.jpg"
+    },
+    "genres": [
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.397,
+      "imdb": 8.2,
+      "filmCritics": 7.2,
+      "russianFilmCritics": 93.75,
+      "await": 99.09
+    },
+    "id": 1108577,
+    "name": "Зеленая книга",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1108577.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1108577.jpg"
+    },
+    "genres": [
+      {
+        "name": "биография"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "id": 397667,
+    "name": "Остров проклятых",
+    "rating": {
+      "kp": 8.51,
+      "imdb": 8.2,
+      "filmCritics": 6.7,
+      "russianFilmCritics": 85.7143,
+      "await": 78.65
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/397667.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_397667.jpg"
+    },
+    "genres": [
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "детектив"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.058,
+      "imdb": 8.4,
+      "filmCritics": 7.6,
+      "russianFilmCritics": 86.3636,
+      "await": 92.37
+    },
+    "id": 843649,
+    "name": "Мстители: Война бесконечности",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/843649.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_843649.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "id": 45146,
+    "name": "Любовь и голуби",
+    "rating": {
+      "kp": 8.286,
+      "imdb": 8,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/45146.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_45146.jpg"
+    },
+    "genres": [
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.383,
+      "imdb": 7.9,
+      "filmCritics": 8,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 2213,
+    "name": "Титаник",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/2213.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_2213.jpg"
+    },
+    "genres": [
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "история"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 6.897,
+      "imdb": 6.6,
+      "filmCritics": 4.5,
+      "russianFilmCritics": 38.8889,
+      "await": 94.6
+    },
+    "id": 463634,
+    "name": "Веном",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/463634.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_463634.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "ужасы"
+      }
+    ]
+  },
+  {
+    "id": 1100777,
+    "name": "Триггер",
+    "rating": {
+      "kp": 8.479,
+      "imdb": 7.4,
+      "filmCritics": 0,
+      "russianFilmCritics": 71.4286,
+      "await": 93.68
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1100777.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1100777.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.843,
+      "imdb": 8.4,
+      "filmCritics": 8.2,
+      "russianFilmCritics": 70.5882,
+      "await": 92.33
+    },
+    "id": 843650,
+    "name": "Мстители: Финал",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/843650.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_843650.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "id": 820638,
+    "name": "Мажор",
+    "rating": {
+      "kp": 8.231,
+      "imdb": 7.6,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 81.25
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/820638.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_820638.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "id": 5079093,
+    "name": "Монастырь",
+    "rating": {
+      "kp": 7.44,
+      "imdb": 0,
+      "filmCritics": 0,
+      "russianFilmCritics": 78.5714,
+      "await": 88.74
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/5079093.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_5079093.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.641,
+      "imdb": 8.9,
+      "filmCritics": 9.2,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "id": 342,
+    "name": "Криминальное чтиво",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/342.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_342.jpg"
+    },
+    "genres": [
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.515,
+      "imdb": 7.5,
+      "filmCritics": 7.3,
+      "russianFilmCritics": 94.7368,
+      "await": 95.79
+    },
+    "id": 409600,
+    "name": "Доктор Стрэндж",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/409600.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_409600.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.673,
+      "imdb": 8,
+      "filmCritics": 7.6,
+      "russianFilmCritics": 72,
+      "await": 96.96
+    },
+    "id": 409424,
+    "name": "Дюна",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/409424.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_409424.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.84,
+      "imdb": 8,
+      "filmCritics": 7.8,
+      "russianFilmCritics": 83.3333,
+      "await": 95.04
+    },
+    "id": 689066,
+    "name": "Стражи Галактики",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/689066.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_689066.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.497,
+      "imdb": 8.7,
+      "filmCritics": 7.8,
+      "russianFilmCritics": 60,
+      "await": 0
+    },
+    "id": 301,
+    "name": "Матрица",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/301.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_301.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.989,
+      "imdb": 7.4,
+      "filmCritics": 6.4,
+      "russianFilmCritics": 75,
+      "await": 85.59
+    },
+    "id": 462606,
+    "name": "Области тьмы",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/462606.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_462606.jpg"
+    },
+    "genres": [
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "фантастика"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.519,
+      "imdb": 9,
+      "filmCritics": 8.6,
+      "russianFilmCritics": 45.4545,
+      "await": 0
+    },
+    "id": 111543,
+    "name": "Темный рыцарь",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/111543.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_111543.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.042,
+      "imdb": 8.1,
+      "filmCritics": 8.5,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "id": 89514,
+    "name": "Рататуй",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/89514.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_89514.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "семейный"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "id": 263531,
+    "name": "Мстители",
+    "rating": {
+      "kp": 7.893,
+      "imdb": 8,
+      "filmCritics": 8.1,
+      "russianFilmCritics": 83.3333,
+      "await": 93.78
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/263531.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_263531.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.706,
+      "imdb": 8.6,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 46483,
+    "name": "Ну, погоди!",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/46483.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_46483.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "детский"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.231,
+      "imdb": 8.4,
+      "filmCritics": 8,
+      "russianFilmCritics": 88.2353,
+      "await": 92.92
+    },
+    "id": 586397,
+    "name": "Джанго освобожденный",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/586397.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_586397.jpg"
+    },
+    "genres": [
+      {
+        "name": "вестерн"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "id": 839954,
+    "name": "Легенда",
+    "rating": {
+      "kp": 7.184,
+      "imdb": 6.9,
+      "filmCritics": 5.9,
+      "russianFilmCritics": 76.9231,
+      "await": 96.09
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/839954.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_839954.jpg"
+    },
+    "genres": [
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.525,
+      "imdb": 8.1,
+      "filmCritics": 7.9,
+      "russianFilmCritics": 80,
+      "await": 0
+    },
+    "id": 324,
+    "name": "Поймай меня, если сможешь",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/324.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_324.jpg"
+    },
+    "genres": [
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "биография"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "id": 44386,
+    "name": "Джентльмены удачи",
+    "rating": {
+      "kp": 8.541,
+      "imdb": 8.4,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/44386.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_44386.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.775,
+      "imdb": 8.5,
+      "filmCritics": 8.5,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 2360,
+    "name": "Король Лев",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/2360.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_2360.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "мюзикл"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.107,
+      "imdb": 7.9,
+      "filmCritics": 7.8,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 430,
+    "name": "Шрэк",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/430.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_430.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.558,
+      "imdb": 8,
+      "filmCritics": 7.1,
+      "russianFilmCritics": 100,
+      "await": 95.11
+    },
+    "id": 462360,
+    "name": "Дэдпул",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/462360.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_462360.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.719,
+      "imdb": 8.4,
+      "filmCritics": 8.3,
+      "russianFilmCritics": 94.1176,
+      "await": 97.51
+    },
+    "id": 679486,
+    "name": "Тайна Коко",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/679486.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_679486.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      },
+      {
+        "name": "музыка"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.244,
+      "imdb": 8.1,
+      "filmCritics": 7.8,
+      "russianFilmCritics": 81.8182,
+      "await": 96.61
+    },
+    "id": 835086,
+    "name": "Ford против Ferrari",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/835086.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_835086.jpg"
+    },
+    "genres": [
+      {
+        "name": "биография"
+      },
+      {
+        "name": "спорт"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "боевик"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.063,
+      "imdb": 7.6,
+      "filmCritics": 6.2,
+      "russianFilmCritics": 100,
+      "await": 83.06
+    },
+    "id": 420923,
+    "name": "Шерлок Холмс",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/420923.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_420923.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "id": 46225,
+    "name": "Бриллиантовая рука",
+    "rating": {
+      "kp": 8.513,
+      "imdb": 8.3,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/46225.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_46225.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.602,
+      "imdb": 8.8,
+      "filmCritics": 8.2,
+      "russianFilmCritics": 71.4286,
+      "await": 0
+    },
+    "id": 328,
+    "name": "Властелин колец: Братство Кольца",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/328.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_328.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.359,
+      "imdb": 8.4,
+      "filmCritics": 8.6,
+      "russianFilmCritics": 93.3333,
+      "await": 0
+    },
+    "id": 279102,
+    "name": "ВАЛЛ·И",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/279102.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_279102.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.582,
+      "imdb": 8.5,
+      "filmCritics": 7.4,
+      "russianFilmCritics": 50,
+      "await": 0
+    },
+    "id": 474,
+    "name": "Гладиатор",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/474.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_474.jpg"
+    },
+    "genres": [
+      {
+        "name": "история"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.644,
+      "imdb": 8.5,
+      "filmCritics": 8.8,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 476,
+    "name": "Назад в будущее",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/476.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_476.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.758,
+      "imdb": 8,
+      "filmCritics": 7.9,
+      "russianFilmCritics": 95.2381,
+      "await": 97.82
+    },
+    "id": 841700,
+    "name": "Марсианин",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/841700.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_841700.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "id": 44745,
+    "name": "Кавказская пленница, или Новые приключения Шурика",
+    "rating": {
+      "kp": 8.462,
+      "imdb": 8.3,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/44745.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_44745.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "мюзикл"
+      }
+    ]
+  },
+  {
+    "id": 389,
+    "name": "Леон",
+    "rating": {
+      "kp": 8.669,
+      "imdb": 8.5,
+      "filmCritics": 6.9,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/389.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_389.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.219,
+      "imdb": 7.9,
+      "filmCritics": 7.9,
+      "russianFilmCritics": 80,
+      "await": 0
+    },
+    "id": 322,
+    "name": "Гарри Поттер и узник Азкабана",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/322.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_322.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.136,
+      "imdb": 7.3,
+      "filmCritics": 6,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 63991,
+    "name": "Пираты Карибского моря: Сундук мертвеца",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/63991.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_63991.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.714,
+      "imdb": 7.2,
+      "filmCritics": 5.8,
+      "russianFilmCritics": 60,
+      "await": 96.42
+    },
+    "id": 522892,
+    "name": "Иллюзия обмана",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/522892.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_522892.jpg"
+    },
+    "genres": [
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "id": 61237,
+    "name": "Железный человек",
+    "rating": {
+      "kp": 7.958,
+      "imdb": 7.9,
+      "filmCritics": 7.7,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/61237.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_61237.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "id": 195334,
+    "name": "Престиж",
+    "rating": {
+      "kp": 8.519,
+      "imdb": 8.5,
+      "filmCritics": 7.1,
+      "russianFilmCritics": 33.3333,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/195334.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_195334.jpg"
+    },
+    "genres": [
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "id": 1355059,
+    "name": "Беспринципные",
+    "rating": {
+      "kp": 7.665,
+      "imdb": 6.4,
+      "filmCritics": 0,
+      "russianFilmCritics": 50,
+      "await": 94.9
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1355059.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1355059.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "id": 502838,
+    "name": "Шерлок",
+    "rating": {
+      "kp": 8.861,
+      "imdb": 9.1,
+      "filmCritics": 0,
+      "russianFilmCritics": 75,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/502838.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_502838.jpg"
+    },
+    "genres": [
+      {
+        "name": "детектив"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "id": 1387021,
+    "name": "Лига справедливости Зака Снайдера",
+    "rating": {
+      "kp": 7.835,
+      "imdb": 8,
+      "filmCritics": 6.7,
+      "russianFilmCritics": 92.3077,
+      "await": 98.63
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1387021.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1387021.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "фэнтези"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.121,
+      "imdb": 7.4,
+      "filmCritics": 7.2,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 688,
+    "name": "Гарри Поттер и Тайная комната",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/688.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_688.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.633,
+      "imdb": 7.8,
+      "filmCritics": 0,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "id": 32898,
+    "name": "Достучаться до небес",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/32898.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_32898.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.959,
+      "imdb": 8.1,
+      "filmCritics": 8,
+      "russianFilmCritics": 96.2963,
+      "await": 96.18
+    },
+    "id": 692861,
+    "name": "Исчезнувшая",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/692861.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_692861.jpg"
+    },
+    "genres": [
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 6.763,
+      "imdb": 6.7,
+      "filmCritics": 0,
+      "russianFilmCritics": 60,
+      "await": 81.45
+    },
+    "id": 1183582,
+    "name": "Холоп",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1183582.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1183582.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "мелодрама"
+      }
+    ]
+  },
+  {
+    "id": 46708,
+    "name": "Москва слезам не верит",
+    "rating": {
+      "kp": 8.418,
+      "imdb": 8.1,
+      "filmCritics": 4.8,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/46708.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_46708.jpg"
+    },
+    "genres": [
+      {
+        "name": "мелодрама"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "id": 1199100,
+    "name": "Главный герой",
+    "rating": {
+      "kp": 7.389,
+      "imdb": 7.1,
+      "filmCritics": 7,
+      "russianFilmCritics": 85.7143,
+      "await": 95.15
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1199100.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1199100.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "мелодрама"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.073,
+      "imdb": 8.2,
+      "filmCritics": 8.9,
+      "russianFilmCritics": 87.5,
+      "await": 94.95
+    },
+    "id": 645118,
+    "name": "Головоломка",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/645118.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_645118.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "семейный"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.458,
+      "imdb": 7.4,
+      "filmCritics": 6.8,
+      "russianFilmCritics": 92.5926,
+      "await": 92.89
+    },
+    "id": 538225,
+    "name": "Первому игроку приготовиться",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/538225.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_538225.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.979,
+      "imdb": 8.3,
+      "filmCritics": 7.8,
+      "russianFilmCritics": 80,
+      "await": 83.74
+    },
+    "id": 9691,
+    "name": "Бесславные ублюдки",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/9691.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_9691.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "военный"
+      }
+    ]
+  },
+  {
+    "id": 406408,
+    "name": "Законопослушный гражданин",
+    "rating": {
+      "kp": 8,
+      "imdb": 7.4,
+      "filmCritics": 4.4,
+      "russianFilmCritics": 20,
+      "await": 71.23
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/406408.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_406408.jpg"
+    },
+    "genres": [
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.219,
+      "imdb": 8.1,
+      "filmCritics": 7.9,
+      "russianFilmCritics": 100,
+      "await": 68.42
+    },
+    "id": 280172,
+    "name": "Как приручить дракона",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/280172.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_280172.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.654,
+      "imdb": 9,
+      "filmCritics": 8.7,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "id": 3498,
+    "name": "Властелин колец: Возвращение короля",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/3498.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_3498.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "id": 775273,
+    "name": "Душа",
+    "rating": {
+      "kp": 8.376,
+      "imdb": 8,
+      "filmCritics": 8.3,
+      "russianFilmCritics": 77.2727,
+      "await": 96.86
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/775273.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_775273.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      },
+      {
+        "name": "музыка"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.149,
+      "imdb": 8.1,
+      "filmCritics": 8.3,
+      "russianFilmCritics": 83.3333,
+      "await": 82.85
+    },
+    "id": 407636,
+    "name": "Гарри Поттер и Дары Смерти: Часть II",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/407636.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_407636.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "детектив"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.978,
+      "imdb": 8.4,
+      "filmCritics": 7.3,
+      "russianFilmCritics": 89.6552,
+      "await": 96.44
+    },
+    "id": 1048334,
+    "name": "Джокер",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1048334.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1048334.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "триллер"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.105,
+      "imdb": 7.6,
+      "filmCritics": 6.4,
+      "russianFilmCritics": 66.6667,
+      "await": 0
+    },
+    "id": 2656,
+    "name": "Пятый элемент",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/2656.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_2656.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "мелодрама"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.685,
+      "imdb": 6.9,
+      "filmCritics": 6.6,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 104992,
+    "name": "Дьявол носит Prada",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/104992.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_104992.jpg"
+    },
+    "genres": [
+      {
+        "name": "драма"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.599,
+      "imdb": 8.8,
+      "filmCritics": 8.5,
+      "russianFilmCritics": 83.3333,
+      "await": 0
+    },
+    "id": 312,
+    "name": "Властелин колец: Две крепости",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/312.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_312.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "id": 5928,
+    "name": "Один дома 2: Затерянный в Нью-Йорке",
+    "rating": {
+      "kp": 8.029,
+      "imdb": 6.8,
+      "filmCritics": 4.5,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/5928.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_5928.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "семейный"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.059,
+      "imdb": 7.1,
+      "filmCritics": 5.4,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 102124,
+    "name": "Пираты Карибского моря: На краю света",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/102124.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_102124.jpg"
+    },
+    "genres": [
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "фэнтези"
+      }
+    ]
+  },
+  {
+    "id": 88173,
+    "name": "Алита: Боевой ангел",
+    "rating": {
+      "kp": 7.239,
+      "imdb": 7.3,
+      "filmCritics": 6.1,
+      "russianFilmCritics": 66.6667,
+      "await": 89.98
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/88173.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_88173.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.579,
+      "imdb": 7.3,
+      "filmCritics": 6.8,
+      "russianFilmCritics": 68,
+      "await": 94.88
+    },
+    "id": 804662,
+    "name": "Круэлла",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/804662.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_804662.jpg"
+    },
+    "genres": [
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "драма"
+      }
+    ]
+  },
+  {
+    "id": 88198,
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "семейный"
+      }
+    ],
+    "name": "Живая сталь",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/88198.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_88198.jpg"
+    },
+    "rating": {
+      "kp": 7.664,
+      "imdb": 7,
+      "filmCritics": 5.9,
+      "russianFilmCritics": 71.4286,
+      "await": 89.3
+    }
+  },
+  {
+    "id": 404900,
+    "name": "Во все тяжкие",
+    "rating": {
+      "kp": 8.88,
+      "imdb": 9.5,
+      "filmCritics": 0,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/404900.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_404900.jpg"
+    },
+    "genres": [
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "триллер"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.097,
+      "imdb": 7.8,
+      "filmCritics": 6.6,
+      "russianFilmCritics": 90,
+      "await": 93.99
+    },
+    "id": 278522,
+    "name": "Хоббит: Нежданное путешествие",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/278522.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_278522.jpg"
+    },
+    "genres": [
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "боевик"
+      }
+    ]
+  },
+  {
+    "id": 478491,
+    "name": "Маша и Медведь",
+    "rating": {
+      "kp": 7.258,
+      "imdb": 7.5,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/478491.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_478491.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "детский"
+      }
+    ]
+  },
+  {
+    "id": 591929,
+    "name": "Гравити Фолз",
+    "rating": {
+      "kp": 8.963,
+      "imdb": 8.9,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/591929.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_591929.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "детектив"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      },
+      {
+        "name": "фантастика"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 9.196,
+      "imdb": 8.4,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 0
+    },
+    "id": 45319,
+    "name": "Жил-был пёс",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/45319.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_45319.jpg"
+    },
+    "genres": [
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "комедия"
+      },
+      {
+        "name": "короткометражка"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  },
+  {
+    "id": 5078983,
+    "name": "Мажор в Сочи",
+    "rating": {
+      "kp": 7.06,
+      "imdb": 0,
+      "filmCritics": 0,
+      "russianFilmCritics": 0,
+      "await": 94.54
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/5078983.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_5078983.jpg"
+    },
+    "genres": [
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "комедия"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 7.528,
+      "imdb": 7.3,
+      "filmCritics": 6.9,
+      "russianFilmCritics": 60,
+      "await": 98.23
+    },
+    "id": 1236063,
+    "name": "Довод",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/1236063.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1236063.jpg"
+    },
+    "genres": [
+      {
+        "name": "фантастика"
+      },
+      {
+        "name": "боевик"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "приключения"
+      }
+    ]
+  },
+  {
+    "id": 819101,
+    "name": "Омерзительная восьмерка",
+    "rating": {
+      "kp": 7.962,
+      "imdb": 7.8,
+      "filmCritics": 7.3,
+      "russianFilmCritics": 87.0968,
+      "await": 98.7
+    },
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/819101.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_819101.jpg"
+    },
+    "genres": [
+      {
+        "name": "вестерн"
+      },
+      {
+        "name": "криминал"
+      },
+      {
+        "name": "триллер"
+      },
+      {
+        "name": "драма"
+      },
+      {
+        "name": "детектив"
+      }
+    ]
+  },
+  {
+    "rating": {
+      "kp": 8.477,
+      "imdb": 8.6,
+      "filmCritics": 8.6,
+      "russianFilmCritics": 100,
+      "await": 0
+    },
+    "id": 370,
+    "name": "Унесённые призраками",
+    "poster": {
+      "url": "https://st.kp.yandex.net/images/film_big/370.jpg",
+      "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_370.jpg"
+    },
+    "genres": [
+      {
+        "name": "аниме"
+      },
+      {
+        "name": "мультфильм"
+      },
+      {
+        "name": "фэнтези"
+      },
+      {
+        "name": "приключения"
+      },
+      {
+        "name": "семейный"
+      }
+    ]
+  }
+]
