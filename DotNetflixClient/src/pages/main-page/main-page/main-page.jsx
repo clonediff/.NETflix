@@ -4,18 +4,16 @@ import BurgerMenu from '../burger-menu/burger-menu'
 import Header from '../header/header'
 import films from '../../../data.json'
 import './main-page.css'
+import BurgerPanel from '../burger-panel/burger-panel'
 
 const MainPage = () => {
 
-    const [topProp, setLeftProp] = useState({
-        top: -190
-    })
-
+    const [burgerPanelStyle, setBurgerPanelStyle] = useState({ top: -190 })
     const [isBurgerHidden, setIsBurgerHidden] = useState(false)
 
     const changeBurgerPanel = ({ top = 0 }) => {
-        if (topProp.top !== top){
-            setLeftProp({ top });
+        if (burgerPanelStyle.top !== top) {
+            setBurgerPanelStyle({ top });
             setIsBurgerHidden(!isBurgerHidden)
         }
     }
@@ -23,22 +21,9 @@ const MainPage = () => {
     return (
         <>
             <BurgerMenu hidden={ isBurgerHidden } onBurgerClick={ changeBurgerPanel } />
+            <BurgerPanel topProp={ burgerPanelStyle } />
             <div onClick={ () => changeBurgerPanel({ top: -190 }) }>
                 <Header />
-                <div style={ topProp } className='burger-panel'>
-                    <a href='/'>
-                        Фильмы
-                    </a>
-                    <a href='/'>
-                        Сериалы
-                    </a>
-                    <a href='/'>
-                        Мультфильмы
-                    </a>
-                    <a href='/'>
-                        Аниме
-                    </a>
-                </div>
                 <div className='main-page'>
                     {
                         ['Приключения', 'Триллер', 'Боевик']
