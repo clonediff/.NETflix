@@ -6,10 +6,10 @@ namespace BackendAPI
 {
 	public class ApplicationDBContext : DbContext
 	{
-		public DbSet<MovieInfo> Movies { get; set; }        
+		public DbSet<MovieInfo> Movies { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Role> Roles { get; set; }
- 
+
 		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
 			: base(options)
 		{
@@ -21,36 +21,46 @@ namespace BackendAPI
 			// Integer check constraints
 			modelBuilder.Entity<CurrencyValue>()
 				.ToTable(t =>
-					t.HasCheckConstraint($"CK_{nameof(CurrencyValue)}_{nameof(CurrencyValue.Value)}", 
-						$"{nameof(CurrencyValue.Value)} > 0"));
+					t.HasCheckConstraint($"CK_{nameof(CurrencyValue)}_{nameof(CurrencyValue.Value)}",
+						$"{nameof(CurrencyValue.Value)} >= 0"));
 			modelBuilder.Entity<SeasonsInfo>()
 				.ToTable(t =>
 				{
-					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.Number)}", 
+					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.Number)}",
 						$"{nameof(SeasonsInfo.Number)} > 0");
-					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.EpisodesCount)}", 
+					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.EpisodesCount)}",
 						$"{nameof(SeasonsInfo.EpisodesCount)} >= 0");
 				});
 			modelBuilder.Entity<MovieInfo>()
 				.ToTable(t =>
 				{
-					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.Year)}", 
+					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.Year)}",
 						$"{nameof(MovieInfo.Year)} >= 1900");
-					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.Rating)}", 
+					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.Rating)}",
 						$"0 <= {nameof(MovieInfo.Rating)} AND {nameof(MovieInfo.Rating)} <= 10");
 					t.HasCheckConstraint($"CK_{nameof(MovieInfo)}_{nameof(MovieInfo.MovieLength)}",
 						$"{nameof(MovieInfo.MovieLength)} > 0");
 				});
 			// Many to many
 			modelBuilder.Entity<MovieInfo>()
-				.HasMany(m => m.Countries)
-				.WithMany();
+				.HasMany(m => m.Countries);
+			modelBuilder.Entity<Country>()
+				.HasMany(c => c.Movies);
+			modelBuilder.Entity<CountryMovieInfo>()
+				.HasKey(x => new { x.CountryId, x.MovieInfoId });
+
 			modelBuilder.Entity<MovieInfo>()
-				.HasMany(m => m.Genres)
-				.WithMany();
+				.HasMany(m => m.Genres);
+			modelBuilder.Entity<Genre>()
+				.HasMany(g => g.Movies);
+			modelBuilder.Entity<GenreMovieInfo>()
+				.HasKey(x => new { x.MovieInfoId, x.GenreId });
+
 			modelBuilder.Entity<MovieInfo>()
-				.HasMany(m => m.SeasonsInfo)
-				.WithMany();
+				.HasMany(m => m.SeasonsInfo);
+			modelBuilder.Entity<SeasonsInfo>()
+				.HasOne(s => s.MovieInfo);
+
 			modelBuilder.Entity<MovieInfo>()
 				.HasMany(m => m.Proffessions);
 			modelBuilder.Entity<Person>()
