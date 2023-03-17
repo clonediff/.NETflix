@@ -1,5 +1,7 @@
 using BackendAPI;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,13 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 	options.LogTo(Console.WriteLine);
 	options.UseSqlServer(connectionString);
 });
+
+builder.Services.AddControllers()
+	.AddJsonOptions(options => {
+		options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+		options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+		options.JsonSerializerOptions.WriteIndented = true;
+		});
 
 var app = builder.Build();
 
