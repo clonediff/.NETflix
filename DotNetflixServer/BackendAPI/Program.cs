@@ -1,7 +1,9 @@
 using BackendAPI;
+using BackendAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
@@ -26,6 +30,9 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.WriteIndented = true;
 		});
 
+builder.Services.AddTransient<IHashPassword, HashPassword>();
+builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,6 +45,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(b => b.WithOrigins("http://localhost:3000"));
 
 app.MapControllers();
 
