@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button,  Form, Input, InputNumber, } from 'antd';
+import { Button,  Form, Input, InputNumber,DatePicker, Space } from 'antd';
 import { axiosInstance } from "../../../AxiosInstance"; 
 import styles from "./RegistrationForm.module.sass"
 
@@ -10,7 +10,7 @@ export const RegistrationForm = () => {
         let email = values.email;
         let password = values.password;
         let nickname = values.nickname;
-        let age = values.age;
+        let birthday = values.birthday;
         /*axiosInstance.post("/login", {email, password, nickname, age})
         .then((response) => alert(response))
         .catch(error => alert(error));*/
@@ -97,26 +97,16 @@ export const RegistrationForm = () => {
       </Form.Item>
       
       <Form.Item
-      name='age'
-      label="Возраст"
-      rules={[
-        {
-          required: true,
-          message: "Пожалуйста, введите ваш возраст!",
-          type: 'number',
-        },
-        () => ({
-            validator(_, value) {
-              if (!value || (value < 150 && value > 0)) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('Возраст не должен быть больше 150 и меньше 0'));
-            },
-          }),
-      ]}
-    >
-      <InputNumber />
-    </Form.Item>
+      name="birthday" 
+      label="Дата рождения"
+      rules={[{
+        required: true,
+        message: "Пожалуйста, введите вашу дату рождения!",
+      }]}>
+        <Space direction="vertical">
+          <DatePicker className={styles.birthday} format="YYYY-MM-DD"/>
+        </Space>
+      </Form.Item>
 
       <Form.Item className={styles.button}>
         <Button type="primary" htmlType="submit">
