@@ -21,4 +21,8 @@
     <ProjectReference Include="..\DBModels\DBModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="jsons\" />
+  </ItemGroup>
+
 </Project>
