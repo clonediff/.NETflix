@@ -1,0 +1,44 @@
+@use "../../constants.css"
+@use "../../mixins.sass"
+
+.mainDiv
+    display: flex
+    padding: 0 15px
+    margin: 20px 50px
+    min-height: 400px
+
+.wrapper
+    position: relative
+    overflow: hidden
+    width: 300px
+
+.sidebar
+    height: auto
+    width: 300px
+    position: fixed
+    z-index: 1
+    background-color: var(--header-bg-color)
+    border-radius: 30px
+    a
+        padding: 20px 10px
+        font-size: 20px
+        text-align: center
+        text-decoration: none
+        color: #fff
+        display: block
+        font-weight: 700
+        &:not(:last-child)
+            border-bottom: solid 1px gray
+        &:hover
+            color: red
+            cursor: pointer
+        .active
+            color: red
+            
+.contentDiv
+    flex-grow: 1
+    height: 100%
+    background-color: gray
+    border-radius: 30px
+    margin-left: 10px
+    padding: 0 20px

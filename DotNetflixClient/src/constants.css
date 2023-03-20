@@ -4,3 +4,12 @@
     --search-bg-color: rgb(0, 52, 94);
     --placeholder-color: #c0c0c0;
 }
+
+.pageStyle{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    background-image: url("../public/dotnetflix-bgi.jpg");
+    background-size: cover;
+    height: 100%;
+}
