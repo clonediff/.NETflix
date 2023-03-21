@@ -39,10 +39,11 @@ export const ProfilePage = () => {
         <div className="pageStyle">
             <Header/>
             <div className={styles.mainDiv}>
-                <div className={styles.wrapper}>
+                <div className={styles.sidebar_wrapper}>
                     <div className={styles.sidebar}>
                         {tabs.map((item, index) => (
-                            <a onClick={() => setNavigationState(index)} >{item.title}</a>
+                            <a onClick={() => setNavigationState(index)}
+                            className={navigationState === index && styles.active}>{item.title}</a>
                         ))}
                     </div>
                 </div>
