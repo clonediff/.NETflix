@@ -6,25 +6,25 @@ import { useEffect, useState } from "react";
 import { SubscriptionInfo } from "./subscription/SubsriptionInfo";
 
 export const ProfilePage = () => {
-    const user = {
+    const [userData, setUserData] = useState(
+    {
         id: 1,
         login: "Admin",
         email: "example@example.com",
-        birthdate: '10.06.2003',
-        password: "65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5",
-        enabled2FA: false,
+        birthdate: '2003.06.10.',
+        enabled2FA: true,
         role: {
             id: 1,
             name: "Admin"
         }
-    }
+    })
 
     const [navigationState, setNavigationState] = useState(0)
     
     const tabs = [
     {
         title: 'Основная информация',
-        body: <MainInfo user={user}/>
+        body: <MainInfo userData={userData} setUserData = {(newV) => setUserData(newV)}/>
     }, 
     {
         title: 'Управление подпиской',
