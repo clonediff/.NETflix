@@ -5,15 +5,28 @@ import styles from "./RegistrationForm.module.sass"
 
 
 export const RegistrationForm = () => {
+    const navigator = useNavigate();
     const [form] = Form.useForm();
     const onFinish = (values) => {
         let email = values.email;
         let password = values.password;
-        let nickname = values.nickname;
+        let confirmPassword = values.confirm;
+        let userName = values.nickname;
         let birthday = values.birthday;
-        /*axiosInstance.post("/login", {email, password, nickname, age})
-        .then((response) => alert(response))
-        .catch(error => alert(error));*/
+        axiosInstance.post("auth/register", 
+        {
+            email,
+            password,
+            confirmPassword, 
+            userName,
+            birthday
+        })
+          .then((response) => {
+            console.log(response)
+            navigator("/login")
+          })
+          .catch(error => 
+            console.log(error));
         //navigate, if ok
     };
     
@@ -103,9 +116,7 @@ export const RegistrationForm = () => {
         required: true,
         message: "Пожалуйста, введите вашу дату рождения!",
       }]}>
-        <Space direction="vertical">
           <DatePicker className={styles.birthday} format="YYYY-MM-DD"/>
-        </Space>
       </Form.Item>
 
       <Form.Item className={styles.button}>

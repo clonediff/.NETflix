@@ -11,9 +11,17 @@ export const LoginForm = () => {
         let username = values.username;
         let password = values.password;
         let remember = values.remember;
-        /*axiosInstance.post("/login", {username, password, remember})
-        .then((response) => alert(response))
-        .catch(error => alert(error));*/
+        axiosInstance.post("auth/login", 
+        {
+          username, 
+          password, 
+          remember
+        })
+          .then((response) => {
+            console.log(response)
+            navigate("/")
+          })
+          .catch(error => console.log(error));
         //send request to server
         //navigate, if ok
     };
