@@ -1,9 +1,9 @@
 .burger-menu {
     display: none;
     position: absolute;
+    height: 40px;
     width: 32px;
     left: 8px;
-    top: 4px;
     cursor: pointer;
     z-index: 2;
     transition: 0.3s;
@@ -11,6 +11,10 @@
 
 .burger-menu:hover path {
     stroke: red;
+}
+
+.burger-menu:hover + .burger-panel {
+    top: 0px;
 }
 
 @media screen and (max-width: 760px) {
@@ -21,6 +25,7 @@
 
 @media screen and (max-width: 600px) {
     .burger-menu {
+        height: 28px;
         width: 20px;
     }
 }
