@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DBModels\DBModels.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
