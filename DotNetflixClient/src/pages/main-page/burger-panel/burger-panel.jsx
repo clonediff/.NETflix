@@ -1,8 +1,8 @@
 import './burger-panel.css'
 
-const BurgerPanel = ({ topProp }) => {
+const BurgerPanel = () => {
     return (
-        <div style={ topProp } className='burger-panel'>
+        <div className='burger-panel'>
             <a href='/'>
                 Фильмы
             </a>

@@ -1,28 +1,40 @@
+import { useState, useEffect } from 'react'
 import FilmContainer from '../film-container/film-container'
 import BurgerMenu from '../burger-menu/burger-menu'
-import Header from '../header/header'
 import BurgerPanel from '../burger-panel/burger-panel'
-import films from '../../../data.json'
+import Header from '../header/header'
+import FilmService from '../../../services/film-service'
 import './main-page.css'
 
-const MainPage = ({ isBurgerHidden, changeBurgerPanel, burgerPanelStyle }) => {
+const MainPage = () => {
+
+    const [grouppedFilms, setGrouppedFilms] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        const filmService = new FilmService()
+        filmService.getFilms('/')
+            .then(data => {
+                setGrouppedFilms(data)
+                setIsLoading(false)
+            })
+    }, [])
+
     return (
         <>
-            <BurgerMenu hidden={ isBurgerHidden } onBurgerClick={ changeBurgerPanel } />
-            <BurgerPanel topProp={ burgerPanelStyle } />
-            <div className='main-page-container' onClick={ () => changeBurgerPanel({ top: -190 }) }>
-                <Header />
-                <div>
-                    {/* {
-                        ['Приключения', 'Триллер', 'Боевик']
-                            .map(genre =>
-                                <FilmContainer 
-                                    key={ genre }
-                                    genre={ genre } 
-                                    films={ films.filter(film => film.genres.map(genre => genre.name).includes(genre.toLowerCase())) } />
-                            )
-                    } */}
-                </div>
+            <BurgerMenu />
+            <BurgerPanel />
+            <Header />
+            <div className='main-page-container'>
+                {
+                    !isLoading
+                    ? grouppedFilms.map(group =>
+                        <FilmContainer
+                            key={ group.films[0].id }
+                            category={ group.category }
+                            films={ group.films }/>)
+                    : null
+                }
             </div>
         </>
     )

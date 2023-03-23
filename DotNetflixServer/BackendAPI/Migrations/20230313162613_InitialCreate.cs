@@ -80,7 +80,7 @@ namespace BackendAPI.Migrations
                 {
                     table.PrimaryKey("PK_SeasonsInfo", x => x.Id);
                     table.CheckConstraint("CK_SeasonsInfo_EpisodesCount", "EpisodesCount >= 0");
-                    table.CheckConstraint("CK_SeasonsInfo_Number", "Number > 0");
+                    table.CheckConstraint("CK_SeasonsInfo_Number", "Number >= 0");
                 });
 
             migrationBuilder.CreateTable(

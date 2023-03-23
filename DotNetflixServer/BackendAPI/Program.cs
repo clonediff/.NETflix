@@ -40,26 +40,26 @@ builder.Services.AddTransient<IFilmProvider, FilmProvider>();
 var app = builder.Build();
 
 #region backupData
-//app.Map("/backupData", (ApplicationDBContext db) =>
-//{
-//	var folderPath = "./jsons";
-//	var dbSets = typeof(ApplicationDBContext).GetProperties()
-//		.Where(x => x.PropertyType.IsGenericType && 
-//			x.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
-//	var ofType = typeof(Enumerable).GetMethod(nameof(Enumerable.OfType));
-//	foreach (var dbSet in dbSets)
-//	{
-//		var genreic = dbSet.PropertyType.GetGenericArguments();
-//		var genericOfType = ofType.MakeGenericMethod(genreic[0]);
-//		var data = genericOfType.Invoke(null, new[] { (IEnumerable)dbSet.GetValue(db) });
-//		var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
-//		{
-//			Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-//			ReferenceHandler = ReferenceHandler.IgnoreCycles
-//		});
-//		File.WriteAllText(Path.Combine(folderPath, $"{genreic[0].Name}.txt"), json);
-//	}
-//});
+app.Map("/backupData", (ApplicationDBContext db) =>
+{
+	var folderPath = "./jsons";
+	var dbSets = typeof(ApplicationDBContext).GetProperties()
+		.Where(x => x.PropertyType.IsGenericType && 
+			x.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+	var ofType = typeof(Enumerable).GetMethod(nameof(Enumerable.OfType));
+	foreach (var dbSet in dbSets)
+	{
+		var generic = dbSet.PropertyType.GetGenericArguments();
+		var genericOfType = ofType.MakeGenericMethod(generic[0]);
+		var data = genericOfType.Invoke(null, new[] { (IEnumerable)dbSet.GetValue(db) });
+		var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+		{
+			Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+			ReferenceHandler = ReferenceHandler.IgnoreCycles
+		});
+		File.WriteAllText(Path.Combine(folderPath, $"{generic[0].Name}.txt"), json);
+	}
+});
 #endregion
 
 // Configure the HTTP request pipeline.

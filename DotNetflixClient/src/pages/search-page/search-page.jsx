@@ -7,7 +7,7 @@ import BurgerPanel from '../main-page/burger-panel/burger-panel';
 import FilmService from '../../services/film-service';
 import './search-page.css'
 
-const SearchPage = ({ isBurgerHidden, changeBurgerPanel, burgerPanelStyle }) => {
+const SearchPage = () => {
 
     const [searchParams, ] = useSearchParams()
     const [filmsSearched, setFilmsSearched] = useState([])
@@ -15,7 +15,7 @@ const SearchPage = ({ isBurgerHidden, changeBurgerPanel, burgerPanelStyle }) => 
 
     useEffect(() => {
         const filmService = new FilmService()
-        filmService.getSearchFilms('/search?' + searchParams.toString())
+        filmService.getFilms('/search?' + searchParams.toString())
             .then(data => {
                 setFilmsSearched(data)
                 setIsLoading(false)
@@ -24,18 +24,20 @@ const SearchPage = ({ isBurgerHidden, changeBurgerPanel, burgerPanelStyle }) => 
 
     return (
         <>
-            <BurgerMenu hidden={ isBurgerHidden } onBurgerClick={ changeBurgerPanel } />
-            <BurgerPanel topProp={ burgerPanelStyle } />
+            <BurgerMenu />
+            <BurgerPanel />
             <Header />
             <div className='films-searched'>
                 <h1 className='title'>
                     Результаты поиска
                 </h1>
-                { isLoading 
+                { 
+                    isLoading 
                     ? null 
                     : filmsSearched.length !== 0
                         ? filmsSearched.map(film => <FilmCard key={ film.id } film={ film } /> )
-                        : <span className='not-found-span'>По вашему запросу ничего не найдено</span> }
+                        : <span className='not-found-span'>По вашему запросу ничего не найдено</span> 
+                }
             </div>
         </>
     )

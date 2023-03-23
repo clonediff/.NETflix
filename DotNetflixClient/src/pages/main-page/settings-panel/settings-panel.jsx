@@ -3,7 +3,7 @@ import './settings-panel.css'
 
 const SettingsPanel = ({ topProp }) => {
     return (
-        <div style={ topProp } className='settings-panel'>
+        <div className='settings-panel'>
             <div className='settings-panel-label'>
                 Год выхода
             </div>
@@ -20,19 +20,22 @@ const SettingsPanel = ({ topProp }) => {
                 Жанры
             </div>
             <Form.Item noStyle name='genres' initialValue=''>
-                <input type='search' className='settings-panel-input' autoComplete='off'/>
+                <input type='search' placeholder='через запятую' className='settings-panel-input' autoComplete='off'/>
             </Form.Item>
             <div className='settings-panel-label'>
                 Актёры
             </div>
             <Form.Item noStyle name='actors' initialValue=''>
-                <input type='search' className='settings-panel-input' autoComplete='off'/>
+                <input type='search' placeholder='через запятую' className='settings-panel-input' autoComplete='off'/>
             </Form.Item>
             <div className='settings-panel-label'>
                 Режиссёр
             </div>
             <Form.Item noStyle name='director' initialValue=''>
                 <input type='search' className='settings-panel-input' autoComplete='off'/>
+            </Form.Item>
+            <Form.Item noStyle>
+                <button type='submit' hidden />
             </Form.Item>
         </div>
     )

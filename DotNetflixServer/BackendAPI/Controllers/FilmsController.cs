@@ -1,6 +1,6 @@
 ﻿using System.Collections;
+using BackendAPI.Dto;
 using BackendAPI.Services;
-using DBModels.BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendAPI.Controllers;
@@ -16,8 +16,14 @@ public class FilmsController : ControllerBase
         _filmProvider = filmProvider;
     }
 
+    [HttpGet]
+    public IEnumerable GetALlFilms()
+    {
+        return _filmProvider.GetAllFilms();
+    }
+    
     [HttpGet("/search")]
-    public IEnumerable<MovieInfo> GetFilmsBySearch(
+    public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(
         [FromQuery] string? type,
         [FromQuery] string? name, 
         [FromQuery] int? year, 

@@ -4,7 +4,7 @@ const FilmCard = ({ film }) => {
     return (
         <a href={ `/movies/${film.id}` }>
             <div className='film-card'>
-                <img className='film-poster' alt={ film.name } src={ film.posterURL } />
+                <img className='film-poster' alt={ film.name } src={ film.posterUrl } />
                 <div className='film-title'>{ film.name }</div>
                 <div className='film-rating'>
                     <div>{ film.rating }</div>

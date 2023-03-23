@@ -14,6 +14,8 @@
 		public string? PosterURL { get; set; }
 		public int TypeId { get; set; }
 		public Types Type { get; set; }
+		public int? CategoryId { get; set; }
+		public Category? Category { get; set; }
 		public int? BudgetId { get; set; }
 		public CurrencyValue? Budget { get; set; }
 		public int? FeesId { get; set; }

@@ -2,7 +2,7 @@ import { axiosInstance } from '../AxiosInstance'
 
 class FilmService {
 
-    getSearchFilms(path) {
+    getFilms(path) {
         return axiosInstance
             .get(path)
             .then(response => response.data)

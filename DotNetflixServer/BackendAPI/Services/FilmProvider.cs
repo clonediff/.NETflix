@@ -1,3 +1,6 @@
+using System.Collections;
+using BackendAPI.Dto;
+using BackendAPI.Mappers;
 using DBModels.BusinessLogic;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +15,17 @@ public class FilmProvider : IFilmProvider
         _dbContext = dbContext;
     }
     
-    public IEnumerable<MovieInfo> GetFilmsBySearch(string? type, string? name, int? year, string? country, string[]? genres, string[]? actors, string? director)
+    public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(string? type, string? name, int? year, string? country, string[]? genres, string[]? actors, string? director)
     {
         if (type is not null)
         {
             _dbContext.Movies
                 .Include(m => m.Type);
-            
-            return _dbContext.Movies.Where(m => m.Type.Name == type);
+
+            return _dbContext.Movies
+                .Where(m => m.Type.Name == type)
+                .AsEnumerable()
+                .Select(m => m.ToMovieForSearchPageDto());
         }
 
         IQueryable<MovieInfo>? result = null;
@@ -83,6 +89,18 @@ public class FilmProvider : IFilmProvider
             }
         }
 
-        return result!;
+        return result!
+            .Select(m => m.ToMovieForSearchPageDto());
+    }
+
+    public IEnumerable GetAllFilms()
+    {
+        return _dbContext.Movies
+            .Where(m => m.CategoryId != null)
+            .Include(movie => movie.Category)
+            .AsEnumerable()
+            .Select(m => m.ToMovieForMainPageDto())
+            .GroupBy(m => m.Category)
+            .Select(g => new { Category = g.Key, Films = g });
     }
 }
