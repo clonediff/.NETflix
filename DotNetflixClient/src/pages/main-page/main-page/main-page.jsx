@@ -1,55 +1,40 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import FilmContainer from '../film-container/film-container'
 import BurgerMenu from '../burger-menu/burger-menu'
+import BurgerPanel from '../burger-panel/burger-panel'
 import Header from '../header/header'
-import films from '../../../data.json'
+import FilmService from '../../../services/film-service'
 import './main-page.css'
 
 const MainPage = () => {
 
-    const [topProp, setLeftProp] = useState({
-        top: -190
-    })
+    const [grouppedFilms, setGrouppedFilms] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
-    const [isBurgerHidden, setIsBurgerHidden] = useState(false)
-
-    const changeBurgerPanel = ({ top = 0 }) => {
-        if (topProp.top !== top){
-            setLeftProp({ top });
-            setIsBurgerHidden(!isBurgerHidden)
-        }
-    }
+    useEffect(() => {
+        const filmService = new FilmService()
+        filmService.getFilms('/')
+            .then(data => {
+                setGrouppedFilms(data)
+                setIsLoading(false)
+            })
+    }, [])
 
     return (
         <>
-            <BurgerMenu hidden={ isBurgerHidden } onBurgerClick={ changeBurgerPanel } />
-            <div onClick={ () => changeBurgerPanel({ top: -190 }) }>
-                <Header />
-                <div style={ topProp } className='burger-panel'>
-                    <a href='/'>
-                        Фильмы
-                    </a>
-                    <a href='/'>
-                        Сериалы
-                    </a>
-                    <a href='/'>
-                        Мультфильмы
-                    </a>
-                    <a href='/'>
-                        Аниме
-                    </a>
-                </div>
-                <div className='main-page'>
-                    {
-                        ['Приключения', 'Триллер', 'Боевик']
-                            .map(genre =>
-                                <FilmContainer 
-                                    key={ genre }
-                                    genre={ genre } 
-                                    films={ films.filter(film => film.genres.map(genre => genre.name).includes(genre.toLowerCase())) } />
-                            )
-                    }
-                </div>
+            <BurgerMenu />
+            <BurgerPanel />
+            <Header />
+            <div className='main-page-container'>
+                {
+                    !isLoading
+                    ? grouppedFilms.map(group =>
+                        <FilmContainer
+                            key={ group.films[0].id }
+                            category={ group.category }
+                            films={ group.films }/>)
+                    : null
+                }
             </div>
         </>
     )

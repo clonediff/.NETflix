@@ -1904,7 +1904,7 @@ namespace BackendAPI.Migrations
                         {
                             t.HasCheckConstraint("CK_SeasonsInfo_EpisodesCount", "EpisodesCount >= 0");
 
-                            t.HasCheckConstraint("CK_SeasonsInfo_Number", "Number > 0");
+                            t.HasCheckConstraint("CK_SeasonsInfo_Number", "Number >= 0");
                         });
                 });
 

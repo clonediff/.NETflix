@@ -1,5 +1,6 @@
 ﻿using DBModels.BusinessLogic;
 using DBModels.IdentityLogic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Text.Json;
 
 namespace BackendAPI
 {
-	public class ApplicationDBContext : DbContext
+	public class ApplicationDBContext : IdentityDbContext<User>
 	{
 		public DbSet<Country> Countries { get; set; }
 		public DbSet<CountryMovieInfo> CountryMovieInfo { get; set; }
@@ -25,10 +26,16 @@ namespace BackendAPI
 		public DbSet<MovieInfo> Movies { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Role> Roles { get; set; }
+		public DbSet<Category> Categories { get; set; }
 
 		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
 			: base(options)
 		{
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.EnableSensitiveDataLogging();
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,7 +50,7 @@ namespace BackendAPI
 				.ToTable(t =>
 				{
 					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.Number)}",
-						$"{nameof(SeasonsInfo.Number)} > 0");
+						$"{nameof(SeasonsInfo.Number)} >= 0");
 					t.HasCheckConstraint($"CK_{nameof(SeasonsInfo)}_{nameof(SeasonsInfo.EpisodesCount)}",
 						$"{nameof(SeasonsInfo.EpisodesCount)} >= 0");
 				});
@@ -85,6 +92,10 @@ namespace BackendAPI
 				.HasKey(p => new { p.MovieInfoId, p.PersonId, p.Proffession });
 
 			// Data
+			var categories = GetData<Category>();
+			modelBuilder.Entity<Category>()
+				.HasData(categories);
+
 			var countries = GetData<Country>();
 			modelBuilder.Entity<Country>()
 				.HasData(countries);
@@ -125,6 +136,7 @@ namespace BackendAPI
 				movie.Proffessions = null;
 				movie.SeasonsInfo = null;
 				movie.Type = null;
+				movie.Category = null;
 			}
 			modelBuilder.Entity<MovieInfo>()
 				.HasData(movies);

@@ -1,0 +1,100 @@
+@import url(../../../constants.css);
+
+.settings-panel {
+    position: absolute;
+    top: -500px;
+    background-color: var(--header-bg-color);
+    width: 270px;
+    padding-top: 60px;
+    padding-bottom: 10px;
+    transition: 0.4s;
+    color: white;
+    border-radius: 8px;
+    z-index: -1;
+    transition: 0.5s;
+}
+
+.settings-panel:hover {
+    top: 0px;
+}
+
+.settings-panel-label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 6px;
+}
+
+.settings-panel-input {
+    color: white;
+    background-color: var(--search-bg-color);
+    width: 258px;
+    height: 30px;
+    margin-left: 6px;
+    padding-left: 8px;
+    padding-right: 4px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+}
+
+.settings-panel-input:focus-visible {
+    outline: none;
+}
+
+@media screen and (max-width: 910px) {
+    .settings-panel {
+        width: 220px;
+        padding-top: 40px;
+    }
+    .settings-panel-input {
+        width: 208px;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .settings-panel-label {
+        margin-bottom: 0px;
+        margin-top: 6px;
+        font-size: 14px;
+    }
+    .settings-panel-input {
+        height: 24px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .settings-panel-label {
+        margin-top: 3px;
+        font-size: 10px;
+    }
+    .settings-panel {
+        width: 120px;
+        padding-top: 28px;
+    }
+    .settings-panel-input {
+        width: 108px;
+        height: 18px;
+        font-size: 10px;
+        border-radius: 6px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .settings-panel-label {
+        margin-top: 3px;
+        font-size: 8px;
+    }
+    .settings-panel {
+        width: 110px;
+    }
+    .settings-panel-input {
+        width: 98px;
+        height: 12px;
+        font-size: 8px;
+        border-radius: 4px;
+    }
+    .settings-panel-input::-webkit-input-placeholder {
+        font-size: 8px;
+    }
+}

@@ -5,7 +5,7 @@
     margin-right: auto;
 }
 
-.genre-header {
+.category-header {
     color: white;
     margin-left: 60px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -53,7 +53,7 @@
     .container {
         width: 1260px;
     }
-    .genre-header {
+    .category-header {
         margin-left: 54px;
     }
     .arrow {
@@ -66,7 +66,7 @@
         padding-top: 48px;
         width: 1039px;
     }
-    .genre-header {
+    .category-header {
         margin-left: 48px;
         margin-bottom: 4px;
     }
@@ -92,7 +92,7 @@
     .container {
         width: 752px;
     }
-    .genre-header {
+    .category-header {
         font-size: 18px;
     }
     .arrow {
@@ -105,7 +105,7 @@
         padding-top: 40px;
         width: 588px;
     }
-    .genre-header {
+    .category-header {
         font-size: 14px;
         margin-left: 34px;
     }
@@ -126,7 +126,7 @@
         padding-top: 20px;
         width: 446px;
     }
-    .genre-header {
+    .category-header {
         font-size: 12px;
         margin-left: 29px;
     }
