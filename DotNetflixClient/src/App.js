@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom"
+import { ProfilePage } from "./pages/profile-page/Profile"
 import { LoginPage } from "./pages/login-page/LoginPageContainer/LoginPage"
 import { RegistrationPage } from "./pages/registration-page/registration-page/RegistrationPage"
 import MainPage from "./pages/main-page"
@@ -11,6 +12,7 @@ const App = () => {
             <Route path="/login" element={ <LoginPage /> }/>
             <Route path="/registration" element={ <RegistrationPage /> }/>
             <Route path="/search/*" element={ <SearchPage /> }/>
+            <Route path="/profile" element={<ProfilePage />}/>
         </Routes>
     )
 }
