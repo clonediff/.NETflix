@@ -9,6 +9,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Services;
+using DBModels.IdentityLogic;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,32 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
 	options.LogTo(Console.WriteLine);
 	options.UseSqlServer(connectionString);
+});
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            options.User.RequireUniqueEmail = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 5;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedPhoneNumber = false;
+        }
+    })
+    .AddEntityFrameworkStores<ApplicationDBContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("user", pb => pb
+        .RequireClaim("level", "user", "admin"));
+    options.AddPolicy("admin", pb => pb
+        .RequireClaim("level", "admin"));
 });
 
 builder.Services.AddControllers()
@@ -70,6 +98,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

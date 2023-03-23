@@ -1,10 +1,9 @@
-﻿namespace DBModels.IdentityLogic
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace DBModels.IdentityLogic
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public Role Role { get; set; }
+        public DateTime Birthday { get; set; }
     }
 }

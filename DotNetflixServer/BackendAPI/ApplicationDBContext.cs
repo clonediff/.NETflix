@@ -1,5 +1,6 @@
 ﻿using DBModels.BusinessLogic;
 using DBModels.IdentityLogic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Text.Json;
 
 namespace BackendAPI
 {
-	public class ApplicationDBContext : DbContext
+	public class ApplicationDBContext : IdentityDbContext<User>
 	{
 		public DbSet<Country> Countries { get; set; }
 		public DbSet<CountryMovieInfo> CountryMovieInfo { get; set; }
