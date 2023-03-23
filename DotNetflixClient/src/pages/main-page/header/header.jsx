@@ -18,8 +18,8 @@ const Header = () => {
     }
 
     const submit = (values) => {
-        const actors = !values.actors ? [] : values.actors.split(' ').join('').split(',')
-        const genres = !values.genres ? [] : values.genres.split(' ').join('').split(',')
+        const actors = !values.actors ? [] : values.actors.split(',')
+        const genres = !values.genres ? [] : values.genres.split(',')
         debugger
         const keyValuePairs = Object.entries(values)
             .filter(([, val]) => val !== '')
