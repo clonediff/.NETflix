@@ -34,4 +34,10 @@ public class FilmsController : ControllerBase
     {
         return _filmProvider.GetFilmsBySearch(type, name, year, country, genres, actors, director);
     }
+
+    [HttpGet("/film")]
+    public async Task<MovieForMoviePageDto?> GetFilmById([FromQuery] int id)
+    {
+        return await _filmProvider.GetFilmByIdAsync(id);
+    }
 }
