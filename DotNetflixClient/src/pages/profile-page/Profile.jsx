@@ -11,8 +11,8 @@ export const ProfilePage = () => {
         id: 1,
         login: "Admin",
         email: "example@example.com",
-        birthdate: '2003.06.10.',
-        enabled2FA: true,
+        birthdate: '2003.06.10',
+        enabled2FA: false,
         role: {
             id: 1,
             name: "Admin"
@@ -24,16 +24,12 @@ export const ProfilePage = () => {
     const tabs = [
     {
         title: 'Основная информация',
-        body: <MainInfo userData={userData} setUserData = {(newV) => setUserData(newV)}/>
+        body: <MainInfo userData={userData} setUserData = {setUserData}/>
     }, 
     {
         title: 'Управление подпиской',
         body: <SubscriptionInfo/>
     }]
-
-    useEffect(() => {
-        console.log(navigationState)
-    }, [navigationState])
 
     return (
         <div className="pageStyle">
@@ -42,7 +38,7 @@ export const ProfilePage = () => {
                 <div className={styles.sidebar_wrapper}>
                     <div className={styles.sidebar}>
                         {tabs.map((item, index) => (
-                            <a onClick={() => setNavigationState(index)}
+                            <a onClick={() => setNavigationState(index)} key={index}
                             className={navigationState === index && styles.active}>{item.title}</a>
                         ))}
                     </div>

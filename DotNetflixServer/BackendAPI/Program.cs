@@ -11,6 +11,8 @@ using System.Text.Json.Serialization;
 using Services;
 using DBModels.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
+using Services.MailSenderService;
+using Services.TwoFAService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 	options.LogTo(Console.WriteLine);
 	options.UseSqlServer(connectionString);
 });
+
+builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"));
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
     {
@@ -62,10 +66,16 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 		});
 
+builder.Services.AddMemoryCache();
 builder.Services.AddTransient<IHashPassword, HashPassword>();
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 
 var app = builder.Build();
+
+app.UseCors(b => b.WithOrigins("http://localhost:3000")
+				.AllowAnyHeader());
 
 #region backupData
 app.Map("/backupData", (ApplicationDBContext db) =>
@@ -103,7 +113,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseCors(b => b.WithOrigins("http://localhost:3000"));
 
 app.MapControllers();
 

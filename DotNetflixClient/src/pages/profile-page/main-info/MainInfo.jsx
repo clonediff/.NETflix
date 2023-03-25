@@ -5,15 +5,15 @@ import "./MainInfo.css"
 import ChangeEmailForm from "./components/change-email-form"
 import ChangePassForm from "./components/change-pass-form"
 import ChangeUSettingsForm from "./components/change-usettings-form"
+import { Enable2FA } from "../enable2fa/Enable2FA"
 
 export const MainInfo = ({userData, setUserData}) => {
-    console.log(setUserData.type)
     return (
         <div>
             <Routes>
                 <Route path="/" element={
                     <>
-                        <Link to='./change' className={styles.editBtn}>
+                        <Link to='./change' className={styles.myBtn}>
                             Изменить
                             <svg width="20px" height="20px" viewBox="0 0 24 24" id="_24x24_On_Light_Edit" data-name="24x24/On Light/Edit" xmlns="http://www.w3.org/2000/svg">
                                 <rect id="view-box" width="24" height="24" fill="none"/>
@@ -31,7 +31,7 @@ export const MainInfo = ({userData, setUserData}) => {
                         {
                             !userData.enabled2FA &&
                             <TitleValue title="Подключить двухфакторную аутентификацию" 
-                                value={<a href="#">Подключить</a>}/>
+                                value={<Link to="./enable2FA">Подключить</Link>}/>
                         }
                         {
                             userData.enabled2FA &&
@@ -39,6 +39,7 @@ export const MainInfo = ({userData, setUserData}) => {
                         }
                     </>
                 }/>
+                <Route path="/enable2FA" element={ <Enable2FA user={userData}/> }/>
                 <Route path="/change" element={<ChangeUSettingsForm userData = {userData} setUserData={setUserData}/>} />
                 {
                     userData.enabled2FA === true && 

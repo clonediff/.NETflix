@@ -44,7 +44,6 @@ public class AuthController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody]RegisterForm form)
     {
-        //Todo: Тут надо будет сделать логику с подтверждением email-адреса в будущем
         if (form.Password != form.ConfirmPassword)
         {
             return BadRequest("Разные пароли!");
@@ -76,7 +75,7 @@ public class AuthController : ControllerBase
             return BadRequest(creatingResult.Errors);
         }
 
-        await _signInManager.SignInAsync(user,true);
+        //await _signInManager.SignInAsync(user,true);
         return Ok("Пользователь успешно зарегистрирован!");
     }
 }
