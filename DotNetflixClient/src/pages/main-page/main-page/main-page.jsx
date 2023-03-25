@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import FilmContainer from '../film-container/film-container'
+import { FilmContainer, FilmsContainerSkeleton } from '../film-container/film-container'
 import BurgerMenu from '../burger-menu/burger-menu'
 import BurgerPanel from '../burger-panel/burger-panel'
 import Header from '../header/header'
@@ -27,13 +27,13 @@ const MainPage = () => {
             <Header />
             <div className='main-page-container'>
                 {
-                    !isLoading
-                    ? grouppedFilms.map(group =>
+                    isLoading
+                    ? <FilmsContainerSkeleton />
+                    : grouppedFilms.map(group =>
                         <FilmContainer
                             key={ group.films[0].id }
                             category={ group.category }
                             films={ group.films }/>)
-                    : null
                 }
             </div>
         </>

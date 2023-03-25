@@ -10,6 +10,7 @@
 .films-searched {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 100px auto;
     justify-items: center;
     min-height: 100%;
     height: auto;
@@ -37,6 +38,9 @@
 }
 
 @media screen and (max-width: 910px) {
+    .films-searched {
+        grid-template-rows: 40px auto;
+    }
     .title {
         font-size: 18px;
         margin-left: 30px;

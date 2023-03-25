@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
+import { FilmCardSkeleton, HeaderSkeleton } from '../../film-skeleton/film-skeleton'
 import FilmCard from '../film-card/film-card'
 import './film-container.css'
 
-const FilmContainer = ({ category, films }) => {
+export const FilmContainer = ({ category, films }) => {
 
     const [filmList, setFilmList] = useState({})
 
@@ -36,4 +37,15 @@ const FilmContainer = ({ category, films }) => {
     )
 }
 
-export default FilmContainer
+export const FilmsContainerSkeleton = () => {
+    return (
+        Array(7).fill().map((_, i) => i + 1).map(id => 
+            <div key={ id } className='container'>
+                <HeaderSkeleton />
+                <div className='films-container'>
+                    { Array(7).fill().map((_, i) => i + 1).map(id => <FilmCardSkeleton key={ id } />) }
+                </div>
+            </div>
+        )
+    )
+}

@@ -1,0 +1,38 @@
+.skeleton-header {
+    width: 364px;
+    height: 30px;
+    margin-left: 60px;
+    border-radius: 8px;
+}
+
+.skeleton-card {
+    height: 250px;
+    width: 170px;
+    border-radius: 10px;
+}
+
+.skeleton-grid-container {
+    display: flex;
+    grid-column: 1 / 8;
+}
+
+.skeleton-animation {
+    background: linear-gradient(90deg, rgb(255 255 255 / 10%) 25%, rgb(255 255 255 / 20%) 37%, rgb(255 255 255 / 10%) 63%);
+    background-size: 400% 100%;
+    animation-name: skeleton-animation;
+    animation-duration: 1.5s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
+
+@keyframes skeleton-animation {
+    from {
+        background-position: 100% 50%;
+    }
+    to {
+        background-position: 0% 50%;
+    }
+}
+
+@import url(../main-page/film-card/film-card.css);
+@import url(../main-page/film-container/film-container.css);
