@@ -3,7 +3,7 @@ using DBModels.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Services._2FAService;
+using Services.TwoFAService;
 using Services.MailSenderService;
 
 namespace BackendAPI.Controllers
