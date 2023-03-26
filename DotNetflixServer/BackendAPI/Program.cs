@@ -52,6 +52,16 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	if (builder.Environment.IsDevelopment())
+    {
+		options.Cookie.SameSite = SameSiteMode.None;
+		options.Cookie.HttpOnly = true;
+		options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    }
+});
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("user", pb => pb
@@ -74,8 +84,10 @@ builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 
 var app = builder.Build();
 
-app.UseCors(b => b.WithOrigins("http://localhost:3000")
-				.AllowAnyHeader());
+app.UseCors(b => b
+	.WithOrigins("http://localhost:3000")
+	.AllowAnyHeader()
+	.AllowCredentials())
 
 #region backupData
 app.Map("/backupData", (ApplicationDBContext db) =>
