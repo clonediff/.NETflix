@@ -87,7 +87,7 @@ var app = builder.Build();
 app.UseCors(b => b
 	.WithOrigins("http://localhost:3000")
 	.AllowAnyHeader()
-	.AllowCredentials())
+	.AllowCredentials());
 
 #region backupData
 app.Map("/backupData", (ApplicationDBContext db) =>

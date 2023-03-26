@@ -1,4 +1,6 @@
-﻿using DBModels.Forms.LoginForm;
+﻿using BackendAPI.Dto;
+using BackendAPI.Mappers;
+using DBModels.Forms.LoginForm;
 using DBModels.Forms.RegisterForm;
 using DBModels.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
@@ -77,5 +79,12 @@ public class AuthController : ControllerBase
 
         //await _signInManager.SignInAsync(user,true);
         return Ok("Пользователь успешно зарегистрирован!");
+    }
+
+    [HttpGet("[action]")]
+    public async Task<UserDto> GetUserAsync()
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        return user?.ToUserDto()!;
     }
 }

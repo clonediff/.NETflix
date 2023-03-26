@@ -4,19 +4,23 @@ import "../../constants.css"
 import { MainInfo } from "./main-info/MainInfo";
 import { useEffect, useState } from "react";
 import { SubscriptionInfo } from "./subscription/SubsriptionInfo";
+import { axiosInstance } from "../../AxiosInstance";
+import { useNavigate } from "react-router-dom";
 
 export const ProfilePage = () => {
-    const [userData, setUserData] = useState(
-    {
-        id: 1,
-        login: "Admin",
-        email: "example@example.com",
-        birthdate: '2003.06.10',
-        enabled2FA: false,
-        role: {
-            id: 1,
-            name: "Admin"
-        }
+    const naviagte = useNavigate()
+    const [userData, setUserData] = useState({})
+
+    useEffect(() => {
+        axiosInstance.get("/auth/getuser")
+            .then(response => {
+                if (response.data)
+                    setUserData(response.data)
+                else
+                    naviagte("/login")
+            })
+            // TODO: cach error
+            .catch(error => console.log(error))
     })
 
     const [navigationState, setNavigationState] = useState(0)
