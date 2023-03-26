@@ -52,7 +52,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
+#region badPractise
+/*builder.Services.ConfigureApplicationCookie(options =>
 {
 	if (builder.Environment.IsDevelopment())
     {
@@ -60,7 +61,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 		options.Cookie.HttpOnly = true;
 		options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     }
-});
+});*/
+#endregion
 
 builder.Services.AddAuthorization(options =>
 {
@@ -119,13 +121,32 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+app.UseRouting();
+
+app.UseEndpoints(_ => {});
+
+app.Use((ctx, next) =>
+{
+	if (ctx.Request.Path.StartsWithSegments("/api"))
+	{
+		ctx.Response.StatusCode = 404;
+		return Task.CompletedTask;
+	}
+
+	return next();
+});
+
+app.MapControllers();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-
-app.MapControllers();
+app.UseSpa(spaBuilder =>
+{
+    spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+});
 
 app.Run();

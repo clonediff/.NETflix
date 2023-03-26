@@ -11,7 +11,7 @@ export const LoginForm = () => {
         let username = values.username;
         let password = values.password;
         let remember = values.remember;
-        axiosInstance.post("auth/login", 
+        axiosInstance.post("Api/Auth/Login", 
         {
           username, 
           password, 
