@@ -13,7 +13,7 @@ const MainPage = () => {
 
     useEffect(() => {
         const filmService = new FilmService()
-        filmService.getFilms('/')
+        filmService.getData('/')
             .then(data => {
                 setGrouppedFilms(data)
                 setIsLoading(false)

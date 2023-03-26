@@ -16,7 +16,7 @@ const SearchPage = () => {
 
     useEffect(() => {
         const filmService = new FilmService()
-        filmService.getFilms('/search?' + searchParams.toString())
+        filmService.getData('/search?' + searchParams.toString())
             .then(data => {
                 setFilmsSearched(data)
                 setIsLoading(false)

@@ -1,5 +1,6 @@
 using System.Collections;
 using BackendAPI.Dto;
+using BackendAPI.Dto.MoviePage;
 using BackendAPI.Mappers;
 using DBModels.BusinessLogic;
 using Microsoft.EntityFrameworkCore;
@@ -9,12 +10,12 @@ namespace BackendAPI.Services;
 public class FilmProvider : IFilmProvider
 {
     private readonly ApplicationDBContext _dbContext;
-    
+
     public FilmProvider(ApplicationDBContext dbContext)
     {
         _dbContext = dbContext;
     }
-    
+
     public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(string? type, string? name, int? year, string? country, string[]? genres, string[]? actors, string? director)
     {
         if (type is not null)
@@ -41,13 +42,13 @@ public class FilmProvider : IFilmProvider
                 ? _dbContext.Movies.Where(m => m.Year == year)
                 : result.Where(m => m.Year == year);
         }
-        
+
         if (country is not null)
         {
             _dbContext.Movies
                 .Include(m => m.Countries)
                 .ThenInclude(cm => cm.Country);
-            
+
             result = result is null
                 ? _dbContext.Movies.Where(m => m.Countries.Any(cm => cm.Country.Name == country))
                 : result.Where(m => m.Countries.Any(cm => cm.Country.Name == country));
@@ -102,5 +103,28 @@ public class FilmProvider : IFilmProvider
             .Select(m => m.ToMovieForMainPageDto())
             .GroupBy(m => m.Category)
             .Select(g => new { Category = g.Key, Films = g });
+    }
+
+    public async Task<MovieForMoviePageDto?> GetFilmByIdAsync(int id)
+    {
+        var result = await _dbContext.Movies
+          .Where(m => m.Id == id)
+          .Include(movie => movie.Type)
+          .Include(movie => movie.Category)
+          .Include(movie => movie.Budget)
+          .Include(movie => movie.Fees)
+          .Include(movie => movie.Countries)
+          .ThenInclude(cm => cm.Country)
+          .Include(movie => movie.Genres)
+          .ThenInclude(gm => gm.Genre)
+          .Include(movie => movie.SeasonsInfo)
+          .Include(movie => movie.Proffessions)
+          .ThenInclude(pm => pm.Person)
+          .Include(movie => movie.Fees.World)
+          .Include(movie => movie.Fees.Russia)
+          .Include(movie => movie.Fees.USA)
+          .FirstOrDefaultAsync();
+
+        return result?.ToMovieForMoviePageDto();
     }
 }
