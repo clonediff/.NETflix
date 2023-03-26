@@ -2,8 +2,8 @@
 {
     public class FeesForMoviePageDto
     {
-        public string Fees_World { get;set;}
-        public string Fees_Russia{ get;set;}
-        public string Fees_USA{ get;set;}
+        public string World { get; set; }
+        public string Russia { get; set; }
+        public string USA { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿using DBModels.BusinessLogic;
+﻿using System.Collections;
 
-namespace BackendAPI.Dto
+namespace BackendAPI.Dto.MoviePage
 {
     public class MovieForMoviePageDto
     {
@@ -21,6 +21,6 @@ namespace BackendAPI.Dto
 		public List<string> Countries { get; set; }
 		public List<string> Genres { get; set; }
 		public List<SeasonsInfoForMoviePageDto> SeasonsInfo { get; set; }
-		public List<PersonForMoviePageDto> Proffessions { get; set; }
+		public IEnumerable Proffessions { get; set; }
     }
 }

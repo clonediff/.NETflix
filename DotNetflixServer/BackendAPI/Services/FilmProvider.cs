@@ -1,5 +1,6 @@
 using System.Collections;
 using BackendAPI.Dto;
+using BackendAPI.Dto.MoviePage;
 using BackendAPI.Mappers;
 using DBModels.BusinessLogic;
 using Microsoft.EntityFrameworkCore;
@@ -124,6 +125,6 @@ public class FilmProvider : IFilmProvider
           .Include(movie => movie.Fees.USA)
           .FirstOrDefaultAsync();
 
-        return result is null ? null : result.ToMovieForMoviePageDto();
+        return result?.ToMovieForMoviePageDto();
     }
 }

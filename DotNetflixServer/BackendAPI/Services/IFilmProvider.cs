@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using BackendAPI.Dto;
+using BackendAPI.Dto.MoviePage;
 
 namespace BackendAPI.Services;
 

@@ -1,4 +1,5 @@
 ﻿using BackendAPI.Dto;
+using BackendAPI.Dto.MoviePage;
 using DBModels.BusinessLogic;
 
 namespace BackendAPI.Mappers;
@@ -48,9 +49,9 @@ public static class MovieInfoToDto
 
             Fees = new FeesForMoviePageDto
             {
-                Fees_World = $"{movieInfo.Fees?.World?.Value}{movieInfo.Fees?.World?.Currency}",
-                Fees_Russia = $"{movieInfo.Fees?.Russia?.Value}{movieInfo.Fees?.Russia?.Currency}",
-                Fees_USA = $"{movieInfo.Fees?.USA?.Value}{movieInfo.Fees?.USA?.Currency}"
+                World = $"{movieInfo.Fees?.World?.Value}{movieInfo.Fees?.World?.Currency}",
+                Russia = $"{movieInfo.Fees?.Russia?.Value}{movieInfo.Fees?.Russia?.Currency}",
+                USA = $"{movieInfo.Fees?.USA?.Value}{movieInfo.Fees?.USA?.Currency}"
             },
 
             Countries = movieInfo.Countries.Select(c => c.Country.Name).ToList(),
@@ -63,13 +64,16 @@ public static class MovieInfoToDto
                     EpisodesCount= s.EpisodesCount,
                 }).ToList(),
 
-            Proffessions = movieInfo.Proffessions.Select(p =>
-                new PersonForMoviePageDto
-                {
-                    Name = p.Person.Name,
-                    Photo = p.Person.Photo,
-                    Profession = p.Proffession
-                }).ToList(),
+            Proffessions = movieInfo.Proffessions
+                .Select(p =>
+                    new PersonForMoviePageDto
+                    {
+                        Name = p.Person.Name,
+                        Photo = p.Person.Photo,
+                        Profession = p.Proffession
+                    })
+                .GroupBy(p => p.Profession)
+                .Select(g => new { Profession = g.Key, People = g })
         };
     }
 }
