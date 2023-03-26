@@ -20,6 +20,11 @@
     margin-right: auto;
 }
 
+.films-searched-skeleton {
+    display: flex;
+    grid-column: 1 / 8;
+}
+
 .not-found-span {
     color: white;
     grid-column: 1 / 8;

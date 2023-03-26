@@ -20,6 +20,6 @@ export const PosterSkeleton = () => {
 
 export const TextSkeleton = ({ width }) => {
     return (
-        <div style={{ width: width }} className='skeleton-text  skeleton-animation'></div>
+        <div style={{ width: width }} className='skeleton-text skeleton-animation'></div>
     )
 }

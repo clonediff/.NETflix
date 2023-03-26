@@ -46,7 +46,7 @@ const SearchPage = () => {
 
 const SearchedFilmsSkeleton = () => {
     return (
-        <div className='skeleton-grid-container'>
+        <div className='films-searched-skeleton'>
             {
                 Array(4).fill().map((_, i) => i + 1).map(id => <FilmCardSkeleton key={ id } />)
             }
