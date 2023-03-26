@@ -1,4 +1,4 @@
-﻿namespace BackendAPI.Dto
+﻿namespace BackendAPI.Dto.MoviePage
 {
     public class FeesForMoviePageDto
     {
