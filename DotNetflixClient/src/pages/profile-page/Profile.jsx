@@ -21,7 +21,7 @@ export const ProfilePage = () => {
             })
             // TODO: cach error
             .catch(error => console.log(error))
-    })
+    }, [])
 
     const [navigationState, setNavigationState] = useState(0)
     
