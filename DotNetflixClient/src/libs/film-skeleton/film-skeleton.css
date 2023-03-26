@@ -11,9 +11,15 @@
     border-radius: 10px;
 }
 
-.skeleton-grid-container {
-    display: flex;
-    grid-column: 1 / 8;
+.skeleton-poster {
+    width: 250px;
+    height: 375px;
+    border-radius: 10px;
+}
+
+.skeleton-text {
+    height: 28px;
+    border-radius: 6px;
 }
 
 .skeleton-animation {
@@ -34,5 +40,5 @@
     }
 }
 
-@import url(../main-page/film-card/film-card.css);
-@import url(../main-page/film-container/film-container.css);
+@import url(../../pages/main-page/film-card/film-card.css);
+@import url(../../pages/main-page/film-container/film-container.css);

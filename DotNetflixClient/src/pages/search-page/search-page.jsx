@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FilmCardSkeleton } from '../film-skeleton/film-skeleton';
+import { FilmCardSkeleton } from '../../libs/film-skeleton/film-skeleton'
 import Header from '../main-page/header/header';
 import FilmCard from '../main-page/film-card/film-card';
 import BurgerMenu from '../main-page/burger-menu/burger-menu';

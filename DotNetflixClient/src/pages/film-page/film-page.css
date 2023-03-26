@@ -38,6 +38,18 @@
     gap: 10px;
 }
 
+.film-info-skeleton {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 150px auto;
+    grid-template-rows: repeat(10, 80px);
+    gap: 10px;
+}
+
+.film-info-skeleton > .skeleton-text:first-child {
+    grid-column: 1 / 3;
+}
+
 .film-page-title {
     grid-column: 1 / 3;
     font-size: 50px;
@@ -76,8 +88,11 @@
         font-size: 40px;
         grid-column: 1;
     }
-    .film-page-poster {
+    .film-page-poster, .skeleton-poster {
         width: 200px;
+    }
+    .skeleton-poster {
+        height: 250px;
     }
     .film-page {
         grid-template-columns: 200px auto;
@@ -87,6 +102,20 @@
     }
     .film-info {
         grid-template-columns: 1fr;
+    }
+    .film-info-skeleton {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(10, 50px);
+    }
+    .film-info-skeleton > .skeleton-text:first-child {
+        grid-column: 1;
+        width: 250px !important;
+    }
+    .film-info-skeleton .skeleton-text:nth-of-type(2n) {
+        width: 100px !important;
+    }
+    .film-info-skeleton > .skeleton-text:first-child ~ .skeleton-text:nth-of-type(2n + 1) {
+        width: 200px !important;
     }
     .film-page-people-container {
         grid-template-columns: 1fr;
@@ -98,8 +127,11 @@
 }
 
 @media screen and (max-width: 700px) {
-    .film-page-poster {
+    .film-page-poster, .skeleton-poster {
         width: 175px;
+    }
+    .skeleton-poster {
+        height: 260px;
     }
     .film-page {
         grid-template-columns: 175px auto;
@@ -113,12 +145,31 @@
 }
 
 @media screen and (max-width: 520px) {
-    .film-page-poster {
+    .film-page-poster, .skeleton-poster {
         width: 125px;
+    }
+    .skeleton-poster {
+        height: 187px;
     }
     .film-page {
         grid-template-columns: 125px auto;
         column-gap: 24px;
+    }
+    .film-info-skeleton {
+        grid-template-rows: repeat(10, 30px);
+    }
+    .film-info-skeleton .skeleton-text {
+        height: 20px !important;
+    }
+    .film-info-skeleton > .skeleton-text:first-child {
+        grid-column: 1;
+        width: 200px !important;
+    }
+    .film-info-skeleton .skeleton-text:nth-of-type(2n) {
+        width: 80px !important;
+    }
+    .film-info-skeleton > .skeleton-text:first-child ~ .skeleton-text:nth-of-type(2n + 1) {
+        width: 150px !important;
     }
     .film-page::after {
         filter: blur(2px);
@@ -132,8 +183,11 @@
 }
 
 @media screen and (max-width: 450px) {
-    .film-page-poster {
+    .film-page-poster, .skeleton-poster {
         width: 100px;
+    }
+    .skeleton-poster {
+        height: 150px;
     }
     .film-page {
         grid-template-columns: 100px auto;
@@ -148,8 +202,11 @@
 }
 
 @media screen and (max-width: 375px) {
-    .film-page-poster {
+    .film-page-poster, .skeleton-poster {
         width: 75px;
+    }
+    .skeleton-poster {
+        height: 112px;
     }
     .film-page {
         grid-template-columns: 75px auto;

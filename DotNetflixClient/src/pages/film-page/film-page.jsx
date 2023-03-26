@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { PosterSkeleton, TextSkeleton } from '../../libs/film-skeleton/film-skeleton'
 import BurgerMenu from '../main-page/burger-menu/burger-menu'
 import BurgerPanel from '../main-page/burger-panel/burger-panel'
 import Header from '../main-page/header/header'
 import FilmService from '../../services/film-service'
 import './film-page.css'
-import { useState } from 'react'
 
 const FilmPage = () => {
 
@@ -31,7 +31,7 @@ const FilmPage = () => {
             <div className='film-page'>
                 {
                     isLoading
-                    ? null
+                    ? <FilmPageSkeleton />
                     : <FilmPageInfo film={ film } />
                 }
             </div>
@@ -104,6 +104,27 @@ const PersonInMovie = ({ person }) => {
             <img width={ 50 } src={ person.photo } alt=''/>
             <span>{ person.name }</span>
         </div>
+    )
+}
+
+const FilmPageSkeleton = () => {
+    return (
+        <>
+            <PosterSkeleton />
+            <div className='film-info-skeleton'>
+                <TextSkeleton width={ 460 } />
+                <TextSkeleton width={ 150 } />
+                <TextSkeleton width={ 300 } />
+                <TextSkeleton width={ 150 } />
+                <TextSkeleton width={ 300 } />
+                <TextSkeleton width={ 150 } />
+                <TextSkeleton width={ 300 } />
+                <TextSkeleton width={ 150 } />
+                <TextSkeleton width={ 300 } />
+                <TextSkeleton width={ 150 } />
+                <TextSkeleton width={ 300 } />
+            </div>
+        </>
     )
 }
 

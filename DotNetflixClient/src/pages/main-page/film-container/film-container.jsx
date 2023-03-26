@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FilmCardSkeleton, HeaderSkeleton } from '../../film-skeleton/film-skeleton'
+import { FilmCardSkeleton, HeaderSkeleton } from '../../../libs/film-skeleton/film-skeleton'
 import FilmCard from '../film-card/film-card'
 import './film-container.css'
 
