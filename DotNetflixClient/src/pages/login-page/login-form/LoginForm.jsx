@@ -2,9 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from 'antd';
 import styles from "./LoginForm.module.sass"
 import { axiosInstance } from "../../../AxiosInstance"; 
+import { useEffect } from "react";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+      localStorage.removeItem('authenticated')
+    }, [])
 
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -19,6 +24,7 @@ export const LoginForm = () => {
         })
           .then((response) => {
             console.log(response)
+            localStorage.setItem('authenticated', true)
             navigate("/")
           })
           .catch(error => console.log(error));

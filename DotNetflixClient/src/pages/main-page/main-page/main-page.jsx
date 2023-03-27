@@ -3,8 +3,8 @@ import FilmContainer from '../film-container/film-container'
 import BurgerMenu from '../burger-menu/burger-menu'
 import BurgerPanel from '../burger-panel/burger-panel'
 import Header from '../header/header'
-import FilmService from '../../../services/film-service'
 import './main-page.css'
+import { axiosInstance } from '../../../AxiosInstance'
 
 const MainPage = () => {
 
@@ -12,8 +12,8 @@ const MainPage = () => {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const filmService = new FilmService()
-        filmService.getFilms('/')
+        axiosInstance.get('/api/films/getallfilms')
+            .then(response => response.data)
             .then(data => {
                 setGrouppedFilms(data)
                 setIsLoading(false)

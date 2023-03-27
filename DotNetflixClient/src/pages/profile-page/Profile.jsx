@@ -12,7 +12,7 @@ export const ProfilePage = () => {
     const [userData, setUserData] = useState({})
 
     useEffect(() => {
-        axiosInstance.get("/auth/getuser")
+        axiosInstance.get("api/auth/getuser")
             .then(response => {
                 if (response.data)
                     setUserData(response.data)
