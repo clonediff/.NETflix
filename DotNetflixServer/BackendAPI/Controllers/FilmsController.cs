@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using BackendAPI.Dto;
+using BackendAPI.Dto.MoviePage;
 using BackendAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,5 +34,11 @@ public class FilmsController : ControllerBase
         [FromQuery] string? director)
     {
         return _filmProvider.GetFilmsBySearch(type, name, year, country, genres, actors, director);
+    }
+
+    [HttpGet("/movies")]
+    public async Task<MovieForMoviePageDto?> GetFilmById([FromQuery] int id)
+    {
+        return await _filmProvider.GetFilmByIdAsync(id);
     }
 }
