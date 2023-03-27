@@ -6,7 +6,7 @@ import "../main-info/MainInfo.css"
 import { Input, Form, Button, Modal } from "antd"
 import { useNavigate } from "react-router-dom"
 
-export const Enable2FA = ({user}) => {
+export const Enable2FA = ({user, setUser}) => {
 
     const navigate = useNavigate()
 
@@ -19,11 +19,7 @@ export const Enable2FA = ({user}) => {
     }, [remainedToResend])
 
     const sendCode = () => {
-        axiosInstance.get('TwoFactorAuth/SendCode', {
-            params: {
-                email: user.email
-            }
-        })
+        axiosInstance.get('TwoFactorAuth/SendCode')
             .then(response => {
                 setCodeSend(true)
                 setRemainedToResend(120)
@@ -34,10 +30,10 @@ export const Enable2FA = ({user}) => {
 
     const sendEnableRequest = (val) => {
         axiosInstance.post('TwoFactorAuth/Enable', {
-            email: user.email,
             code: val.code
         })
             .then(response => {
+                setUser(x => ({...x, enabled2FA: true}))
                 setShowModal(true)
             })
             // TODO: catch error

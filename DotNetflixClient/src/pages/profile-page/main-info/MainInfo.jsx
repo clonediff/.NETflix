@@ -25,17 +25,14 @@ export const MainInfo = ({userData, setUserData}) => {
                         <TitleValue title="Birthdate" value={formatDate(userData && userData.birthdate)}/>
                         <TitleValue title="Age" value={getAge(userData && userData.birthdate)}/>
                         {
-                            !userData.enabled2FA &&
+                            userData.enabled2FA ?
+                            <h3>Двухфакторная аутентификация подключена</h3> : 
                             <TitleValue title="Подключить двухфакторную аутентификацию" 
                                 value={<Link to="./enable2FA">Подключить</Link>}/>
                         }
-                        {
-                            userData.enabled2FA &&
-                            <h3>Двухфакторная аутентификация подключена</h3>
-                        }
                     </>
                 }/>
-                <Route path="/enable2FA" element={ <Enable2FA user={userData}/> }/>
+                <Route path="/enable2FA" element={ <Enable2FA user={userData} setUser={setUserData}/> }/>
                 <Route path="/change" element={<ChangeUSettingsForm userData = {userData} setUserData={setUserData}/>} />
                 {
                     userData.enabled2FA === true && 

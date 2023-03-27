@@ -22,18 +22,16 @@ namespace BackendAPI.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public async Task SendCodeAsync([FromQuery]string email)
+		public async Task SendCodeAsync()
 		{
-			//TODO: использовать данные из куки
-			var user = await _userManager.FindByEmailAsync(email);
+			var user = await _userManager.GetUserAsync(HttpContext.User);
 			await _twoFAService.SendCodeAsync(user);
 		}
 
 		[HttpPost("[action]")]
 		public async Task<IActionResult> EnableAsync([FromBody]TwoFADto twoFA)
 		{
-			// TODO: использовать данные из куки
-			var user = await _userManager.FindByEmailAsync(twoFA.Email);
+			var user = await _userManager.GetUserAsync(HttpContext.User);
 			if (!_twoFAService.CheckCode(user, twoFA.Code))
 				return BadRequest("Код не совпадает или устарел");
 			var enableResult = await _userManager.SetTwoFactorEnabledAsync(user, true);
