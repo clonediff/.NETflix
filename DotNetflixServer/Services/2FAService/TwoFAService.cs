@@ -1,11 +1,6 @@
-﻿using DBModels.IdentityLogic;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Services.MailSenderService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccess.Entities.IdentityLogic;
 
 namespace Services.TwoFAService
 {

@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { axiosInstance } from '../../AxiosInstance'
 import { PosterSkeleton, TextSkeleton } from '../../libs/film-skeleton/film-skeleton'
 import BurgerMenu from '../main-page/burger-menu/burger-menu'
 import BurgerPanel from '../main-page/burger-panel/burger-panel'
 import Header from '../main-page/header/header'
 import './film-page.css'
-import { axiosInstance } from '../../AxiosInstance'
 
 const FilmPage = () => {
 
@@ -15,7 +15,7 @@ const FilmPage = () => {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        axiosInstance.get(`api/films/movies?id=${id}`)
+        axiosInstance.get(`api/films/getfilmbyid?id=${id}`)
             .then(response => {
                 setFilm(response.data)
                 setIsLoading(false)
@@ -72,14 +72,11 @@ const FilmPageInfo = ({ film }) => {
                 <div>{ film.countries.join(", ") }</div>
                 <b>Жанры</b>
                 <div>{ film.genres.join(", ") }</div>
-                <b>Сезоны</b>
-                <div>
-                    { 
-                        film.seasonsInfo.length !== 0 
-                        ? film.seasonsInfo.map(si => <div key={ si.number }>Сезон { si.number }, количество серий: { si.episodesCount }</div>) 
-                        : "—" 
-                    }
-                </div>
+                {
+                    film.seasonsInfo.length !== 0 
+                    ? <SeasonsInfo seasonsInfo={ film.seasonsInfo } />
+                    : null
+                }
                 {
                     film.proffessions.map(prof => 
                         <div className='film-page-people-container' key={ prof.profession }>
@@ -91,6 +88,19 @@ const FilmPageInfo = ({ film }) => {
                             </div>
                         </div>
                     )
+                }
+            </div>
+        </>
+    )
+}
+
+const SeasonsInfo = ({ seasonsInfo }) => {
+    return (
+        <>
+            <b>Сезоны</b>
+            <div>
+                { 
+                    seasonsInfo.map(si => <div key={ si.number }>Сезон { si.number }, количество серий: { si.episodesCount }</div>) 
                 }
             </div>
         </>

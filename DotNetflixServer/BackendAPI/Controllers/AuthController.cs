@@ -1,20 +1,19 @@
-﻿using BackendAPI.Dto;
-using BackendAPI.Mappers;
-using DBModels.Forms.LoginForm;
-using DBModels.Forms.RegisterForm;
-using DBModels.IdentityLogic;
+﻿using DataAccess.Entities.Forms.LoginForm;
+using DataAccess.Entities.Forms.RegisterForm;
+using DataAccess.Entities.IdentityLogic;
+using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Services.Mappers;
 
 namespace BackendAPI.Controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private SignInManager<User> _signInManager;
-    private UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<User> _userManager;
 
     public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
     {

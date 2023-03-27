@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using BackendAPI.Dto;
-using BackendAPI.Dto.MoviePage;
-using BackendAPI.Services;
+using DtoLibrary;
+using DtoLibrary.MoviePage;
 using Microsoft.AspNetCore.Mvc;
+using Services.FilmService;
 
 namespace BackendAPI.Controllers;
 
@@ -24,19 +24,12 @@ public class FilmsController : ControllerBase
     }
     
     [HttpGet("[action]")]
-    public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(
-        [FromQuery] string? type,
-        [FromQuery] string? name, 
-        [FromQuery] int? year, 
-        [FromQuery] string? country,
-        [FromQuery(Name = "genre")] string[]? genres,
-        [FromQuery(Name = "actor")] string[]? actors,
-        [FromQuery] string? director)
+    public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch([FromQuery] QueryStringDto dto)
     {
-        return _filmProvider.GetFilmsBySearch(type, name, year, country, genres, actors, director);
+        return _filmProvider.GetFilmsBySearch(dto.Type, dto.Name, dto.Year, dto.Country, dto.Genres, dto.Actors, dto.Director);
     }
 
-    [HttpGet("movies")]
+    [HttpGet("[action]")]
     public async Task<MovieForMoviePageDto?> GetFilmById([FromQuery] int id)
     {
         return await _filmProvider.GetFilmByIdAsync(id);

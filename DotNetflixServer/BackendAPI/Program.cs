@@ -1,16 +1,12 @@
-using BackendAPI;
-using BackendAPI.Services;
-using DBModels.BusinessLogic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Collections;
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Services;
-using DBModels.IdentityLogic;
+using DataAccess;
+using DataAccess.Entities.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
+using Services.FilmService;
 using Services.MailSenderService;
 using Services.TwoFAService;
 
@@ -73,13 +69,13 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers()
-	.AddJsonOptions(options => {
+	.AddJsonOptions(options => 
+	{
 		options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 		options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-		});
+	});
 
 builder.Services.AddMemoryCache();
-builder.Services.AddTransient<IHashPassword, HashPassword>();
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();

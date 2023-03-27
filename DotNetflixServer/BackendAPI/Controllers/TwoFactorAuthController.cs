@@ -1,10 +1,8 @@
-﻿using BackendAPI.Dto;
-using DBModels.IdentityLogic;
+﻿using DataAccess.Entities.IdentityLogic;
+using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Services.TwoFAService;
-using Services.MailSenderService;
 
 namespace BackendAPI.Controllers
 {
@@ -12,8 +10,8 @@ namespace BackendAPI.Controllers
 	[Route("api/[controller]")]
 	public class TwoFactorAuthController : Controller
 	{
-		private ITwoFAService _twoFAService;
-		private UserManager<User> _userManager;
+		private readonly ITwoFAService _twoFAService;
+		private readonly UserManager<User> _userManager;
 
 		public TwoFactorAuthController(UserManager<User> userManager, ITwoFAService twoFAService)
 		{
