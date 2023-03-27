@@ -4,8 +4,8 @@ import { PosterSkeleton, TextSkeleton } from '../../libs/film-skeleton/film-skel
 import BurgerMenu from '../main-page/burger-menu/burger-menu'
 import BurgerPanel from '../main-page/burger-panel/burger-panel'
 import Header from '../main-page/header/header'
-import FilmService from '../../services/film-service'
 import './film-page.css'
+import { axiosInstance } from '../../AxiosInstance'
 
 const FilmPage = () => {
 
@@ -15,10 +15,9 @@ const FilmPage = () => {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const filmService = new FilmService()
-        filmService.getData(`movies?id=${id}`)
-            .then(data => {
-                setFilm(data)
+        axiosInstance.get(`api/films/movies?id=${id}`)
+            .then(response => {
+                setFilm(response.data)
                 setIsLoading(false)
             })
     }, [id])
