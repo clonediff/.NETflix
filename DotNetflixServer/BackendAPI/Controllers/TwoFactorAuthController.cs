@@ -9,7 +9,7 @@ using Services.MailSenderService;
 namespace BackendAPI.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class TwoFactorAuthController : Controller
 	{
 		private ITwoFAService _twoFAService;

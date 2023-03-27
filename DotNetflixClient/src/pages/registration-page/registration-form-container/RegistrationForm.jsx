@@ -13,7 +13,7 @@ export const RegistrationForm = () => {
         let confirmPassword = values.confirm;
         let userName = values.nickname;
         let birthday = values.birthday;
-        axiosInstance.post("auth/register", 
+        axiosInstance.post("Api/Auth/Register", 
         {
             email,
             password,

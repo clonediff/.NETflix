@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BackendAPI.Controllers;
 
 [ApiController]
-[Route("/")]
+[Route("api/[controller]")]
 public class FilmsController : ControllerBase
 {
     private readonly IFilmProvider _filmProvider;
@@ -16,13 +16,13 @@ public class FilmsController : ControllerBase
         _filmProvider = filmProvider;
     }
 
-    [HttpGet]
+    [HttpGet("[action]")]
     public IEnumerable GetALlFilms()
     {
         return _filmProvider.GetAllFilms();
     }
     
-    [HttpGet("/search")]
+    [HttpGet("[action]")]
     public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(
         [FromQuery] string? type,
         [FromQuery] string? name, 

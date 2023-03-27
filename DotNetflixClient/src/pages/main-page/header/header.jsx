@@ -1,19 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate, createSearchParams } from 'react-router-dom'
 import { Form } from 'antd'
 import SettingsPanel from '../settings-panel/settings-panel'
 import './header.css'
-import { axiosInstance } from '../../../AxiosInstance'
 
 const Header = () => {
 
-    // const [userData, setUserData] = useState(undefined)
-
-    // useEffect(() => {
-    //     axiosInstance.get("/auth/getuser")
-    //         .then(response => setUserData(response.data))
-    // }, [])
-
+    const isAuthenticated = localStorage.getItem('authenticated')
     const [settingsPanelStyle, setSettingsPanelStyle] = useState({ top: -500 })
     const navigate = useNavigate()
 
@@ -70,11 +63,11 @@ const Header = () => {
                     </div>
                     <SettingsPanel topProp={ settingsPanelStyle } />
                 </Form>
-                {/* {
-                    userData ? 
-                    <Link className='header-link' to='/profile'>{userData.login}</Link> : */}
-                    <Link className='header-link' to='/login'>Войти</Link>
-                {/* } */}
+                {
+                    isAuthenticated
+                    ? <Link className='header-link' to='/profile'>Профиль</Link>
+                    : <Link className='header-link' to='/login'>Войти</Link>
+                }
             </div>
         </div>
     )
