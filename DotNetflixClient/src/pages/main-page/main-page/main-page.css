@@ -4,4 +4,5 @@
     background-color: var(--main-bg-color);
     min-height: 100%;
     height: auto;
+    padding-bottom: 64px;
 }

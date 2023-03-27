@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { FilmCardSkeleton } from '../../libs/film-skeleton/film-skeleton'
 import Header from '../main-page/header/header';
 import FilmCard from '../main-page/film-card/film-card';
 import BurgerMenu from '../main-page/burger-menu/burger-menu';
@@ -33,13 +34,23 @@ const SearchPage = () => {
                 </h1>
                 { 
                     isLoading 
-                    ? null 
+                    ? <SearchedFilmsSkeleton />
                     : filmsSearched.length !== 0
                         ? filmsSearched.map(film => <FilmCard key={ film.id } film={ film } /> )
                         : <span className='not-found-span'>По вашему запросу ничего не найдено</span> 
                 }
             </div>
         </>
+    )
+}
+
+const SearchedFilmsSkeleton = () => {
+    return (
+        <div className='films-searched-skeleton'>
+            {
+                Array(4).fill().map((_, i) => i + 1).map(id => <FilmCardSkeleton key={ id } />)
+            }
+        </div>
     )
 }
 
