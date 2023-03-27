@@ -4,7 +4,7 @@ import "../MainInfo.css"
 const USettingsFooter = ({linkDirection, linkText}) => {
     return(
         <>
-            <div style={{width:"100%", height:"2px", backgroundColor:"black"}}></div>
+            <div style={{width:"100%", height:"2px", backgroundColor:"black", marginTop:'.8em'}}></div>
             <Link className="settings-return-link settings-link" to={linkDirection}>
                 {linkText}
             </Link>

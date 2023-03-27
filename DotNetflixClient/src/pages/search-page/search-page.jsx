@@ -4,8 +4,8 @@ import Header from '../main-page/header/header';
 import FilmCard from '../main-page/film-card/film-card';
 import BurgerMenu from '../main-page/burger-menu/burger-menu';
 import BurgerPanel from '../main-page/burger-panel/burger-panel';
-import FilmService from '../../services/film-service';
 import './search-page.css'
+import { axiosInstance } from '../../AxiosInstance';
 
 const SearchPage = () => {
 
@@ -14,8 +14,8 @@ const SearchPage = () => {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const filmService = new FilmService()
-        filmService.getFilms('/search?' + searchParams.toString())
+        axiosInstance.get('/api/films/getfilmsbysearch?' + searchParams.toString())
+            .then(response => response.data)
             .then(data => {
                 setFilmsSearched(data)
                 setIsLoading(false)

@@ -1,4 +1,6 @@
-﻿using DBModels.Forms.LoginForm;
+﻿using BackendAPI.Dto;
+using BackendAPI.Mappers;
+using DBModels.Forms.LoginForm;
 using DBModels.Forms.RegisterForm;
 using DBModels.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +10,7 @@ namespace BackendAPI.Controllers;
 
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private SignInManager<User> _signInManager;
@@ -44,7 +46,6 @@ public class AuthController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody]RegisterForm form)
     {
-        //Todo: Тут надо будет сделать логику с подтверждением email-адреса в будущем
         if (form.Password != form.ConfirmPassword)
         {
             return BadRequest("Разные пароли!");
@@ -76,7 +77,14 @@ public class AuthController : ControllerBase
             return BadRequest(creatingResult.Errors);
         }
 
-        await _signInManager.SignInAsync(user,true);
+        //await _signInManager.SignInAsync(user,true);
         return Ok("Пользователь успешно зарегистрирован!");
+    }
+
+    [HttpGet("[action]")]
+    public async Task<UserDto> GetUserAsync()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        return user?.ToUserDto()!;
     }
 }

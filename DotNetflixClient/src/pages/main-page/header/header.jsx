@@ -6,6 +6,7 @@ import './header.css'
 
 const Header = () => {
 
+    const isAuthenticated = localStorage.getItem('authenticated')
     const [settingsPanelStyle, setSettingsPanelStyle] = useState({ top: -500 })
     const navigate = useNavigate()
 
@@ -62,7 +63,11 @@ const Header = () => {
                     </div>
                     <SettingsPanel topProp={ settingsPanelStyle } />
                 </Form>
-                <Link className='header-link' to='/login'>Войти</Link>
+                {
+                    isAuthenticated
+                    ? <Link className='header-link' to='/profile'>Профиль</Link>
+                    : <Link className='header-link' to='/login'>Войти</Link>
+                }
             </div>
         </div>
     )

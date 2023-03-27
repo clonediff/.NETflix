@@ -11,6 +11,8 @@ using System.Text.Json.Serialization;
 using Services;
 using DBModels.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
+using Services.MailSenderService;
+using Services.TwoFAService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 	options.UseSqlServer(connectionString);
 });
 
+builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"));
+
 builder.Services.AddIdentity<User, IdentityRole>(options =>
     {
         if (builder.Environment.IsDevelopment())
@@ -48,6 +52,18 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
+#region badPractise
+/*builder.Services.ConfigureApplicationCookie(options =>
+{
+	if (builder.Environment.IsDevelopment())
+    {
+		options.Cookie.SameSite = SameSiteMode.None;
+		options.Cookie.HttpOnly = true;
+		options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    }
+});*/
+#endregion
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("user", pb => pb
@@ -62,8 +78,11 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 		});
 
+builder.Services.AddMemoryCache();
 builder.Services.AddTransient<IHashPassword, HashPassword>();
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 
 var app = builder.Build();
 
@@ -97,14 +116,38 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(pb => pb
+	.AllowAnyHeader()
+	.AllowCredentials()
+	.WithOrigins("http://localhost:3000")
+);
+
+app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseCors(b => b.WithOrigins("http://localhost:3000"));
+app.UseEndpoints(_ => {});
+
+app.Use((ctx, next) =>
+{
+	if (ctx.Request.Path.StartsWithSegments("/api"))
+	{
+		ctx.Response.StatusCode = 404;
+		return Task.CompletedTask;
+	}
+
+	return next();
+});
 
 app.MapControllers();
+
+app.UseHttpsRedirection();
+
+app.UseSpa(spaBuilder =>
+{
+	spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+});
 
 app.Run();
