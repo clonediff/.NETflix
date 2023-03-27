@@ -86,11 +86,6 @@ builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 
 var app = builder.Build();
 
-app.UseCors(b => b
-	.WithOrigins("http://localhost:3000")
-	.AllowAnyHeader()
-	.AllowCredentials());
-
 #region backupData
 app.Map("/backupData", (ApplicationDBContext db) =>
 {
@@ -121,7 +116,17 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+app.UseCors(pb => pb
+	.AllowAnyHeader()
+	.AllowCredentials()
+	.WithOrigins("http://localhost:3000")
+);
+
 app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseEndpoints(_ => {});
 
@@ -140,13 +145,9 @@ app.MapControllers();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.UseSpa(spaBuilder =>
 {
-    spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+	spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
 });
 
 app.Run();

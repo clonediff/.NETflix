@@ -84,7 +84,7 @@ public class AuthController : ControllerBase
     [HttpGet("[action]")]
     public async Task<UserDto> GetUserAsync()
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await _userManager.GetUserAsync(User);
         return user?.ToUserDto()!;
     }
 }
