@@ -1,7 +1,5 @@
 ﻿using DataAccess;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections;
 
 namespace BackendAPI.Controllers
 {
@@ -9,7 +7,8 @@ namespace BackendAPI.Controllers
     [Route("api/[controller]")]
     public class EnumsController : Controller
     {
-        private ApplicationDBContext _dbContext;
+        private readonly ApplicationDBContext _dbContext;
+        
         public EnumsController(ApplicationDBContext dBContext)
         {
             _dbContext = dBContext;
@@ -18,12 +17,13 @@ namespace BackendAPI.Controllers
         [HttpGet("[action]")]
         public IDictionary<string, IEnumerable<string>> GetAll()
         {
-            var res = new Dictionary<string, IEnumerable<string>>();
-            res["types"] = _dbContext.Types.Select(x => x.Name);
-            res["countries"] = _dbContext.Countries.Select(x => x.Name);
-            res["genres"] = _dbContext.Genres.Select(x => x.Name);
-            res["categories"] = _dbContext.Categories.Select(x => x.Name);
-            return res;
+            return new Dictionary<string, IEnumerable<string>>
+            {
+                ["types"] = _dbContext.Types.Select(x => x.Name),
+                ["countries"] = _dbContext.Countries.Select(x => x.Name),
+                ["genres"] = _dbContext.Genres.Select(x => x.Name),
+                ["categories"] = _dbContext.Categories.Select(x => x.Name)
+            };
         }
     }
 }

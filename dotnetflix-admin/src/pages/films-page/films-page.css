@@ -1,0 +1,22 @@
+.films-page {
+    display: grid;
+    grid-template-columns: 300px auto;
+    gap: 24px;
+}
+
+.film-list {
+    width: 276px;
+    height: 100%;
+    padding: 12px;
+    border: 2px solid rgb(33, 150, 243);
+    border-radius: 4px;
+}
+
+.film-add-form {
+    border: 2px solid rgb(33, 150, 243);
+    border-radius: 4px;
+}
+
+.form-item {
+    margin: 12px;
+}
