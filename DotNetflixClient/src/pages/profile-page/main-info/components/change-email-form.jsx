@@ -1,10 +1,19 @@
-import { Form, Input, Button } from "antd"
+import { Form, Input, Button, Modal } from "antd"
 import styles from "../MainInfo.module.sass"
 import "../MainInfo.css"
 import USettingsFooter from "./usettings-footer"
-import Field2FACode from "./field-2FA-code"
+import Gen2FACodeSendField from "../functions/Gen2FACodeSendField"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { axiosInstance } from "../../../../AxiosInstance"
 
 const ChangeEmailForm = ({userData, setUserData}) => {
+    
+    const navigate = useNavigate()
+
+    const {content} = Gen2FACodeSendField();
+    const [showModal, setShowModal] = useState(false)
+
     return(
         <>
             <Form className="settings-form" layout="vertical" onFinish={(values) => {SendChangedData(values)}}>
@@ -26,7 +35,7 @@ const ChangeEmailForm = ({userData, setUserData}) => {
                     <Input />
                 </Form.Item>
                 <Form.Item >
-                    <Field2FACode/>
+                    {content}
                 </Form.Item>
                 <Form.Item className={styles.button}>
                     <Button className="settings-submit-button" type="primary" htmlType="submit">
@@ -35,37 +44,28 @@ const ChangeEmailForm = ({userData, setUserData}) => {
                 </Form.Item>             
             </Form>
             <USettingsFooter linkDirection={'../change'} linkText={"Вернуться к основным настройкам"} />
+
+            <Modal title=""
+                open={showModal}
+                footer={[
+                    <Button className="settings-submit-button" type="primary" onClick={() => navigate("../")}>Ok</Button>
+                ]}>
+                <p>Почта изменена!</p>
+            </Modal>
         </>
     )
 
     function SendChangedData (values) {
-
-        console.log(values)
-
-        let bodyFormData = new FormData();
-
-        bodyFormData.append('email', values.email)
-        bodyFormData.append('fadata', values.fadata)
-
-        /*axiosInstance({
-        method: "post",
-        url: "/calc", //поменять
-        data: bodyFormData,
-        headers: { "Content-Type": "multipart/form-data" },
+        axiosInstance.post('api/User/SetUserMail', {
+            email: values.email,
+            code: values.code
         })
-        .then(function (response) {
-            setRes(response.data)
-        })
-        .catch(function (response) {
-            //handle error
-            console.log(response);
-        });*/
-
-        //если успех
-        let copy = { ...userData }
-        copy.email = values.email
-        
-        setUserData(copy)
+            .then(response => {
+                setUserData(x => ({...userData, email: values.email}))
+                setShowModal(true)
+            })
+            // TODO: catch error
+            .catch(error => console.log(error))
     }
 }
 
