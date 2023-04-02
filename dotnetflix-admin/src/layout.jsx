@@ -4,12 +4,18 @@ import './layout.css'
 const Layout = ({ children }) => {
     return (
         <>
-            <div className='header'></div>
+            <div className='header'>
+                <div className='header-navigation'>
+                    <Link to='/' className='navigation-links'>Главная</Link>
+                    <Link to='/films' className='navigation-links'>Фильмы</Link>
+                    <Link to='/users' className='navigation-links'>Пользователи</Link>
+                </div>
+            </div>
             <div className='side-bar'>
                 <div className='side-bar-navigation'>
-                    <Link to='/' className='side-bar-navigation-link'>Главная</Link>
-                    <Link to='/films' className='side-bar-navigation-link'>Фильмы</Link>
-                    <Link to='/users' className='side-bar-navigation-link'>Пользователи</Link>
+                    <Link to='/' className='navigation-links'>Главная</Link>
+                    <Link to='/films' className='navigation-links'>Фильмы</Link>
+                    <Link to='/users' className='navigation-links'>Пользователи</Link>
                 </div>
             </div>
             <div className='content'>

@@ -6,7 +6,7 @@
 
 .film-list {
     width: 276px;
-    height: 100%;
+    height: calc(100% - 25.6px);
     padding: 12px;
     border: 2px solid rgb(33, 150, 243);
     border-radius: 4px;
@@ -19,4 +19,45 @@
 
 .form-item {
     margin: 12px;
+}
+
+.form-label {
+    margin-left: 12px;
+}
+
+.form-list-input {
+    margin-bottom: 0px;
+}
+
+.remove-button {
+    font-size: 24px;
+}
+
+.person-space {
+    width: 80%;
+}
+
+@media screen and (max-width: 1024px) {
+    .films-page {
+        grid-template-columns: 250px auto;
+        gap: 18px;
+    }
+    .film-list {
+        width: 226px;
+    }
+    .person-space {
+        width: 90%;
+    }
+    .remove-button {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .films-page {
+        grid-template-columns: 1fr;
+    }
+    .film-list {
+        width: calc(100% - 27.2px);
+    }
 }
