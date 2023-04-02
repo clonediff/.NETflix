@@ -118,7 +118,7 @@ const FilmsPage = () => {
                                                 <Form.Item name={[field.name, 'episodesCount']} className='form-list-input'>
                                                     <InputNumber addonBefore='Серии' />
                                                 </Form.Item>
-                                                <MinusCircleOutlined className='remove-button' onClick={ () => remove(field.name) } />
+                                                <MinusCircleOutlined onClick={ () => remove(field.name) } />
                                             </Space>
                                         </>
                                     ))
@@ -138,7 +138,7 @@ const FilmsPage = () => {
                                     fields.map((field, index) => (
                                         <>
                                             { index === 0 ? <div className='form-label'>Коллектив</div> : null }
-                                            <Space className='form-item person-space' key={ field.key }>
+                                            <Space direction='vertical' className='form-item person-space' key={ field.key }>
                                                 <Form.Item name={[field.name, 'name']} className='form-list-input'>
                                                     <Input addonAfter={
                                                         <Form.Item name={[field.name, 'profession']} noStyle>
@@ -149,7 +149,14 @@ const FilmsPage = () => {
                                                         </Form.Item>
                                                     } />
                                                 </Form.Item>
-                                                <MinusCircleOutlined className='remove-button' onClick={ () => remove(field.name) } />
+                                                <Form.Item name={[field.name, 'photo']} className='form-list-input'>
+                                                    <Input addonBefore='фото' />
+                                                </Form.Item>
+                                                <Button 
+                                                    icon={ <MinusCircleOutlined /> } 
+                                                    onClick={ () => remove(field.name) }>
+                                                    Убрать участника
+                                                </Button>
                                             </Space>
                                         </>
                                     ))

@@ -29,33 +29,14 @@
     margin-bottom: 0px;
 }
 
-.remove-button {
-    font-size: 24px;
-}
-
 .person-space {
-    width: 80%;
+    width: 90%;
 }
 
 @media screen and (max-width: 1024px) {
     .films-page {
-        grid-template-columns: 250px auto;
-        gap: 18px;
-    }
-    .film-list {
-        width: 226px;
-    }
-    .person-space {
-        width: 90%;
-    }
-    .remove-button {
-        font-size: 18px;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .films-page {
         grid-template-columns: 1fr;
+        gap: 18px;
     }
     .film-list {
         width: calc(100% - 27.2px);
