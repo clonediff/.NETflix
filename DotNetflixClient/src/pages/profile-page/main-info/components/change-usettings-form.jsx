@@ -88,7 +88,7 @@ const ChangeUSettingsForm = ({userData, setUserData }) => {
 
     function SendChangedData (values) {
 
-        axiosInstance.post('api/User/SetUserData', {
+        axiosInstance.put('api/User/SetUserData', {
             birthdate : values.birthday === undefined? userData.birthdate : values.birthday.$d,
             username: values.username
         })

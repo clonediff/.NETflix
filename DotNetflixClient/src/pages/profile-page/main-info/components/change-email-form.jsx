@@ -56,7 +56,7 @@ const ChangeEmailForm = ({userData, setUserData}) => {
     )
 
     function SendChangedData (values) {
-        axiosInstance.post('api/User/SetUserMail', {
+        axiosInstance.put('api/User/SetUserMail', {
             email: values.email,
             code: values.code
         })

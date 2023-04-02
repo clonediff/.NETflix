@@ -28,7 +28,7 @@ public class UserController : ControllerBase
         return user?.ToUserDto()!;
     }
 
-    [HttpPost("[action]")]
+    [HttpPut("[action]")]
     public async Task<IActionResult> SetUserPassword([FromBody] UserChangePasswordDto chPass )
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -40,7 +40,7 @@ public class UserController : ControllerBase
         return changeRes.Succeeded? Ok("Пароль изменён"): BadRequest(changeRes.Errors);
     }
 
-    [HttpPost("[action]")]
+    [HttpPut("[action]")]
     public async Task<IActionResult> SetUserMail([FromBody] UserChangeMailDto chMail)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -51,7 +51,7 @@ public class UserController : ControllerBase
         return changeRes.Succeeded? Ok("Почта изменена"): BadRequest(changeRes.Errors);
     }
 
-    [HttpPost("[action]")]
+    [HttpPut("[action]")]
     public async Task<IActionResult> SetUserData([FromBody] UserChangeOrdinaryDto chOrdinary)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);

@@ -77,7 +77,7 @@ const ChangePassForm = () => {
 
 
     function SendChangedData (values) {
-        axiosInstance.post('api/User/SetUserPassword', {
+        axiosInstance.put('api/User/SetUserPassword', {
             password: values.password,
             code: values.code
         })
