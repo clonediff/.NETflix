@@ -22,6 +22,14 @@ const FilmsPage = () => {
 
     const sendForm = (values) => {
         console.log(values)
+        Object.keys(values).forEach(key => {
+            if (values[key] === undefined)
+                values[key] = null
+            console.log(key, values[key])
+        });
+        axiosInstance.post('api/Films/AddFilm', values)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
     }
 
     const currencySuffix = (

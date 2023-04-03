@@ -128,4 +128,35 @@ public class FilmProvider : IFilmProvider
 
         return result?.ToMovieForMoviePageDto();
     }
+
+    public async Task AddFilmAsync(MovieInfo movieInfo)
+    {
+        var type = await _dbContext.Types.SingleAsync(x => x.Name == movieInfo.Type.Name);
+        var category = movieInfo.Category != null ? await _dbContext.Categories.SingleAsync(x => x.Name == movieInfo.Category.Name) : null;
+
+        var movieInfoCountryNames = movieInfo.Countries.Select(x => x.Country.Name);
+        var countries = await _dbContext.Countries.Where(x => movieInfoCountryNames.Contains(x.Name)).ToDictionaryAsync(x => x.Name);
+
+        var movieInfoGenreNames = movieInfo.Genres.Select(x => x.Genre.Name);
+        var genres = await _dbContext.Genres.Where(x => movieInfoGenreNames.Contains(x.Name)).ToDictionaryAsync(x => x.Name);
+
+        var movieInfoPeopleData = movieInfo.Proffessions.Select(x => x.Person.Photo);
+        var people = await _dbContext.Persons.Where(x => movieInfoPeopleData.Contains(x.Photo)).ToDictionaryAsync(x => new { x.Name, x.Photo });
+
+        movieInfo.Type = type;
+        movieInfo.Category = category;
+
+        foreach (var mm_movieCountry in movieInfo.Countries)
+            mm_movieCountry.Country = countries[mm_movieCountry.Country.Name];
+
+        foreach (var mm_movieGenre in movieInfo.Genres)
+            mm_movieGenre.Genre = genres[mm_movieGenre.Genre.Name];
+
+        foreach (var mm_moviePerson in movieInfo.Proffessions)
+            if (people.ContainsKey(new { mm_moviePerson.Person.Name, mm_moviePerson.Person.Photo }))
+                mm_moviePerson.Person = people[new { mm_moviePerson.Person.Name, mm_moviePerson.Person.Photo }];
+
+        _dbContext.Movies.Add(movieInfo);
+        await _dbContext.SaveChangesAsync();
+    }
 }

@@ -3,6 +3,7 @@ using DtoLibrary;
 using DtoLibrary.MoviePage;
 using Microsoft.AspNetCore.Mvc;
 using Services.FilmService;
+using Services.Mappers;
 
 namespace BackendAPI.Controllers;
 
@@ -33,5 +34,12 @@ public class FilmsController : ControllerBase
     public async Task<MovieForMoviePageDto?> GetFilmById([FromQuery] int id)
     {
         return await _filmProvider.GetFilmByIdAsync(id);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> AddFilmAsync([FromBody] FilmInsertDto dto)
+    {
+        await _filmProvider.AddFilmAsync(dto.ToMovieInfo());
+        return Ok();
     }
 }
