@@ -33,6 +33,23 @@
     width: 90%;
 }
 
+.option-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.left-border-radius {
+    border-top-left-radius: 6px !important;
+    border-bottom-left-radius: 6px !important;
+}
+
+.right-border-radius {
+    border-top-right-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
+}
+
 @media screen and (max-width: 1024px) {
     .films-page {
         grid-template-columns: 1fr;

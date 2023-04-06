@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Button, Form, Input, InputNumber, Select, Space } from 'antd'
+import { Button, Checkbox, Form, Input, InputNumber, Select, Space } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { axiosInstance } from '../../axiosInstance'
 import './films-page.css'
+import { useForm } from 'antd/es/form/Form';
 
 const FilmsPage = () => {
+
+    const [form] = useForm()
 
     const [options, setOptions] = useState({
         types: [],
@@ -22,6 +25,7 @@ const FilmsPage = () => {
 
     const sendForm = (values) => {
         console.log(values)
+        // axiosInstance.post('api/enums/post', values)
     }
 
     const currencySuffix = (
@@ -32,14 +36,36 @@ const FilmsPage = () => {
         ]} />
     )
 
+    const currencyValidator = (namepath) => 
+        ({ getFieldValue }) => ({
+            validator(_, value) {
+                if (getFieldValue(namepath) && !value) {
+                    return Promise.reject(new Error('Введите наименование валюты'))
+                }
+                return Promise.resolve()
+            }
+        })
+
     return (
         <div className='films-page'>
             <div className='film-list'>Список всех фильмов на сайте</div> 
-            <Form className='film-add-form' onFinish={ sendForm }>
-                <Form.Item label='Название' className='form-item' name='name'>
+            <Form form={ form } className='film-add-form' onFinish={ sendForm }>
+                <Form.Item label='Название' className='form-item' name='name'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите название'
+                        }
+                    ]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label='Год выхода' className='form-item' name='year'>
+                <Form.Item label='Год выхода' className='form-item' name='year'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите год выхода'
+                        }
+                    ]}>
                     <Input />
                 </Form.Item>
                 <Form.Item label='Описание' className='form-item' name='description'>
@@ -54,7 +80,13 @@ const FilmsPage = () => {
                 <Form.Item label='Рейтинг' className='form-item' name='rating'>
                     <Input />
                 </Form.Item>
-                <Form.Item label='Длительность' className='form-item' name='movieLength'>
+                <Form.Item label='Длительность' className='form-item' name='movieLength'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите длительность'
+                        }
+                    ]}>
                     <Input />
                 </Form.Item>
                 <Form.Item label='Возрастное ограничение' className='form-item' name='ageRating'>
@@ -63,7 +95,13 @@ const FilmsPage = () => {
                 <Form.Item label='URL постера' className='form-item' name='posterUrl'>
                     <Input />
                 </Form.Item>
-                <Form.Item label='Тип' className='form-item' name='type'>
+                <Form.Item label='Тип' className='form-item' name='type'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Выберите тип'
+                        }
+                    ]}>
                     <Select allowClear options={ options.types.map(v => ({ label: v, value: v })) } />
                 </Form.Item>
                 <Form.Item label='Категория' className='form-item' name='category'>
@@ -71,36 +109,52 @@ const FilmsPage = () => {
                 </Form.Item>
                 <Form.Item label='Бюджет' className='form-item' name='budget'>
                     <Input addonAfter={ 
-                        <Form.Item name='budgetCurrency' noStyle>
+                        <Form.Item name='budgetCurrency' noStyle
+                            rules={[ currencyValidator('budget') ]}>
                             { currencySuffix }
                         </Form.Item>
                      } />
                 </Form.Item>
                 <Form.Item label='Сборы в мире' className='form-item' name='feesWorld'>
                     <Input addonAfter={ 
-                        <Form.Item name='feesWorldCurrency' noStyle>
+                        <Form.Item name='feesWorldCurrency' noStyle
+                            rules={[ currencyValidator('feesWorld') ]}>
                             { currencySuffix }
                         </Form.Item>
                      } />
                 </Form.Item>
                 <Form.Item label='Сборы в России' className='form-item' name='feesRussia'>
                     <Input addonAfter={ 
-                        <Form.Item name='feesRussiaCurrency' noStyle>
+                        <Form.Item name='feesRussiaCurrency' noStyle
+                            rules={[ currencyValidator('feesRussia') ]}>
                             { currencySuffix }
                         </Form.Item>
                      } />
                 </Form.Item>
                 <Form.Item label='Сборы в США' className='form-item' name='feesUsa'>
                     <Input addonAfter={ 
-                        <Form.Item name='feesUsaCurrency' noStyle>
+                        <Form.Item name='feesUsaCurrency' noStyle
+                            rules={[ currencyValidator('feesUsa') ]}>
                             { currencySuffix }
                         </Form.Item>
                      } />
                 </Form.Item>
-                <Form.Item label='Жанры' className='form-item' name='genres'>
+                <Form.Item label='Жанры' className='form-item' name='genres'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Выберите жанр'
+                        }
+                    ]}>
                     <Select allowClear mode='multiple' options={ options.genres.map(v => ({ label: v, value: v })) } />
                 </Form.Item>
-                <Form.Item label='Страны' className='form-item' name='countries'>
+                <Form.Item label='Страны' className='form-item' name='countries'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Выберите страны'
+                        }
+                    ]}>
                     <Select allowClear mode='multiple' options={ options.countries.map(v => ({ label: v, value: v })) } />
                 </Form.Item>
                 <Form.List name='seasons'>
@@ -109,18 +163,10 @@ const FilmsPage = () => {
                             <>
                                 {
                                     fields.map((field, index) => (  
-                                        <>
+                                        <div key={ field.key }>
                                             { index === 0 ? <div className='form-label'>Сезоны</div> : null }
-                                            <Space align='center' className='form-item' key={ field.key }>
-                                                <Form.Item name={[field.name, 'number']} className='form-list-input'>
-                                                    <InputNumber addonBefore='№' />
-                                                </Form.Item>
-                                                <Form.Item name={[field.name, 'episodesCount']} className='form-list-input'>
-                                                    <InputNumber addonBefore='Серии' />
-                                                </Form.Item>
-                                                <MinusCircleOutlined onClick={ () => remove(field.name) } />
-                                            </Space>
-                                        </>
+                                            <SeasonsSpace name={ field.name } remove={ remove } />
+                                        </div>
                                     ))
                                 }
                                 <Form.Item className='form-item'>
@@ -136,29 +182,10 @@ const FilmsPage = () => {
                             <>
                                 {
                                     fields.map((field, index) => (
-                                        <>
+                                        <div key={ field.key }>
                                             { index === 0 ? <div className='form-label'>Коллектив</div> : null }
-                                            <Space direction='vertical' className='form-item person-space' key={ field.key }>
-                                                <Form.Item name={[field.name, 'name']} className='form-list-input'>
-                                                    <Input addonAfter={
-                                                        <Form.Item name={[field.name, 'profession']} noStyle>
-                                                            <Select allowClear options={[
-                                                                { label: 'актёр', value: 'актеры' },
-                                                                { label: 'оператор', value: 'операторы' }
-                                                            ]} />
-                                                        </Form.Item>
-                                                    } />
-                                                </Form.Item>
-                                                <Form.Item name={[field.name, 'photo']} className='form-list-input'>
-                                                    <Input addonBefore='фото' />
-                                                </Form.Item>
-                                                <Button 
-                                                    icon={ <MinusCircleOutlined /> } 
-                                                    onClick={ () => remove(field.name) }>
-                                                    Убрать участника
-                                                </Button>
-                                            </Space>
-                                        </>
+                                            <PeopleSpace name={ field.name } remove={ remove } form={ form } />
+                                        </div>
                                     ))
                                 }
                                 <Form.Item className='form-item'>
@@ -172,6 +199,96 @@ const FilmsPage = () => {
                     <Button htmlType='submit' className='form-item'>Добавить</Button>
                 </Form.Item>
             </Form>
+        </div>
+    )
+}
+
+const SeasonsSpace = ({ name, remove }) => {
+    return (
+        <Space direction='vertical' className='form-item'>
+            <Form.Item label='№ Сезона' name={[name, 'number']} className='form-list-input'
+                rules={[
+                    {
+                        required: true,
+                        message: 'Введите номер сезона'
+                    }
+                ]}>
+                <InputNumber />
+            </Form.Item>
+            <Form.Item label='Количество серий' name={[name, 'episodesCount']} className='form-list-input'
+                rules={[
+                    {
+                        required: true,
+                        message: 'Введите количество серий'
+                    }
+                ]}>
+                <InputNumber />
+            </Form.Item>
+            <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(name) }>
+                Убрать сезон
+            </Button>
+        </Space>
+    )
+}
+
+const PeopleSpace = ({ name, remove, form }) => {
+
+    const [exists, setExists] = useState(true)
+
+    const changeExistance = (exists) => {
+        setExists(exists)
+        form.setFieldValue(['people', name, 'exists'], exists)
+    }
+
+    return (
+        <Space direction='vertical' className='form-item person-space'>
+            <Space.Compact style={{ width: '100%' }}>
+                <Form.Item name={[name, 'name']} noStyle required>
+                    <Select 
+                        style={{ display: exists ? 'inline-block' : 'none', width: '80%' }} 
+                        showSearch 
+                        allowClear 
+                        optionLabelProp='label'
+                        notFoundContent={ 
+                            <Button className='right-border-radius' onClick={ () => changeExistance(false) }>
+                                Добавить нового человека
+                            </Button> }>
+                        <Select.Option label='Том Круз' value='Том Круз'>
+                            <OptionItem />
+                        </Select.Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item name={[name, 'name']} noStyle required>
+                    <Input className='left-border-radius' style={{ display: !exists ? 'inline-block' : 'none', width: '80%' }} />
+                </Form.Item>
+                <Form.Item name={[name, 'profession']} noStyle required>
+                    <Select style={{ width: '20%' }} allowClear options={[
+                        { label: 'актёр', value: 'актеры' },
+                        { label: 'оператор', value: 'операторы' }
+                    ]} />
+                </Form.Item>
+            </Space.Compact>
+            <Form.Item hidden={ exists } name={[name, 'photo']} className='form-list-input' noStyle>
+                <Input addonBefore='фото' />
+            </Form.Item>
+            <Form.Item hidden initialValue={ true } name={[name, 'exists']} className='form-list-input' valuePropName='checked' noStyle>
+                <Checkbox />
+            </Form.Item>
+            <Button style={{ display: !exists ? 'block' : 'none' }} onClick={ () => changeExistance(true) }>
+                Добавить существуещего человека
+            </Button>
+            <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(name) }>
+                Убрать участника
+            </Button>
+        </Space>
+    )
+}
+
+const OptionItem = () => {
+    return (
+        <div className='option-item'>
+            <span>Том Круз</span>
+            <img style={{ width: 20 }} src='https://st.kp.yandex.net/images/actor_iphone/iphone360_20302.jpg' alt=''/>
         </div>
     )
 }
