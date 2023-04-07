@@ -1,1 +1,0 @@
-[{"Id":1,"Name":"animated-series","Slug":"animated-series"},{"Id":2,"Name":"anime","Slug":"anime"},{"Id":3,"Name":"cartoon","Slug":"cartoon"},{"Id":4,"Name":"mini-series","Slug":"mini-series"},{"Id":5,"Name":"movie","Slug":"movie"},{"Id":6,"Name":"tv-series","Slug":"tv-series"},{"Id":7,"Name":"tv-show","Slug":"tv-show"}]

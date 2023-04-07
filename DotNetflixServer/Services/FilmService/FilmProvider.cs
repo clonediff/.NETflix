@@ -39,9 +39,7 @@ public class FilmProvider : IFilmProvider
 
         if (year is not null)
         {
-            result = result is null
-                ? _dbContext.Movies.Where(m => m.Year == year)
-                : result.Where(m => m.Year == year);
+            result = (result ?? _dbContext.Movies).Where(m => m.Year == year);
         }
 
         if (country is not null)
@@ -50,9 +48,7 @@ public class FilmProvider : IFilmProvider
                 .Include(m => m.Countries)
                 .ThenInclude(cm => cm.Country);
 
-            result = result is null
-                ? _dbContext.Movies.Where(m => m.Countries.Any(cm => cm.Country.Name == country))
-                : result.Where(m => m.Countries.Any(cm => cm.Country.Name == country));
+            result = (result ?? _dbContext.Movies).Where(m => m.Countries.Any(cm => cm.Country.Name == country));
         }
 
         if (genres is not null && genres?.Length != 0)
@@ -61,33 +57,27 @@ public class FilmProvider : IFilmProvider
                 .Include(m => m.Genres)
                 .ThenInclude(gm => gm.Genre);
 
-            result = result is null
-                ? _dbContext.Movies.Where(m => m.Genres.Count(gm => genres!.Contains(gm.Genre.Name)) == genres!.Length)
-                : result.Where(m => m.Genres.Count(gm => genres!.Contains(gm.Genre.Name)) == genres!.Length);
+            result = (result ?? _dbContext.Movies).Where(m => m.Genres.Count(gm => genres!.Contains(gm.Genre.Name)) == genres!.Length);
         }
 
         if (actors is not null && actors?.Length != 0 || director is not null)
         {
             _dbContext.Movies
                 .Include(m => m.Proffessions)
-                .ThenInclude(pm => pm.Person);
+                    .ThenInclude(pm => pm.Person)
+                .Include(m => m.Proffessions)
+                    .ThenInclude(pm => pm.Profession);
 
-            if (actors?.Length != 0)
+            if (actors is not null)
             {
-                result = result is null
-                    ? _dbContext.Movies.Where(m => m.Proffessions
-                        .Count(pm => pm.Proffession == "актеры" && actors!.Contains(pm.Person.Name)) == actors!.Length)
-                    : result.Where(m => m.Proffessions
-                        .Count(pm => pm.Proffession == "актеры" && actors!.Contains(pm.Person.Name)) == actors!.Length);
+                result = (result ?? _dbContext.Movies).Where(m => m.Proffessions
+                        .Count(pm => pm.Profession.Name == "актеры" && actors!.Contains(pm.Person.Name)) == actors!.Length);
             }
 
             if (director is not null)
             {
-                result = result is null
-                    ? _dbContext.Movies.Where(m => m.Proffessions
-                        .Any(pm => pm.Proffession == "режиссеры" && pm.Person.Name == director))
-                    : result.Where(m => m.Proffessions
-                        .Any(pm => pm.Proffession == "режиссеры" && pm.Person.Name == director));
+                result = (result ?? _dbContext.Movies).Where(m => m.Proffessions
+                        .Any(pm => pm.Profession.Name == "режиссеры" && pm.Person.Name == director));
             }
         }
 
@@ -109,22 +99,24 @@ public class FilmProvider : IFilmProvider
     public async Task<MovieForMoviePageDto?> GetFilmByIdAsync(int id)
     {
         var result = await _dbContext.Movies
-          .Where(m => m.Id == id)
-          .Include(movie => movie.Type)
-          .Include(movie => movie.Category)
-          .Include(movie => movie.Budget)
-          .Include(movie => movie.Fees)
-          .Include(movie => movie.Countries)
-          .ThenInclude(cm => cm.Country)
-          .Include(movie => movie.Genres)
-          .ThenInclude(gm => gm.Genre)
-          .Include(movie => movie.SeasonsInfo)
-          .Include(movie => movie.Proffessions)
-          .ThenInclude(pm => pm.Person)
-          .Include(movie => movie.Fees.World)
-          .Include(movie => movie.Fees.Russia)
-          .Include(movie => movie.Fees.USA)
-          .FirstOrDefaultAsync();
+            .Where(m => m.Id == id)
+            .Include(movie => movie.Type)
+            .Include(movie => movie.Category)
+            .Include(movie => movie.Budget)
+            .Include(movie => movie.Fees)
+            .Include(movie => movie.Countries)
+                .ThenInclude(cm => cm.Country)
+            .Include(movie => movie.Genres)
+                .ThenInclude(gm => gm.Genre)
+            .Include(movie => movie.SeasonsInfo)
+            .Include(movie => movie.Proffessions)
+                .ThenInclude(pm => pm.Person)
+            .Include(movie => movie.Proffessions)
+                .ThenInclude(pm => pm.Profession)
+            .Include(movie => movie.Fees.World)
+            .Include(movie => movie.Fees.Russia)
+            .Include(movie => movie.Fees.USA)
+            .FirstOrDefaultAsync();
 
         return result?.ToMovieForMoviePageDto();
     }
@@ -158,5 +150,10 @@ public class FilmProvider : IFilmProvider
 
         _dbContext.Movies.Add(movieInfo);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public IEnumerable<string> GetAllNames()
+    {
+        return _dbContext.Movies.Select(x => x.Name);
     }
 }

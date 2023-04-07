@@ -25,7 +25,6 @@ const FilmsPage = () => {
         Object.keys(values).forEach(key => {
             if (values[key] === undefined)
                 values[key] = null
-            console.log(key, values[key])
         });
         axiosInstance.post('api/Films/AddFilm', values)
             .then(response => console.log(response))

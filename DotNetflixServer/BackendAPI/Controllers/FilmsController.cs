@@ -35,11 +35,4 @@ public class FilmsController : ControllerBase
     {
         return await _filmProvider.GetFilmByIdAsync(id);
     }
-
-    [HttpPost("[action]")]
-    public async Task<IActionResult> AddFilmAsync([FromBody] FilmInsertDto dto)
-    {
-        await _filmProvider.AddFilmAsync(dto.ToMovieInfo());
-        return Ok();
-    }
 }
