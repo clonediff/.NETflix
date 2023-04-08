@@ -21,7 +21,7 @@ namespace Services.Mappers
                 AgeRating = dto.AgeRating,
                 Description = dto.Description,
                 MovieLength = dto.MovieLength,
-                Genres = dto.Genres.Select(x => new GenreMovieInfo { Genre = new Genre { Name = x } }).ToList(),
+                Genres = dto.Genres.Select(x => new GenreMovieInfo { GenreId = x }).ToList(),
                 Budget = GetCurrencyValue(dto.Budget, dto.BudgetCurrency),
                 Fees = feesRussia is not null ||
                         feesUsa is not null ||
@@ -34,17 +34,18 @@ namespace Services.Mappers
                         } : null!,
                 PosterURL = dto.PosterURL,
                 Year = dto.Year,
-                Type = new Types { Name = dto.Type },
+                TypeId = dto.Type,
                 Slogan = dto.Slogan,
                 ShortDescription = dto.ShortDescription,
                 Rating = dto.Rating,
-                Category = dto.Category is not null ?
-                    new Category { Name = dto.Category } : null!,
-                Countries = dto.Countries.Select(x => new CountryMovieInfo { Country = new Country { Name = x } }).ToList(),
-                SeasonsInfo = dto.Seasons.Select(x => new SeasonsInfo { Number = x.Number, EpisodesCount = x.EpisodesCount }).ToList(),
-                Proffessions = dto.People.Select(x => new PersonProffessionInMovie { Profession = new Profession { Name = x.Profession },
-                    Person = new Person
+                CategoryId = dto.Category,
+                Countries = dto.Countries.Select(x => new CountryMovieInfo { CountryId = x }).ToList(),
+                SeasonsInfo = dto.Seasons?.Select(x => new SeasonsInfo { Number = x.Number, EpisodesCount = x.EpisodesCount }).ToList(),
+                Proffessions = dto.People.Select(x => new PersonProffessionInMovie { ProfessionId = x.Profession ,
+                    PersonId = x.Id,
+                    Person = x.Id != 0 ? null! : new Person
                     {
+                        Id = x.Id,
                         Name = x.Name,
                         Photo = x.Photo,
                     } }).ToList()

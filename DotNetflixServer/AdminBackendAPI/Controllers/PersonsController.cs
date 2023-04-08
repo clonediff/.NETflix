@@ -15,7 +15,7 @@ namespace AdminBackendAPI.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public IEnumerable<PersonsDto> GetAll()
         {
             return _dbContext.Persons.Select(x => x.ToPersonsDto());

@@ -12,7 +12,6 @@ using Services.TwoFAService;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using DataAccess.Entities.BusinessLogic;
-using BackendAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using AdminBackendAPI.Dto;
+using DataAccess;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminBackendAPI.Controllers
@@ -15,9 +16,9 @@ namespace AdminBackendAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public IDictionary<string, IEnumerable<string>> GetAll()
+        public IDictionary<string, IEnumerable<EnumDto>> GetAll()
         {
-            return new Dictionary<string, IEnumerable<string>>
+            return new Dictionary<string, IEnumerable<EnumDto>>
             {
                 ["types"] = GetTypes(),
                 ["countries"] = GetCountries(),
@@ -28,33 +29,33 @@ namespace AdminBackendAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetTypes()
+        public IEnumerable<EnumDto> GetTypes()
         {
-            return _dbContext.Types.Select(x => x.Name);
+            return _dbContext.Types.Select(x => new EnumDto { Id = x.Id, Name = x.Name });
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetCountries()
+        public IEnumerable<EnumDto> GetCountries()
         {
-            return _dbContext.Countries.Select(x => x.Name);
+            return _dbContext.Countries.Select(x => new EnumDto { Id = x.Id, Name = x.Name });
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetGenres()
+        public IEnumerable<EnumDto> GetGenres()
         {
-            return _dbContext.Genres.Select(x => x.Name);
+            return _dbContext.Genres.Select(x => new EnumDto { Id = x.Id, Name = x.Name });
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetCategories()
+        public IEnumerable<EnumDto> GetCategories()
         {
-            return _dbContext.Categories.Select(x => x.Name);
+            return _dbContext.Categories.Select(x => new EnumDto { Id = x.Id, Name = x.Name });
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetProfessions()
+        public IEnumerable<EnumDto> GetProfessions()
         {
-            return _dbContext.Professions.Select(x => x.Name);
+            return _dbContext.Professions.Select(x => new EnumDto { Id = x.Id, Name = x.Name });
         }
     }
 }

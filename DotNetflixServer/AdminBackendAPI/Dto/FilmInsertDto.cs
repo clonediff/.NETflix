@@ -14,8 +14,8 @@ public class FilmInsertDto
     public int? AgeRating { get; set; }
     public string? PosterURL { get; set; }
 
-    public string Type { get; set; }
-    public string? Category { get; set; }
+    public int Type { get; set; }
+    public int? Category { get; set; }
 
     public uint? Budget { get; set; }
     public string? BudgetCurrency { get; set; }
@@ -26,9 +26,9 @@ public class FilmInsertDto
     public uint? FeesWorld { get; set; }
     public string? FeesWorldCurrency { get; set; }
 
-    public string[] Countries { get; set; }
-    public string[] Genres { get; set; }
+    public int[] Countries { get; set; }
+    public int[] Genres { get; set; }
 
-    public SeasonsInfoForMoviePageDto[] Seasons { get; set; }
-    public PersonForMoviePageDto[] People { get; set; }
+    public SeasonsInfoForMoviePageDto[]? Seasons { get; set; }
+    public InsertPersonDto[] People { get; set; }
 }

@@ -13,13 +13,24 @@ const FilmsPage = () => {
         types: [],
         categories: [],
         genres: [],
-        countries: []
+        countries: [],
+        professions: []
     })
+
+    const [people, setPeople] = useState([{
+        id: 0,
+        name: '',
+        photo: ''
+    }])
 
     useEffect(() => {
         axiosInstance.get('api/enums/getall')
             .then(({ data }) => {
                 setOptions(data)
+            })
+        axiosInstance.get('api/persons/getall')
+            .then(({ data }) => {
+                setPeople(data)
             })
     }, [])
 
@@ -108,10 +119,10 @@ const FilmsPage = () => {
                             message: 'Выберите тип'
                         }
                     ]}>
-                    <Select allowClear options={ options.types.map(v => ({ label: v, value: v })) } />
+                    <Select allowClear options={ options.types.map(v => ({ label: v.name, value: v.id })) } />
                 </Form.Item>
                 <Form.Item label='Категория' className='form-item' name='category'>
-                    <Select allowClear options={ options.categories.map(v => ({ label: v, value: v })) } />
+                    <Select allowClear options={ options.categories.map(v => ({ label: v.name, value: v.id })) } />
                 </Form.Item>
                 <Form.Item label='Бюджет' className='form-item' name='budget'>
                     <Input addonAfter={ 
@@ -152,7 +163,8 @@ const FilmsPage = () => {
                             message: 'Выберите жанр'
                         }
                     ]}>
-                    <Select allowClear mode='multiple' options={ options.genres.map(v => ({ label: v, value: v })) } />
+                    <Select filterOption={ filterOptions } allowClear mode='multiple' 
+                        options={ options.genres.map(v => ({ label: v.name, value: v.id })) } />
                 </Form.Item>
                 <Form.Item label='Страны' className='form-item' name='countries'
                     rules={[
@@ -161,7 +173,8 @@ const FilmsPage = () => {
                             message: 'Выберите страны'
                         }
                     ]}>
-                    <Select allowClear mode='multiple' options={ options.countries.map(v => ({ label: v, value: v })) } />
+                    <Select filterOption={ filterOptions } allowClear mode='multiple' 
+                        options={ options.countries.map(v => ({ label: v.name, value: v.id })) } />
                 </Form.Item>
                 <Form.List name='seasons'>
                     {
@@ -190,7 +203,9 @@ const FilmsPage = () => {
                                     fields.map((field, index) => (
                                         <div key={ field.key }>
                                             { index === 0 ? <div className='form-label'>Коллектив</div> : null }
-                                            <PeopleSpace name={ field.name } remove={ remove } form={ form } />
+                                            <PeopleSpace name={ field.name } remove={ remove } 
+                                                form={ form } professions={ options.professions } 
+                                                people={ people }/>
                                         </div>
                                     ))
                                 }
@@ -237,7 +252,11 @@ const SeasonsSpace = ({ name, remove }) => {
     )
 }
 
-const PeopleSpace = ({ name, remove, form }) => {
+const filterOptions = (inputValue, option) => {
+    return option.label.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1;
+}
+
+const PeopleSpace = ({ name, remove, form, professions, people }) => {
 
     const [exists, setExists] = useState(true)
 
@@ -249,29 +268,32 @@ const PeopleSpace = ({ name, remove, form }) => {
     return (
         <Space direction='vertical' className='form-item person-space'>
             <Space.Compact style={{ width: '100%' }}>
-                <Form.Item name={[name, 'name']} noStyle required>
+                <Form.Item name={[name, 'id']} noStyle required>
                     <Select 
                         style={{ display: exists ? 'inline-block' : 'none', width: '80%' }} 
                         showSearch 
                         allowClear 
+                        filterOption={ filterOptions }
                         optionLabelProp='label'
                         notFoundContent={ 
                             <Button className='right-border-radius' onClick={ () => changeExistance(false) }>
                                 Добавить нового человека
                             </Button> }>
-                        <Select.Option label='Том Круз' value='Том Круз'>
-                            <OptionItem />
-                        </Select.Option>
+                        { people.map(v => (
+                            <Select.Option label={v.name} value={v.id}>
+                                <OptionItem name={v.name} photo={v.photo}/>
+                            </Select.Option>
+                        )) }
+                        {/* <Select.Option label='Том Круз' value='Том Круз'>
+                            <OptionItem name={}/>
+                        </Select.Option> */}
                     </Select>
                 </Form.Item>
                 <Form.Item name={[name, 'name']} noStyle required>
                     <Input className='left-border-radius' style={{ display: !exists ? 'inline-block' : 'none', width: '80%' }} />
                 </Form.Item>
                 <Form.Item name={[name, 'profession']} noStyle required>
-                    <Select style={{ width: '20%' }} allowClear options={[
-                        { label: 'актёр', value: 'актеры' },
-                        { label: 'оператор', value: 'операторы' }
-                    ]} />
+                    <Select style={{ width: '20%' }} allowClear options={ professions.map(v => ({ label: v.name, value: v.id })) }/>
                 </Form.Item>
             </Space.Compact>
             <Form.Item hidden={ exists } name={[name, 'photo']} className='form-list-input' noStyle>
@@ -290,11 +312,11 @@ const PeopleSpace = ({ name, remove, form }) => {
     )
 }
 
-const OptionItem = () => {
+const OptionItem = ({ name, photo}) => {
     return (
         <div className='option-item'>
-            <span>Том Круз</span>
-            <img style={{ width: 20 }} src='https://st.kp.yandex.net/images/actor_iphone/iphone360_20302.jpg' alt=''/>
+            <span>{name}</span>
+            <img style={{ width: 20 }} src={photo} alt=''/>
         </div>
     )
 }
