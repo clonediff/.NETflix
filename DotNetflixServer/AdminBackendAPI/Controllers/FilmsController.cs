@@ -16,6 +16,12 @@ namespace AdminBackendAPI.Controllers
             _filmProvider = filmProvider;
         }
 
+        [HttpGet("[action]")]
+        public async Task<int> GetFilmsCountAsync()
+        {
+            return await _filmProvider.GetFilmsCountAsync();
+        }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> AddFilmAsync([FromBody] FilmInsertDto dto)
         {
@@ -24,9 +30,9 @@ namespace AdminBackendAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetAllNames()
+        public IEnumerable<string> GetAllNames([FromQuery] int? page = 1)
         {
-            return _filmProvider.GetAllNames();
+            return _filmProvider.GetAllNames(page!.Value);
         }
     }
 }

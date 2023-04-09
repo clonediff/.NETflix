@@ -17,6 +17,11 @@ public class FilmProvider : IFilmProvider
         _dbContext = dbContext;
     }
 
+    public async Task<int> GetFilmsCountAsync()
+    {
+        return await _dbContext.Movies.CountAsync();
+    }
+
     public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(string? type, string? name, int? year, string? country, string[]? genres, string[]? actors, string? director)
     {
         if (type is not null)
@@ -127,8 +132,11 @@ public class FilmProvider : IFilmProvider
         await _dbContext.SaveChangesAsync();
     }
 
-    public IEnumerable<string> GetAllNames()
+    public IEnumerable<string> GetAllNames(int page)
     {
-        return _dbContext.Movies.Select(x => x.Name);
+        return _dbContext.Movies
+            .Skip(15 * (page - 1))
+            .Take(15)
+            .Select(x => x.Name);
     }
 }
