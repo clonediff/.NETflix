@@ -1,13 +1,22 @@
-import { Form, Input, Button } from "antd"
+import { Form, Input, Button, Modal } from "antd"
 import styles from "../MainInfo.module.sass"
 import "../MainInfo.css"
 import USettingsFooter from "./usettings-footer"
-import Field2FACode from "./field-2FA-code"
+import Gen2FACodeSendField from "../functions/Gen2FACodeSendField"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { axiosInstance } from "../../../../AxiosInstance"
 
 const ChangePassForm = () => {
+
+    const navigate = useNavigate()
+
+    const {content} = Gen2FACodeSendField();
+    const [showModal, setShowModal] = useState(false)
+
     return(
         <>
-            <Form className="settings-form" layout="vertical">
+            <Form className="settings-form" layout="vertical" onFinish={(values) => SendChangedData(values)}>
                 <Form.Item
                     name="password"
                     label="Новый пароль"
@@ -45,7 +54,7 @@ const ChangePassForm = () => {
                     <Input.Password />
                 </Form.Item>
                 <Form.Item >
-                    <Field2FACode/>
+                    {content}
                 </Form.Item>
                 <Form.Item className={styles.button}>
                     <Button className="settings-submit-button" type="primary" htmlType="submit">
@@ -53,14 +62,33 @@ const ChangePassForm = () => {
                     </Button>
                 </Form.Item>
             </Form>
+            
             <USettingsFooter linkDirection={'../change'} linkText={"Вернуться к основным настройкам"} />
+
+            <Modal title=""
+                open={showModal}
+                footer={[
+                    <Button className="settings-submit-button" type="primary" onClick={() => navigate("../")}>Ok</Button>
+                ]}>
+                <p>Пароль изменён!</p>
+            </Modal>
         </>
     )
+
+
+    function SendChangedData (values) {
+        axiosInstance.put('api/User/SetUserPassword', {
+            password: values.password,
+            code: values.code
+        })
+            .then(response => {
+                setShowModal(true)
+            })
+            // TODO: catch error
+            .catch(error => console.log(error))
+    }
 }
 
-function SendChangedData (values) {
 
-    
-}
 
 export default ChangePassForm
