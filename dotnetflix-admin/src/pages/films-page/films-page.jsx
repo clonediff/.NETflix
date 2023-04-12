@@ -16,6 +16,9 @@ const FilmsPage = () => {
                 setFilmsCount(data)
                 setIsLoading(false)
             })
+    }, [])
+
+    useEffect(() => {
         axiosInstance.get(`api/enums/getallnames?page=${page}`)
             .then(({ data }) => {
                 setFilms(data)
@@ -29,7 +32,8 @@ const FilmsPage = () => {
     return (
         <>
             {
-                !isLoading ? 
+                !isLoading 
+                ? 
                 <>
                     <div className='film-list'>
                     {
@@ -46,7 +50,8 @@ const FilmsPage = () => {
                         total={ filmsCount }
                         onChange={ onPageChanged } />
                 </>
-                : null
+                : 
+                null
             }
         </>
     )
