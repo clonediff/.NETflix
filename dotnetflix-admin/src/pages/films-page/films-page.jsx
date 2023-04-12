@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../axiosInstance'
+import { Button, Form, Input, Pagination } from 'antd'
 import './films-page.css'
-import { Pagination } from 'antd'
 
 const FilmsPage = () => {
 
@@ -9,9 +9,10 @@ const FilmsPage = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [page, setPage] = useState(1)
     const [filmsCount, setFilmsCount] = useState(0)
+    const [searchedFilmName, setSearchedFilmName] = useState(null)
 
     useEffect(() => {
-        axiosInstance.get('api/enums/getfilmscount')
+        axiosInstance.get('api/films/getfilmscount')
             .then(({ data }) => {
                 setFilmsCount(data)
                 setIsLoading(false)
@@ -19,14 +20,18 @@ const FilmsPage = () => {
     }, [])
 
     useEffect(() => {
-        axiosInstance.get(`api/enums/getallnames?page=${page}`)
+        axiosInstance.get(`api/films/getallnames?page=${page}&name=${searchedFilmName}`)
             .then(({ data }) => {
                 setFilms(data)
             })
-    }, [page])
+    }, [page, searchedFilmName])
 
     const onPageChanged = (page, _) => {
         setPage(page)
+    }
+
+    const onSearch = (values) => {
+        setSearchedFilmName(values.name)
     }
 
     return (
@@ -35,12 +40,20 @@ const FilmsPage = () => {
                 !isLoading 
                 ? 
                 <>
+                    <Form onFinish={ onSearch }>
+                        <Form.Item name='name' noStyle>
+                            <Input.Search placeholder='Введите название фильма' className='film-search' />
+                        </Form.Item>
+                        <Form.Item hidden noStyle>
+                            <Button htmlType='submit'></Button>  
+                        </Form.Item>
+                    </Form>
                     <div className='film-list'>
-                    {
-                        films.map(film => (
-                            <div className='film-list-item'>{ film }</div>
-                        ))
-                    }
+                        {
+                            films.map(film => (
+                                <div className='film-list-item'>{ film }</div>
+                            ))
+                        }
                     </div>
                     <Pagination 
                         className='pagination'

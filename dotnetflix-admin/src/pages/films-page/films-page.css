@@ -1,7 +1,23 @@
+@import url(../../constants.css);
+
+.film-search {
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.film-search input, .film-search button, .film-search input:focus {
+    border: none !important;
+}
+
+.film-search input:focus {
+    box-shadow: none;
+}
+
 .film-list {
     height: auto;
     padding: 12px;
-    border: 2px solid rgb(33, 150, 243);
+    border: 2px solid var(--sidebarBgColor);
     border-radius: 4px;
 }
 

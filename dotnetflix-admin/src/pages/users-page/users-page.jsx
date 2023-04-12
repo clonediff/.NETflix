@@ -1,4 +1,4 @@
-import { Button, Form, Pagination, Select, Space } from 'antd'
+import { Button, Form, Input, Pagination, Select, Space } from 'antd'
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../axiosInstance'
 import './users-page.css'
@@ -6,16 +6,34 @@ import './users-page.css'
 const UsersPage = () => {
 
     const [users, setUsers] = useState([])
+    const [page, setPage] = useState(1) 
+    const [searchedUserName, setSearchedUserName] = useState(null)
 
     useEffect(() => {
-        axiosInstance.get('userURL')
+        axiosInstance.get(`userURL?page=${page}&name=${searchedUserName}`)
             .then(({ data }) => {
                 setUsers(data)
             })
-    }, [])
+    }, [page, searchedUserName])
+
+    const onPageChanged = (page, _) => {
+        setPage(page)
+    }
+
+    const onSearch = (values) => {
+        setSearchedUserName(values.name)
+    }
 
     return (
         <>
+            <Form onFinish={ onSearch }>
+                <Form.Item name='name' noStyle>
+                    <Input.Search placeholder='введите имя пользователя' className='user-search' />
+                </Form.Item>
+                <Form.Item hidden noStyle>
+                    <Button htmlType='submit'></Button>
+                </Form.Item>
+            </Form>
             <div className='user-list'>
                 <User />
                 <User />
@@ -39,7 +57,8 @@ const UsersPage = () => {
                 responsive
                 showSizeChanger={ false }
                 pageSize={ 15 }
-                total={ 100 } />
+                total={ 100 }
+                onChange={ onPageChanged } />
         </>
     )
 }
