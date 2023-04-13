@@ -1,10 +1,7 @@
-﻿using DataAccess.Entities.Forms.LoginForm;
-using DataAccess.Entities.Forms.RegisterForm;
-using DataAccess.Entities.IdentityLogic;
+﻿using BackendAPI.Models.Forms;
 using DtoLibrary;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Services.Mappers;
+using Services.AuthService;
 
 namespace BackendAPI.Controllers;
 
@@ -12,78 +9,48 @@ namespace BackendAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly IAuthService _authService;
 
-    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
+    public AuthController(IAuthService authService)
     {
-        _signInManager = signInManager;
-        _userManager = userManager;
+        _authService = authService;
     }
 
     [HttpPost("[action]")]
     public async Task<IActionResult> Login([FromBody] LoginForm form)
     {
         //Todo: тут нужно будет сделать функционал с запоминанием пользователя(через Services.AddAuthentication().AddCookie())
-        var result = await _signInManager.PasswordSignInAsync(form.UserName, form.Password, form.Remember, false);
-        if (result.Succeeded)
+        var loginResult = await _authService.Login(form);
+        if (loginResult.IsSuccess)
         {
             return Ok("Вы успешно вошли в аккаунт!");
         }
-
-        return BadRequest("Неверный логин или пароль!");
+        return BadRequest(loginResult.ErrorMessage);
     }
 
     [HttpGet("[action]")]
     public async Task<IActionResult> Logout()
-    {
-        await _signInManager.SignOutAsync();
-        return Ok("Вы вышли из аккаунта");
-        //Todo: Тут либо статус код Ok, либо правильней будет SignOut с указанием схем
+    { 
+        await _authService.Logout();
+        return Ok("Вы успешно вышли из аккаунта");
     }
 
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody]RegisterForm form)
     {
-        if (form.Password != form.ConfirmPassword)
+        var registerResult = await _authService.Register(form);
+        if (registerResult.IsSuccess)
         {
-            return BadRequest("Разные пароли!");
+            return Ok("Пользователь успешно зарегистрирован!");
         }
-        
-        var user = new User
-        {
-            UserName = form.UserName,
-            PasswordHash = form.Password,
-            Email = form.Email,
-            Birthday = form.Birthday
-        };
-        
-        var checkExistingEmail = await _userManager.FindByEmailAsync(user.Email);
-        if (checkExistingEmail != null)
-        {
-            return BadRequest("Пользователь с таким email-адресом уже существует!");
-        }
-        
-        var checkingExistingUserName = await _userManager.FindByNameAsync(user.UserName);
-        if (checkingExistingUserName != null)
-        {
-            return BadRequest("Пользователь с таким именем уже существует!");
-        } 
-
-        var creatingResult = await _userManager.CreateAsync(user,form.Password);
-        if (!creatingResult.Succeeded)
-        {
-            return BadRequest(creatingResult.Errors);
-        }
-
-        //await _signInManager.SignInAsync(user,true);
-        return Ok("Пользователь успешно зарегистрирован!");
+        return BadRequest(registerResult.ErrorMessage);
     }
 
     [HttpGet("[action]")]
     public async Task<UserDto> GetUserAsync()
     {
-        var user = await _userManager.GetUserAsync(User);
-        return user?.ToUserDto()!;
+        var userClaims = User;
+        var user = await _authService.GetUserAsync(userClaims);
+        return user;
     }
 }

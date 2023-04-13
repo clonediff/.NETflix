@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Entities.Forms.RegisterForm;
+namespace BackendAPI.Models.Forms;
 
 public class RegisterForm
 {
