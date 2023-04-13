@@ -3,9 +3,11 @@ using System.Collections;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BackendAPI.Middleware;
 using DataAccess;
 using DataAccess.Entities.IdentityLogic;
 using Microsoft.AspNetCore.Identity;
+using Services.AuthService;
 using Services.FilmService;
 using Services.MailSenderService;
 using Services.TwoFAService;
@@ -79,6 +81,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
+builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -104,6 +108,8 @@ app.Map("/backupData", (ApplicationDBContext db) =>
 	}
 });
 #endregion
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
