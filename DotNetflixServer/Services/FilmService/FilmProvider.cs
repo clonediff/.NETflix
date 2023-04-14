@@ -132,11 +132,12 @@ public class FilmProvider : IFilmProvider
         await _dbContext.SaveChangesAsync();
     }
 
-    public IEnumerable<string> GetAllNames(int page)
+    public IEnumerable<string> GetAllNames(int page, string? name)
     {
         return _dbContext.Movies
-            .Skip(15 * (page - 1))
-            .Take(15)
+            .Where(x => name == null || x.Name.Contains(name))
+            .Skip(25 * (page - 1))
+            .Take(25)
             .Select(x => x.Name);
     }
 }

@@ -1,6 +1,7 @@
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Services.FilmService;
+using Services.UserService;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

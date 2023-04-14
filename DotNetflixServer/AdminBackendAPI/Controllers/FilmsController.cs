@@ -30,9 +30,9 @@ namespace AdminBackendAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetAllNames([FromQuery] int? page = 1)
+        public IEnumerable<string> GetAllNames([FromQuery] string? name, [FromQuery] int? page = 1)
         {
-            return _filmProvider.GetAllNames(page!.Value);
+            return _filmProvider.GetAllNames(page!.Value, name);
         }
     }
 }
