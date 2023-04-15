@@ -1,0 +1,12 @@
+@import url(../../constants.css);
+
+.login-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 6px;
+}
