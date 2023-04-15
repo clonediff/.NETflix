@@ -3,6 +3,7 @@ using DtoLibrary;
 using DtoLibrary.MoviePage;
 using Microsoft.AspNetCore.Mvc;
 using Services.FilmService;
+using Services.Mappers;
 
 namespace BackendAPI.Controllers;
 

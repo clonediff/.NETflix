@@ -70,7 +70,7 @@ public static class MovieInfoToDto
                     {
                         Name = p.Person.Name,
                         Photo = p.Person.Photo,
-                        Profession = p.Proffession
+                        Profession = p.Profession.Name
                     })
                 .GroupBy(p => p.Profession)
                 .Select(g => new { Profession = g.Key, People = g })
