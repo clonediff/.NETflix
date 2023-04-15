@@ -1,61 +1,33 @@
-.films-page {
-    display: grid;
-    grid-template-columns: 300px auto;
-    gap: 24px;
+@import url(../../constants.css);
+
+.film-search {
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.film-search input, .film-search button, .film-search input:focus {
+    border: none !important;
+}
+
+.film-search input:focus {
+    box-shadow: none;
 }
 
 .film-list {
-    width: 276px;
-    height: calc(100% - 25.6px);
+    height: auto;
     padding: 12px;
-    border: 2px solid rgb(33, 150, 243);
+    border: 2px solid var(--sidebarBgColor);
     border-radius: 4px;
 }
 
-.film-add-form {
-    border: 2px solid rgb(33, 150, 243);
-    border-radius: 4px;
-}
-
-.form-item {
-    margin: 12px;
-}
-
-.form-label {
-    margin-left: 12px;
-}
-
-.form-list-input {
-    margin-bottom: 0px;
-}
-
-.person-space {
-    width: 90%;
-}
-
-.option-item {
+.pagination {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
+    justify-content: center;
+    margin-top: 8px;
 }
 
-.left-border-radius {
-    border-top-left-radius: 6px !important;
-    border-bottom-left-radius: 6px !important;
-}
-
-.right-border-radius {
-    border-top-right-radius: 6px !important;
-    border-bottom-right-radius: 6px !important;
-}
-
-@media screen and (max-width: 1024px) {
-    .films-page {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-    .film-list {
-        width: calc(100% - 27.2px);
-    }
+.film-list-item {
+    margin: 12px;
+    font-weight: 500;
 }

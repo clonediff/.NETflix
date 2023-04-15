@@ -7,6 +7,7 @@ const Layout = ({ children }) => {
             <div className='header'>
                 <div className='header-navigation'>
                     <Link to='/' className='navigation-links'>Главная</Link>
+                    <Link to='/addfilm' className='navigation-links'>Добавить фильм</Link>
                     <Link to='/films' className='navigation-links'>Фильмы</Link>
                     <Link to='/users' className='navigation-links'>Пользователи</Link>
                 </div>
@@ -14,7 +15,8 @@ const Layout = ({ children }) => {
             <div className='side-bar'>
                 <div className='side-bar-navigation'>
                     <Link to='/' className='navigation-links'>Главная</Link>
-                    <Link to='/films' className='navigation-links'>Фильмы</Link>
+                    <Link to='/addfilm' className='navigation-links'>Добавить фильм</Link>
+                    <Link to='/films' className='navigation-links'>Список фильмов</Link>
                     <Link to='/users' className='navigation-links'>Пользователи</Link>
                 </div>
             </div>

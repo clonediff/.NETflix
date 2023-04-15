@@ -23,6 +23,8 @@ export const ProfilePage = () => {
             .catch(error => console.log(error))
     }, [])
 
+    console.log(userData)
+
     const [navigationState, setNavigationState] = useState(0)
     
     const tabs = [
