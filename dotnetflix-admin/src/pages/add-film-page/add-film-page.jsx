@@ -32,7 +32,7 @@ const AddFilmPage = () => {
 
     const sendForm = (values) => {
         console.log(values)
-        axiosInstance.post('api/Films/AddFilm', values)
+        axiosInstance.post('api/films/addfilm', values)
             .then(response => console.log(response))
             .catch(error => console.log(error))
     }

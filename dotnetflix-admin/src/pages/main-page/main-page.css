@@ -1,0 +1,8 @@
+@import url(../../constants.css);
+
+.grid-data-item {
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+    margin-bottom: 24px;
+    padding: 24px;
+}

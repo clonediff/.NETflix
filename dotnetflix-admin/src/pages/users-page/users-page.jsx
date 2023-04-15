@@ -6,11 +6,19 @@ import './users-page.css'
 const UsersPage = () => {
 
     const [users, setUsers] = useState([])
-    const [page, setPage] = useState(1) 
+    const [page, setPage] = useState(1)   
+    const [usersCount, setUsersCount] = useState(0)
     const [searchedUserName, setSearchedUserName] = useState(null)
 
     useEffect(() => {
-        axiosInstance.get(`userURL?page=${page}&name=${searchedUserName}`)
+        axiosInstance.get('api/users/getuserscount')
+            .then(({ data }) => {
+                setUsersCount(data)
+            })
+    }, [])
+
+    useEffect(() => {
+        axiosInstance.get(`api/user/getusers?page=${page}&name=${searchedUserName}`)
             .then(({ data }) => {
                 setUsers(data)
             })
@@ -56,8 +64,8 @@ const UsersPage = () => {
                 className='pagination'
                 responsive
                 showSizeChanger={ false }
-                pageSize={ 15 }
-                total={ 100 }
+                pageSize={ 25 }
+                total={ usersCount }
                 onChange={ onPageChanged } />
         </>
     )
@@ -66,20 +74,24 @@ const UsersPage = () => {
 const User = () => {
 
     const [isBanned, setIsBanned] = useState(false)
+    const [bannedUntill, setBannedUntill] = useState('')
 
     const onRoleUpdating = (values) => {
         console.log(values)
-        axiosInstance.put('roleURL', { ...values, id: 1 })
+        axiosInstance.put('api/users/setrole', { ...values, id: 1 })
     }
 
     const onBanning = (values) => {
         console.log(values)
-        axiosInstance.put('banURL', { ...values, id: 1 })
+        axiosInstance.put('api/users/banuser', { ...values, id: 1 })
+            .then(({ data }) => {
+                setBannedUntill(data)
+            })
         setIsBanned(true)
     } 
 
     const onUnbanning = () => {
-        axiosInstance.put('unbanURL', { id: 1 })
+        axiosInstance.put('api/users/unbanuser', { id: 1 })
         setIsBanned(false)
     }
 
@@ -107,7 +119,7 @@ const User = () => {
                     isBanned 
                     ?
                     <Space.Compact>
-                        <div className='ban-info'>Забанен до 16.04.2023</div>
+                        <div className='ban-info'>Забанен до { bannedUntill }</div>
                         <button className='ban-button unban-color' onClick={ onUnbanning }>Разблокировать</button>
                     </Space.Compact>
                     :

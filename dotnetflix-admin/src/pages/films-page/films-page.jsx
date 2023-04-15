@@ -59,7 +59,7 @@ const FilmsPage = () => {
                         className='pagination'
                         responsive
                         showSizeChanger={ false }
-                        pageSize={ 15 }
+                        pageSize={ 25 }
                         total={ filmsCount }
                         onChange={ onPageChanged } />
                 </>
