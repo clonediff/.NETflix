@@ -1,0 +1,33 @@
+@import url(../../constants.css);
+
+.film-search {
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.film-search input, .film-search button, .film-search input:focus {
+    border: none !important;
+}
+
+.film-search input:focus {
+    box-shadow: none;
+}
+
+.film-list {
+    height: auto;
+    padding: 12px;
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.film-list-item {
+    margin: 12px;
+    font-weight: 500;
+}

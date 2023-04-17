@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="jsons\" />
     <Folder Include="Models" />
   </ItemGroup>
 
