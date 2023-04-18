@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../axiosInstance'
-import CustomSpin from '../../custom-spin/cusotom-spin'
+import CustomSpin from '../../custom-spin/custom-spin'
 import './main-page.css'
 
 const MainPage = () => {
