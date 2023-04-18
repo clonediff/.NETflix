@@ -1,35 +1,43 @@
 ﻿using DataAccess;
 using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Exceptions;
 
 namespace Services.UserService
 {
     public class UserService : IUserService
     {
-
-        readonly ApplicationDBContext _dbContext;
+        private readonly ApplicationDBContext _dbContext;
 
         public UserService(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> BanUserAsync(string userId, int days)
+        public IEnumerable<GetRoleDto> GetAllRoles()
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+            return _dbContext.Roles
+                .Select(x => new GetRoleDto
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                })
+                .AsEnumerable();
+        }
+
+        public async Task<DateTime> BanUserAsync(string userId, int days)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
             if (user == null)
-                return new NotFoundObjectResult("No user with this id");
+                throw new UserNotFoundException();
 
             user.BannedUntil = DateTime.Now.Add(TimeSpan.FromDays(days));
+            
             await _dbContext.SaveChangesAsync();
 
-            return new OkObjectResult(new 
-            {
-               BannedUntil = user.BannedUntil,
-            });
+            return user.BannedUntil.Value;
         }
 
         public async Task<int> GetUsersCountAsync()
@@ -40,52 +48,57 @@ namespace Services.UserService
         public IEnumerable<UserAdminDto> GetUsersFiltered(int page, string? name)
         {
             return
-                (from user in _dbContext.Users.Where(x => name == null || x.UserName.Contains(name)).Skip(25 * (page - 1)).Take(25)
-                 join role in _dbContext.UserRoles on user.Id equals role.UserId
-                 select new UserAdminDto
-                 {
-                     Id = user.Id,
-                     UserName = user.UserName,
-                     BannedUntil = user.BannedUntil,
-                     RoleId = role.RoleId,
-                 }).AsEnumerable();
+                (
+                    from user in _dbContext.Users
+                        .Where(x => name == null || x.UserName.Contains(name))
+                        .Skip(25 * (page - 1))
+                        .Take(25)
+                    join role in _dbContext.UserRoles on user.Id equals role.UserId
+                    select new UserAdminDto
+                    {
+                        Id = user.Id,
+                        Name = user.UserName,
+                        BannedUntil = user.BannedUntil,
+                        RoleId = role.RoleId,
+                    }
+                ).AsEnumerable();
         }
 
-        public async Task<IActionResult> SetRoleAsync(string role, string userId)
+        public async Task SetRoleAsync(string roleId, string userId)
         {
-            if (_dbContext.Roles.FirstOrDefault(r => r.Id == role) == null)
-                return new BadRequestObjectResult("Wrong role");
+            if (await _dbContext.Roles.FirstOrDefaultAsync(r => r.Id == roleId) == null)
+                throw new RoleNotFoundException();
 
-            var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
             if (user == null)
-                return new NotFoundObjectResult("No user with this id");
+                throw new UserNotFoundException();
 
-            var userRoles = _dbContext.UserRoles.Where(x => x.UserId == userId).AsEnumerable();
+            var userRoles = _dbContext.UserRoles
+                .Where(x => x.UserId == userId)
+                .AsEnumerable();
+            
             _dbContext.UserRoles.RemoveRange(userRoles);
 
             await _dbContext.UserRoles.AddAsync(new IdentityUserRole<string> 
             { 
-                RoleId = role,
+                RoleId = roleId,
                 UserId = userId,
             });
 
             await _dbContext.SaveChangesAsync();
-
-            return new OkObjectResult("Role set");
         }
 
-        public async Task<IActionResult> UnbanUserAsync(string userId)
+        public async Task UnbanUserAsync(string userId)
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
             if (user == null)
-                return new NotFoundObjectResult("No user with this id");
+                throw new UserNotFoundException();
 
             user.BannedUntil = null;
+            
             await _dbContext.SaveChangesAsync();
-
-            return new OkObjectResult("Unbanned");
         }
     }
 }

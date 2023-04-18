@@ -43,6 +43,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(pb => pb
     .AllowAnyHeader()
     .AllowCredentials()
+    .AllowAnyMethod()
     .WithOrigins("http://localhost:3001")
 );
 
