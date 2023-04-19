@@ -3,6 +3,7 @@ using DataAccess;
 using DtoLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Services.Exceptions;
+using Services.MailSenderService;
 using Services.UserService;
 
 namespace AdminBackendAPI.Controllers
@@ -12,12 +13,12 @@ namespace AdminBackendAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ApplicationDBContext _dbContext;
+        private readonly IEmailService _emailService;
         
-        public UserController(IUserService userService, ApplicationDBContext dbContext)
+        public UserController(IUserService userService, IEmailService emailService)
         {
             _userService = userService;
-            _dbContext = dbContext;
+            _emailService = emailService;
         }
 
         [HttpGet("[action]")]
@@ -43,14 +44,16 @@ namespace AdminBackendAPI.Controllers
         {
             try
             {
-                await _userService.SetRoleAsync(setRoleDto.RoleId, setRoleDto.UserId);
+                var newRole = await _userService.SetRoleAsync(setRoleDto.RoleId, setRoleDto.UserId);
+                var email = await _userService.GetEmailAsync(setRoleDto.UserId);
+                await _emailService.SendEmailAsync(email, "Ваша роль обновлена", $"Теперь Вы {newRole}.");
                 return Ok();
             }
-            catch (UserNotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return BadRequest(ex.Message);
             }
-            catch (RoleNotFoundException ex)
+            catch (IncorrectOperationException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -62,9 +65,15 @@ namespace AdminBackendAPI.Controllers
             try
             {
                 var bannedUntil = await _userService.BanUserAsync(banUserDto.UserId, banUserDto.Days);
+                var email = await _userService.GetEmailAsync(banUserDto.UserId);
+                await _emailService.SendEmailAsync(email, "Ваш аккаунт был заблокирован", $"Дата автоматической разблокировки {bannedUntil:d}.");
                 return Ok(bannedUntil.ToString("d"));
             }
-            catch (UserNotFoundException ex)
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (IncorrectOperationException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -76,9 +85,16 @@ namespace AdminBackendAPI.Controllers
             try
             {
                 await _userService.UnbanUserAsync(userId);
+                var email = await _userService.GetEmailAsync(userId);
+                await _emailService.SendEmailAsync(email, "Ваш аккаунт был разблокирован",
+                    "Желаем приятно провести время на нашем сервисе");
                 return Ok();
             }
-            catch (UserNotFoundException ex)
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (IncorrectOperationException ex)
             {
                 return BadRequest(ex.Message);
             }

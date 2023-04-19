@@ -15,6 +15,16 @@ namespace Services.UserService
             _dbContext = dbContext;
         }
 
+        public async Task<string> GetEmailAsync(string userId)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
+            if (user == null)
+                throw new NotFoundException("Не удалось найти пользователя");
+            
+            return user.Email;
+        }
+
         public IEnumerable<GetRoleDto> GetAllRoles()
         {
             return _dbContext.Roles
@@ -31,7 +41,10 @@ namespace Services.UserService
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
             if (user == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException("Не удалось найти пользователя");
+
+            if (user.BannedUntil != null)
+                throw new IncorrectOperationException("Нельзя заблокировать уже заблокированного пользователя");
 
             user.BannedUntil = DateTime.Now.Add(TimeSpan.FromDays(days));
             
@@ -64,15 +77,20 @@ namespace Services.UserService
                 ).AsEnumerable();
         }
 
-        public async Task SetRoleAsync(string roleId, string userId)
+        public async Task<string> SetRoleAsync(string roleId, string userId)
         {
-            if (await _dbContext.Roles.FirstOrDefaultAsync(r => r.Id == roleId) == null)
-                throw new RoleNotFoundException();
+            var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+            
+            if (role == null)
+                throw new NotFoundException("Не удалось найти роль");
 
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
             if (user == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException("Не удалось найти пользователя");
+
+            if (user.BannedUntil != null)
+                throw new IncorrectOperationException("Нельзя менять роль заблокированным пользователям");
 
             var userRoles = _dbContext.UserRoles
                 .Where(x => x.UserId == userId)
@@ -87,6 +105,8 @@ namespace Services.UserService
             });
 
             await _dbContext.SaveChangesAsync();
+
+            return role.Name!;
         }
 
         public async Task UnbanUserAsync(string userId)
@@ -94,7 +114,10 @@ namespace Services.UserService
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
             if (user == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException("Не удалось найти пользователя");
+
+            if (user.BannedUntil == null)
+                throw new IncorrectOperationException("Нельзя разблокировать уже разблокированного пользователя");
 
             user.BannedUntil = null;
             

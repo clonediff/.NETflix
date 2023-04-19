@@ -4,6 +4,7 @@ using Services.FilmService;
 using Services.UserService;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using Services.MailSenderService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +29,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"));
+
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
