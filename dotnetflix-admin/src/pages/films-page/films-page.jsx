@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../axiosInstance'
-import { Button, Form, Input, Pagination } from 'antd'
+import DataLayout from '../../data-layout/data-layout'
 import './films-page.css'
 
 const FilmsPage = () => {
@@ -15,16 +15,26 @@ const FilmsPage = () => {
         axiosInstance.get('api/films/getfilmscount')
             .then(({ data }) => {
                 setFilmsCount(data)
-                setIsLoading(false)
             })
     }, [])
-
+        
     useEffect(() => {
-        axiosInstance.get(`api/films/getallnames?page=${page}&name=${searchedFilmName}`)
+        axiosInstance.get(`api/films/getallnames?page=${page}`)
             .then(({ data }) => {
                 setFilms(data)
+                setIsLoading(false)
             })
-    }, [page, searchedFilmName])
+    }, [page])
+
+    useEffect(() => {
+        if (searchedFilmName) {
+            axiosInstance.get(`api/films/getallnames?page=1&name=${encodeURIComponent(searchedFilmName)}`)
+                .then(({ data }) => {
+                    setFilms(data)
+                    setFilmsCount(data.length)
+                })
+        }
+    }, [searchedFilmName])
 
     const onPageChanged = (page, _) => {
         setPage(page)
@@ -35,38 +45,15 @@ const FilmsPage = () => {
     }
 
     return (
-        <>
-            {
-                !isLoading 
-                ? 
-                <>
-                    <Form onFinish={ onSearch }>
-                        <Form.Item name='name' noStyle>
-                            <Input.Search placeholder='Введите название фильма' className='film-search' />
-                        </Form.Item>
-                        <Form.Item hidden noStyle>
-                            <Button htmlType='submit'></Button>  
-                        </Form.Item>
-                    </Form>
-                    <div className='film-list'>
-                        {
-                            films.map(film => (
-                                <div className='film-list-item'>{ film }</div>
-                            ))
-                        }
-                    </div>
-                    <Pagination 
-                        className='pagination'
-                        responsive
-                        showSizeChanger={ false }
-                        pageSize={ 25 }
-                        total={ filmsCount }
-                        onChange={ onPageChanged } />
-                </>
-                : 
-                null
-            }
-        </>
+        <DataLayout
+            dataCount={ filmsCount }
+            isLoading={ isLoading }
+            onPageChanged={ onPageChanged }
+            onSearch={ onSearch }
+            searchPlaceholder='введите название фильма'
+            children={
+                films.map((film, i) => (<div key={ i } className='film-list-item'>{ film }</div>))
+            } />
     )
 }
 

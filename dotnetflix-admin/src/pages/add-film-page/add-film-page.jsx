@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Button, Form, Input, InputNumber, Select, Space } from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { useForm } from 'antd/es/form/Form';
 import { axiosInstance } from '../../axiosInstance'
+import { useForm } from 'antd/es/form/Form';
+import { Button, Form, Input, InputNumber, Modal, Select, Space } from 'antd'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import './add-film-page.css'
 
 const AddFilmPage = () => {
 
     const [form] = useForm()
+    const [modal, contextHolder] = Modal.useModal()
 
     const [options, setOptions] = useState({
         types: [],
@@ -18,6 +19,7 @@ const AddFilmPage = () => {
     })
 
     const [people, setPeople] = useState([])
+    const [isFilmCrewEmpty, setIsFilmCrewEmpty] = useState(false)
 
     useEffect(() => {
         axiosInstance.get('api/enums/getall')
@@ -33,8 +35,18 @@ const AddFilmPage = () => {
     const sendForm = (values) => {
         console.log(values)
         axiosInstance.post('api/films/addfilm', values)
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
+            .then(response => {
+                modal.success({
+                    title: 'фильм успешно добавлен',
+                    zIndex: 10001
+                })
+            })
+            .catch(error => {
+                modal.error({
+                    title: 'не удалось добавить фильм',
+                    zIndex: 10001
+                })
+            })
     }
 
     const currencySuffix = (
@@ -57,6 +69,9 @@ const AddFilmPage = () => {
 
     return (
         <Form form={ form } className='film-add-form' onFinish={ sendForm }>
+            {
+                contextHolder
+            }
             <Form.Item 
                 label='Название' 
                 className='form-item' 
@@ -242,7 +257,20 @@ const AddFilmPage = () => {
                     )
                 }
             </Form.List>
-            <Form.List name='people'>
+            <Form.List 
+                name='people'
+                rules={[
+                    {
+                        validator: (rule, value, callback) => {
+                            if (value && value.length > 0) {
+                                return Promise.resolve()
+                            } else {
+                                setIsFilmCrewEmpty(true)
+                                return Promise.reject(new Error('добавьте участников фильма'))
+                            }
+                        }
+                    }
+                ]}>
                 {
                     (fields, { add, remove }) => (
                         <>
@@ -254,13 +282,22 @@ const AddFilmPage = () => {
                                             name={ field.name } 
                                             remove={ remove } 
                                             people={ people } 
-                                            professions={ options.professions } />
+                                            professions={ options.professions }
+                                            form={ form } />
                                     </div>
                                 ))
                             }
                             <Form.Item className='form-item'>
-                                <Button onClick={ () => add() } icon={ <PlusOutlined /> }>Добавить участника</Button>
+                                <Button 
+                                    onClick={ () => { 
+                                        setIsFilmCrewEmpty(false)
+                                        add() 
+                                    }} 
+                                    icon={ <PlusOutlined /> }>Добавить участника</Button>
                             </Form.Item>
+                            {
+                                isFilmCrewEmpty ? <div className='form-label' style={{ color: '#ff4d4f' }}>Добавьте участников фильма</div> : null
+                            }
                         </>
                     )
                 }
@@ -310,9 +347,41 @@ const filterOptions = (inputValue, option) => {
     return option.label.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1;
 }
 
-const PeopleSpace = ({ name, remove, people, professions }) => {
+const PeopleSpace = ({ name, remove, people, professions, form }) => {
 
     const [exists, setExists] = useState(true)
+
+    const personPhotoValidator = ({ getFieldValue }) => ({
+        validator(_, value) {
+            if (getFieldValue(['people', name, 'id']) || value) {
+                return Promise.resolve()
+            } else {
+                return Promise.reject(new Error('добавьте фото'))
+            }
+        }
+    })
+
+    const personValidator = (pathname, errorMessage) => 
+        ({ getFieldValue }) => ({
+            validator(_, value) {
+                if (getFieldValue(['people', name, pathname]) || value) {
+                    return Promise.resolve()
+                } else {
+                    return Promise.reject(new Error(errorMessage))
+                }
+            }
+        })
+
+    const onAddNewPersonClicked = () => {
+        form.setFieldValue(['people', name, 'id'], undefined)
+        setExists(false)
+    }
+
+    const onAddExistingPersonClicked = () => {
+        form.setFieldValue(['people', name, 'name'], null)
+        form.setFieldValue(['people', name, 'photo'], null)
+        setExists(true)
+    }
 
     return (
         <Space direction='vertical' className='form-item person-space'>
@@ -321,12 +390,7 @@ const PeopleSpace = ({ name, remove, people, professions }) => {
                     name={[name, 'id']}
                     style={{ display: exists ? 'inline-block' : 'none', width: '80%' }} 
                     className='form-list-input'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'выберите актёра'
-                        }
-                    ]}>
+                    rules={[ personValidator('name', 'выберите актёра') ]}>
                     <Select 
                         style={{ display: exists ? 'inline-block' : 'none' }} 
                         showSearch 
@@ -334,14 +398,14 @@ const PeopleSpace = ({ name, remove, people, professions }) => {
                         filterOption={ filterOptions }
                         optionLabelProp='label'
                         notFoundContent={ 
-                            <Button className='right-border-radius' onClick={ () => setExists(false) }>
+                            <Button className='right-border-radius' onClick={ onAddNewPersonClicked }>
                                 Добавить нового человека
                             </Button> }>
                         {
                             people.map(p => (
                                 <Select.Option key={ p.id } label={ p.name } value={ p.id }>
                                     <div className='option-item'>
-                                        <span>{ name }</span>
+                                        <span>{ p.name }</span>
                                         <img style={{ width: 20 }} src={ p.photo } alt=''/>
                                     </div>
                                 </Select.Option>
@@ -353,12 +417,7 @@ const PeopleSpace = ({ name, remove, people, professions }) => {
                     name={[name, 'name']}
                     style={{ display: !exists ? 'inline-block' : 'none', width: '80%' }}
                     className='form-list-input'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'введите имя актёра'
-                        }
-                    ]}>
+                    rules={[ personValidator('id', 'введите имя актёра') ]}>
                     <Input className='left-border-radius' style={{ display: !exists ? 'inline-block' : 'none' }} />
                 </Form.Item>
                 <Form.Item 
@@ -368,7 +427,7 @@ const PeopleSpace = ({ name, remove, people, professions }) => {
                     rules={[
                         {
                             required: true,
-                            message: 'выберите профессию'
+                            message: 'выберите профессию',
                         }
                     ]}>
                     <Select allowClear options={ professions.map(p => ({ label: p.name, value: p.id })) } />
@@ -378,15 +437,10 @@ const PeopleSpace = ({ name, remove, people, professions }) => {
                 name={[name, 'photo']} 
                 hidden={ exists } 
                 className='form-list-input' 
-                rules={[
-                    {
-                        required: true,
-                        message: 'добавьте фото'
-                    }
-                ]}>
+                rules={[ personPhotoValidator ]}>
                 <Input addonBefore='фото' />
             </Form.Item>
-            <Button style={{ display: !exists ? 'block' : 'none' }} onClick={ () => setExists(true) }>
+            <Button style={{ display: !exists ? 'block' : 'none' }} onClick={ onAddExistingPersonClicked }>
                 Добавить существуещего человека
             </Button>
             <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(name) }>

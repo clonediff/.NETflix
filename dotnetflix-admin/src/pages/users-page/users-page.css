@@ -1,26 +1,3 @@
-@import url(../../constants.css);
-
-.user-search {
-    border: 2px solid var(--sidebarBgColor);
-    border-radius: 4px;
-    margin-bottom: 24px;
-}
-
-.user-search input, .user-search button, .user-search input:focus {
-    border: none !important;
-}
-
-.user-search input:focus {
-    box-shadow: none;
-}
-
-.user-list {
-    height: auto;
-    padding: 12px;
-    border: 2px solid var(--sidebarBgColor);
-    border-radius: 4px;
-}
-
 .user-list-item {
     display: flex;
     flex-direction: row;

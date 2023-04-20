@@ -1,14 +1,15 @@
 ﻿using DtoLibrary;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Services.UserService
 {
     public interface IUserService
     {
+        Task<string> GetEmailAsync(string userId);
+        IEnumerable<GetRoleDto> GetAllRoles();
         Task<int> GetUsersCountAsync();
         IEnumerable<UserAdminDto> GetUsersFiltered(int page, string? name);
-        Task<IActionResult> SetRoleAsync(string role, string userId);
-        Task<IActionResult> BanUserAsync(string userId, int days);
-        Task<IActionResult> UnbanUserAsync(string userId);
+        Task<string> SetRoleAsync(string roleId, string userId);
+        Task<DateTime> BanUserAsync(string userId, int days);
+        Task UnbanUserAsync(string userId);
     }
 }
