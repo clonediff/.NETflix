@@ -1,4 +1,6 @@
-﻿using DataAccess;
+﻿using System.Security.Claims;
+using DataAccess;
+using DataAccess.Entities.IdentityLogic;
 using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,17 @@ namespace Services.UserService
     public class UserService : IUserService
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(ApplicationDBContext dbContext)
+        public UserService(ApplicationDBContext dbContext, UserManager<User> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+        }
+
+        public async Task<User> GetUserAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            return await _userManager.GetUserAsync(claimsPrincipal);
         }
 
         public async Task<string> GetEmailAsync(string userId)

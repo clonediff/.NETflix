@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -11,9 +10,8 @@ using Services.AuthService;
 using Services.FilmService;
 using Services.MailSenderService;
 using Services.TwoFAService;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication;
-using DataAccess.Entities.BusinessLogic;
+using Services.SubscriptionService;
+using Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,10 +79,12 @@ builder.Services.AddControllers()
 	});
 
 builder.Services.AddMemoryCache();
-builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddTransient<IFilmService, FilmService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var app = builder.Build();

@@ -22,6 +22,8 @@ namespace DataAccess
 		public DbSet<MovieInfo> Movies { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Category> Categories { get; set; }
+		public DbSet<Subscription> Subscriptions { get; set; }
+		public DbSet<UserSubscription> UserSubscriptions { get; set; }
 
 		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
 			: base(options)
@@ -85,6 +87,14 @@ namespace DataAccess
 				.HasMany(p => p.Proffessions);
 			modelBuilder.Entity<PersonProffessionInMovie>()
 				.HasKey(p => new { p.MovieInfoId, p.PersonId, p.ProfessionId });
+
+			modelBuilder.Entity<MovieInfo>()
+				.HasMany(m => m.Subscriptions)
+				.WithMany(s => s.Movies);
+			modelBuilder.Entity<User>()
+				.HasMany(u => u.Subscriptions)
+				.WithMany(s => s.Users)
+				.UsingEntity<UserSubscription>();
 
 			// Data
 			var categories = GetData<Category>();

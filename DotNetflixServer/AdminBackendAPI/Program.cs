@@ -31,7 +31,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"));
 
-builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddTransient<IFilmService, FilmService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
