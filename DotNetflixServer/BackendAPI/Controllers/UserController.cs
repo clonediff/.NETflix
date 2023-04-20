@@ -1,6 +1,4 @@
-﻿using DataAccess.Entities.Forms.LoginForm;
-using DataAccess.Entities.Forms.RegisterForm;
-using DataAccess.Entities.IdentityLogic;
+﻿using DataAccess.Entities.IdentityLogic;
 using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

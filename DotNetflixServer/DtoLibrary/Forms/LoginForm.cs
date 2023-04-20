@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Entities.Forms.LoginForm;
+namespace BackendAPI.Models.Forms;
 
 public class LoginForm
 {

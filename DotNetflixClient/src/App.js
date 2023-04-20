@@ -17,10 +17,10 @@ const App = () => {
             <Route path="/profile/*" element={ <ProfilePage /> }/>
             <Route path="/movies/:id" element={ <FilmPage /> } />
             <Route path="*" element={<ErrorPage errorNumber={404}/>}></Route>
-            <Route path="500"element={<ErrorPage errorNumber={500}/>}></Route>
+            {/* <Route path="500"element={<ErrorPage errorNumber={500}/>}></Route>
             <Route path="401"element={<ErrorPage errorNumber={401}/>}></Route>
             <Route path="403"element={<ErrorPage errorNumber={403}/>}></Route>
-            <Route path="418"element={<ErrorPage errorNumber={418}/>}></Route>
+            <Route path="418"element={<ErrorPage errorNumber={418}/>}></Route> */}
         </Routes>
     )
 }
