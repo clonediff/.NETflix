@@ -1,4 +1,5 @@
 ﻿using AdminBackendAPI.Dto;
+using DtoLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Services.FilmService;
 using Services.Mappers;
@@ -30,9 +31,9 @@ namespace AdminBackendAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetAllNames([FromQuery] string? name, [FromQuery] int? page = 1)
+        public async Task<PaginationDataDto<string>> GetAllNames([FromQuery] string? name, [FromQuery] int? page = 1)
         {
-            return _filmService.GetAllNames(page!.Value, name);
+            return await _filmService.GetFilmsFilteredAsync(page!.Value, name);
         }
     }
 }

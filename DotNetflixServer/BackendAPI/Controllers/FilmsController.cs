@@ -42,7 +42,7 @@ public class FilmsController : ControllerBase
         try
         {
             var user = await _userService.GetUserAsync(User);   
-            var userSubscriptions = await _subscriptionService.GetAllSubscriptionsAsync(user.Id);
+            var userSubscriptions = await _subscriptionService.GetAllUserSubscriptionsAsync(user.Id);
             var film = await _filmService.GetFilmByIdAsync(id);
 
             if (_subscriptionService.HaveCommonSubscriptions(userSubscriptions, film!.Subscriptions))

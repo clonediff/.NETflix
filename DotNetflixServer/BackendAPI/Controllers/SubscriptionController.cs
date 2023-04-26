@@ -25,7 +25,7 @@ public class SubscriptionController : ControllerBase
         try
         {
             var user = await _userService.GetUserAsync(User);
-            await _subscriptionService.PurchaseSubscriptionAsync(new SubscriptionDto
+            await _subscriptionService.PurchaseSubscriptionAsync(new UserSubscriptionDto
             {
                 SubscriptionId = subscriptionId,
                 UserId = user.Id
@@ -48,7 +48,7 @@ public class SubscriptionController : ControllerBase
         try
         {
             var user = await _userService.GetUserAsync(User);
-            await _subscriptionService.ExtendSubscriptionAsync(new SubscriptionDto
+            await _subscriptionService.ExtendSubscriptionAsync(new UserSubscriptionDto
             {
                 SubscriptionId = subscriptionId,
                 UserId = user.Id

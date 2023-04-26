@@ -24,6 +24,7 @@ namespace DataAccess
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }
 		public DbSet<UserSubscription> UserSubscriptions { get; set; }
+		public DbSet<SubscriptionMovieInfo> SubscriptionMovies { get; set; }
 
 		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
 			: base(options)
@@ -90,7 +91,8 @@ namespace DataAccess
 
 			modelBuilder.Entity<MovieInfo>()
 				.HasMany(m => m.Subscriptions)
-				.WithMany(s => s.Movies);
+				.WithMany(s => s.Movies)
+				.UsingEntity<SubscriptionMovieInfo>();
 			modelBuilder.Entity<User>()
 				.HasMany(u => u.Subscriptions)
 				.WithMany(s => s.Users)

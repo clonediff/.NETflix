@@ -4,11 +4,12 @@ import { useForm } from 'antd/es/form/Form';
 import { Button, Form, Input, InputNumber, Modal, Select, Space } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import './add-film-page.css'
+import '../../data-layout/form-styles.css'
 
 const AddFilmPage = () => {
 
     const [form] = useForm()
-    const [modal, contextHolder] = Modal.useModal()
+    const [modal, modalHolder] = Modal.useModal()
 
     const [options, setOptions] = useState({
         types: [],
@@ -33,7 +34,6 @@ const AddFilmPage = () => {
     }, [])
 
     const sendForm = (values) => {
-        console.log(values)
         axiosInstance.post('api/films/addfilm', values)
             .then(response => {
                 modal.success({
@@ -68,10 +68,8 @@ const AddFilmPage = () => {
         })
 
     return (
-        <Form form={ form } className='film-add-form' onFinish={ sendForm }>
-            {
-                contextHolder
-            }
+        <Form form={ form } className='add-form' onFinish={ sendForm }>
+            { modalHolder }
             <Form.Item 
                 label='Название' 
                 className='form-item' 

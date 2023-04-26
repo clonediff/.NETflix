@@ -137,12 +137,22 @@ public class FilmService : IFilmService
         await _dbContext.SaveChangesAsync();
     }
 
-    public IEnumerable<string> GetAllNames(int page, string? name)
+    public async Task<PaginationDataDto<string>> GetFilmsFilteredAsync(int page, string? name)
     {
-        return _dbContext.Movies
-            .Where(x => name == null || x.Name.Contains(name))
+        var filteredMovies = _dbContext.Movies
+            .Where(x => name == null || x.Name.Contains(name));
+
+        var filteredMoviesCount = await filteredMovies.CountAsync();
+        
+        var movieNames = filteredMovies 
             .Skip(25 * (page - 1))
             .Take(25)
             .Select(x => x.Name);
+
+        return new PaginationDataDto<string>
+        {
+            Data = movieNames,
+            Count = filteredMoviesCount
+        };
     }
 }

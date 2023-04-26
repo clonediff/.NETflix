@@ -12,4 +12,5 @@ public class Subscription
     public List<MovieInfo> Movies { get; set; }
     public List<User> Users { get; set; }
     public List<UserSubscription> UserSubscriptions { get; set; }
+    public List<SubscriptionMovieInfo> SubscriptionMovies { get; set; }
 }

@@ -12,5 +12,5 @@ public interface IFilmService
     public IEnumerable GetAllFilms();
     public Task<MovieForMoviePageDto?> GetFilmByIdAsync(int id);
     public Task AddFilmAsync(MovieInfo movieInfo);
-    IEnumerable<string> GetAllNames(int page, string? name);
+    Task<PaginationDataDto<string>> GetFilmsFilteredAsync(int page, string? name);
 }
