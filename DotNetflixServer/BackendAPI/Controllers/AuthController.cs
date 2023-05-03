@@ -38,6 +38,7 @@ public class AuthController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody]RegisterForm form)
     {
+        //TODO: сделать функционал с отправкой сообщения пользователю, если человек пытается зарегистрироваться по его майлу
         var registerResult = await _authService.Register(form);
         if (registerResult.IsSuccess)
         {
