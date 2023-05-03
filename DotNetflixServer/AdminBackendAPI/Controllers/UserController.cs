@@ -22,21 +22,21 @@ namespace AdminBackendAPI.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<int> GetUsersCountAsync()
+        {
+            return await _userService.GetUsersCountAsync();
+        }
+
+        [HttpGet("[action]")]
         public IEnumerable<GetRoleDto> GetAllRoles()
         {
             return _userService.GetAllRoles();
         }
 
         [HttpGet("[action]")]
-        public async Task<int> GetUsersCount()
+        public async Task<PaginationDataDto<UserAdminDto>> GetUsers([FromQuery] string? name, [FromQuery] int? page = 1)
         { 
-            return await _userService.GetUsersCountAsync();
-        }
-
-        [HttpGet("[action]")]
-        public IEnumerable<UserAdminDto> GetUsers([FromQuery] string? name, [FromQuery] int? page = 1)
-        { 
-            return _userService.GetUsersFiltered(page!.Value, name);
+            return await _userService.GetUsersFilteredAsync(page!.Value, name);
         }
 
         [HttpPut("[action]")]
