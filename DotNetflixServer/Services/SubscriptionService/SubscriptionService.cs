@@ -120,11 +120,12 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task ChangeSubscriptionAvailabilityAsync(SubscriptionAvailabilityDto dto)
     {
-        _dbContext.Subscriptions.Update(new Subscription
-        {
-            Id = dto.Id,
-            IsAvailable = dto.IsAvailable
-        });
+        var subscription = await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+        if (subscription is null)
+            throw new NotFoundException("Не удалось найти подписку");
+
+        subscription.IsAvailable = dto.IsAvailable;
 
         await _dbContext.SaveChangesAsync();
     }
