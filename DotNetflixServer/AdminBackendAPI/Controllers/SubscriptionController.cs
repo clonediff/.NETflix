@@ -29,9 +29,9 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public IEnumerable<FilmInSubscriptionDto> GetAllFilmsWithSubscriptionAsync([FromQuery] int subscriptionId, [FromQuery] string? name)
+    public IEnumerable<FilmInSubscriptionDto> GetAllFilmsAsync([FromQuery] int subscriptionId, [FromQuery] string? name)
     {
-        return _subscriptionService.GetAllFilmsWithSubscriptionAsync(subscriptionId, name);
+        return _subscriptionService.GetAllFilms(subscriptionId, name);
     }
 
     [HttpPut("[action]")]

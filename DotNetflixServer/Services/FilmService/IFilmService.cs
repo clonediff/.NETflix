@@ -10,7 +10,7 @@ public interface IFilmService
     public Task<int> GetFilmsCountAsync();
     public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(string? type, string? name, int? year, string? country, string[]? genres, string[]? actors, string? director);
     public IEnumerable GetAllFilms();
-    public Task<MovieForMoviePageDto?> GetFilmByIdAsync(int id);
+    public Task<MovieForMoviePageDto> GetFilmByIdAsync(int filmId, string userId);
     public Task AddFilmAsync(MovieInfo movieInfo);
     Task<PaginationDataDto<string>> GetFilmsFilteredAsync(int page, string? name);
 }

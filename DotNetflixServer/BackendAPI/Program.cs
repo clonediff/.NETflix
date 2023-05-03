@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Services.AuthService;
 using Services.FilmService;
 using Services.MailSenderService;
+using Services.PaymentService;
 using Services.TwoFAService;
 using Services.SubscriptionService;
 using Services.UserService;
@@ -79,12 +80,13 @@ builder.Services.AddControllers()
 	});
 
 builder.Services.AddMemoryCache();
-builder.Services.AddTransient<IFilmService, FilmService>();
+builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var app = builder.Build();

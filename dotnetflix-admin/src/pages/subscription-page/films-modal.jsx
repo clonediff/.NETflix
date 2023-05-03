@@ -15,7 +15,7 @@ const FilmsModal = ({ openFilms, hideFilmsModal, subscription }) => {
 
     useEffect(() => {
         if (openFilms && films.length === 0) {
-            axiosInstance.get(`api/subscription/getallFilmswithsubscription?subscriptionId=${subscription.id}`)
+            axiosInstance.get(`api/subscription/getallfilms?subscriptionId=${subscription.id}`)
                 .then(({ data }) => {
                     setFilms(data)
                     setInitialSubsInfo(data.map(f => f.isInSubscription))

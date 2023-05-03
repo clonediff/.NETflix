@@ -10,14 +10,23 @@ a {
     width: 100%;
     height: 64px;
     background-color: var(--headerBgColor);
-    z-index: 10000;
+    z-index: 9000;
 }
 
-.header-navigation {
-    position: relative;
+.burger-menu {
     display: none;
-    top: 10px;
-    justify-content: space-around;
+}
+
+.burger-menu:hover + .burger-navigation {
+    top: 48px;
+}
+
+.burger-navigation {
+    display: none;
+}
+
+.burger-navigation:hover {
+    top: 48px;
 }
 
 .side-bar {
@@ -31,7 +40,6 @@ a {
 
 .side-bar-navigation {
     display: grid;
-    grid-template-rows: 1fr 1fr;
     gap: 12px;
     margin: 12px;
 }
@@ -66,11 +74,27 @@ a {
     .side-bar {
         display: none;
     }
-    .navigation-links {
-        font-size: 16px;
+    .burger-menu {
+        position: fixed;
+        top: 0px;
+        display: block;
+        height: 48px;
+        width: 32px;
+        margin-left: 8px;
+        cursor: pointer;
+        z-index: 9500;
     }
-    .header-navigation {
-        display: flex;
+    .burger-navigation {
+        position: fixed;
+        top: -180px;
+        display: grid;
+        justify-content: center;
+        width: 200px;
+        gap: 4px;
+        padding: 4px 4px 12px;
+        background-color: var(--headerBgColor);
+        z-index: 5000;
+        transition: 1s;
     }
     .content {
         margin: 66px 18px 18px 18px;
@@ -78,10 +102,10 @@ a {
 }
 
 @media screen and (max-width: 425px) {
-    .header-navigation {
-        top: 14px;
+    .burger-navigation {
+        width: 150px;
     }
     .navigation-links {
-        font-size: 12px;
+        font-size: 14px;
     }
 }

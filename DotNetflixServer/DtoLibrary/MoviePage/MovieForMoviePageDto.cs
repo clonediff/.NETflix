@@ -22,6 +22,5 @@ namespace DtoLibrary.MoviePage
 		public List<string> Genres { get; set; }
 		public List<SeasonsInfoForMoviePageDto> SeasonsInfo { get; set; }
 		public IEnumerable Proffessions { get; set; }
-		public List<string> Subscriptions { get; set; }
     }
 }

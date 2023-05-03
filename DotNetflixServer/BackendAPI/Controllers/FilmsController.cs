@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using DtoLibrary;
-using DtoLibrary.MoviePage;
 using Microsoft.AspNetCore.Mvc;
 using Services.Exceptions;
 using Services.FilmService;
-using Services.SubscriptionService;
 using Services.UserService;
 
 namespace BackendAPI.Controllers;
@@ -14,13 +12,11 @@ namespace BackendAPI.Controllers;
 public class FilmsController : ControllerBase
 {
     private readonly IFilmService _filmService;
-    private readonly ISubscriptionService _subscriptionService;
     private readonly IUserService _userService;
 
-    public FilmsController(IFilmService filmService, ISubscriptionService subscriptionService, IUserService userService)
+    public FilmsController(IFilmService filmService, IUserService userService)
     {
         _filmService = filmService;
-        _subscriptionService = subscriptionService;
         _userService = userService;
     }
 
@@ -37,24 +33,22 @@ public class FilmsController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<ActionResult<MovieForMoviePageDto?>> GetFilmById([FromQuery] int id)
+    public async Task<IActionResult> GetFilmById([FromQuery] int id)
     {
+        var userId = await _userService.GetUserIdAsync(User);
+
         try
         {
-            var user = await _userService.GetUserAsync(User);   
-            var userSubscriptions = await _subscriptionService.GetAllUserSubscriptionsAsync(user.Id);
-            var film = await _filmService.GetFilmByIdAsync(id);
-
-            if (_subscriptionService.HaveCommonSubscriptions(userSubscriptions, film!.Subscriptions))
-            {
-                return Ok(film);
-            }
-            
-            return BadRequest("Оформите подписку, чтобы получить доступ к данному контенту");
+            var movie = await _filmService.GetFilmByIdAsync(id, userId);
+            return Ok(movie);
         }
         catch (NotFoundException ex)
         {
             return NotFound(ex.Message);
+        }
+        catch (IncorrectOperationException ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

@@ -4,32 +4,24 @@ using DtoLibrary;
 using Microsoft.EntityFrameworkCore;
 using Services.Exceptions;
 using Services.Mappers;
+using Services.PaymentService;
 
 namespace Services.SubscriptionService;
 
 public class SubscriptionService : ISubscriptionService
 {
     private readonly ApplicationDBContext _dbContext;
+    private readonly IPaymentService _paymentService;
 
-    public SubscriptionService(ApplicationDBContext dbContext)
+    public SubscriptionService(ApplicationDBContext dbContext, IPaymentService paymentService)
     {
         _dbContext = dbContext;
+        _paymentService = paymentService;
     }
 
     public async Task<int> GetSubscriptionsCountAsync()
     {
         return await _dbContext.Subscriptions.CountAsync();
-    }
-
-    public async Task<List<string>> GetAllUserSubscriptionsAsync(string userId)
-    {
-        var user = await _dbContext.Users
-            .Include(x => x.Subscriptions)
-            .FirstOrDefaultAsync(x => x.Id == userId);
-
-        return user!.Subscriptions
-            .Select(s => s.Name)
-            .ToList();
     }
 
     public async Task<PaginationDataDto<SubscriptionDto>> GetSubscriptionsFilteredAsync(string? name, int page)
@@ -52,7 +44,7 @@ public class SubscriptionService : ISubscriptionService
         };
     }
 
-    public IEnumerable<FilmInSubscriptionDto> GetAllFilmsWithSubscriptionAsync(int subscriptionId, string? name)
+    public IEnumerable<FilmInSubscriptionDto> GetAllFilms(int subscriptionId, string? name)
     {
         return _dbContext.Movies
             .Where(x => name == null || x.Name.Contains(name))
@@ -87,13 +79,6 @@ public class SubscriptionService : ISubscriptionService
         await _dbContext.SaveChangesAsync();
     }
 
-    public bool HaveCommonSubscriptions(List<string> userSubscriptions, List<string> filmSubscriptions)
-    {
-        return filmSubscriptions.Count == 0 ||
-               userSubscriptions.Count != 0 &&
-               filmSubscriptions.Any(fs => userSubscriptions.Contains(fs));
-    }
-
     public async Task AddSubscriptionAsync(AddSubscriptionDto dto)
     {
         var subscription = new Subscription
@@ -110,14 +95,13 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task UpdateSubscriptionAsync(UpdateSubscriptionDto dto)
     {
-        var subscription = await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == dto.Id);
-
-        if (subscription is null)
-            throw new NotFoundException("Не удалось найти подписку");
-
-        subscription.Name = dto.Name;
-        subscription.PeriodInDays = dto.PeriodInDays;
-        subscription.Cost = dto.Cost;
+        _dbContext.Subscriptions.Update(new Subscription
+        {
+            Id = dto.Id,
+            Cost = dto.Cost,
+            Name = dto.Name,
+            PeriodInDays = dto.PeriodInDays
+        });
 
         await _dbContext.SaveChangesAsync();
     }
@@ -136,32 +120,86 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task ChangeSubscriptionAvailabilityAsync(SubscriptionAvailabilityDto dto)
     {
-        var subscription = await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == dto.Id);
-
-        if (subscription is null)
-            throw new NotFoundException("Не удалось найти подписку");
-
-        subscription.IsAvailable = dto.IsAvailable;
+        _dbContext.Subscriptions.Update(new Subscription
+        {
+            Id = dto.Id,
+            IsAvailable = dto.IsAvailable
+        });
 
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task PurchaseSubscriptionAsync(UserSubscriptionDto dto)
+    public async Task<IEnumerable<GetUserSubscriptionDto>> GetAllUserSubscriptionsAsync(string userId)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.UserSubscriptions)
+                .ThenInclude(us => us.Subscription)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        
+        if (user == null)
+            throw new NotFoundException("Не удалось найти пользователя");
+
+        return user.UserSubscriptions
+            .Select(us => new GetUserSubscriptionDto
+            {
+                Id = us.Subscription.Id,
+                SubscriptionName = us.Subscription.Name,
+                Expires = us.Expires,
+                Cost = us.Subscription.Cost
+            });
+    }
+
+    public async IAsyncEnumerable<string> GetAllFilmNames(int subscriptionId)
+    {
+        var subscription = await _dbContext.Subscriptions
+            .Where(s => s.Id == subscriptionId)
+            .Include(s => s.Movies)
+            .FirstOrDefaultAsync(s => s.Id == subscriptionId);
+        
+        if (subscription == null || !subscription.IsAvailable)
+            throw new NotFoundException("Не удалось найти подписку");
+
+        foreach (var movie in subscription.Movies)
+        {
+            yield return movie.Name;
+        }
+    }
+
+    public IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions()
+    {
+        return _dbContext.Subscriptions
+            .Where(s => s.IsAvailable)
+            .Include(s => s.Movies)
+            .Select(s => new AvailableSubscriptionDto
+            {
+                PeriodInDays = s.PeriodInDays,
+                Cost = s.Cost,
+                Name = s.Name,
+                Id = s.Id,
+                FilmNames = s.Movies.Select(m => m.Name)
+            })
+            .AsEnumerable();
+    }
+
+    public async Task PurchaseSubscriptionAsync(UserSubscriptionDto userSubscriptionDto, CardDataDto cardDataDto)
     {
         var user = await _dbContext.Users
             .Include(u => u.Subscriptions)
-            .FirstOrDefaultAsync(x => x.Id == dto.UserId);
+            .FirstOrDefaultAsync(x => x.Id == userSubscriptionDto.UserId);
 
         if (user == null)
             throw new NotFoundException("Не удалось найти пользователя");
 
-        var subscription = await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == dto.SubscriptionId);
+        var subscription = await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == userSubscriptionDto.SubscriptionId);
 
-        if (subscription == null)
+        if (subscription == null || !subscription.IsAvailable)
             throw new NotFoundException("Не удалось найти подписку");
 
         if (user.Subscriptions.Any(x => x.Id == subscription.Id))
             throw new IncorrectOperationException("Неудалось приобрести данную подписку, так как она уже приобретена");
+        
+        if (!_paymentService.PayByCard(cardDataDto, subscription.Cost))
+            throw new IncorrectOperationException("Не удалось приобрести данную подписку, так как введены некорректные реквизиты к оплате");
         
         user.Subscriptions.Add(subscription);
 
@@ -177,16 +215,16 @@ public class SubscriptionService : ISubscriptionService
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task ExtendSubscriptionAsync(UserSubscriptionDto dto)
+    public async Task ExtendSubscriptionAsync(UserSubscriptionDto userSubscriptionDto, CardDataDto cardDataDto)
     {
         var user = await _dbContext.Users
             .Include(u => u.Subscriptions)
-            .FirstOrDefaultAsync(x => x.Id == dto.UserId);
+            .FirstOrDefaultAsync(x => x.Id == userSubscriptionDto.UserId);
 
         if (user == null)
             throw new NotFoundException("Не удалось найти пользователя");
 
-        var subscription = user.Subscriptions.FirstOrDefault(x => x.Id == dto.SubscriptionId);
+        var subscription = user.Subscriptions.FirstOrDefault(x => x.Id == userSubscriptionDto.SubscriptionId);
         
         if (subscription == null)
             throw new NotFoundException("Не удалось найти подписку");
@@ -194,7 +232,10 @@ public class SubscriptionService : ISubscriptionService
         if (subscription.PeriodInDays == null)
             throw new IncorrectOperationException("Нельзя продлевать бессрочные подписки");
         
-        var userSubscription = _dbContext.UserSubscriptions.FirstOrDefault(x => x.SubscriptionId == dto.SubscriptionId)!;
+        if (!_paymentService.PayByCard(cardDataDto, subscription.Cost))
+            throw new IncorrectOperationException("Не удалось продлить данную подписку, так как введены некорректные реквизиты к оплате");
+        
+        var userSubscription = _dbContext.UserSubscriptions.FirstOrDefault(x => x.SubscriptionId == userSubscriptionDto.SubscriptionId)!;
         
         userSubscription.Expires += TimeSpan.FromDays(subscription.PeriodInDays.Value);
 

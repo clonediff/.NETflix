@@ -7,7 +7,7 @@ namespace Services.UserService
     public interface IUserService
     {
         Task<int> GetUsersCountAsync();
-        Task<User> GetUserAsync(ClaimsPrincipal claimsPrincipal);
+        Task<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal);
         Task<string> GetEmailAsync(string userId);
         IEnumerable<GetRoleDto> GetAllRoles();
         Task<PaginationDataDto<UserAdminDto>> GetUsersFilteredAsync(int page, string? name);

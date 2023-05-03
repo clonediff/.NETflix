@@ -74,9 +74,6 @@ public static class MovieInfoToDto
                     })
                 .GroupBy(p => p.Profession)
                 .Select(g => new { Profession = g.Key, People = g }),
-            Subscriptions = movieInfo.Subscriptions
-                .Select(s => s.Name)
-                .ToList()
         };
     }
 }

@@ -24,9 +24,10 @@ namespace Services.UserService
             return await _dbContext.Users.CountAsync();
         }
 
-        public async Task<User> GetUserAsync(ClaimsPrincipal claimsPrincipal)
+        public async Task<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
         {
-            return await _userManager.GetUserAsync(claimsPrincipal);
+            var user = await _userManager.GetUserAsync(claimsPrincipal);
+            return await _userManager.GetUserIdAsync(user);
         }
 
         public async Task<string> GetEmailAsync(string userId)

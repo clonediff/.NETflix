@@ -102,10 +102,10 @@ public class FilmService : IFilmService
             .Select(g => new { Category = g.Key, Films = g });
     }
 
-    public async Task<MovieForMoviePageDto?> GetFilmByIdAsync(int id)
+    public async Task<MovieForMoviePageDto> GetFilmByIdAsync(int filmId, string userId)
     {
-        var result = await _dbContext.Movies
-            .Where(m => m.Id == id)
+        var movie = await _dbContext.Movies
+            .Where(m => m.Id == filmId)
             .Include(movie => movie.Type)
             .Include(movie => movie.Category)
             .Include(movie => movie.Budget)
@@ -125,10 +125,29 @@ public class FilmService : IFilmService
             .Include(movie => movie.Subscriptions)
             .FirstOrDefaultAsync();
 
-        if (result == null)
+        if (movie is null)
             throw new NotFoundException("Не удалось найти запрашиваемый контент");
 
-        return result.ToMovieForMoviePageDto();
+        var availableMovies = await GetAvailableFilmIds(userId);
+
+        if (movie.Subscriptions.Count == 0 || availableMovies.Count != 0 && availableMovies.Contains(filmId))
+        {
+            return movie.ToMovieForMoviePageDto();
+        }
+
+        throw new IncorrectOperationException("Оформите подписку, чтобы получить доступ к данному контенту");
+    }
+
+    private async Task<List<int>> GetAvailableFilmIds(string userId)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Subscriptions)
+                .ThenInclude(s => s.Movies)
+            .FirstOrDefaultAsync(x => x.Id == userId);
+
+        return user!.Subscriptions
+            .SelectMany(s => s.Movies.Select(m => m.Id))
+            .ToList();
     }
 
     public async Task AddFilmAsync(MovieInfo movieInfo)

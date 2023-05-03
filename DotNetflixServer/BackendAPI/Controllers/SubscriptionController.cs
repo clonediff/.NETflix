@@ -20,16 +20,45 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> Purchase([FromQuery] int subscriptionId)
+    public IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions()
     {
+        return _subscriptionService.GetAllSubscriptions();
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllUserSubscriptionsAsync()
+    {
+        var userId = await _userService.GetUserIdAsync(User);
+        
         try
         {
-            var user = await _userService.GetUserAsync(User);
+            var subscriptions = await _subscriptionService.GetAllUserSubscriptionsAsync(userId);
+            return Ok(subscriptions);
+        }
+        catch (NotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("[action]")]
+    public IAsyncEnumerable<string> GetAllFilmNames([FromQuery] int subscriptionId)
+    {
+        return _subscriptionService.GetAllFilmNames(subscriptionId);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> PurchaseAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
+    {
+        var userId = await _userService.GetUserIdAsync(User);
+        
+        try
+        {
             await _subscriptionService.PurchaseSubscriptionAsync(new UserSubscriptionDto
             {
                 SubscriptionId = subscriptionId,
-                UserId = user.Id
-            });
+                UserId = userId
+            }, cardDataDto);
             return Ok();
         }
         catch (NotFoundException ex)
@@ -43,16 +72,17 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> Extend([FromQuery] int subscriptionId)
+    public async Task<IActionResult> ExtendAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
+        var userId = await _userService.GetUserIdAsync(User);
+        
         try
         {
-            var user = await _userService.GetUserAsync(User);
             await _subscriptionService.ExtendSubscriptionAsync(new UserSubscriptionDto
             {
                 SubscriptionId = subscriptionId,
-                UserId = user.Id
-            });
+                UserId = userId
+            }, cardDataDto);
             return Ok();
         }
         catch (NotFoundException ex)
