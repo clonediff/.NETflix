@@ -1,0 +1,70 @@
+.subscription-card-wrapper{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    background-color: var(--header-bg-color);
+    border: solid 2px var(--header-bg-color);
+    color: white;
+    border-radius: 15px;
+    width: 344px;
+    padding: 10px 15px;
+    height: 500px;
+}
+
+.subscription-card-wrapper:hover{
+    border-color: red
+}
+
+.subscription-card-info{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.price-div{    
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.14), inset 0px 3px 7px 0px rgba(0, 0, 0, 0.31);
+    max-width: 138px;
+    background: var(--search-bg-color);
+    padding: 30px 25px;
+    margin-top: 22px;
+}
+
+.price-div h3{
+    line-height: 1.5;
+    font-size: 24px;
+    margin: 0;
+}
+
+.movies-div{
+    margin-top: 20px;   
+}
+
+.movies-div ul{
+    margin: 0;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.movies-div ul li {
+    list-style: none;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #414146;
+    color: #fff;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.pointer:hover{
+    color: red;
+}
+
+.buy-btn{
+    margin-bottom: 20px;
+}

@@ -1,6 +1,7 @@
 html{
     height: 100%;
     min-height: 500px;
+    background-color: var(--main-bg-color);
 }
 
 body {
@@ -11,6 +12,10 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+*{
+    box-sizing: border-box;
 }
 
 #root{
