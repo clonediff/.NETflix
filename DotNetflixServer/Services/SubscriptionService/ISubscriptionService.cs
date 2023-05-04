@@ -15,7 +15,7 @@ public interface ISubscriptionService
     Task ChangeSubscriptionAvailabilityAsync(SubscriptionAvailabilityDto dto);
     Task<IEnumerable<GetUserSubscriptionDto>> GetAllUserSubscriptionsAsync(string userId);
     IAsyncEnumerable<string> GetAllFilmNames(int subscriptionId);
-    IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions();
+    IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions(string userId);
     Task PurchaseSubscriptionAsync(UserSubscriptionDto userSubscriptionDto, CardDataDto cardDataDto);
     Task ExtendSubscriptionAsync(UserSubscriptionDto userSubscriptionDto, CardDataDto cardDataDto);
 }

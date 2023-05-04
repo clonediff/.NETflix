@@ -20,9 +20,19 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions()
+    public async Task<IActionResult> GetAllSubscriptions()
     {
-        return _subscriptionService.GetAllSubscriptions();
+        var userId = await _userService.GetUserIdAsync(User);
+
+        try
+        {
+            var subscriptions = _subscriptionService.GetAllSubscriptions(userId);
+            return Ok(subscriptions);
+        }
+        catch (NotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("[action]")]
