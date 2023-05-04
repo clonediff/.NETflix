@@ -18,7 +18,7 @@ namespace DtoLibrary.MoviePage
 		public string? Category { get; set; }
 		public string? Budget { get; set; }
 		public FeesForMoviePageDto? Fees { get; set; }
-		public List<string> Countries { get; set; }
+		public List<CountriesForMoviePageDto> Countries { get; set; }
 		public List<string> Genres { get; set; }
 		public List<SeasonsInfoForMoviePageDto> SeasonsInfo { get; set; }
 		public IEnumerable Proffessions { get; set; }

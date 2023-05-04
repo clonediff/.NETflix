@@ -6,6 +6,8 @@ import BurgerMenu from '../main-page/burger-menu/burger-menu'
 import BurgerPanel from '../main-page/burger-panel/burger-panel'
 import Header from '../main-page/header/header'
 import './film-page.css'
+import { CountriesMap } from './countries-map'
+
 
 const FilmPage = () => {
 
@@ -69,7 +71,10 @@ const FilmPageInfo = ({ film }) => {
                 <b>Сборы в США</b>
                 <div>{ film.fees.usa !== '' ? film.fees.usa : "—" }</div>
                 <b>Страны</b>
-                <div>{ film.countries.join(", ") }</div>
+                <div>
+                    { film.countries.map((c) => c.name).join(", ") }
+                    <CountriesMap countries={film.countries}/>
+                </div>      
                 <b>Жанры</b>
                 <div>{ film.genres.join(", ") }</div>
                 {
@@ -88,7 +93,7 @@ const FilmPageInfo = ({ film }) => {
                             </div>
                         </div>
                     )
-                }
+                }         
             </div>
         </>
     )

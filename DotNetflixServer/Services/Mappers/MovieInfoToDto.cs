@@ -54,14 +54,20 @@ public static class MovieInfoToDto
                 USA = $"{movieInfo.Fees?.USA?.Value}{movieInfo.Fees?.USA?.Currency}"
             },
 
-            Countries = movieInfo.Countries.Select(c => c.Country.Name).ToList(),
+            Countries = movieInfo.Countries.Select(c =>
+                new CountriesForMoviePageDto
+                {
+                    Name = c.Country.Name,
+                    Lat = c.Country.Lat,
+                    Lng = c.Country.Lng,
+                }).ToList(),
             Genres = movieInfo.Genres.Select(g => g.Genre.Name).ToList(),
 
-            SeasonsInfo = movieInfo.SeasonsInfo.Select(s => 
+            SeasonsInfo = movieInfo.SeasonsInfo.Select(s =>
                 new SeasonsInfoForMoviePageDto
                 {
-                    Number= s.Number,
-                    EpisodesCount= s.EpisodesCount,
+                    Number = s.Number,
+                    EpisodesCount = s.EpisodesCount,
                 }).ToList(),
 
             Proffessions = movieInfo.Proffessions
