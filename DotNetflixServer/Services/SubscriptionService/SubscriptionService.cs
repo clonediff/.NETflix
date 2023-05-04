@@ -166,8 +166,16 @@ public class SubscriptionService : ISubscriptionService
         }
     }
 
-    public IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions()
+    public IEnumerable<AvailableSubscriptionDto> GetAllSubscriptions(string userId)
     {
+        var userSubscriptionIds = _dbContext.Users
+            .Where(u => u.Id == userId)
+            .Include(u => u.Subscriptions)
+            .SelectMany(u => u.Subscriptions.Select(s => s.Id));
+        
+        if (userSubscriptionIds == null)
+            throw new NotFoundException("Не удалось найти пользователя");
+        
         return _dbContext.Subscriptions
             .Where(s => s.IsAvailable)
             .Include(s => s.Movies)
@@ -177,7 +185,8 @@ public class SubscriptionService : ISubscriptionService
                 Cost = s.Cost,
                 Name = s.Name,
                 Id = s.Id,
-                FilmNames = s.Movies.Select(m => m.Name)
+                FilmNames = s.Movies.Select(m => m.Name),
+                BelongsToUser = userSubscriptionIds.Contains(s.Id)
             })
             .AsEnumerable();
     }
