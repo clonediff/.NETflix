@@ -20,35 +20,11 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetAllSubscriptions()
+    public async Task<IEnumerable<AvailableSubscriptionDto>> GetAllSubscriptionsAsync()
     {
         var userId = await _userService.GetUserIdAsync(User);
 
-        try
-        {
-            var subscriptions = _subscriptionService.GetAllSubscriptions(userId);
-            return Ok(subscriptions);
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetAllUserSubscriptionsAsync()
-    {
-        var userId = await _userService.GetUserIdAsync(User);
-        
-        try
-        {
-            var subscriptions = await _subscriptionService.GetAllUserSubscriptionsAsync(userId);
-            return Ok(subscriptions);
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return _subscriptionService.GetAllSubscriptions(userId);
     }
 
     [HttpGet("[action]")]
@@ -61,6 +37,9 @@ public class SubscriptionController : ControllerBase
     public async Task<IActionResult> PurchaseAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
         var userId = await _userService.GetUserIdAsync(User);
+        
+        if (userId is null)
+            return BadRequest();
         
         try
         {
@@ -85,6 +64,9 @@ public class SubscriptionController : ControllerBase
     public async Task<IActionResult> ExtendAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
         var userId = await _userService.GetUserIdAsync(User);
+        
+        if (userId is null)
+            return BadRequest();
         
         try
         {

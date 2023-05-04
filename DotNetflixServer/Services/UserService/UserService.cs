@@ -24,10 +24,28 @@ namespace Services.UserService
             return await _dbContext.Users.CountAsync();
         }
 
-        public async Task<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
+        public async Task<string?> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
         {
             var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+            if (user == null)
+                return null;
+            
             return await _userManager.GetUserIdAsync(user);
+        }
+
+        public async Task<IEnumerable<int>> GetAvailableFilmIdsAsync(string? userId)
+        {
+            if (userId is null)
+                return Enumerable.Empty<int>();
+
+            var user = await _dbContext.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Subscriptions)
+                    .ThenInclude(s => s.Movies)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user!.Subscriptions.SelectMany(s => s.Movies.Select(m => m.Id));
         }
 
         public async Task<string> GetEmailAsync(string userId)
@@ -38,6 +56,21 @@ namespace Services.UserService
                 throw new NotFoundException("Не удалось найти пользователя");
             
             return user.Email;
+        }
+
+        public IEnumerable<GetUserSubscriptionDto> GetAllUserSubscriptions(string userId)
+        {
+            var userSubscriptions = _dbContext.UserSubscriptions
+                .Where(us => us.UserId == userId)
+                .Include(s => s.Subscription);
+
+            return userSubscriptions.Select(us => new GetUserSubscriptionDto
+            {
+                Id = us.Subscription.Id,
+                Expires = us.Expires,
+                Cost = us.Subscription.Cost,
+                SubscriptionName = us.Subscription.Name
+            });
         }
 
         public IEnumerable<GetRoleDto> GetAllRoles()
