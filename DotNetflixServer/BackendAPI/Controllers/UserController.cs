@@ -2,8 +2,10 @@
 using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Services.Exceptions;
 using Services.Mappers;
 using Services.TwoFAService;
+using Services.UserService;
 
 namespace BackendAPI.Controllers;
 
@@ -12,11 +14,14 @@ namespace BackendAPI.Controllers;
 public class UserController : ControllerBase
 {
     private readonly ITwoFAService _twoFAService;
-    readonly UserManager<User> _userManager;
-    public UserController(UserManager<User> userManager, ITwoFAService twoFAService)
+    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
+    
+    public UserController(UserManager<User> userManager, ITwoFAService twoFAService, IUserService userService)
     {
         _userManager = userManager;
         _twoFAService = twoFAService;
+        _userService = userService;
     }
 
     [HttpGet("[action]")]
@@ -24,6 +29,18 @@ public class UserController : ControllerBase
     {
         var user = await _userManager.GetUserAsync(User);
         return user?.ToUserDto()!;
+    }
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllUserSubscriptionsAsync()
+    {
+        var userId = await _userService.GetUserIdAsync(User);
+
+        if (userId is null)
+            return BadRequest();
+
+        var subscriptions = _userService.GetAllUserSubscriptions(userId);
+        return Ok(subscriptions);
     }
 
     [HttpPut("[action]")]

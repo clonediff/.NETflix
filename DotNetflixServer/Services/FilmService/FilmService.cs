@@ -6,16 +6,19 @@ using DtoLibrary.MoviePage;
 using Microsoft.EntityFrameworkCore;
 using Services.Exceptions;
 using Services.Mappers;
+using Services.UserService;
 
 namespace Services.FilmService;
 
 public class FilmService : IFilmService
 {
     private readonly ApplicationDBContext _dbContext;
+    private readonly IUserService _userService;
 
-    public FilmService(ApplicationDBContext dbContext)
+    public FilmService(ApplicationDBContext dbContext, IUserService userService)
     {
         _dbContext = dbContext;
+        _userService = userService;
     }
 
     public async Task<int> GetFilmsCountAsync()
@@ -102,7 +105,7 @@ public class FilmService : IFilmService
             .Select(g => new { Category = g.Key, Films = g });
     }
 
-    public async Task<MovieForMoviePageDto> GetFilmByIdAsync(int filmId, string userId)
+    public async Task<MovieForMoviePageDto> GetFilmByIdAsync(int filmId, string? userId)
     {
         var movie = await _dbContext.Movies
             .Where(m => m.Id == filmId)
@@ -128,26 +131,14 @@ public class FilmService : IFilmService
         if (movie is null)
             throw new NotFoundException("Не удалось найти запрашиваемый контент");
 
-        var availableMovies = await GetAvailableFilmIds(userId);
+        var availableMovies = await _userService.GetAvailableFilmIdsAsync(userId);
 
-        if (movie.Subscriptions.Count == 0 || availableMovies.Count != 0 && availableMovies.Contains(filmId))
+        if (movie.Subscriptions.Count == 0 || availableMovies.Contains(filmId))
         {
             return movie.ToMovieForMoviePageDto();
         }
 
         throw new IncorrectOperationException("Оформите подписку, чтобы получить доступ к данному контенту");
-    }
-
-    private async Task<List<int>> GetAvailableFilmIds(string userId)
-    {
-        var user = await _dbContext.Users
-            .Include(u => u.Subscriptions)
-                .ThenInclude(s => s.Movies)
-            .FirstOrDefaultAsync(x => x.Id == userId);
-
-        return user!.Subscriptions
-            .SelectMany(s => s.Movies.Select(m => m.Id))
-            .ToList();
     }
 
     public async Task AddFilmAsync(MovieInfo movieInfo)
