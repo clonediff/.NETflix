@@ -11,6 +11,7 @@
     width: 344px;
     padding: 10px 15px;
     height: 500px;
+    box-sizing: border-box;
 }
 
 .subscription-card-wrapper:hover{
@@ -67,4 +68,8 @@
 
 .buy-btn{
     margin-bottom: 20px;
+}
+
+.buy-btn:disabled{
+    color: white
 }

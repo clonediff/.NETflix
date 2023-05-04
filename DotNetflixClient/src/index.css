@@ -14,10 +14,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-*{
-    box-sizing: border-box;
-}
-
 #root{
     height: 100%;
 }

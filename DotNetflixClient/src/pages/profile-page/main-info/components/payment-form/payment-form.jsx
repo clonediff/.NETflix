@@ -2,17 +2,18 @@ import { Form, Input, Button, DatePicker, Modal } from "antd"
 import { TitleValue } from "../../../title-value/TitleValue"
 import "./payment-form.css"
 
-export const PaymentForm = ({Product, Show, onCancel}) => {
+export const PaymentForm = ({Product, Show, onCancel, onBuy}) => {
 
     // Product structure: Cost, Name, Id
     return(
         <Modal className="payment-modal" open={Show} closable="false" footer={ null } onCancel={onCancel}>
             { Product &&
-                <Form className="payment-form" layout="vertical">
+                <Form className="payment-form" layout="vertical"
+                    onFinish={onBuy}>
                     <Form.Item
                         style={{color: "white"}}
                         label="Номер карты"
-                        name="cardnum"
+                        name="cardnumber"
                         rules={[
                             {
                             required: true,
@@ -34,7 +35,7 @@ export const PaymentForm = ({Product, Show, onCancel}) => {
                     </Form.Item>
                     <Form.Item
                         label="Срок действия"
-                        name="validtime"
+                        name="expirationDate"
                         rules={[
                             {
                             required: true,
@@ -64,7 +65,7 @@ export const PaymentForm = ({Product, Show, onCancel}) => {
                     <TitleValue title={"Товар"} value={Product.name}></TitleValue>
                     <TitleValue title={"Цена"} value={Product.cost}></TitleValue>
                     <Form.Item style={{display: "flex", justifyContent: "center"}}>
-                        <Button type="primary">Подтвердить</Button>
+                        <Button type="primary" htmlType="submit">Подтвердить</Button>
                     </Form.Item>
                 </Form>
             }
