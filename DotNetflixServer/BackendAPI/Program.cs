@@ -12,8 +12,10 @@ using Services.FilmService;
 using Services.MailSenderService;
 using Services.TwoFAService;
 using System.Linq;
+using BackendAPI.Hub;
 using Microsoft.AspNetCore.Authentication;
 using DataAccess.Entities.BusinessLogic;
+using Services.ChatStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddCors();
 
@@ -81,6 +85,7 @@ builder.Services.AddControllers()
 	});
 
 builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<IChatStorage, ChatStorage>();
 builder.Services.AddTransient<IFilmProvider, FilmProvider>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
@@ -164,6 +169,8 @@ app.Use((ctx, next) =>
 app.MapControllers();
 
 app.UseHttpsRedirection();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseSpa(spaBuilder =>
 {
