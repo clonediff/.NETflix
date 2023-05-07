@@ -35,6 +35,11 @@ const MainPage = () => {
                             category={ group.category }
                             films={ group.films }/>)
                 }
+                <div className='chat-link'>
+                    <a href='/chat'>
+                        Присоединяйся к беседе в нашем чате
+                    </a>
+                </div>
             </div>
         </>
     )
