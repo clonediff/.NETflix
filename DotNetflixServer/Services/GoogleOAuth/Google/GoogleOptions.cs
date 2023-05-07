@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace DotNetflixAuth.Models;
+namespace Services.GoogleOAuth.Google;
 
 public class GoogleOptions : OAuthOptions
 {
@@ -11,7 +12,7 @@ public class GoogleOptions : OAuthOptions
     {
         Events = new GoogleEvents();
         SignInScheme = IdentityConstants.ExternalScheme;
-        CallbackPath = new PathString("/googleoauth/google-cb");
+        CallbackPath = "/googleoauth/google-cb";
         SaveTokens = false;
 
         Scope.Clear();

@@ -58,6 +58,8 @@ export const LoginForm = () => {
       const urlParams = new URLSearchParams(params).toString();
   
       window.location = `${googleAuthUrl}?${urlParams}`;
+
+      localStorage.setItem('authenticated', true)
     }, []);
 
     return(<div className={styles.login}>

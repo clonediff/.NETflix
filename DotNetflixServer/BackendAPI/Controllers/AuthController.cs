@@ -1,5 +1,6 @@
 ﻿using BackendAPI.Models.Forms;
 using DtoLibrary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.AuthService;
 
@@ -48,6 +49,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("[action]")]
+    [Authorize]
     public async Task<UserDto> GetUserAsync()
     {
         var userClaims = User;

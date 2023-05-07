@@ -1,4 +1,4 @@
-﻿namespace DotNetflixAuth.Models;
+﻿namespace Services.GoogleOAuth.Google;
 
 public static class GoogleDefaults
 {

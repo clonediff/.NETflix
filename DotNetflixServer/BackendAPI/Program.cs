@@ -8,7 +8,6 @@ using System.Text.Json.Serialization;
 using BackendAPI.Middleware;
 using DataAccess;
 using DataAccess.Entities.IdentityLogic;
-using DotNetflixAuth.Models;
 using IdentityPasswordGenerator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,8 +15,8 @@ using Microsoft.AspNetCore.Identity;
 using Services.AuthService;
 using Services.FilmService;
 using Services.GoogleOAuth;
+using Services.GoogleOAuth.Google;
 using Services.MailSenderService;
-using Services.OAuthService;
 using Services.TwoFAService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -95,7 +94,9 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("user", pb => pb
-        .RequireClaim("level", "user", "admin"));
+        .RequireClaim("level", "user","manager", "admin"));
+    options.AddPolicy("manager", pb => pb
+	    .RequireClaim("level", "manager", "admin"));
     options.AddPolicy("admin", pb => pb
         .RequireClaim("level", "admin"));
 });
@@ -119,10 +120,11 @@ builder.Services.AddTransient<IFilmProvider, FilmProvider>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
-builder.Services.AddScoped<IOAuthService, OAuthServiceImpl>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordGenerator, PasswordGenerator>();
+builder.Services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
 
 var app = builder.Build();
 
@@ -146,7 +148,7 @@ app.Map("/backupData", (ApplicationDBContext db) =>
 		});
 		File.WriteAllText(Path.Combine(folderPath, $"{generic[0].Name}.txt"), json);
 	}
-});
+}).RequireAuthorization("admin");
 #endregion
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();

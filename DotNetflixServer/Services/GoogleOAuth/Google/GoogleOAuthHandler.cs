@@ -4,9 +4,10 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace DotNetflixAuth.Models;
+namespace Services.GoogleOAuth.Google;
 
 public class GoogleOAuthHandler : OAuthHandler<GoogleOptions>
 {

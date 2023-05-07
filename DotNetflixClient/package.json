@@ -12,11 +12,13 @@
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-alice-carousel": "^2.7.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-fast-marquee": "^1.3.5",
     "react-google-button": "^0.7.2",
     "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
+    "react-use-cookie": "^1.4.0",
     "sass": "^1.58.3",
     "web-vitals": "^2.1.4"
   },

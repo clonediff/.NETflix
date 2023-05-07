@@ -18,6 +18,10 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         {
             await next(context);
         }
+        /*catch()
+        {
+           Возможно тут нужно будет сделать обработку ошибок, возникающих при oauth => свой кастомный Exception 
+        }*/
         catch (Exception ex)
         {
             await HandleExceptionAsync(context,

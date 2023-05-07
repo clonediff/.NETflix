@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace DotNetflixAuth.Models;
+namespace Services.GoogleOAuth.Google;
 
 public class GoogleEvents : OAuthEvents
 {

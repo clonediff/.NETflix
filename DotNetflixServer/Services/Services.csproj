@@ -12,12 +12,28 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
+      <PackageReference Include="IdentityPasswordGenerator" Version="1.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0-preview.2.23128.3" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-preview.2.23128.3" />
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="Microsoft.AspNetCore.Authentication">
+            <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.3\Microsoft.AspNetCore.Authentication.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.AspNetCore.Authentication.Abstractions">
+          <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.3\Microsoft.AspNetCore.Authentication.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.AspNetCore.Http.Abstractions" >
+            <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.3\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.AspNetCore.Identity">
+            <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.3\Microsoft.AspNetCore.Identity.dll</HintPath>
+        </Reference>
+      <Reference Include="Microsoft.AspNetCore.Authentication.OAuth">
+        <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.3\Microsoft.AspNetCore.Authentication.OAuth.dll</HintPath>
+      </Reference>
       <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
         <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.3\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
       </Reference>
