@@ -113,6 +113,9 @@ public class SubscriptionService : ISubscriptionService
         if (subscription is null)
             throw new NotFoundException("Не удалось найти подписку");
 
+        if (_dbContext.UserSubscriptions.Any(us => us.SubscriptionId == subscriptionId))
+            throw new IncorrectOperationException("Не удалось удалить подписку");
+
         _dbContext.Subscriptions.Remove(subscription);
 
         await _dbContext.SaveChangesAsync();
@@ -159,7 +162,7 @@ public class SubscriptionService : ISubscriptionService
         }
 
         return _dbContext.Subscriptions
-            .Where(s => s.IsAvailable)
+            .Where(s => s.IsAvailable || userSubscriptionIds.Contains(s.Id))
             .Include(s => s.Movies)
             .Select(s => new AvailableSubscriptionDto
             {

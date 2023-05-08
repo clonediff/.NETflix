@@ -80,6 +80,10 @@ public class SubscriptionController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (IncorrectOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("[action]")]
