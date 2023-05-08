@@ -8,7 +8,7 @@ import { axiosInstance } from "../../AxiosInstance";
 import { useNavigate } from "react-router-dom";
 
 export const ProfilePage = () => {
-    const naviagte = useNavigate()
+    const navigate = useNavigate()
     const [userData, setUserData] = useState({})
 
     useEffect(() => {
@@ -17,10 +17,13 @@ export const ProfilePage = () => {
                 if (response.data)
                     setUserData(response.data)
                 else
-                    naviagte("/login")
+                    navigate("/login")
             })
-            // TODO: cach error
-            .catch(error => console.log(error))
+            // TODO: может переделать надо будет
+            .catch((error) => {
+                if(error.response.status === 404)
+                    navigate("/login") 
+            })
     }, [])
 
     const [navigationState, setNavigationState] = useState(0)

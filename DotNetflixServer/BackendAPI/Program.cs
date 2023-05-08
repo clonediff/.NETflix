@@ -1,13 +1,21 @@
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BackendAPI.Middleware;
 using DataAccess;
 using DataAccess.Entities.IdentityLogic;
+using IdentityPasswordGenerator;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Services.AuthService;
 using Services.FilmService;
+using Services.GoogleOAuth;
+using Services.GoogleOAuth.Google;
 using Services.MailSenderService;
 using Services.PaymentService;
 using Services.TwoFAService;
@@ -40,10 +48,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"));
+builder.Services.Configure<GoogleSecrets>(builder.Configuration.GetSection("GoogleOAuth"));
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
     {
-        if (builder.Environment.IsDevelopment())
+	    if (builder.Environment.IsDevelopment())
         {
             options.User.RequireUniqueEmail = false;
             options.Password.RequireDigit = false;
@@ -59,22 +68,45 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
-#region badPractise
-/*builder.Services.ConfigureApplicationCookie(options =>
+builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.ExternalScheme, options =>
 {
-	if (builder.Environment.IsDevelopment())
-    {
-		options.Cookie.SameSite = SameSiteMode.None;
-		options.Cookie.HttpOnly = true;
-		options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    }
-});*/
-#endregion
+	//TODO: Перенести это в отдельный класс как с гуглом. Сделать такие же классы для vk 
+	//options.LoginPath = new PathString("/OAuth/ExternalLogin");
+    
+	options.LoginPath = new PathString("/api/oauth/google");
+
+	var del = options.Events.OnRedirectToAccessDenied;
+	options.Events.OnRedirectToAccessDenied = async ctx =>
+	{
+		var signInManager = ctx.HttpContext.RequestServices.GetRequiredService<SignInManager<User>>();
+		
+		if (ctx.Request.Path.StartsWithSegments(new PathString("/api/oauth/google")))
+		{
+			var properties = signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.AuthenticationScheme,
+				"https://localhost:7289/api/oauth/google");
+			await ctx.HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, properties);
+			return;
+		}
+
+		await del(ctx);
+	};
+});
+
+builder.Services.AddAuthentication()
+	.AddOAuth<GoogleOptions, GoogleOAuthHandler>(GoogleDefaults.AuthenticationScheme,options =>
+	{
+		options.ClientId = builder.Configuration.GetSection("GoogleOAuth")
+			.GetValue<string>("ClientId") ?? string.Empty;
+		options.ClientSecret = builder.Configuration.GetSection("GoogleOAuth")
+			.GetValue<string>("ClientSecret") ?? string.Empty;
+	});
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("user", pb => pb
-        .RequireClaim("level", "user", "admin"));
+        .RequireClaim("level", "user","manager", "admin"));
+    options.AddPolicy("manager", pb => pb
+	    .RequireClaim("level", "manager", "admin"));
     options.AddPolicy("admin", pb => pb
         .RequireClaim("level", "admin"));
 });
@@ -86,6 +118,13 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 	});
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.Cookie.SameSite = SameSiteMode.None;
+	options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+	options.Cookie.HttpOnly = true;
+});
+
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IChatStorage, ChatStorage>();
 builder.Services.AddScoped<IFilmService, FilmService>();
@@ -96,6 +135,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IPasswordGenerator, PasswordGenerator>();
+builder.Services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
 
 var app = builder.Build();
 
@@ -146,10 +189,28 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseCors(pb => pb
-	.AllowAnyHeader()
-	.AllowCredentials()
-	.WithOrigins("http://localhost:3000")
+app.UseCors(pb => 
+	pb
+		.AllowCredentials()
+		.AllowAnyHeader()
+		.AllowAnyMethod()
+		.SetIsOriginAllowed(origin =>
+		{
+			if (string.IsNullOrWhiteSpace(origin)) return false;
+			if (builder.Environment.IsDevelopment())
+			{
+				// Only add this to allow testing with localhost, remove this line in production!
+				if (origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost")) return true;
+			}
+
+			if (builder.Environment.IsProduction())
+			{
+				// Insert your production domain here.
+				//TODO: На деплое свой домейн нужно будет прописать сюда
+				if (origin.ToLower().StartsWith("https://dev.mydomain.com")) return true;   
+			}
+			return false;
+		})
 );
 
 app.UseRouting();
@@ -177,9 +238,9 @@ app.UseHttpsRedirection();
 
 app.MapHub<ChatHub>("/chatHub");
 
-app.UseSpa(spaBuilder =>
+/*app.UseSpa(spaBuilder =>
 {
 	spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-});
+});*/
 
 app.Run();

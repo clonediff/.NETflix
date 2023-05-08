@@ -2,7 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from 'antd';
 import styles from "./LoginForm.module.sass"
 import { axiosInstance } from "../../../AxiosInstance"; 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import GoogleButton from 'react-google-button';
+
+const { REACT_APP_GOOGLE_CLIENT_ID, REACT_APP_BASE_BACKEND_URL } = process.env;
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -31,10 +34,33 @@ export const LoginForm = () => {
         //send request to server
         //navigate, if ok
     };
+    
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
-
     };
+
+    const openGoogleLoginPage = useCallback(() => {
+      const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+      const redirectUri = 'api/oauth/google';
+  
+      const scope = ['https://www.googleapis.com/auth/userinfo.profile',
+       'https://www.googleapis.com/auth/userinfo.email'].join(' ');
+  
+      const params = {
+        response_type: 'code',
+        client_id: REACT_APP_GOOGLE_CLIENT_ID,
+        redirect_uri: `${REACT_APP_BASE_BACKEND_URL}/${redirectUri}`,
+        prompt: 'select_account',
+        access_type: 'offline',
+        scope
+      };
+  
+      const urlParams = new URLSearchParams(params).toString();
+  
+      window.location = `${googleAuthUrl}?${urlParams}`;
+
+      localStorage.setItem('authenticated', true)
+    }, []);
 
     return(<div className={styles.login}>
       <Form
@@ -93,7 +119,7 @@ export const LoginForm = () => {
         </Form.Item>
     
         <Form.Item
-          className={styles.item}
+          
           wrapperCol={{
             offset: 8,
             span: 16,
@@ -104,6 +130,14 @@ export const LoginForm = () => {
           </Button>
         </Form.Item>
       </Form>
+      <div className={styles.socials}>
+          Или
+          <GoogleButton
+          style={{width: "13em", fontSize: "14px"}}
+          onClick={openGoogleLoginPage}
+          label="Sign in with Google">
+          </GoogleButton>
+        </div>
     </div>
         );
 }

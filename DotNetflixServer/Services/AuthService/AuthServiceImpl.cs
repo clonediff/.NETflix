@@ -49,17 +49,17 @@ public class AuthServiceImpl : IAuthService
             Email = form.Email,
             Birthday = form.Birthday
         };
-        
+        //TODO: Поменять сообщения ошибок про существование пользователя
         var checkExistingEmail = await _userManager.FindByEmailAsync(user.Email);
         if (checkExistingEmail != null)
         {
-            return new AuthResultDto("Пользователь с таким email-адресом уже существует!");
+            return new AuthResultDto("Ошибка регистрации. Попробуйте снова");
         }
         
         var checkingExistingUserName = await _userManager.FindByNameAsync(user.UserName);
         if (checkingExistingUserName != null)
         {
-            return new AuthResultDto("Пользователь с таким именем уже существует!");
+            return new AuthResultDto("Ошибка регистрации. Попробуйте снова");
         } 
 
         var creatingResult = await _userManager.CreateAsync(user,form.Password);
@@ -67,6 +67,8 @@ public class AuthServiceImpl : IAuthService
         {
             return new AuthResultDto(creatingResult.Errors.FirstOrDefault()?.Description);
         }
+
+        await _userManager.AddClaimAsync(user, new Claim("level", "user"));
 
         return new AuthResultDto();
     }

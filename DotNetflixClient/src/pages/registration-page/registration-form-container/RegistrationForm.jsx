@@ -1,12 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button,  Form, Input, InputNumber,DatePicker, Space } from 'antd';
+import { Button,  Form, Input,DatePicker, Alert} from 'antd';
 import { axiosInstance } from "../../../AxiosInstance"; 
 import styles from "./RegistrationForm.module.sass"
-
+import { useState } from "react";
 
 export const RegistrationForm = () => {
     const navigator = useNavigate();
     const [form] = Form.useForm();
+    const [errorMessage, setErrorMessage] = useState("");
+    const [visible, setVisible] = useState(false);
+
     const onFinish = (values) => {
         let email = values.email;
         let password = values.password;
@@ -25,10 +28,22 @@ export const RegistrationForm = () => {
             console.log(response)
             navigator("/login")
           })
-          .catch(error => 
-            console.log(error));
+          .catch(error => {
+            onFinishFailed(error.response.data)
+          }
+            );
         //navigate, if ok
     };
+
+    const onFinishFailed = (errorMessage) => {
+      setVisible(true);
+      setErrorMessage(errorMessage);
+    }
+
+    const handleClose = () => {
+      setVisible(false);
+      setErrorMessage("");
+    }
     
     return(<div className={styles.registration}>
     <Form
@@ -119,6 +134,7 @@ export const RegistrationForm = () => {
           <DatePicker className={styles.birthday} format="YYYY-MM-DD"/>
       </Form.Item>
 
+      {visible && <Alert classname={styles.alert} message={errorMessage} type="error" closable afterClose={handleClose} showIcon className={styles.errorMessage}></Alert>}
       <Form.Item className={styles.button}>
         <Button type="primary" htmlType="submit">
           Регистрация
