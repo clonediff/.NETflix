@@ -71,18 +71,14 @@ public class GoogleOAuthService : IGoogleOAuth
                 if (user == null)
                 {
                     var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-                    var username = HttpContext.User.FindFirstValue(ClaimTypes.Name);
                     var password = _passwordGenerator.GeneratePassword(_passwordOptions);
 
                     var existingUser = await _userManager.FindByEmailAsync(email);
                     if (existingUser != null)
-                    {
                         await _userManager.AddLoginAsync(existingUser, info);
-                        
-                    }
                     else
                     {
-                        user = new User {Email = email, UserName = username};
+                        user = new User {Email = email, UserName = email};
                         var identityRes = await _userManager.CreateAsync(user, password);
                 
                         if (identityRes.Succeeded)
@@ -94,12 +90,10 @@ public class GoogleOAuthService : IGoogleOAuth
                     }
                 }
                 else
-                {
                     await _userManager.AddLoginAsync(user, info);
-                }
             }
 
-            await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false);
+            await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true, true);
             return true;
         }
 

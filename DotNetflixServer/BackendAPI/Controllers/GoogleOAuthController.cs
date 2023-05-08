@@ -21,10 +21,7 @@ public class OAuthController : ControllerBase
         var canExternalLoginAsync = await _googleOAuthService.ExternalLoginAsync(callback.Code);
         if (canExternalLoginAsync)
             return Redirect("http://localhost:3000");
-
-        var resp = HttpContext.Response;
-
-        await resp.WriteAsJsonAsync("Возникла ошибка при авторизации при помощи сервиса Google");
+        
         return Redirect("http://localhost:3000/login");
     }
 }
