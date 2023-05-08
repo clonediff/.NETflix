@@ -33,6 +33,4 @@ public class GoogleOptions : OAuthOptions
         ClaimActions.MapJsonKey("urn:google:profile", "link");
         ClaimActions.MapJsonKey(ClaimTypes.Email, "email");  
     }
-    
-    
 }
