@@ -1,0 +1,122 @@
+@import url(../../constants.css);
+
+.chat-container {
+    background-color: var(--film-page-bg-color);
+    height: calc(100% - 124px);
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+.chat-container::after {
+    content: "";
+    position: fixed;
+    left: -5%;
+    right: -5%;
+    top: -5%;
+    width: 110%;
+    height: 110%;
+    background-image: url(../../../public/dotnetflix-bgi.jpg);
+    background-size: cover;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+.chat {
+    /* background-color: var(--header-bg-color); */
+    height: 100%;
+    width: 70%;
+    margin: auto;
+    border-radius: 8px;
+    padding: 6px;
+}
+
+.message-list {
+    height: 92%;
+    overflow-y: auto;
+}
+
+.message-list::-webkit-scrollbar {
+    display: none;
+}
+
+.message-wrapper {
+    display: flex;
+}
+
+.message-wrapper:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+.message {
+    border-radius: 8px;
+    color: white;
+    padding: 4px 8px;
+    overflow-wrap: break-word;
+    max-width: 50%;
+}
+
+.message-time {
+    color: grey;
+}
+
+.message-enter {
+    margin-top: 8px;
+    height: calc(8% - 8px);
+}
+
+.message-input {
+    height: calc(100%);
+    background-color: var(--main-bg-color);
+    color: white;
+    font-size: 16px;
+    padding: 0px 8px;
+    border-radius: 8px;
+    word-wrap: break-word;
+    border: none;
+}
+
+.message-input::placeholder {
+    color: #dddddd95;
+}
+
+.message-enter input {
+    border: none !important;
+}
+
+.message-enter input:focus {
+    box-shadow: none;
+}
+
+.message-input:focus-visible {
+    outline: none;
+}
+
+@media screen and (max-width: 920px) {
+    .chat-container {
+        height: calc(100% - 104px);
+    }
+    .chat-container::after {
+        filter: blur(3px);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .chat-container {
+        display: flex;
+        justify-content: center;
+        height: calc(100% - 44px);
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    .chat {
+        height: calc(100% - 8px);
+        width: calc(100% - 32px);
+        background-color: transparent;
+    }
+    .message-input::placeholder {
+        font-size: 16px;
+    }
+    .chat-container::after {
+        filter: blur(1px);
+    }
+}
