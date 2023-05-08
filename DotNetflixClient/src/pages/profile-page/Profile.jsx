@@ -26,8 +26,6 @@ export const ProfilePage = () => {
             })
     }, [])
 
-    console.log(userData)
-
     const [navigationState, setNavigationState] = useState(0)
     
     const tabs = [
@@ -37,7 +35,7 @@ export const ProfilePage = () => {
     }, 
     {
         title: 'Управление подпиской',
-        body: <SubscriptionInfo/>
+        body: <SubscriptionInfo userData={userData}/>
     }]
 
     return (
@@ -48,7 +46,7 @@ export const ProfilePage = () => {
                     <div className={styles.sidebar}>
                         {tabs.map((item, index) => (
                             <a onClick={() => setNavigationState(index)} key={index}
-                            className={navigationState === index && styles.active}>{item.title}</a>
+                            className={navigationState === index ? styles.active : null}>{item.title}</a>
                         ))}
                     </div>
                 </div>

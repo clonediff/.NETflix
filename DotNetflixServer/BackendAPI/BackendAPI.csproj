@@ -28,9 +28,4 @@
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="jsons\" />
-    <Folder Include="Models" />
-  </ItemGroup>
-
 </Project>

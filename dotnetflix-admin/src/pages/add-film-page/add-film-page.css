@@ -1,0 +1,18 @@
+.form-label {
+    margin-left: 12px;
+}
+
+.form-list-input {
+    margin-bottom: 0px;
+}
+
+.person-space {
+    width: 90%;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+}

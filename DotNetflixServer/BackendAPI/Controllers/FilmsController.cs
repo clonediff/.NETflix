@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using DtoLibrary;
-using DtoLibrary.MoviePage;
 using Microsoft.AspNetCore.Mvc;
+using Services.Exceptions;
 using Services.FilmService;
+using Services.UserService;
 
 namespace BackendAPI.Controllers;
 
@@ -10,28 +11,44 @@ namespace BackendAPI.Controllers;
 [Route("api/[controller]")]
 public class FilmsController : ControllerBase
 {
-    private readonly IFilmProvider _filmProvider;
+    private readonly IFilmService _filmService;
+    private readonly IUserService _userService;
 
-    public FilmsController(IFilmProvider filmProvider)
+    public FilmsController(IFilmService filmService, IUserService userService)
     {
-        _filmProvider = filmProvider;
+        _filmService = filmService;
+        _userService = userService;
     }
 
     [HttpGet("[action]")]
-    public IEnumerable GetALlFilms()
+    public IEnumerable GetAllFilms()
     {
-        return _filmProvider.GetAllFilms();
+        return _filmService.GetAllFilms();
     }
     
     [HttpGet("[action]")]
     public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch([FromQuery] QueryStringDto dto)
     {
-        return _filmProvider.GetFilmsBySearch(dto.Type, dto.Name, dto.Year, dto.Country, dto.Genres, dto.Actors, dto.Director);
+        return _filmService.GetFilmsBySearch(dto.Type, dto.Name, dto.Year, dto.Country, dto.Genres, dto.Actors, dto.Director);
     }
 
     [HttpGet("[action]")]
-    public async Task<MovieForMoviePageDto?> GetFilmById([FromQuery] int id)
+    public async Task<IActionResult> GetFilmById([FromQuery] int id)
     {
-        return await _filmProvider.GetFilmByIdAsync(id);
+        var userId = await _userService.GetUserIdAsync(User);
+
+        try
+        {
+            var movie = await _filmService.GetFilmByIdAsync(id, userId);
+            return Ok(movie);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (IncorrectOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

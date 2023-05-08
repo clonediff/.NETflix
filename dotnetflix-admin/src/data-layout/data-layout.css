@@ -1,0 +1,52 @@
+@import url(../constants.css);
+
+.data-search {
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.data-search input, .data-search button, .data-search input:focus {
+    border: none !important;
+}
+
+.data-search input:focus {
+    box-shadow: none;
+}
+
+.data-list {
+    height: auto;
+    padding: 12px;
+    border: 2px solid var(--sidebarBgColor);
+    border-radius: 4px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.list-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--sidebarBgColor);
+}
+
+.list-item-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+@media screen and (max-width: 900px) {
+    .list-item-options {
+        display: grid;
+        grid-template-columns: auto;
+    }
+}

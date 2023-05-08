@@ -17,7 +17,15 @@ using Services.FilmService;
 using Services.GoogleOAuth;
 using Services.GoogleOAuth.Google;
 using Services.MailSenderService;
+using Services.PaymentService;
 using Services.TwoFAService;
+using System.Linq;
+using BackendAPI.Hub;
+using Microsoft.AspNetCore.Authentication;
+using DataAccess.Entities.BusinessLogic;
+using Services.ChatStorage;
+using Services.SubscriptionService;
+using Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +35,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddCors();
 
@@ -116,10 +126,14 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddMemoryCache();
-builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddSingleton<IChatStorage, ChatStorage>();
+builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
@@ -129,26 +143,41 @@ builder.Services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
 var app = builder.Build();
 
 #region backupData
-app.Map("/backupData", (ApplicationDBContext db) =>
+app.Map("/backupData", async (ApplicationDBContext db) =>
 {
-	var folderPath = "./jsons";
-	var dbSets = typeof(ApplicationDBContext).GetProperties()
-		.Where(x => x.PropertyType.IsGenericType && 
-			x.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
-	var ofType = typeof(Enumerable).GetMethod(nameof(Enumerable.OfType));
-	foreach (var dbSet in dbSets)
-	{
-		var generic = dbSet.PropertyType.GetGenericArguments();
-		var genericOfType = ofType.MakeGenericMethod(generic[0]);
-		var data = genericOfType.Invoke(null, new[] { (IEnumerable)dbSet.GetValue(db) });
-		var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
-		{
-			Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-			ReferenceHandler = ReferenceHandler.IgnoreCycles
-		});
-		File.WriteAllText(Path.Combine(folderPath, $"{generic[0].Name}.txt"), json);
-	}
-}).RequireAuthorization("admin");
+	var folderPath = "../DataAccess/jsons";
+    if (!Directory.Exists(folderPath))
+        Directory.CreateDirectory(folderPath);
+
+    await WriteDbSetAsync(db.Countries, folderPath, x => { x.Movies = null; });
+    await WriteDbSetAsync(db.CountryMovieInfo, folderPath, x => { x.Country = null; });
+    await WriteDbSetAsync(db.CurrencyValues, folderPath);
+    await WriteDbSetAsync(db.Fees, folderPath, x => { x.USA = null; x.Russia = null; x.World = null; });
+    await WriteDbSetAsync(db.Genres, folderPath, x => { x.Movies = null; });
+    await WriteDbSetAsync(db.GenreMovieInfo, folderPath, x => { x.Genre = null; });
+    await WriteDbSetAsync(db.Persons, folderPath, x => { x.Proffessions = null; });
+    await WriteDbSetAsync(db.PersonProffessionInMovie, folderPath, x => { x.Person = null; });
+    await WriteDbSetAsync(db.SeasonsInfos, folderPath, x => { x.MovieInfo = null; });
+    await WriteDbSetAsync(db.Types, folderPath);
+    await WriteDbSetAsync(db.Movies, folderPath, 
+        x => { x.Budget = null; x.Proffessions = null; x.Category = null; x.Countries = null; x.Fees = null; x.Genres = null; x.SeasonsInfo = null; x.Type = null; });
+    await WriteDbSetAsync(db.Categories, folderPath);
+    await WriteDbSetAsync(db.Professions, folderPath);
+});
+
+async Task WriteDbSetAsync<T>(DbSet<T> source, string folderPath, Action<T> changeDataRecord = null!)
+	where T : class
+{
+	var data = source.ToArray();
+    if (changeDataRecord is not null) Array.ForEach(data, changeDataRecord);
+    var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        //WriteIndented = true
+    });
+    await File.WriteAllTextAsync(Path.Combine(folderPath, $"{typeof(T).Name}.txt"), json);
+}
 #endregion
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
@@ -206,6 +235,8 @@ app.Use((ctx, next) =>
 app.MapControllers();
 
 app.UseHttpsRedirection();
+
+app.MapHub<ChatHub>("/chatHub");
 
 /*app.UseSpa(spaBuilder =>
 {
