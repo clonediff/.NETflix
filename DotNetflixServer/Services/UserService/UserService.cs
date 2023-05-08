@@ -1,4 +1,6 @@
-﻿using DataAccess;
+﻿using System.Security.Claims;
+using DataAccess;
+using DataAccess.Entities.IdentityLogic;
 using DtoLibrary;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,41 @@ namespace Services.UserService
     public class UserService : IUserService
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(ApplicationDBContext dbContext)
+        public UserService(ApplicationDBContext dbContext, UserManager<User> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+        }
+
+        public async Task<int> GetUsersCountAsync()
+        {
+            return await _dbContext.Users.CountAsync();
+        }
+
+        public async Task<string?> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+            if (user == null)
+                return null;
+            
+            return await _userManager.GetUserIdAsync(user);
+        }
+
+        public async Task<IEnumerable<int>> GetAvailableFilmIdsAsync(string? userId)
+        {
+            if (userId is null)
+                return Enumerable.Empty<int>();
+
+            var user = await _dbContext.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Subscriptions)
+                    .ThenInclude(s => s.Movies)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user!.Subscriptions.SelectMany(s => s.Movies.Select(m => m.Id));
         }
 
         public async Task<string> GetEmailAsync(string userId)
@@ -23,6 +56,21 @@ namespace Services.UserService
                 throw new NotFoundException("Не удалось найти пользователя");
             
             return user.Email;
+        }
+
+        public IEnumerable<GetUserSubscriptionDto> GetAllUserSubscriptions(string userId)
+        {
+            var userSubscriptions = _dbContext.UserSubscriptions
+                .Where(us => us.UserId == userId)
+                .Include(s => s.Subscription);
+
+            return userSubscriptions.Select(us => new GetUserSubscriptionDto
+            {
+                Id = us.Subscription.Id,
+                Expires = us.Expires,
+                Cost = us.Subscription.Cost,
+                SubscriptionName = us.Subscription.Name
+            });
         }
 
         public IEnumerable<GetRoleDto> GetAllRoles()
@@ -53,28 +101,32 @@ namespace Services.UserService
             return user.BannedUntil.Value;
         }
 
-        public async Task<int> GetUsersCountAsync()
+        public async Task<PaginationDataDto<UserAdminDto>> GetUsersFilteredAsync(int page, string? name)
         {
-            return await _dbContext.Users.CountAsync();
-        }
+            var filteredUsers = _dbContext.Users
+                .Where(x => name == null || x.UserName.Contains(name));
 
-        public IEnumerable<UserAdminDto> GetUsersFiltered(int page, string? name)
-        {
-            return
-                (
-                    from user in _dbContext.Users
-                        .Where(x => name == null || x.UserName.Contains(name))
-                        .Skip(25 * (page - 1))
-                        .Take(25)
-                    join role in _dbContext.UserRoles on user.Id equals role.UserId
-                    select new UserAdminDto
+            var filteredUsersCount = await filteredUsers.CountAsync();
+
+            var users = filteredUsers
+                .Join(
+                    _dbContext.UserRoles,
+                    user => user.Id,
+                    role => role.UserId,
+                    (user, role) => new UserAdminDto
                     {
                         Id = user.Id,
                         Name = user.UserName,
                         BannedUntil = user.BannedUntil,
-                        RoleId = role.RoleId,
-                    }
-                ).AsEnumerable();
+                        RoleId = role.RoleId
+                    })
+                .AsEnumerable();
+
+            return new PaginationDataDto<UserAdminDto>
+            {
+                Data = users,
+                Count = filteredUsersCount
+            };
         }
 
         public async Task<string> SetRoleAsync(string roleId, string userId)

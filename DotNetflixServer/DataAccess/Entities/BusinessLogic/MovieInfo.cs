@@ -24,4 +24,5 @@ public class MovieInfo
 	public List<GenreMovieInfo> Genres { get; set; }
 	public List<SeasonsInfo>? SeasonsInfo { get; set; }
 	public List<PersonProffessionInMovie> Proffessions { get; set; }
+	public List<Subscription> Subscriptions { get; set; }
 }

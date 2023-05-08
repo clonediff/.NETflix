@@ -73,7 +73,7 @@ public static class MovieInfoToDto
                         Profession = p.Profession.Name
                     })
                 .GroupBy(p => p.Profession)
-                .Select(g => new { Profession = g.Key, People = g })
+                .Select(g => new { Profession = g.Key, People = g }),
         };
     }
 }

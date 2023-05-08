@@ -1,57 +1,5 @@
-.user-list-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    font-weight: 500;
-    border-bottom: 1px solid var(--sidebarBgColor);
-}
-
-.user-options {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-}
-
 .ban-info {
     padding: 4px 8px;
     font-weight: 400;
     border: 1px solid rgb(217, 217, 217);
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-}
-
-.ban-button {
-    color: white;
-    font-weight: 500;
-    padding: 8px 16px;
-    border: none;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    cursor: pointer;
-}
-
-.ban-color {
-    background-color: rgb(255, 77, 79);
-}
-
-.unban-color {
-    background-color: rgb(77, 176, 80);
-}
-
-.ban-color:hover {
-    background-color: rgb(255, 120, 117);
-}
-
-.unban-color:hover {
-    background-color: rgb(123, 188, 126);
-}
-
-@media screen and (max-width: 900px) {
-    .user-options {
-        flex-direction: column;
-        align-items: flex-end;
-    }
 }
