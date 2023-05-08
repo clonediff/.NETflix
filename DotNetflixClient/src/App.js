@@ -7,6 +7,7 @@ import MainPage from "./pages/main-page"
 import SearchPage from "./pages/search-page/search-page"
 import FilmPage from "./pages/film-page/film-page"
 import { ErrorPage } from "./pages/ErrorPages/ErrorPage"
+import { SubscriptionsPage } from "./pages/subscriptions-page/SubscriptionsPage"
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/profile/*" element={ <ProfilePage /> }/>
             <Route path="/movies/:id" element={ <FilmPage /> } />
             <Route path="/chat" element={ <ChatPage /> } />
+            <Route path="/subscriptions" element={ <SubscriptionsPage /> } />
             <Route path="*" element={<ErrorPage errorNumber={404}/>}></Route>
             {/* <Route path="500"element={<ErrorPage errorNumber={500}/>}></Route>
             <Route path="401"element={<ErrorPage errorNumber={401}/>}></Route>

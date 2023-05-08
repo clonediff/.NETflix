@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -10,12 +9,15 @@ using Microsoft.AspNetCore.Identity;
 using Services.AuthService;
 using Services.FilmService;
 using Services.MailSenderService;
+using Services.PaymentService;
 using Services.TwoFAService;
 using System.Linq;
 using BackendAPI.Hub;
 using Microsoft.AspNetCore.Authentication;
 using DataAccess.Entities.BusinessLogic;
 using Services.ChatStorage;
+using Services.SubscriptionService;
+using Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,10 +88,13 @@ builder.Services.AddControllers()
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IChatStorage, ChatStorage>();
-builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITwoFAService, TwoFAService>();
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var app = builder.Build();

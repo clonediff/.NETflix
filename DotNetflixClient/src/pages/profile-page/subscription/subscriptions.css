@@ -1,0 +1,27 @@
+/* .alternatingWrapper{
+    border-radius: 10px;
+    overflow: hidden;
+} */
+
+.subscription-div{
+    margin-top: 4px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+/* .alternatingDivs:nth-child(odd){
+    background-color: white;
+}
+
+.alternatingDivs:nth-child(even){
+    background-color: var(--header-bg-color);
+    color: white;
+} */
+
+.pointer{
+    cursor: pointer;
+}
+
+.dashed-underline{
+    border-bottom: 1px dashed black;
+}

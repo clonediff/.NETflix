@@ -8,6 +8,6 @@
     color: white;
 }
 
-[title] {
+.payment-form .ant-form-item-required{
     color: white !important;
 }

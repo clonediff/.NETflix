@@ -1,0 +1,23 @@
+.ban-button {
+    color: white;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.ban-color {
+    background-color: rgb(255, 77, 79);
+}
+
+.unban-color {
+    background-color: rgb(77, 176, 80);
+}
+
+.ban-color:hover {
+    background-color: rgb(255, 120, 117);
+}
+
+.unban-color:hover {
+    background-color: rgb(123, 188, 126);
+}
