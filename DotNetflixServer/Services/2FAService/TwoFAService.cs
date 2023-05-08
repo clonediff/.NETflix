@@ -6,8 +6,8 @@ namespace Services.TwoFAService
 {
     public class TwoFAService : ITwoFAService
     {
-        private IEmailService _emailService;
-        private IMemoryCache _memoryCache;
+        private readonly IEmailService _emailService;
+        private readonly IMemoryCache _memoryCache;
 
         public TwoFAService(IEmailService emailService, IMemoryCache memoryCache)
         {

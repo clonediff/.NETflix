@@ -4,7 +4,11 @@ using Services.FilmService;
 using Services.UserService;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using DataAccess.Entities.IdentityLogic;
+using Microsoft.AspNetCore.Identity;
 using Services.MailSenderService;
+using Services.PaymentService;
+using Services.SubscriptionService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +35,14 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"));
 
-builder.Services.AddTransient<IFilmProvider, FilmProvider>();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDBContext>();
+
+builder.Services.AddTransient<IFilmService, FilmService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 var app = builder.Build();
 

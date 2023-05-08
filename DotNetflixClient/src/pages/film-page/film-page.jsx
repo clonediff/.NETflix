@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../AxiosInstance'
 import { PosterSkeleton, TextSkeleton } from '../../libs/film-skeleton/film-skeleton'
@@ -7,7 +7,7 @@ import BurgerPanel from '../main-page/burger-panel/burger-panel'
 import Header from '../main-page/header/header'
 import './film-page.css'
 import { CountriesMap } from './countries-map'
-
+import { Modal } from 'antd'
 
 const FilmPage = () => {
 
@@ -15,12 +15,20 @@ const FilmPage = () => {
 
     const [film, setFilm] = useState({})
     const [isLoading, setIsLoading] = useState(true)
+    const [modal, modalHolder] = Modal.useModal()
+    const navigate = useNavigate()
 
     useEffect(() => {
         axiosInstance.get(`api/films/getfilmbyid?id=${id}`)
             .then(response => {
                 setFilm(response.data)
                 setIsLoading(false)
+            })
+            .catch(err => {
+                modal.error({
+                    title: err.response.data,
+                    onOk: () => navigate('/subscriptions')
+                })
             })
     }, [id])
 
@@ -29,6 +37,7 @@ const FilmPage = () => {
             <BurgerMenu />
             <BurgerPanel />
             <Header />
+            {modalHolder}
             <div className='film-page'>
                 {
                     isLoading
