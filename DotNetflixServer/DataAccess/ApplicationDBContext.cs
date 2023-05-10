@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
-using DataAccess.Entities.BusinessLogic;
-using DataAccess.Entities.IdentityLogic;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -154,7 +153,7 @@ namespace DataAccess
 
 		T[]? GetData<T>()
 		{
-			var path = Path.Combine("../DataAccess/jsons", $"{typeof(T).Name}.txt");
+			var path = Path.Combine("../Domain/jsons", $"{typeof(T).Name}.txt");
 			var text = File.ReadAllText(path);
             return JsonSerializer.Deserialize<T[]>(text);
 		}

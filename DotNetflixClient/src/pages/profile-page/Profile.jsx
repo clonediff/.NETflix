@@ -1,11 +1,11 @@
-import Header from "../main-page/header/header";
-import styles from "./Profile.module.sass"
-import "../../constants.css"
+import CommonLayout from "../../layouts/common-layout/common-layout";
 import { MainInfo } from "./main-info/MainInfo";
 import { useEffect, useState } from "react";
 import { SubscriptionInfo } from "./subscription/SubsriptionInfo";
 import { axiosInstance } from "../../AxiosInstance";
 import { useNavigate } from "react-router-dom";
+import styles from "./Profile.module.sass"
+import "../../constants.css"
 
 export const ProfilePage = () => {
     const navigate = useNavigate()
@@ -40,21 +40,22 @@ export const ProfilePage = () => {
 
     return (
         <div className="pageStyle">
-            <Header/>
-            <div className={styles.mainDiv}>
-                <div className={styles.sidebar_wrapper}>
-                    <div className={styles.sidebar}>
-                        {tabs.map((item, index) => (
-                            <a onClick={() => setNavigationState(index)} key={index}
-                            className={navigationState === index ? styles.active : null}>{item.title}</a>
-                        ))}
+            <CommonLayout>
+                <div className={styles.mainDiv}>
+                    <div className={styles.sidebar_wrapper}>
+                        <div className={styles.sidebar}>
+                            {tabs.map((item, index) => (
+                                <a onClick={() => setNavigationState(index)} key={index}
+                                className={navigationState === index ? styles.active : null}>{item.title}</a>
+                            ))}
+                        </div>
+                    </div>
+                    <div className={styles.contentDiv}>
+                        <h1>{tabs[navigationState].title}</h1>
+                        {tabs[navigationState].body}
                     </div>
                 </div>
-                <div className={styles.contentDiv}>
-                    <h1>{tabs[navigationState].title}</h1>
-                    {tabs[navigationState].body}
-                </div>
-            </div>
+            </CommonLayout>
         </div>
     )
 }

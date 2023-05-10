@@ -1,7 +1,5 @@
+import CommonLayout from '../../layouts/common-layout/common-layout'
 import { useEffect, useState } from 'react'
-import BurgerMenu from '../main-page/burger-menu/burger-menu'
-import BurgerPanel from '../main-page/burger-panel/burger-panel'
-import Header from '../main-page/header/header'
 import { ActiveSubscriptionContent } from '../profile-page/subscription/active-subscription-content/ActiveSubscriptionContent'
 import { SubscriptionCard } from './subscription-card/subscription-card'
 import { PaymentForm } from '../profile-page/main-info/components/payment-form/payment-form'
@@ -89,26 +87,24 @@ export const SubscriptionsPage = () => {
     }
 
     return (
-    <>
-        <BurgerMenu />
-        <BurgerPanel />
-        <Header />
-        {modalHolder}
-        <ActiveSubscriptionContent subscription={selectedSubscription} 
-            showActiveSubscription={showActiveSubscription}
-            onCancel={onCancel}/>
-        <PaymentForm Product={buyModalSubscription} Show={showBuyModal} onCancel={onBuyModalCancel} 
-            onBuy={onBuy}/>
-        
-        <div style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', padding: '0 80px'}}>
-            {
-                subscriptions.map(subscription => 
-                    <SubscriptionCard key={subscription.id} 
-                        subscription={subscription}
-                        setSelected={() => setSelected(subscription)}
-                        onBuy={() => setBuySubsription(subscription)}
-                        onExtend={() => setExtendSubscription(subscription)}/>)
-            }
-        </div>
-    </>)
+        <CommonLayout>  
+            {modalHolder}
+            <ActiveSubscriptionContent subscription={selectedSubscription} 
+                showActiveSubscription={showActiveSubscription}
+                onCancel={onCancel}/>
+            <PaymentForm Product={buyModalSubscription} Show={showBuyModal} onCancel={onBuyModalCancel} 
+                onBuy={onBuy}/>
+            
+            <div style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', padding: '0 80px'}}>
+                {
+                    subscriptions.map(subscription => 
+                        <SubscriptionCard key={subscription.id} 
+                            subscription={subscription}
+                            setSelected={() => setSelected(subscription)}
+                            onBuy={() => setBuySubsription(subscription)}
+                            onExtend={() => setExtendSubscription(subscription)}/>)
+                }
+            </div>
+        </CommonLayout>
+    )
 }

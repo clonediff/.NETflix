@@ -12,10 +12,11 @@ export const CountriesMap = ({countries}) => {
         <div style={{position: "absolute", width: params.width, height: params.height, zIndex: 1}}></div>
         <YMaps>
           <Map width={params.width} height={params.height} state={mapState}>   
-            {countries.map((c) => 
+            {countries.map((c, i) => 
                 <Placemark
+                key={ i }
                 geometry={
-                  [c.lat, c.lng]
+                  [c.latitude, c.longitude]
                 }
                 properties={{
                   iconCaption: c.name,

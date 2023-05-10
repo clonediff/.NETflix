@@ -1,10 +1,8 @@
+import CommonLayout from '../../../layouts/common-layout/common-layout'
 import { useState, useEffect } from 'react'
 import { FilmContainer, FilmsContainerSkeleton } from '../film-container/film-container'
-import BurgerMenu from '../burger-menu/burger-menu'
-import BurgerPanel from '../burger-panel/burger-panel'
-import Header from '../header/header'
-import './main-page.css'
 import { axiosInstance } from '../../../AxiosInstance'
+import './main-page.css'
 
 const MainPage = () => {
 
@@ -15,25 +13,22 @@ const MainPage = () => {
         axiosInstance.get('/api/films/getallfilms')
             .then(response => response.data)
             .then(data => {
-                setGrouppedFilms(data)
+                setGrouppedFilms(Object.entries(data))
                 setIsLoading(false)
             })
     }, [])
 
     return (
-        <>
-            <BurgerMenu />
-            <BurgerPanel />
-            <Header />
+        <CommonLayout>
             <div className='main-page-container'>
                 {
                     isLoading
                     ? <FilmsContainerSkeleton />
                     : grouppedFilms.map(group =>
                         <FilmContainer
-                            key={ group.films[0].id }
-                            category={ group.category }
-                            films={ group.films }/>)
+                            key={ group[1][0].id }
+                            category={ group[0] }
+                            films={ group[1] }/>)
                 }
                 <div className='chat-link'>
                     <a href='/chat'>
@@ -41,7 +36,7 @@ const MainPage = () => {
                     </a>
                 </div>
             </div>
-        </>
+        </CommonLayout>
     )
 }
 

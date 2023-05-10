@@ -1,13 +1,11 @@
+import CommonLayout from '../../layouts/common-layout/common-layout'
+import { CountriesMap } from './countries-map'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../AxiosInstance'
 import { PosterSkeleton, TextSkeleton } from '../../libs/film-skeleton/film-skeleton'
-import BurgerMenu from '../main-page/burger-menu/burger-menu'
-import BurgerPanel from '../main-page/burger-panel/burger-panel'
-import Header from '../main-page/header/header'
-import './film-page.css'
-import { CountriesMap } from './countries-map'
 import { Modal } from 'antd'
+import './film-page.css'
 
 const FilmPage = () => {
 
@@ -33,10 +31,7 @@ const FilmPage = () => {
     }, [id])
 
     return (
-        <>
-            <BurgerMenu />
-            <BurgerPanel />
-            <Header />
+        <CommonLayout>
             {modalHolder}
             <div className='film-page'>
                 {
@@ -45,14 +40,14 @@ const FilmPage = () => {
                     : <FilmPageInfo film={ film } />
                 }
             </div>
-        </>
+        </CommonLayout>
     )
 }
 
 const FilmPageInfo = ({ film }) => {
     return (
         <>
-            <img className='film-page-poster' alt={ film.name } src={ film.posterURL } />
+            <img className='film-page-poster' alt={ film.name } src={ film.posterUrl } />
             <div className='film-info'>
                 <div className='film-page-title'>{ film.name }</div>
                 <b>Год производства</b>
@@ -92,17 +87,17 @@ const FilmPageInfo = ({ film }) => {
                     : null
                 }
                 {
-                    film.proffessions.map(prof => 
-                        <div className='film-page-people-container' key={ prof.profession }>
-                            <b className='film-page-profession-name'>{ prof.profession }</b>
+                    Object.entries(film.professions).map(prof => 
+                        <div className='film-page-people-container' key={ prof[0] }>
+                            <b className='film-page-profession-name'>{ prof[0] }</b>
                             <div className='film-page-people'>
                                 {
-                                    prof.people.map((person, id) => <PersonInMovie key={ id } person={ person } />)
+                                    prof[1].map((person, id) => <PersonInMovie key={ id } person={ person } />)
                                 }
                             </div>
                         </div>
                     )
-                }         
+                }
             </div>
         </>
     )

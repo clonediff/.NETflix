@@ -8,13 +8,13 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-        <ProjectReference Include="..\DtoLibrary\DtoLibrary.csproj" />
+        <ProjectReference Include="..\Contracts\Contracts.csproj" />
+        <ProjectReference Include="..\Mappers\Mappers.csproj" />
+        <ProjectReference Include="..\Services.Abstractions\Services.Abstractions.csproj" />
+        <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNetflixOAuth" Version="1.0.1" />
-        <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
-        <PackageReference Include="IdentityPasswordGenerator" Version="1.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
         <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0-preview.2.23128.3" />
     </ItemGroup>

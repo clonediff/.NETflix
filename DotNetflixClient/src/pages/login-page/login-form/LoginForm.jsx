@@ -10,10 +10,6 @@ const { REACT_APP_GOOGLE_CLIENT_ID, REACT_APP_BASE_BACKEND_URL } = process.env;
 export const LoginForm = () => {
     const navigate = useNavigate();
 
-    useEffect(() => {
-      localStorage.removeItem('authenticated')
-    }, [])
-
     const onFinish = (values) => {
         console.log('Success:', values);
         let username = values.username;

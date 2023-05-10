@@ -1,8 +1,6 @@
+import CommonLayout from '../../layouts/common-layout/common-layout'
 import { useState, useEffect, useRef } from 'react'
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr'
-import BurgerMenu from '../main-page/burger-menu/burger-menu'
-import BurgerPanel from '../main-page/burger-panel/burger-panel'
-import Header from '../main-page/header/header'
 import { Form, Input } from 'antd'
 import { axiosInstance } from '../../AxiosInstance'
 import './chat-page.css'
@@ -52,10 +50,7 @@ const ChatPage = () => {
     }
 
     return (
-        <>
-            <BurgerMenu />
-            <BurgerPanel />
-            <Header />
+        <CommonLayout>
             <div className='chat-container'>
                 <div className='chat'>
                     <div className='message-list'>
@@ -90,7 +85,7 @@ const ChatPage = () => {
                     </Form>
                 </div>
             </div>
-        </>
+        </CommonLayout>
     )
 }
 
