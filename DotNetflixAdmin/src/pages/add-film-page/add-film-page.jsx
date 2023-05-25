@@ -244,7 +244,7 @@ const AddFilmPage = () => {
                                 fields.map((field, index) => (  
                                     <div key={ field.key }>
                                         { index === 0 ? <div className='form-label'>Сезоны</div> : null }
-                                        <SeasonsSpace name={ field.name } remove={ remove } />
+                                        <SeasonsSpace name={ field.name } removeHandler={ (name, _) => remove(name) } />
                                     </div>
                                 ))
                             }
@@ -278,7 +278,7 @@ const AddFilmPage = () => {
                                         { index === 0 ? <div className='form-label'>Коллектив</div> : null }
                                         <PeopleSpace 
                                             name={ field.name } 
-                                            remove={ remove } 
+                                            removeHandler={ (name, __, _) => remove(name) } 
                                             people={ people } 
                                             professions={ options.professions }
                                             form={ form } />
@@ -307,7 +307,7 @@ const AddFilmPage = () => {
     )
 }
 
-const SeasonsSpace = ({ name, remove }) => {
+export const SeasonsSpace = ({ seasonId, name, removeHandler }) => {
     return (
         <Space direction='vertical' className='form-item'>
             <Form.Item 
@@ -334,7 +334,7 @@ const SeasonsSpace = ({ name, remove }) => {
                 ]}>
                 <InputNumber />
             </Form.Item>
-            <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(name) }>
+            <Button icon={ <MinusCircleOutlined /> } onClick={ () => removeHandler(name, seasonId) }>
                 Убрать сезон
             </Button>
         </Space>
@@ -345,7 +345,7 @@ const filterOptions = (inputValue, option) => {
     return option.label.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1;
 }
 
-const PeopleSpace = ({ name, remove, people, professions, form }) => {
+export const PeopleSpace = ({ personId, name, removeHandler, people, professions, form }) => {
 
     const [exists, setExists] = useState(true)
 
@@ -419,7 +419,7 @@ const PeopleSpace = ({ name, remove, people, professions, form }) => {
                     <Input className='left-border-radius' style={{ display: !exists ? 'inline-block' : 'none' }} />
                 </Form.Item>
                 <Form.Item 
-                    name={[name, 'profession']}
+                    name={[name, 'professionId']}
                     style={{ width: '20%' }} 
                     className='form-list-input'
                     rules={[
@@ -441,7 +441,9 @@ const PeopleSpace = ({ name, remove, people, professions, form }) => {
             <Button style={{ display: !exists ? 'block' : 'none' }} onClick={ onAddExistingPersonClicked }>
                 Добавить существуещего человека
             </Button>
-            <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(name) }>
+            <Button 
+                icon={ <MinusCircleOutlined /> } 
+                onClick={ () => removeHandler(name, personId, form.getFieldValue(['people', name, 'professionId']).value ?? form.getFieldValue(['people', name, 'professionId'])) }>
                 Убрать участника
             </Button>
         </Space>

@@ -1,5 +1,7 @@
 ﻿using Contracts.Admin.DataRepresentation;
 using Contracts.Admin.Films;
+using Contracts.Admin.Films.Details;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin.Abstractions;
 
@@ -30,8 +32,58 @@ public class FilmsController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<PaginationDataDto<string>> GetAllNames([FromQuery] string? name, [FromQuery] int? page = 1)
+    public async Task<PaginationDataDto<EnumDto<int>>> GetFilmsFilteredAsync([FromQuery] string? name, [FromQuery] int? page = 1)
     {
         return await _filmService.GetFilmsFilteredAsync(page!.Value, name);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetFilmById([FromQuery] int id)
+    {
+        try
+        {
+            var film = await _filmService.GetFilmById(id);
+            return Ok(film);
+        }
+        catch (NotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteAsync([FromQuery] int id)
+    {
+        try
+        {
+            await _filmService.DeleteFilmAsync(id);
+            return Ok();
+        }
+        catch (NotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("[action]")]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateFilmDto dto)
+    {
+        await _filmService.UpdateFilmAsync(dto);
+
+        return Ok();
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetFilmDetails([FromQuery] int id)
+    {
+        try
+        {
+            var movie = await _filmService.GetFilmDetailsAsync(id);
+            return Ok(movie);
+        }
+        catch (NotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

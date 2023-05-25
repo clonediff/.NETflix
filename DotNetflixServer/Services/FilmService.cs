@@ -102,6 +102,13 @@ public class FilmService : IFilmService
 
     public async Task<MovieForMoviePageDto> GetFilmByIdAsync(int filmId, string? userId)
     {
+        var availableMovies = await _userService.GetAvailableFilmIdsAsync(userId);
+        
+        if (_dbContext.SubscriptionMovies.Any(sm => sm.MovieInfoId == filmId) && !availableMovies.Contains(filmId))
+        {
+            throw new IncorrectOperationException("Оформите подписку, чтобы получить доступ к данному контенту");
+        }
+
         var movie = await _dbContext.Movies
             .Where(m => m.Id == filmId)
             .Include(movie => movie.Type)
@@ -120,19 +127,11 @@ public class FilmService : IFilmService
             .Include(movie => movie.Fees.World)
             .Include(movie => movie.Fees.Russia)
             .Include(movie => movie.Fees.USA)
-            .Include(movie => movie.Subscriptions)
             .FirstOrDefaultAsync();
 
         if (movie is null)
             throw new NotFoundException("Не удалось найти запрашиваемый контент");
 
-        var availableMovies = await _userService.GetAvailableFilmIdsAsync(userId);
-
-        if (movie.Subscriptions.Count == 0 || availableMovies.Contains(filmId))
-        {
-            return movie.ToMovieForMoviePageDto();
-        }
-
-        throw new IncorrectOperationException("Оформите подписку, чтобы получить доступ к данному контенту");
+        return movie.ToMovieForMoviePageDto();
     }
 }

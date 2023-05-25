@@ -152,6 +152,8 @@ app.Map("/backupData", async (ApplicationDBContext db) =>
         x => { x.Budget = null; x.Proffessions = null; x.Category = null; x.Countries = null; x.Fees = null; x.Genres = null; x.SeasonsInfo = null; x.Type = null; });
     await WriteDbSetAsync(db.Categories, folderPath);
     await WriteDbSetAsync(db.Professions, folderPath);
+    await WriteDbSetAsync(db.Subscriptions, folderPath, x => { x.Movies = null; x.Users = null; x.UserSubscriptions = null; x.SubscriptionMovies = null; });
+    await WriteDbSetAsync(db.SubscriptionMovies, folderPath);
 });
 
 async Task WriteDbSetAsync<T>(DbSet<T> source, string folderPath, Action<T> changeDataRecord = null!)

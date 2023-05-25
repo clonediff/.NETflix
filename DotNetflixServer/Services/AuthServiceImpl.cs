@@ -69,7 +69,7 @@ public class AuthServiceImpl : IAuthService
             return new AuthResultDto(creatingResult.Errors.FirstOrDefault()?.Description);
         }
 
-        await _userManager.AddClaimAsync(user, new Claim("level", "user"));
+        await _userManager.AddToRoleAsync(user, "user");
 
         return new AuthResultDto();
     }

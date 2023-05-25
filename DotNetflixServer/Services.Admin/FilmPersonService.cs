@@ -1,6 +1,7 @@
 ﻿using Contracts.Admin.Films;
 using DataAccess;
 using Mappers.Admin;
+using Microsoft.EntityFrameworkCore;
 using Services.Admin.Abstractions;
 
 namespace Services.Admin;
@@ -16,6 +17,8 @@ public class FilmPersonService : IFilmPersonService
 
     public IEnumerable<PersonDto> GetAll()
     {
-        return _dbContext.Persons.Select(p => p.ToPersonsDto());
+        return _dbContext.Persons
+            .AsNoTracking()
+            .Select(p => p.ToPersonsDto());
     }
 }

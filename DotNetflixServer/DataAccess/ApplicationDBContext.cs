@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -149,6 +150,14 @@ namespace DataAccess
 			var seasons = GetData<SeasonsInfo>();
 			modelBuilder.Entity<SeasonsInfo>()
 				.HasData(seasons);
+
+			var subscriptions = GetData<Subscription>();
+			modelBuilder.Entity<Subscription>()
+				.HasData(subscriptions);
+			
+			var subscriptionMovies = GetData<SubscriptionMovieInfo>();
+			modelBuilder.Entity<SubscriptionMovieInfo>()
+				.HasData(subscriptionMovies);
 		}
 
 		T[]? GetData<T>()

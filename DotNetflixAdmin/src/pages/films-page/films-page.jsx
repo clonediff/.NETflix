@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../axiosInstance'
+import Film from './film'
 import DataLayout from '../../data-layout/data-layout'
 import './films-page.css'
 import '../../data-layout/data-layout.css'
+import { Modal } from 'antd'
 
 const FilmsPage = () => {
 
@@ -12,22 +14,26 @@ const FilmsPage = () => {
     const [page, setPage] = useState(1)
     const [filmsCount, setFilmsCount] = useState(0)
     const [searchedFilmsCount, setSearchedFilmsCount] = useState(null)
-        
-    useEffect(() => {
-        axiosInstance.get(`api/films/getallnames?page=${page}`)
+
+    const [modal, modalHolder] = Modal.useModal()
+
+    const fetchFilms = () => {
+        axiosInstance.get(`api/films/getfilmsfiltered?page=${page}`)
             .then(({ data }) => {
                 setFilms(data.data)
                 setFilmsCount(data.count)
                 setIsLoading(false)
             })
-    }, [page])
+    }
+        
+    useEffect(fetchFilms, [page])
 
     const onPageChanged = (page, _) => {
         setPage(page)
     }
 
     const onSearch = (values) => {
-        axiosInstance.get(`api/films/getallnames?name=${encodeURIComponent(values.name)}`)
+        axiosInstance.get(`api/films/getfilmsfiltered?name=${encodeURIComponent(values.name)}`)
             .then(({ data }) => {
                 setSearchedFilms(data.data)
                 setSearchedFilmsCount(data.count)
@@ -52,7 +58,14 @@ const FilmsPage = () => {
             searchPlaceholder='название фильма'>
             <div className='data-list'>
                 {
-                    (searchedFilms ?? films).map((film, i) => (<div key={ i } className='film-list-item'>{ film }</div>))
+                    (searchedFilms ?? films).map(film => (
+                        <Film 
+                            key={ film.id } 
+                            film={ film }
+                            modal={ modal }
+                            modalHolder={ modalHolder }
+                            onDeleteHandler={ fetchFilms } />
+                    ))
                 }
             </div>
         </DataLayout>

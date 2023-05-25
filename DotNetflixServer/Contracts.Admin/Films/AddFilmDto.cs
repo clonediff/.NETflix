@@ -23,4 +23,4 @@ public record AddFilmDto(
     int[] Countries, 
     int[] Genres, 
     AddSeasonDto[]? Seasons, 
-    AddFilmCrewDto[] People);
+    AddOrUpdateFilmCrewDto[] People);

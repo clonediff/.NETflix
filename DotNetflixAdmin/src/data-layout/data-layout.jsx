@@ -20,35 +20,31 @@ const DataLayout = ({
     } 
 
     return (
+        !isLoading
+        ?
         <>
-        {
-            !isLoading
-            ?
-            <>
-                <Form onFinish={ onSearch } form={ form }>
-                    <Space>
-                        <Form.Item name='name' noStyle>
-                            <Input.Search placeholder={ searchPlaceholder } className='data-search' />
-                        </Form.Item>
-                        <Button style={{ marginBottom: 24 }} type='primary' onClick={ handleUpdate }>Очистить</Button>
-                    </Space>
-                    <Form.Item hidden noStyle>
-                        <Button htmlType='submit'></Button>
+            <Form onFinish={ onSearch } form={ form }>
+                <Space>
+                    <Form.Item name='name' noStyle>
+                        <Input.Search placeholder={ searchPlaceholder } className='data-search' />
                     </Form.Item>
-                </Form>
-                { children }
-                <Pagination 
-                    className='pagination'
-                    responsive
-                    showSizeChanger={ false }
-                    pageSize={ pageSize }
-                    total={ dataCount }
-                    onChange={ onPageChanged } />
-            </>
-            :
-            <CustomSpin />
-        }
-    </>
+                    <Button style={{ marginBottom: 24 }} type='primary' onClick={ handleUpdate }>Очистить</Button>
+                </Space>
+                <Form.Item hidden noStyle>
+                    <Button htmlType='submit'></Button>
+                </Form.Item>
+            </Form>
+            { children }
+            <Pagination 
+                className='pagination'
+                responsive
+                showSizeChanger={ false }
+                pageSize={ pageSize }
+                total={ dataCount }
+                onChange={ onPageChanged } />
+        </>
+        :
+        <CustomSpin />
     )
 }
 

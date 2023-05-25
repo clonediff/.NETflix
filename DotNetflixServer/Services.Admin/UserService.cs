@@ -26,7 +26,8 @@ public class UserService : IUserService
     public IEnumerable<EnumDto<string>> GetAllRoles()
     {
         return _dbContext.Roles
-            .Select(x => new EnumDto<string>(x.Id, x.Name))
+            .AsNoTracking()
+            .Select(r => new EnumDto<string>(r.Id, r.Name!))
             .AsEnumerable();
     }
 
