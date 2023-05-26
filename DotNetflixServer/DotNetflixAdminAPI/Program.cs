@@ -80,9 +80,15 @@ app.MapControllers();
 
 app.UseHttpsRedirection();
 
-app.UseSpa(spaBuilder =>
-{
-    spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3001");
-});
+//app.UseSpa(spaBuilder =>
+//{
+//    spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3001");
+//});
+
+using var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+
+await using var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+
+await dbContext.Database.MigrateAsync();
 
 app.Run();

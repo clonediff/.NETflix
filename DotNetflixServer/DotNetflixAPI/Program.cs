@@ -72,7 +72,7 @@ builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.Extern
 		if (ctx.Request.Path.StartsWithSegments(new PathString("/api/oauth/google")))
 		{
 			var properties = signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.AuthenticationScheme,
-				"https://localhost:7289/api/oauth/google");
+				"http://localhost:7289/api/oauth/google");
 			await ctx.HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, properties);
 			return;
 		}
@@ -188,18 +188,18 @@ app.UseCors(pb =>
 		.SetIsOriginAllowed(origin =>
 		{
 			if (string.IsNullOrWhiteSpace(origin)) return false;
-			if (builder.Environment.IsDevelopment())
+			if (true || builder.Environment.IsDevelopment())
 			{
 				// Only add this to allow testing with localhost, remove this line in production!
 				if (origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost")) return true;
 			}
 
-			if (builder.Environment.IsProduction())
-			{
-				// Insert your production domain here.
-				//TODO: На деплое свой домейн нужно будет прописать сюда
-				if (origin.ToLower().StartsWith("https://dev.mydomain.com")) return true;   
-			}
+			//if (builder.Environment.IsProduction())
+			//{
+			//	// Insert your production domain here.
+			//	//TODO: На деплое свой домейн нужно будет прописать сюда
+			//	if (origin.ToLower().StartsWith("https://dev.mydomain.com")) return true;   
+			//}
 			return false;
 		})
 );

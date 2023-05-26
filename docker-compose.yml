@@ -1,0 +1,55 @@
+version: "3.9"
+
+services: 
+  DotNetflixAPI:
+    image: aspnetdotnetflixapi
+    container_name: dotnetflixserver
+    ports:
+      - "7289:80"
+    environment:
+      - GoogleOAuth:ClientId=${GoogleOAuthClientId}
+      - GoogleOAuth:ClientSecret=${GoogleOAuthClientSecret}
+      - ASPNETCORE_ENVIRONMENT:Production
+    build:
+      context: ./DotNetflixServer
+      dockerfile: DockerfileDotNetflixAPI
+    depends_on:
+      - mssql
+  DotNetflixAdminAPI:
+    image: aspnetdotdetflixadminapi
+    container_name: dotnetflixserveradmin
+    ports:
+      - "7298:80"
+    environment:
+    - ASPNETCORE_ENVIRONMENT:Production
+    build:
+      context: ./DotNetflixServer
+      dockerfile: DockerfileDotNetflixAdminAPI
+    depends_on:
+      - mssql
+  DotNetflixAPIClient:
+    image: dotnetflixapiclient
+    container_name: dotnetflixserverclient
+    ports:
+      - "3000:3000"
+    build:
+      context: ./DotNetflixClient
+      dockerfile: Dockerfile
+  DotNetflixAPIClientAdmin:
+    image: dotnetflixadminapiclient
+    container_name: dotnetflixserveradminclient
+    ports:
+      - "3001:3000"
+    build:
+      context: ./DotNetflixAdmin
+      dockerfile: Dockerfile
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 15000:15000
+    volumes:
+      - ~/apps/mssql/data:/var/lib/mssqlql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=pmwPmN1Hgh0SDd2f1TfX!
+  
