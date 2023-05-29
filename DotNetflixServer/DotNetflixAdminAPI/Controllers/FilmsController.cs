@@ -2,6 +2,7 @@
 using Contracts.Admin.Films;
 using Contracts.Admin.Films.Details;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin.Abstractions;
 
@@ -9,6 +10,7 @@ namespace DotNetflixAdminAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "Manager")]
 public class FilmsController : ControllerBase
 {
     private readonly IFilmService _filmService;

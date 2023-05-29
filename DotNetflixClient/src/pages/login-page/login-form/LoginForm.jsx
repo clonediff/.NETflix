@@ -1,14 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Alert, Button, Checkbox, Form, Input } from 'antd';
 import styles from "./LoginForm.module.sass"
 import { axiosInstance } from "../../../AxiosInstance"; 
-import { useCallback, useEffect } from "react";
+import { useCallback, useState } from "react";
 import GoogleButton from 'react-google-button';
 
 const { REACT_APP_GOOGLE_CLIENT_ID, REACT_APP_BASE_BACKEND_URL } = process.env;
 
 export const LoginForm = () => {
     const navigate = useNavigate();
+    const [form] = Form.useForm();
+    const [errorMessage, setErrorMessage] = useState("");
+    const [visible, setVisible] = useState(false);
 
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -26,14 +29,17 @@ export const LoginForm = () => {
             localStorage.setItem('authenticated', true)
             navigate("/")
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+            onFinishFailed(error.response.data)
+          });
         //send request to server
         //navigate, if ok
     };
     
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    const onFinishFailed = (errorMessage) => {
+      setVisible(true);
+      setErrorMessage(errorMessage);
+    }
 
     const openGoogleLoginPage = useCallback(() => {
       const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -58,11 +64,17 @@ export const LoginForm = () => {
       localStorage.setItem('authenticated', true)
     }, []);
 
+    const handleClose = () => {
+      setVisible(false);
+      setErrorMessage("");
+    }
+
     return(<div className={styles.login}>
       <Form
       className={styles.login__form}
         layout="horizontal"
         name="netflix"
+        form={form}
         labelCol={{
           span: 8,
         }}
@@ -73,7 +85,6 @@ export const LoginForm = () => {
           remember: true,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -114,8 +125,9 @@ export const LoginForm = () => {
           <Checkbox /* onChange={(e) => setRemember(e.target.checked)} */>Запомнить меня</Checkbox>
         </Form.Item>
     
-        <Form.Item
-          
+       
+        {visible && <Alert classname={styles.alert} message={errorMessage} type="error" closable afterClose={handleClose} showIcon className={styles.errorMessage}></Alert>}
+        <Form.Item          
           wrapperCol={{
             offset: 8,
             span: 16,

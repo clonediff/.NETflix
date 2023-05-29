@@ -36,12 +36,30 @@ builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSe
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDBContext>();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("User", pb => pb
+        .RequireRole("user", "manager", "admin"));
+    options.AddPolicy("Manager", pb => pb
+        .RequireRole("manager", "admin"));
+    options.AddPolicy("Admin", pb => pb
+        .RequireRole("admin"));
+});
+
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IFilmPersonService, FilmPersonService>();
 builder.Services.AddScoped<IEnumService, EnumService>();
+builder.Services.AddScoped<IAdminAuthService, AdminAuthService>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
 
 var app = builder.Build();
 

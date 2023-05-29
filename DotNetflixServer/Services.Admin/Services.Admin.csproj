@@ -13,4 +13,8 @@
       <ProjectReference Include="..\Services.Admin.Abstractions\Services.Admin.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="DotNetflixOAuth" Version="1.0.1" />
+    </ItemGroup>
+
 </Project>

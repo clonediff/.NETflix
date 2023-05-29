@@ -1,6 +1,7 @@
 ﻿using Contracts.Admin.DataRepresentation;
 using Contracts.Admin.Subscriptions;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin.Abstractions;
 
@@ -8,6 +9,7 @@ namespace DotNetflixAdminAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "Manager")]
 public class SubscriptionController : ControllerBase
 {
     private readonly ISubscriptionService _subscriptionService;
