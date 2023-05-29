@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Contracts.Messages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 
@@ -7,6 +8,7 @@ namespace DotNetflixAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MessageController : ControllerBase
 {
     private readonly IChatStorage _chatStorage;

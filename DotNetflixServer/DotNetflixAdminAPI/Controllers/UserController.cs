@@ -1,6 +1,7 @@
 ﻿using Contracts.Admin.DataRepresentation;
 using Contracts.Admin.Users;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin.Abstractions;
 using Services.Infrastructure.EmailService;
@@ -9,6 +10,7 @@ namespace DotNetflixAdminAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "Admin")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

@@ -2,6 +2,7 @@
 using Contracts.ChangeUserData;
 using Domain.Entities;
 using Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
@@ -10,6 +11,7 @@ namespace DotNetflixAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly ITwoFAService _twoFAService;

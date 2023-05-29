@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-oauth/google": "^0.11.0",
     "@microsoft/signalr": "^7.0.5",
     "@pbe/react-yandex-maps": "^1.2.4",
+    "@react-oauth/google": "^0.11.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -20,6 +20,7 @@
     "react-google-button": "^0.7.2",
     "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
+    "react-signalr": "^0.2.16",
     "react-use-cookie": "^1.4.0",
     "sass": "^1.58.3",
     "web-vitals": "^2.1.4"

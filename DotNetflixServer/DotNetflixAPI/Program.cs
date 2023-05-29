@@ -59,7 +59,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.ExternalScheme, options =>
 {
-	//TODO: Перенести это в отдельный класс как с гуглом. Сделать такие же классы для vk 
 	//options.LoginPath = new PathString("/OAuth/ExternalLogin");
     
 	options.LoginPath = new PathString("/api/oauth/google");
@@ -92,12 +91,12 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("user", pb => pb
-        .RequireClaim("level", "user","manager", "admin"));
-    options.AddPolicy("manager", pb => pb
-	    .RequireClaim("level", "manager", "admin"));
-    options.AddPolicy("admin", pb => pb
-        .RequireClaim("level", "admin"));
+    options.AddPolicy("User", pb => pb
+        .RequireRole("user", "manager", "admin"));
+    options.AddPolicy("Manager", pb => pb
+	    .RequireRole("manager", "admin"));
+    options.AddPolicy("Admin", pb => pb
+        .RequireRole("admin"));
 });
 
 builder.Services.AddControllers()
