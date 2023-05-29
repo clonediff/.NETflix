@@ -229,9 +229,4 @@ app.UseHttpsRedirection();
 
 app.MapHub<ChatHub>("/chatHub");
 
-/*app.UseSpa(spaBuilder =>
-{
-	spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-});*/
-
 app.Run();

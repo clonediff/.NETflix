@@ -5,23 +5,30 @@ services:
     image: aspnetdotnetflixapi
     container_name: dotnetflixserver
     ports:
-      - "7289:80"
+      - "7289:443"
     environment:
       - GoogleOAuth:ClientId=${GoogleOAuthClientId}
       - GoogleOAuth:ClientSecret=${GoogleOAuthClientSecret}
       - ASPNETCORE_ENVIRONMENT:Production
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KestrelCertifPass}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     build:
       context: ./DotNetflixServer
       dockerfile: DockerfileDotNetflixAPI
     depends_on:
       - mssql
+      - DotNetflixAPIClient
   DotNetflixAdminAPI:
     image: aspnetdotdetflixadminapi
     container_name: dotnetflixserveradmin
     ports:
-      - "7298:80"
+      - "7298:443"
     environment:
-    - ASPNETCORE_ENVIRONMENT:Production
+      - ASPNETCORE_ENVIRONMENT:Production
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KestrelCertifPass}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     build:
       context: ./DotNetflixServer
       dockerfile: DockerfileDotNetflixAdminAPI
@@ -39,7 +46,7 @@ services:
     image: dotnetflixadminapiclient
     container_name: dotnetflixserveradminclient
     ports:
-      - "3001:3000"
+      - "3001:3001"
     build:
       context: ./DotNetflixAdmin
       dockerfile: Dockerfile
