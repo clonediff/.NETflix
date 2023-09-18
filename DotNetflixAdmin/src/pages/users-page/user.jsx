@@ -1,15 +1,12 @@
 import { Button, Form, Modal, Select, Space } from 'antd'
-import { useState } from 'react'
 import { axiosInstance } from '../../axiosInstance'
 import '../../data-layout/buttons-styles.css'
 import '../../data-layout/data-layout.css'
 import '../../data-layout/border-styles.css'
 import './users-page.css'
 
-const User = ({ roles, user }) => {
+const User = ({ roles, user, onChange }) => {
 
-    const [isBanned, setIsBanned] = useState(false)
-    const [bannedUntill, setBannedUntill] = useState('')
     const [modal, modalHolder] = Modal.useModal()
 
     const onRoleUpdating = (values) => {
@@ -31,11 +28,10 @@ const User = ({ roles, user }) => {
     const onBanning = (values) => {
         axiosInstance.put('api/user/banuser', { ...values, userId: user.id })
             .then(({ data }) => {
-                setBannedUntill(data)
-                setIsBanned(true)
                 modal.success({
                     title: 'успешно обновлены данные для пользователя ' + user.name,
-                    zIndex: 10001
+                    zIndex: 10001,
+                    afterClose: onChange
                 })
             })
             .catch(error => {
@@ -54,10 +50,10 @@ const User = ({ roles, user }) => {
                 }
             })
             .then(_ => {
-                setIsBanned(false)
                 modal.success({
                     title: 'успешно обновлены данные для пользователя ' + user.name,
-                    zIndex: 10001
+                    zIndex: 10001,
+                    afterClose: onChange
                 })
             })
             .catch(error => {
@@ -73,7 +69,7 @@ const User = ({ roles, user }) => {
             { modalHolder }
             <span>{ user.name }</span>
             <div className='list-item-options'>
-                <Form disabled={ isBanned } onFinish={ onRoleUpdating }>
+                <Form disabled={ user.bannedUntil } onFinish={ onRoleUpdating }>
                     <Space.Compact>
                         <Form.Item 
                             name='roleid' 
@@ -85,10 +81,10 @@ const User = ({ roles, user }) => {
                     </Space.Compact>
                 </Form>
                 {
-                    isBanned 
+                    user.bannedUntil 
                     ?
                     <Space.Compact>
-                        <div className='ban-info left-border-radius'>Забанен до { bannedUntill }</div>
+                        <div className='ban-info left-border-radius'>Забанен до { user.bannedUntil }</div>
                         <button className='ban-button unban-color right-border-radius' onClick={ onUnbanning }>Разблокировать</button>
                     </Space.Compact>
                     :

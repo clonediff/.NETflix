@@ -21,14 +21,14 @@ const UsersPage = () => {
             })
     }, [])
 
-    useEffect(() => {
-        axiosInstance.get(`api/user/getusers?page=${page}`)
-            .then(({ data }) => {
-                setUsers(data.data)
-                setUsersCount(data.count)
-                setIsLoading(false)
-            })
-    }, [page])
+    const fetchUsers = () => axiosInstance.get(`api/user/getusers?page=${page}`)
+        .then(({ data }) => {
+            setUsers(data.data)
+            setUsersCount(data.count)
+            setIsLoading(false)
+        })
+
+    useEffect(fetchUsers, [page])
 
     const onPageChanged = (page, _) => {
         setPage(page)
@@ -60,7 +60,7 @@ const UsersPage = () => {
             searchPlaceholder='имя пользователя'>
             <div className='data-list'>
                 {
-                    (searchedUsers ?? users).map(u => (<User key={ u.id } roles={ roles } user={ u } />))
+                    (searchedUsers ?? users).map(u => (<User key={ u.id } roles={ roles } user={ u } onChange={ fetchUsers } />))
                 }
             </div>
         </DataLayout>
