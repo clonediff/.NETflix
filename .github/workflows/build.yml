@@ -1,8 +1,5 @@
 name: SonarCloud
-on: 
-  push: 
-    branches:
-      - "*"
+on: push
 jobs:
   sonar:
     name: Sonar scanner for .NET
