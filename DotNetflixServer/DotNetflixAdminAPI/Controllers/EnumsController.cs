@@ -1,4 +1,5 @@
 ﻿using Contracts.Admin.DataRepresentation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin.Abstractions;
 
@@ -6,6 +7,7 @@ namespace DotNetflixAdminAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "Manager")]
 public class EnumsController : Controller
 {
     private readonly IEnumService _enumService;

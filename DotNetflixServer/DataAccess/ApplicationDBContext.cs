@@ -158,6 +158,27 @@ namespace DataAccess
 			var subscriptionMovies = GetData<SubscriptionMovieInfo>();
 			modelBuilder.Entity<SubscriptionMovieInfo>()
 				.HasData(subscriptionMovies);
+
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(new[] {
+                new IdentityRole
+                {
+                    Id = "1",
+                    Name = "user",
+                    NormalizedName = "USER"
+                },
+                new IdentityRole
+                {
+                    Id = "2",
+                    Name = "manager",
+                    NormalizedName = "MANAGER"
+                },
+                new IdentityRole
+                {
+                    Id = "3",
+                    Name = "admin",
+                    NormalizedName = "ADMIN"
+                }});
 		}
 
 		T[]? GetData<T>()

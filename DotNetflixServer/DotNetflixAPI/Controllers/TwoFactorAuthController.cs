@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
@@ -8,6 +9,7 @@ namespace DotNetflixAPI.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
+	[Authorize]
 	public class TwoFactorAuthController : Controller
 	{
 		private readonly ITwoFAService _twoFAService;

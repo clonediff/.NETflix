@@ -1,0 +1,32 @@
+.login {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px; }
+    .login .login__form {
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-content: start;
+      justify-content: center;
+      flex-wrap: wrap;
+      transition: 0.4s; }
+      
+      .login .login__form .item {
+        width: 20em; }
+        .login .login__form .item handhelds {
+          width: 10em; }
+        .login .login__form .item medium-screens {
+          width: 15em; }
+    .login .socials {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 15em;
+      gap: 10px;
+      color: white;
+      font-size: 14px; }
+  
