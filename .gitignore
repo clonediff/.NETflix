@@ -507,6 +507,8 @@ fabric.properties
 .history
 .ionide
 
+.env
+
 ### VisualStudio ###
 
 # User-specific files
