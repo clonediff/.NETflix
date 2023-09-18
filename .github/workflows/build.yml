@@ -72,4 +72,4 @@ jobs:
           cd DotNetflixClient
           npm install
       - name: Run ESLint
-        run: npx eslint ./DotNetflixClient 
+        run: npx eslint ./DotNetflixClient
