@@ -2,6 +2,15 @@ name: Linting
 on: push
 
 jobs:
+  build:
+    name: build
+    runs-on: windows-latest
+    steps:
+      - name: Restore dependencies
+        run: dotnet restore DotNetflixServer
+      - name: Build .NET projects
+        run: dotnet build DotNetflixServer --no-restore
+          
   sonar:
     name: Sonar scanner for .NET
     runs-on: windows-latest
@@ -58,4 +67,4 @@ jobs:
           cd DotNetflixClient
           npm install
       - name: Run ESLint
-        run: npx eslint ./DotNetflixClient
+        run: npx eslint ./DotNetflixClient 
