@@ -1,4 +1,4 @@
-name: Linting
+name: Build and Linting
 on: push
 
 jobs:
@@ -6,6 +6,11 @@ jobs:
     name: build
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.0.x
       - name: Restore dependencies
         run: dotnet restore DotNetflixServer
       - name: Build .NET projects
