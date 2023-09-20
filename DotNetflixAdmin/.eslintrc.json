@@ -14,6 +14,9 @@
         "react-hooks/exhaustive-deps": "warn",
         "import/no-unresolved": "off"
     },
+    "parserOptions": {
+        "ecmaVersion": 2023
+    },
     "settings": {
         "react": {
             "version": "detect"
