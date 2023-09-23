@@ -14,7 +14,6 @@
         }
     ],
     "rules": {
-        "array-bracket-spacing": "warn",
         "arrow-spacing": "warn",
         "no-var": "warn",
         "no-unused-vars": [

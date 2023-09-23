@@ -65,13 +65,13 @@ const UpdateFilmPage = () => {
         const updatedFilm = initUpdatedFilm(location.pathname.split('/')[2], values, film, seasonsToDelete, initialFilmCrew, peopleToDelete)
         console.log(updatedFilm)
         axiosInstance.put('api/films/update', updatedFilm)
-            .then(response => {
+            .then(_ => {
                 modal.success({
                     title: 'фильм успешно обновлён',
                     zIndex: 10001
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось обновить фильм',
                     zIndex: 10001
@@ -298,7 +298,7 @@ const UpdateFilmPage = () => {
                 name='people'
                 rules={[
                     {
-                        validator: (rule, value, callback) => {
+                        validator: (rule, value, _) => {
                             if (value && value.length > 0) {
                                 return Promise.resolve()
                             } else {

@@ -56,10 +56,10 @@ const FilmsModal = ({ openFilms, hideFilmsModal, subscription }) => {
             .map(f => [f.id, f.isInSubscription])
         if (entries.length !== 0) {
             axiosInstance.put(`api/subscription/updatefilmsinsubscription?subscriptionId=${subscription.id}`, Object.fromEntries(entries))
-                .then(response => setMessage(
+                .then(_ => setMessage(
                     <div style={{ color: 'green' }}>Список фильмов успешно обновлён</div>
                 ))
-                .catch(error => setMessage(
+                .catch(_ => setMessage(
                     <div style={{ color: 'red' }}>Не удалось обновить список фильмов</div>
                 ))
         }

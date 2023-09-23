@@ -35,13 +35,13 @@ const AddFilmPage = () => {
 
     const sendForm = (values) => {
         axiosInstance.post('api/films/addfilm', values)
-            .then(response => {
+            .then(_ => {
                 modal.success({
                     title: 'фильм успешно добавлен',
                     zIndex: 10001
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось добавить фильм',
                     zIndex: 10001
@@ -259,7 +259,7 @@ const AddFilmPage = () => {
                 name='people'
                 rules={[
                     {
-                        validator: (rule, value, callback) => {
+                        validator: (rule, value, _) => {
                             if (value && value.length > 0) {
                                 return Promise.resolve()
                             } else {

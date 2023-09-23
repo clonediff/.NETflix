@@ -5,12 +5,27 @@
         "plugin:react-hooks/recommended",
         "plugin:import/recommended"
     ],
+    "overrides": [
+        {
+            "files": [
+                "*.js",
+                "*.jsx"
+            ]
+        }
+    ],
     "rules": {
-        "array-bracket-spacing": "warn",
         "arrow-spacing": "warn",
         "no-var": "warn",
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "_",
+                "argsIgnorePattern": "_"
+            }
+        ],
         "no-debugger": "warn",
         "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
         "react-hooks/exhaustive-deps": "warn",
         "import/no-unresolved": "off"
     },
@@ -23,6 +38,8 @@
         }
     },
     "env": {
-        "browser": true
+        "node": true,
+        "browser": true,
+        "es6": true
     }
 }
