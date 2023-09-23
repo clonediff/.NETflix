@@ -35,7 +35,7 @@ export const ProfilePage = () => {
     }, 
     {
         title: 'Управление подпиской',
-        body: <SubscriptionInfo userData={userData}/>
+        body: <SubscriptionInfo />
     }]
 
     return (

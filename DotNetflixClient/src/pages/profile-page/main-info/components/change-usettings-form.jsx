@@ -77,9 +77,9 @@ const ChangeUSettingsForm = ({userData, setUserData }) => {
 
             <Modal title=""
                 open={showModal}
-                footer={[
+                footer={
                     <Button className="settings-submit-button" type="primary" onClick={() => navigate("../")}>Ok</Button>
-                ]}>
+                }>
                 <p>Данные сохранены</p>
             </Modal>
         </>
@@ -92,8 +92,8 @@ const ChangeUSettingsForm = ({userData, setUserData }) => {
             birthdate : values.birthday === undefined? userData.birthdate : values.birthday.$d,
             username: values.username
         })
-            .then(response => {
-                setUserData(x => ({...userData, login: values.username, birthdate: values.birthday === undefined? userData.birthdate : values.birthday.$d}))
+            .then(_ => {
+                setUserData(_ => ({...userData, login: values.username, birthdate: values.birthday === undefined? userData.birthdate : values.birthday.$d}))
                 setShowModal(true)
             })
             // TODO: catch error

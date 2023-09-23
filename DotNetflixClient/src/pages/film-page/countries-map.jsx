@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import './countries-map.css'
 
 export const CountriesMap = ({countries}) => {
-    const { height, width } = useWindowDimensions();
+    const { _, width } = useWindowDimensions();
     let params = getMapParams({width})
     const mapState = { center: [0, 12], zoom: params.zoom};
 

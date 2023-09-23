@@ -14,7 +14,7 @@ export default function Gen2FACodeSendField() {
 
     const sendCode = () => {
         axiosInstance.get('api/TwoFactorAuth/SendCode')
-            .then(response => {
+            .then(_ => {
                 setCodeSend(true)
                 setRemainedToResend(120)
             })
