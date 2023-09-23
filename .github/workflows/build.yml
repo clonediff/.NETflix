@@ -75,5 +75,5 @@ jobs:
           npm install
       - name: Run ESLint
         run: |
-          npx eslint ./DotNetflixClient
-          npx eslint ./DotNetflixAdmin
+          npx eslint ./DotNetflixClient --max-warnings 0
+          npx eslint ./DotNetflixAdmin --max-warnings 0
