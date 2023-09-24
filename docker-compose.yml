@@ -8,7 +8,7 @@ services:
       - "7289:443"
     environment:
       - SMTP_PASSWORD=gomlmldthveiefjr
-      - DB_PASSWORD=pmwPmN1Hgh0SDd2f1TfX
+      - DB_PASS=pmwPmN1Hgh0SDd2f1TfX
       - GoogleOAuth:ClientId=${GoogleOAuthClientId}
       - GoogleOAuth:ClientSecret=${GoogleOAuthClientSecret}
       - ASPNETCORE_ENVIRONMENT:Production
@@ -28,7 +28,7 @@ services:
       - "7298:443"
     environment:
       - SMTP_PASSWORD=gomlmldthveiefjr
-      - DB_PASSWORD=pmwPmN1Hgh0SDd2f1TfX
+      - DB_PASS=pmwPmN1Hgh0SDd2f1TfX
       - ASPNETCORE_ENVIRONMENT:Production
       - ASPNETCORE_URLS=https://+:443
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${KestrelCertifPass}

@@ -26,7 +26,7 @@ namespace Services.Infrastructure.EmailService
 
 			var smtp = new SmtpClient(ec.MailServerAddress, ec.MailServerPort)
 			{
-				EnableSsl = ec.EnableSsl,
+				EnableSsl = true,
 				Credentials = new NetworkCredential(ec.FromAddress, ec.FromPassword)
 			};
 			

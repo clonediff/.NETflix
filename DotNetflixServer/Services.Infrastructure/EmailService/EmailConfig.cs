@@ -8,5 +8,4 @@ public class EmailConfig
 
 	public string MailServerAddress { get; set; }
 	public int MailServerPort { get; set; }
-	public bool EnableSsl { get; set; }
 }
