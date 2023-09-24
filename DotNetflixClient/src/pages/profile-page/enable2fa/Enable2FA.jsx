@@ -20,7 +20,7 @@ export const Enable2FA = ({user, setUser}) => {
 
     const sendCode = () => {
         axiosInstance.get('api/TwoFactorAuth/SendCode')
-            .then(response => {
+            .then(_ => {
                 setCodeSend(true)
                 setRemainedToResend(120)
             })
@@ -32,7 +32,7 @@ export const Enable2FA = ({user, setUser}) => {
         axiosInstance.post('api/TwoFactorAuth/Enable', {
             code: val.code
         })
-            .then(response => {
+            .then(_ => {
                 setUser(x => ({...x, enabled2FA: true}))
                 setShowModal(true)
             })
@@ -80,9 +80,9 @@ export const Enable2FA = ({user, setUser}) => {
         <USettingsFooter linkDirection="../" linkText="Вернуться к информации о пользователе"/>
         <Modal title=""
                 open={showModal}
-                footer={[
+                footer={
                     <Button className="settings-submit-button" type="primary" onClick={handleOk}>Ok</Button>
-                ]}>
+                }>
             <p>Двухфакторная аутентификация подключена</p>
         </Modal>
     </>)

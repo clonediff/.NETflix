@@ -8,13 +8,13 @@ const AddSubscriptionPage = () => {
 
     const sendForm = (values) => {
         axiosInstance.post('api/subscription/add', values)
-            .then(response => {
+            .then(_ => {
                 modal.success({
                     title: 'Успешно добавлена новая подписка. Перейдите в раздел подписок, чтобы её активировать',
                     zIndex: 10001
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'Не удалось добавить подписку',
                     zIndex: 10001

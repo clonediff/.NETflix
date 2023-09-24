@@ -8,7 +8,7 @@ const Film = ({ film, modal, modalHolder, onDeleteHandler }) => {
 
     const deleteFilm = () => {
         axiosInstance.delete(`api/films/delete?id=${film.id}`)
-            .then(response => {
+            .then(_ => {
                 modal.success({
                     title: 'фильм успешно удалён',
                     zIndex: 10001,
