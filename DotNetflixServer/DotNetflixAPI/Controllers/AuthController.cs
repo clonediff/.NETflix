@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> Login([FromBody] LoginForm form)
     {
-        //Todo: тут нужно будет сделать функционал с запоминанием пользователя(через Services.AddAuthentication().AddCookie())
+        //тут нужно будет сделать функционал с запоминанием пользователя(через Services.AddAuthentication().AddCookie())
         if (!ModelState.IsValid) return BadRequest("Проверьте введённые вами данные на корректность");
         var loginResult = await _authService.Login(form);
         if (loginResult.IsSuccess)
@@ -40,7 +40,7 @@ public class AuthController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody]RegisterForm form)
     {
-        //TODO: сделать функционал с отправкой сообщения пользователю, если человек пытается зарегистрироваться по его майлу
+        //сделать функционал с отправкой сообщения пользователю, если человек пытается зарегистрироваться по его майлу
         if (!ModelState.IsValid) return BadRequest("Проверьте введённые вами данные на корректность");
         var registerResult = await _authService.Register(form);
         if (registerResult.IsSuccess)

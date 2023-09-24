@@ -16,7 +16,7 @@ public static class DtoToPerson
                 : new Person
                 {
                     Id = dto.Id,
-                    Name = dto.Name,
+                    Name = dto.Name!,
                     Photo = dto.Photo,
                 }
         };

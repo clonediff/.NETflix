@@ -70,8 +70,9 @@ builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.Extern
 		
 		if (ctx.Request.Path.StartsWithSegments(new PathString("/api/oauth/google")))
 		{
-			var properties = signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.AuthenticationScheme,
-				"http://localhost:7289/api/oauth/google");
+			var properties = signInManager.ConfigureExternalAuthenticationProperties
+				(GoogleDefaults.AuthenticationScheme,
+					builder.Configuration.GetValue<string>("ApiOAuth"));
 			await ctx.HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, properties);
 			return;
 		}
@@ -133,25 +134,25 @@ var app = builder.Build();
 #region backupData
 app.Map("/backupData", async (ApplicationDBContext db) =>
 {
-	var folderPath = "../Domain/jsons";
+	const string folderPath = "../Domain/jsons";
     if (!Directory.Exists(folderPath))
         Directory.CreateDirectory(folderPath);
 
-    await WriteDbSetAsync(db.Countries, folderPath, x => { x.Movies = null; });
-    await WriteDbSetAsync(db.CountryMovieInfo, folderPath, x => { x.Country = null; });
+    await WriteDbSetAsync(db.Countries, folderPath, x => { x.Movies = default; });
+    await WriteDbSetAsync(db.CountryMovieInfo, folderPath, x => { x.Country = default; });
     await WriteDbSetAsync(db.CurrencyValues, folderPath);
-    await WriteDbSetAsync(db.Fees, folderPath, x => { x.USA = null; x.Russia = null; x.World = null; });
-    await WriteDbSetAsync(db.Genres, folderPath, x => { x.Movies = null; });
-    await WriteDbSetAsync(db.GenreMovieInfo, folderPath, x => { x.Genre = null; });
-    await WriteDbSetAsync(db.Persons, folderPath, x => { x.Proffessions = null; });
-    await WriteDbSetAsync(db.PersonProffessionInMovie, folderPath, x => { x.Person = null; });
-    await WriteDbSetAsync(db.SeasonsInfos, folderPath, x => { x.MovieInfo = null; });
+    await WriteDbSetAsync(db.Fees, folderPath, x => { x.USA = default; x.Russia = default; x.World = default; });
+    await WriteDbSetAsync(db.Genres, folderPath, x => { x.Movies = default; });
+    await WriteDbSetAsync(db.GenreMovieInfo, folderPath, x => { x.Genre = default; });
+    await WriteDbSetAsync(db.Persons, folderPath, x => { x.Proffessions = default; });
+    await WriteDbSetAsync(db.PersonProffessionInMovie, folderPath, x => { x.Person = default; });
+    await WriteDbSetAsync(db.SeasonsInfos, folderPath, x => { x.MovieInfo = default; });
     await WriteDbSetAsync(db.Types, folderPath);
     await WriteDbSetAsync(db.Movies, folderPath, 
-        x => { x.Budget = null; x.Proffessions = null; x.Category = null; x.Countries = null; x.Fees = null; x.Genres = null; x.SeasonsInfo = null; x.Type = null; });
+        x => { x.Budget = default; x.Proffessions = default; x.Category = default; x.Countries = default; x.Fees = default; x.Genres = default; x.SeasonsInfo = default; x.Type = default; });
     await WriteDbSetAsync(db.Categories, folderPath);
     await WriteDbSetAsync(db.Professions, folderPath);
-    await WriteDbSetAsync(db.Subscriptions, folderPath, x => { x.Movies = null; x.Users = null; x.UserSubscriptions = null; x.SubscriptionMovies = null; });
+    await WriteDbSetAsync(db.Subscriptions, folderPath, x => { x.Movies = default; x.Users = default; x.UserSubscriptions = default; x.SubscriptionMovies = default; });
     await WriteDbSetAsync(db.SubscriptionMovies, folderPath);
 });
 
@@ -187,19 +188,10 @@ app.UseCors(pb =>
 		.SetIsOriginAllowed(origin =>
 		{
 			if (string.IsNullOrWhiteSpace(origin)) return false;
-			if (true || builder.Environment.IsDevelopment())
-			{
-				// Only add this to allow testing with localhost, remove this line in production!
-				if (origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost")) return true;
-			}
 
-			//if (builder.Environment.IsProduction())
-			//{
-			//	// Insert your production domain here.
-			//	//TODO: На деплое свой домейн нужно будет прописать сюда
-			//	if (origin.ToLower().StartsWith("https://dev.mydomain.com")) return true;   
-			//}
-			return false;
+			// Only add this to allow testing with localhost, remove this line in production!
+			
+			return origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost");
 		})
 );
 
@@ -208,8 +200,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.UseEndpoints(_ => {});
 
 app.Use((ctx, next) =>
 {

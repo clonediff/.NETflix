@@ -7,6 +7,6 @@ public class Fees
 	public CurrencyValue? World { get; set; }
 	public int? RussiaId { get; set; }
 	public CurrencyValue? Russia { get; set; }
-	public int? USAId { get; set; }
-	public CurrencyValue? USA { get; set; }
+	public int? USAId { get; set; } 
+	public CurrencyValue? USA { get; set; } 
 }

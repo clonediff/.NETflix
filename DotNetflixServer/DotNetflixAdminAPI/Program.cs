@@ -81,8 +81,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(_ => { });
-
 app.Use((ctx, next) =>
 {
     if (ctx.Request.Path.StartsWithSegments("/api"))
@@ -97,11 +95,6 @@ app.Use((ctx, next) =>
 app.MapControllers();
 
 app.UseHttpsRedirection();
-
-//app.UseSpa(spaBuilder =>
-//{
-//    spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3001");
-//});
 
 using var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
 

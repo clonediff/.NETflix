@@ -50,7 +50,7 @@ public class AuthServiceImpl : IAuthService
             Email = form.Email,
             Birthday = form.Birthday
         };
-        //TODO: Поменять сообщения ошибок про существование пользователя
+        //Поменять сообщения ошибок про существование пользователя
         var checkExistingEmail = await _userManager.FindByEmailAsync(user.Email);
         if (checkExistingEmail != null)
         {
@@ -66,7 +66,7 @@ public class AuthServiceImpl : IAuthService
         var creatingResult = await _userManager.CreateAsync(user,form.Password);
         if (!creatingResult.Succeeded)
         {
-            return new AuthResultDto(creatingResult.Errors.FirstOrDefault()?.Description);
+            return new AuthResultDto(creatingResult.Errors.FirstOrDefault()?.Description!);
         }
 
         await _userManager.AddToRoleAsync(user, "user");

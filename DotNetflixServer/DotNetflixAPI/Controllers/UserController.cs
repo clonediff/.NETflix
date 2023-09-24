@@ -17,7 +17,7 @@ public class UserController : ControllerBase
     private readonly ITwoFAService _twoFAService;
     private readonly UserManager<User> _userManager;
     private readonly IUserService _userService;
-    
+
     public UserController(UserManager<User> userManager, ITwoFAService twoFAService, IUserService userService)
     {
         _userManager = userManager;
@@ -31,7 +31,7 @@ public class UserController : ControllerBase
         var user = await _userManager.GetUserAsync(User);
         return user?.ToUserDto()!;
     }
-    
+
     [HttpGet("[action]")]
     public async Task<IActionResult> GetAllUserSubscriptionsAsync()
     {
@@ -48,32 +48,36 @@ public class UserController : ControllerBase
     public async Task<IActionResult> SetUserPassword([FromBody] UserChangePasswordDto chPass)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
-        if (!_twoFAService.CheckCode(user.Email, chPass.Code))
-			return BadRequest("Код не совпадает или устарел");
+        if (!_twoFAService.CheckCode(user!.Email!, chPass.Code))
+        {
+            return BadRequest("Код не совпадает или устарел");
+        }
 
         user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, chPass.Password);
         var changeRes = await _userManager.UpdateAsync(user);
-        return changeRes.Succeeded? Ok("Пароль изменён"): BadRequest(changeRes.Errors);
+        return changeRes.Succeeded ? Ok("Пароль изменён") : BadRequest(changeRes.Errors);
     }
 
     [HttpPut("[action]")]
     public async Task<IActionResult> SetUserMail([FromBody] UserChangeMailDto chMail)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
-        if (!_twoFAService.CheckCode(user.Email, chMail.Code))
-			return BadRequest("Код не совпадает или устарел");
+        if (!_twoFAService.CheckCode(user!.Email!, chMail.Code))
+        {
+            return BadRequest("Код не совпадает или устарел");
+        }
 
         var changeRes = await _userManager.SetEmailAsync(user, chMail.Email);
-        return changeRes.Succeeded? Ok("Почта изменена"): BadRequest(changeRes.Errors);
+        return changeRes.Succeeded ? Ok("Почта изменена") : BadRequest(changeRes.Errors);
     }
 
     [HttpPut("[action]")]
     public async Task<IActionResult> SetUserData([FromBody] UserChangeOrdinaryDto chOrdinary)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
-        user.UserName = chOrdinary.UserName;
+        user!.UserName = chOrdinary.UserName;
         user.Birthday = chOrdinary.Birthdate;
         var changeRes = await _userManager.UpdateAsync(user);
-        return changeRes.Succeeded? Ok("Данные изменены"): BadRequest(changeRes.Errors);
+        return changeRes.Succeeded ? Ok("Данные изменены") : BadRequest(changeRes.Errors);
     }
 }

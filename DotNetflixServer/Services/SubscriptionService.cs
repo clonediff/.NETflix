@@ -95,7 +95,7 @@ public class SubscriptionService : ISubscriptionService
         if (!_paymentService.PayByCard(cardDataDto, userSubscription.Subscription.Cost))
             throw new IncorrectOperationException("Не удалось продлить данную подписку, так как введены некорректные реквизиты к оплате");
 
-        userSubscription!.Expires += TimeSpan.FromDays(userSubscription.Subscription.PeriodInDays!.Value);
+        userSubscription.Expires += TimeSpan.FromDays(userSubscription.Subscription.PeriodInDays!.Value);
 
         await _dbContext.SaveChangesAsync();
     }

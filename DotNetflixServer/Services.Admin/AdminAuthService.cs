@@ -17,15 +17,15 @@ public class AdminAuthService : IAdminAuthService
         _signInManager = signInManager;
     }
 
-    public async Task<AuthResultDto> Login(LoginForm form)
+    public async Task<AuthResultDto> Login(LoginForm login)
     {
-        var user = await _userManager.FindByNameAsync(form.UserName);
+        var user = await _userManager.FindByNameAsync(login.UserName);
         if (user == null)
             return new AuthResultDto("Неверный логин или пароль!");
         var roles = await _userManager.GetRolesAsync(user);
         if (!(roles.Contains("admin") || roles.Contains("manager")))
             return new AuthResultDto("У вас нет прав, чтобы войти сюда!");
-        var result = await _signInManager.PasswordSignInAsync(form.UserName, form.Password, true, false);
+        var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);
         if (result.Succeeded)
         {
             return new AuthResultDto();

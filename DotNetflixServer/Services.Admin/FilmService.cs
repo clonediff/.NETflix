@@ -100,19 +100,17 @@ public class FilmService : IFilmService
             Budget: film.Budget is null
                 ? null
                 : new CurrencyValueDto(film.Budget.Id, film.Budget.Value, film.Budget.Currency),
-            Fees: film.Fees is null
-                ? null 
-                : new FeesDto(
-                    Id: film.Fees.Id,
-                    FeesWorld: film.Fees?.World is null
-                        ? null
-                        : new CurrencyValueDto(film.Fees.World.Id, film.Fees.World.Value, film.Fees.World.Currency),
-                    FeesRussia: film.Fees?.Russia is null
-                        ? null
-                        : new CurrencyValueDto(film.Fees.Russia.Id, film.Fees.Russia.Value, film.Fees.Russia.Currency),
-                    FeesUsa: film.Fees?.USA is null
-                        ? null
-                        : new CurrencyValueDto(film.Fees.USA.Id, film.Fees.USA.Value, film.Fees.USA.Currency)),
+            Fees: new FeesDto(
+                Id: film.Fees.Id,
+                FeesWorld: film.Fees.World is null
+                    ? null
+                    : new CurrencyValueDto(film.Fees.World.Id, film.Fees.World.Value, film.Fees.World.Currency),
+                FeesRussia: film.Fees.Russia is null
+                    ? null
+                    : new CurrencyValueDto(film.Fees.Russia.Id, film.Fees.Russia.Value, film.Fees.Russia.Currency),
+                FeesUsa: film.Fees.USA is null
+                    ? null
+                    : new CurrencyValueDto(film.Fees.USA.Id, film.Fees.USA.Value, film.Fees.USA.Currency)),
             Genres: film.Genres.Select(g => new EnumDto<int>(g.GenreId, g.Genre.Name)),
             Countries: film.Countries.Select(c => new EnumDto<int>(c.CountryId, c.Country.Name)),
             Seasons: film.SeasonsInfo?.Select(s => new SeasonDto(s.Id, s.Number, s.EpisodesCount)),

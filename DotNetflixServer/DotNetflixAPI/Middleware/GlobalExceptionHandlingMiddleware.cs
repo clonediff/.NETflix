@@ -18,16 +18,15 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         {
             await next(context);
         }
-        /*catch()
-        {
+        /*
            Возможно тут нужно будет сделать обработку ошибок, возникающих при oauth => свой кастомный Exception 
-        }*/
+        */
         catch (Exception ex)
         {
             await HandleExceptionAsync(context,
                 exception: ex,
                 statusCode: HttpStatusCode.InternalServerError,
-                type: "Server error", 
+                type: "Server error",
                 title: ex.Message);
         }
     }
@@ -38,15 +37,15 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         string type,
         string title)
     {
-        _logger.LogError(exception, exception.Message);
+        _logger.LogError(exception, "Ex message: {exception.Message}", exception.Message);
 
         var response = ctx.Response;
-        response.StatusCode = (int) statusCode;
+        response.StatusCode = (int)statusCode;
         response.ContentType = "application/json";
 
         var problemDetails = new ProblemDetails
         {
-            Status = (int) statusCode,
+            Status = (int)statusCode,
             Type = type,
             Title = title,
             Detail = exception.Message

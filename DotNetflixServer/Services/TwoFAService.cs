@@ -28,7 +28,7 @@ public class TwoFAService : ITwoFAService
         return _memoryCache.TryGetValue<string>(email, out var savedCode) && savedCode == code;
     }
 
-    private string GenerateCode()
+    private static string GenerateCode()
     {
         var randomBytes = new byte[4];
         using (var rng = RandomNumberGenerator.Create())

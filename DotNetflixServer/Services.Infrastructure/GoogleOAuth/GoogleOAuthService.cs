@@ -21,7 +21,7 @@ public class GoogleOAuthService : IGoogleOAuth
     private readonly HttpClient _client;
     private readonly GoogleSecrets _googleSecrets;
     private readonly PasswordOptions _passwordOptions;
-    private readonly HttpContext HttpContext;
+    private readonly HttpContext _httpContext;
 
     public GoogleOAuthService(IOptions<GoogleSecrets> googleSecrets,
         UserManager<User> userManager,
@@ -40,7 +40,7 @@ public class GoogleOAuthService : IGoogleOAuth
             RequiredLength = 16,
             RequiredUniqueChars = 6,
         };
-        HttpContext = contextAccessor.HttpContext;
+        _httpContext = contextAccessor.HttpContext!;
     }
 
 
@@ -67,13 +67,13 @@ public class GoogleOAuthService : IGoogleOAuth
         
             if (user == null)
             {
-                user = await _userManager.GetUserAsync(HttpContext.User);
+                user = await _userManager.GetUserAsync(_httpContext.User);
                 if (user == null)
                 {
-                    var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                    var email = _httpContext.User.FindFirstValue(ClaimTypes.Email);
                     var password = _passwordGenerator.GeneratePassword(_passwordOptions);
 
-                    var existingUser = await _userManager.FindByEmailAsync(email);
+                    var existingUser = await _userManager.FindByEmailAsync(email!);
                     if (existingUser != null)
                         await _userManager.AddLoginAsync(existingUser, info);
                     else
@@ -117,8 +117,8 @@ public class GoogleOAuthService : IGoogleOAuth
         request.Content = content;
         request.Version = _client.DefaultRequestVersion;
 
-        var resp = await _client.SendAsync(request, HttpContext.RequestAborted);
-        var respContent = await resp.Content.ReadAsStringAsync(HttpContext.RequestAborted);
+        var resp = await _client.SendAsync(request, _httpContext.RequestAborted);
+        var respContent = await resp.Content.ReadAsStringAsync(_httpContext.RequestAborted);
         
         return resp.IsSuccessStatusCode switch
         {
@@ -132,21 +132,21 @@ public class GoogleOAuthService : IGoogleOAuth
         var request = new HttpRequestMessage(HttpMethod.Get, GoogleDefaults.UserInformationEndpoint);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokens.AccessToken);
 
-        var response = await _client.SendAsync(request, HttpContext.RequestAborted);
+        var response = await _client.SendAsync(request, _httpContext.RequestAborted);
         if (response.IsSuccessStatusCode)
         {
-            using var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(HttpContext.RequestAborted));
+            using var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(_httpContext.RequestAborted));
             
             var identity = new ClaimsIdentity(IdentityConstants.ExternalScheme);
             
-            var externalAuthenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.ProviderName,"https://localhost:3000/");
+            var externalAuthenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.ProviderName,"/");
             
             var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity), externalAuthenticationProperties,
-                HttpContext, new AuthenticationScheme(GoogleDefaults.AuthenticationScheme, GoogleDefaults.AuthenticationScheme, typeof(GoogleOAuthHandler)),
+                _httpContext, new AuthenticationScheme(GoogleDefaults.AuthenticationScheme, GoogleDefaults.AuthenticationScheme, typeof(GoogleOAuthHandler)),
                 new GoogleOptions(), _client, tokens, payload.RootElement);
             
             context.RunClaimActions();
-            HttpContext.User = context.Principal?.Clone()!;
+            _httpContext.User = context.Principal?.Clone()!;
             return true;
         }
 

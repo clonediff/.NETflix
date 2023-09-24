@@ -45,7 +45,7 @@ public class SubscriptionService : ISubscriptionService
             .Where(x => name == null || x.Name.Contains(name))
             .Include(m => m.Subscriptions)
             .AsEnumerable()
-            .Select(m => new FilmInSubscriptionDto(m.Id, m.Name, m.Subscriptions.Any(s => s.Id == subscriptionId)))
+            .Select(m => new FilmInSubscriptionDto(m.Id, m.Name, m.Subscriptions.Exists(s => s.Id == subscriptionId)))
             .OrderByDescending(x => x.IsInSubscription);
     }
 

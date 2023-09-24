@@ -17,7 +17,7 @@ public class ChatHub : Hub<IClient>
 
     public async Task SendAsync(string message)
     {
-        var userName = Context.User.Identity.Name;
+        var userName = Context.User!.Identity!.Name;
         var date = DateTime.Now;
         
         _chatStorage.PutMessage(new UserMessageDto(message, userName!, date, Context.UserIdentifier!));
