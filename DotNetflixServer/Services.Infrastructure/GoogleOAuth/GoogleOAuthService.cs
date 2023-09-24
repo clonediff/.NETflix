@@ -50,9 +50,6 @@ public class GoogleOAuthService : IGoogleOAuth
 
         await RegisterUserClaimsAsync(tokens);
 
-        /*if (!canGetUser) 
-            return false;*/
-
         var providerKey = await GetProviderKeyAsync(tokens.Response!.RootElement);
 
         if (!providerKey.CanGetKey)
@@ -90,8 +87,8 @@ public class GoogleOAuthService : IGoogleOAuth
         
             if (identityRes.Succeeded)
             {
-                var addLoginAsyncRes = await _userManager.AddLoginAsync(user, info);
-                //if(addLoginAsyncRes.Succeeded)
+                await _userManager.AddLoginAsync(user, info);
+                
                 await _userManager.AddClaimAsync(user, new Claim("level", "user"));
             }
             var loginRes = await _signInManager
@@ -171,5 +168,5 @@ public class GoogleOAuthService : IGoogleOAuth
         return new ProviderKeyDto(payload.Subject, true);
     }
 
-    private record ProviderKeyDto(string Key, bool CanGetKey);
+    private sealed record ProviderKeyDto(string Key, bool CanGetKey);
 }
