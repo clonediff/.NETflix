@@ -11,7 +11,7 @@ using Services.Infrastructure.EmailService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
