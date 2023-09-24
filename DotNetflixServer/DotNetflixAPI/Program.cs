@@ -59,8 +59,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.ExternalScheme, options =>
 {
-	//options.LoginPath = new PathString("/OAuth/ExternalLogin");
-    
 	options.LoginPath = new PathString("/api/oauth/google");
 
 	var del = options.Events.OnRedirectToAccessDenied;
@@ -138,21 +136,21 @@ app.Map("/backupData", async (ApplicationDBContext db) =>
     if (!Directory.Exists(folderPath))
         Directory.CreateDirectory(folderPath);
 
-    await WriteDbSetAsync(db.Countries, folderPath, x => { x.Movies = default; });
-    await WriteDbSetAsync(db.CountryMovieInfo, folderPath, x => { x.Country = default; });
+    await WriteDbSetAsync(db.Countries, folderPath, x => { x.Movies = null; });
+    await WriteDbSetAsync(db.CountryMovieInfo, folderPath, x => { x.Country = null; });
     await WriteDbSetAsync(db.CurrencyValues, folderPath);
-    await WriteDbSetAsync(db.Fees, folderPath, x => { x.USA = default; x.Russia = default; x.World = default; });
-    await WriteDbSetAsync(db.Genres, folderPath, x => { x.Movies = default; });
-    await WriteDbSetAsync(db.GenreMovieInfo, folderPath, x => { x.Genre = default; });
-    await WriteDbSetAsync(db.Persons, folderPath, x => { x.Proffessions = default; });
-    await WriteDbSetAsync(db.PersonProffessionInMovie, folderPath, x => { x.Person = default; });
-    await WriteDbSetAsync(db.SeasonsInfos, folderPath, x => { x.MovieInfo = default; });
+    await WriteDbSetAsync(db.Fees, folderPath, x => { x.USA = null; x.Russia = null; x.World = null; });
+    await WriteDbSetAsync(db.Genres, folderPath, x => { x.Movies = null; });
+    await WriteDbSetAsync(db.GenreMovieInfo, folderPath, x => { x.Genre = null; });
+    await WriteDbSetAsync(db.Persons, folderPath, x => { x.Proffessions = null; });
+    await WriteDbSetAsync(db.PersonProffessionInMovie, folderPath, x => { x.Person = null; });
+    await WriteDbSetAsync(db.SeasonsInfos, folderPath, x => { x.MovieInfo = null; });
     await WriteDbSetAsync(db.Types, folderPath);
     await WriteDbSetAsync(db.Movies, folderPath, 
-        x => { x.Budget = default; x.Proffessions = default; x.Category = default; x.Countries = default; x.Fees = default; x.Genres = default; x.SeasonsInfo = default; x.Type = default; });
+        x => { x.Budget = null; x.Proffessions = null; x.Category = null; x.Countries = null; x.Fees = null; x.Genres = null; x.SeasonsInfo = null; x.Type = null; });
     await WriteDbSetAsync(db.Categories, folderPath);
     await WriteDbSetAsync(db.Professions, folderPath);
-    await WriteDbSetAsync(db.Subscriptions, folderPath, x => { x.Movies = default; x.Users = default; x.UserSubscriptions = default; x.SubscriptionMovies = default; });
+    await WriteDbSetAsync(db.Subscriptions, folderPath, x => { x.Movies = null; x.Users = null; x.UserSubscriptions = null; x.SubscriptionMovies = null; });
     await WriteDbSetAsync(db.SubscriptionMovies, folderPath);
 });
 
@@ -160,7 +158,7 @@ async Task WriteDbSetAsync<T>(DbSet<T> source, string folderPath, Action<T> chan
 	where T : class
 {
 	var data = source.ToArray();
-    if (changeDataRecord is not null) Array.ForEach(data, changeDataRecord);
+    Array.ForEach(data, changeDataRecord);
     var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
     {
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,

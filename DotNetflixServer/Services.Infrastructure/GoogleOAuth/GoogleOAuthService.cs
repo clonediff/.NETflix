@@ -47,57 +47,55 @@ public class GoogleOAuthService : IGoogleOAuth
     public async Task<bool> ExternalLoginAsync(string code)
     {
         var tokens = await ((IGoogleOAuth) this).GetAccessToken(code);
+
+        if (tokens.Error != null) return false;
         
-        if (tokens.Error == null)
-        {
-            var canGetUser = await ((IGoogleOAuth) this).CanGetUserInfoAsync(tokens);
+        var canGetUser = await ((IGoogleOAuth) this).CanGetUserInfoAsync(tokens);
 
-            if (!canGetUser)
-                return false;
+        if (!canGetUser)
+            return false;
 
-            var providerKey = await ((IGoogleOAuth) this).GetProviderKeyAsync(tokens.Response!.RootElement);
+        var providerKey = await ((IGoogleOAuth) this).GetProviderKeyAsync(tokens.Response!.RootElement);
 
-            if (providerKey == null)
-                return false;
+        if (providerKey == null)
+            return false;
             
-            var info = new UserLoginInfo(GoogleDefaults.ProviderName, providerKey,
-                GoogleDefaults.AuthenticationScheme);
+        var info = new UserLoginInfo(GoogleDefaults.ProviderName, providerKey,
+            GoogleDefaults.AuthenticationScheme);
 
-            var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+        var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
         
+        if (user == null)
+        {
+            user = await _userManager.GetUserAsync(_httpContext.User);
             if (user == null)
             {
-                user = await _userManager.GetUserAsync(_httpContext.User);
-                if (user == null)
-                {
-                    var email = _httpContext.User.FindFirstValue(ClaimTypes.Email);
-                    var password = _passwordGenerator.GeneratePassword(_passwordOptions);
+                var email = _httpContext.User.FindFirstValue(ClaimTypes.Email);
+                var password = _passwordGenerator.GeneratePassword(_passwordOptions);
 
-                    var existingUser = await _userManager.FindByEmailAsync(email!);
-                    if (existingUser != null)
-                        await _userManager.AddLoginAsync(existingUser, info);
-                    else
-                    {
-                        user = new User {Email = email, UserName = email};
-                        var identityRes = await _userManager.CreateAsync(user, password);
+                var existingUser = await _userManager.FindByEmailAsync(email!);
+                if (existingUser != null)
+                    await _userManager.AddLoginAsync(existingUser, info);
+                else
+                {
+                    user = new User {Email = email, UserName = email};
+                    var identityRes = await _userManager.CreateAsync(user, password);
                 
-                        if (identityRes.Succeeded)
-                        {
-                            var addLoginAsyncRes = await _userManager.AddLoginAsync(user, info);
-                            if(addLoginAsyncRes.Succeeded)
-                                await _userManager.AddClaimAsync(user, new Claim("level", "user"));
-                        }
+                    if (identityRes.Succeeded)
+                    {
+                        var addLoginAsyncRes = await _userManager.AddLoginAsync(user, info);
+                        if(addLoginAsyncRes.Succeeded)
+                            await _userManager.AddClaimAsync(user, new Claim("level", "user"));
                     }
                 }
-                else
-                    await _userManager.AddLoginAsync(user, info);
             }
-
-            await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true, true);
-            return true;
+            else
+                await _userManager.AddLoginAsync(user, info);
         }
 
-        return false;
+        await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true, true);
+        return true;
+
     }
 
     async Task<OAuthTokenResponse> IGoogleOAuth.GetAccessToken(string code)

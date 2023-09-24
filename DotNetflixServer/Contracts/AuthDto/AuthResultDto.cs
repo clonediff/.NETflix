@@ -3,8 +3,7 @@
 public class AuthResultDto
 {
     public bool IsSuccess { get; }
-    public string ErrorMessage { get; } = null!;
-
+    public string ErrorMessage { get; }
     public AuthResultDto(string errorMessage)
     {
         IsSuccess = false;
@@ -14,5 +13,6 @@ public class AuthResultDto
     public AuthResultDto()
     {
         IsSuccess = true;
+        ErrorMessage = "";
     }
 }

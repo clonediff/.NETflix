@@ -14,5 +14,6 @@ public class AuthResultDto
     public AuthResultDto()
     {
         IsSuccess = true;
+        ErrorMessage = "";
     }
 }
