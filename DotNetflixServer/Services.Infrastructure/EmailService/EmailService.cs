@@ -24,10 +24,12 @@ namespace Services.Infrastructure.EmailService
 			emailMessage.Body = message;
 			emailMessage.IsBodyHtml = true;
 
-			var smtp = new SmtpClient(ec.MailServerAddress, ec.MailServerPort);
-			smtp.Credentials = new NetworkCredential(ec.FromAddress, ec.FromPassword);
-			smtp.EnableSsl = ec.EnableSsl;
-
+			var smtp = new SmtpClient(ec.MailServerAddress, ec.MailServerPort)
+			{
+				EnableSsl = ec.EnableSsl,
+				Credentials = new NetworkCredential(ec.FromAddress, ec.FromPassword)
+			};
+			
 			await smtp.SendMailAsync(emailMessage);
 		}
 	}
