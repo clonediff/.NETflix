@@ -141,7 +141,7 @@ export const RegistrationForm = () => {
         </Button>
       </Form.Item>
       <Form.Item>
-        <label>Нажимая кнопку "Регистрация", вы соглашаетесь с нашими <Link to="">Условиями использования</Link> и <Link to="">Политикой конфиденциальности</Link>.</label>
+        <label>Нажимая кнопку &quot;Регистрация&quot;, вы соглашаетесь с нашими <Link to="">Условиями использования</Link> и <Link to="">Политикой конфиденциальности</Link>.</label>
       </Form.Item>
     </Form>
     </div>);

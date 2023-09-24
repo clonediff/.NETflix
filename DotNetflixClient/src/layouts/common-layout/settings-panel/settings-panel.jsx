@@ -1,7 +1,7 @@
 import { Form } from 'antd'
 import './settings-panel.css'
 
-const SettingsPanel = ({ topProp }) => {
+const SettingsPanel = () => {
     return (
         <div className='settings-panel'>
             <div className='settings-panel-label'>

@@ -41,7 +41,7 @@ export const SubscriptionsPage = () => {
         setOnBuy(_ => (data) => 
             axiosInstance.post(`api/Subscription/Purchase?subscriptionId=${data.prodId}`, data)
                 .then(resp => resp.data)
-                .then(data => {
+                .then(_ => {
                     modal.success({
                         title: 'Подписка успешно оформлена',
                         onOk: () => {
@@ -54,7 +54,7 @@ export const SubscriptionsPage = () => {
                         zIndex: 10001
                     })
                 })
-                .catch(err => modal.error({
+                .catch(_ => modal.error({
                     title: 'Не удалось оформить подписку',
                     zIndex: 10001
                 })))
@@ -66,14 +66,14 @@ export const SubscriptionsPage = () => {
         setOnBuy(_ => (data) => 
             axiosInstance.put(`api/Subscription/Extend?subscriptionId=${data.prodId}`, data)
                 .then(resp => resp.data)
-                .then(data => modal.success({
+                .then(_ => modal.success({
                     title: `Подписка успешно продлена ещё на ${subscription.periodInDays} дней`,
                     onOk: () => {
                         onBuyModalCancel()
                     },
                     zIndex: 10001
                 }))
-                .catch(err => modal.error({
+                .catch(_ => modal.error({
                     title: 'Не удалось оформить подписку',
                     zIndex: 10001
                 })))

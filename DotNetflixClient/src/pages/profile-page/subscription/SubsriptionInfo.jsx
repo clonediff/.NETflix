@@ -6,7 +6,7 @@ import USettingsFooter from "../main-info/components/usettings-footer"
 import { axiosInstance } from "../../../AxiosInstance"
 import { formatDate } from "../../../libs/functions"
 
-export const SubscriptionInfo = ({ userData }) => {
+export const SubscriptionInfo = () => {
     const [subscriptions, setSubscriptions] = useState([])
     const [showActiveSubscription, setShowActiveSubscription] = useState(false)
     const [selectedAS, setSelectedAS] = useState(undefined)

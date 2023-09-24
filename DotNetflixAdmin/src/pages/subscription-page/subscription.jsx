@@ -36,14 +36,14 @@ const Subscription = ({ subscription, modal, modalHolder, onChange }) => {
                 id: subscription.id,
                 isAvailable: isAvailable
             })
-            .then(response => {
+            .then(_ => {
                 setIsAvailable(isAvailable)
                 modal.success({
                     title: 'успешно обновлён статус подписки',
                     zIndex: 10001
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось обновить статус подписки',
                     zIndex: 10001
@@ -53,14 +53,14 @@ const Subscription = ({ subscription, modal, modalHolder, onChange }) => {
 
     const deleteSubscription = () => {
         axiosInstance.delete(`api/subscription/delete?subscriptionId=${subscription.id}`)
-            .then(response => {
+            .then(_ => {
                 modal.success({
                     title: 'подписка успешно удалена',
                     zIndex: 10001,
                     afterClose: onChange
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось удалить подписку',
                     zIndex: 10001

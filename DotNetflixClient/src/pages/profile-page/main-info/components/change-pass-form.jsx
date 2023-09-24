@@ -67,9 +67,9 @@ const ChangePassForm = () => {
 
             <Modal title=""
                 open={showModal}
-                footer={[
+                footer={
                     <Button className="settings-submit-button" type="primary" onClick={() => navigate("../")}>Ok</Button>
-                ]}>
+                }>
                 <p>Пароль изменён!</p>
             </Modal>
         </>
@@ -81,7 +81,7 @@ const ChangePassForm = () => {
             password: values.password,
             code: values.code
         })
-            .then(response => {
+            .then(_ => {
                 setShowModal(true)
             })
             // TODO: catch error
