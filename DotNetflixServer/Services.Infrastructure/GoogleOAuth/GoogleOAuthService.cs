@@ -46,56 +46,60 @@ public class GoogleOAuthService : IGoogleOAuth
 
     public async Task<bool> ExternalLoginAsync(string code)
     {
-        var tokens = await ((IGoogleOAuth) this).GetAccessToken(code);
+        var tokens = await ((IGoogleOAuth)this).GetAccessToken(code);
 
         if (tokens.Error != null) return false;
-        
-        var canGetUser = await ((IGoogleOAuth) this).CanGetUserInfoAsync(tokens);
+
+        var canGetUser = await ((IGoogleOAuth)this).CanGetUserInfoAsync(tokens);
 
         if (!canGetUser)
             return false;
 
-        var providerKey = await ((IGoogleOAuth) this).GetProviderKeyAsync(tokens.Response!.RootElement);
+        var providerKey = await ((IGoogleOAuth)this).GetProviderKeyAsync(tokens.Response!.RootElement);
 
         if (providerKey == null)
             return false;
-            
+
         var info = new UserLoginInfo(GoogleDefaults.ProviderName, providerKey,
             GoogleDefaults.AuthenticationScheme);
 
         var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
+        if (user != null)
+        {
+            await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true, true);
+            return true;
+        }
+
+        user = await _userManager.GetUserAsync(_httpContext.User);
         
         if (user == null)
         {
-            user = await _userManager.GetUserAsync(_httpContext.User);
-            if (user == null)
-            {
-                var email = _httpContext.User.FindFirstValue(ClaimTypes.Email);
-                var password = _passwordGenerator.GeneratePassword(_passwordOptions);
+            var email = _httpContext.User.FindFirstValue(ClaimTypes.Email);
+            var password = _passwordGenerator.GeneratePassword(_passwordOptions);
 
-                var existingUser = await _userManager.FindByEmailAsync(email!);
-                if (existingUser != null)
-                    await _userManager.AddLoginAsync(existingUser, info);
-                else
+            var existingUser = await _userManager.FindByEmailAsync(email!);
+            if (existingUser != null)
+                await _userManager.AddLoginAsync(existingUser, info);
+            else
+            {
+                user = new User { Email = email, UserName = email };
+                var identityRes = await _userManager.CreateAsync(user, password);
+
+                if (identityRes.Succeeded)
                 {
-                    user = new User {Email = email, UserName = email};
-                    var identityRes = await _userManager.CreateAsync(user, password);
-                
-                    if (identityRes.Succeeded)
-                    {
-                        var addLoginAsyncRes = await _userManager.AddLoginAsync(user, info);
-                        if(addLoginAsyncRes.Succeeded)
-                            await _userManager.AddClaimAsync(user, new Claim("level", "user"));
-                    }
+                    var addLoginAsyncRes = await _userManager.AddLoginAsync(user, info);
+                    if (addLoginAsyncRes.Succeeded)
+                        await _userManager.AddClaimAsync(user, new Claim("level", "user"));
                 }
             }
-            else
-                await _userManager.AddLoginAsync(user, info);
         }
+        else
+            await _userManager.AddLoginAsync(user, info);
+
 
         await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true, true);
         return true;
-
     }
 
     async Task<OAuthTokenResponse> IGoogleOAuth.GetAccessToken(string code)
@@ -108,7 +112,7 @@ public class GoogleOAuthService : IGoogleOAuth
             new KeyValuePair<string, string>("grant_type", "authorization_code"),
             new KeyValuePair<string, string>("code", code)
         });
-     
+
         var request = new HttpRequestMessage(HttpMethod.Post, GoogleDefaults.TokenEndpoint);
 
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -117,11 +121,12 @@ public class GoogleOAuthService : IGoogleOAuth
 
         var resp = await _client.SendAsync(request, _httpContext.RequestAborted);
         var respContent = await resp.Content.ReadAsStringAsync(_httpContext.RequestAborted);
-        
+
         return resp.IsSuccessStatusCode switch
         {
             true => OAuthTokenResponse.Success(JsonDocument.Parse(respContent)),
-            false => OAuthTokenResponse.Failed(new Exception($"OAuth token endpoint failure: Status: {resp.StatusCode};Headers: {resp.Headers};Body: {respContent};"))
+            false => OAuthTokenResponse.Failed(new Exception(
+                $"OAuth token endpoint failure: Status: {resp.StatusCode};Headers: {resp.Headers};Body: {respContent};"))
         };
     }
 
@@ -133,16 +138,21 @@ public class GoogleOAuthService : IGoogleOAuth
         var response = await _client.SendAsync(request, _httpContext.RequestAborted);
         if (response.IsSuccessStatusCode)
         {
-            using var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(_httpContext.RequestAborted));
-            
+            using var payload =
+                await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(_httpContext.RequestAborted));
+
             var identity = new ClaimsIdentity(IdentityConstants.ExternalScheme);
-            
-            var externalAuthenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.ProviderName,"/");
-            
-            var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity), externalAuthenticationProperties,
-                _httpContext, new AuthenticationScheme(GoogleDefaults.AuthenticationScheme, GoogleDefaults.AuthenticationScheme, typeof(GoogleOAuthHandler)),
+
+            var externalAuthenticationProperties =
+                _signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.ProviderName, "/");
+
+            var context = new OAuthCreatingTicketContext(new ClaimsPrincipal(identity),
+                externalAuthenticationProperties,
+                _httpContext,
+                new AuthenticationScheme(GoogleDefaults.AuthenticationScheme, GoogleDefaults.AuthenticationScheme,
+                    typeof(GoogleOAuthHandler)),
                 new GoogleOptions(), _client, tokens, payload.RootElement);
-            
+
             context.RunClaimActions();
             _httpContext.User = context.Principal?.Clone()!;
             return true;
@@ -157,7 +167,7 @@ public class GoogleOAuthService : IGoogleOAuth
 
         if (!canGetIdToken)
             return null;
-        
+
         var settings = new GoogleJsonWebSignature.ValidationSettings()
         {
             Audience = new List<string> { _googleSecrets.ClientId }
