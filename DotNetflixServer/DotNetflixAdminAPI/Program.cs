@@ -81,17 +81,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.Use((ctx, next) =>
-{
-    if (ctx.Request.Path.StartsWithSegments("/api"))
-    {
-        ctx.Response.StatusCode = 404;
-        return Task.CompletedTask;
-    }
-
-    return next();
-});
-
 app.MapControllers();
 
 app.UseHttpsRedirection();
