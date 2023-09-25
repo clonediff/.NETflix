@@ -20,7 +20,7 @@ services:
       dockerfile: DockerfileDotNetflixAPI
     depends_on:
       - mssql
-      - DotNetflixAPIClient
+      - DotNetflixAdminAPI
   DotNetflixAdminAPI:
     image: aspnetdotdetflixadminapi
     container_name: dotnetflixserveradmin
@@ -46,6 +46,8 @@ services:
     build:
       context: ./DotNetflixClient
       dockerfile: Dockerfile
+    depends_on:
+      - DotNetflixAPI
   DotNetflixAPIClientAdmin:
     image: dotnetflixadminapiclient
     container_name: dotnetflixserveradminclient
@@ -54,6 +56,8 @@ services:
     build:
       context: ./DotNetflixAdmin
       dockerfile: Dockerfile
+    depends_on:
+      - DotNetflixAdminAPI
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
