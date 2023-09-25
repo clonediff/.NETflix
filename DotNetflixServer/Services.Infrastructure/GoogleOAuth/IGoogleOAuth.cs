@@ -6,7 +6,4 @@ namespace Services.Infrastructure.GoogleOAuth;
 public interface IGoogleOAuth
 {
     Task<bool> ExternalLoginAsync(string code);
-    protected internal Task<OAuthTokenResponse> GetAccessToken(string code);
-    protected internal Task<bool> CanGetUserInfoAsync(OAuthTokenResponse tokens);
-    protected internal Task<string?> GetProviderKeyAsync(JsonElement tokens);
 }

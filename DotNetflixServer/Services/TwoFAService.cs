@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Security.Cryptography;
+using Microsoft.Extensions.Caching.Memory;
 using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 
@@ -27,8 +28,13 @@ public class TwoFAService : ITwoFAService
         return _memoryCache.TryGetValue<string>(email, out var savedCode) && savedCode == code;
     }
 
-    private string GenerateCode()
+    private static string GenerateCode()
     {
-        return new Random().Next().ToString();
+        var randomBytes = new byte[4];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomBytes);
+        }
+        return BitConverter.ToInt32(randomBytes, 0).ToString();
     }
 }

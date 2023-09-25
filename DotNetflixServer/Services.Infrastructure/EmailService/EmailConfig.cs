@@ -2,11 +2,10 @@
 
 public class EmailConfig
 {
-	public string FromName { get; set; }
-	public string FromAddress { get; set; }
-	public string FromPassword { get; set; }
+	public string FromName { get; set; } = null!;
+	public string FromAddress { get; set; } = null!;
+	public string FromPassword { get; set; } = null!;
 
-	public string MailServerAddress { get; set; }
+	public string MailServerAddress { get; set; } = null!;
 	public int MailServerPort { get; set; }
-	public bool EnableSsl { get; set; }
 }

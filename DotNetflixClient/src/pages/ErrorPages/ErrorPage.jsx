@@ -19,7 +19,7 @@ export const ErrorPage = ({errorNumber}) => {
                             <h2>{errorDto.errorMessage}</h2>
                             <Button danger type="primary" 
                                 style={{marginTop : "25px"}} 
-                                onClick={e => {navigate("/")}}>На домашнюю страницу</Button>
+                                onClick={_ => {navigate("/")}}>На домашнюю страницу</Button>
                         </div>
                     </div>
                 </div>

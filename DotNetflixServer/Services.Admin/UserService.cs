@@ -34,7 +34,7 @@ public class UserService : IUserService
     public async Task<PaginationDataDto<UserDto>> GetUsersFilteredAsync(int page, string? name)
     {
         var filteredUsers = _dbContext.Users
-            .Where(x => name == null || x.UserName.Contains(name));
+            .Where(x => name == null || x.UserName!.Contains(name));
 
         var filteredUsersCount = await filteredUsers.CountAsync();
 
@@ -44,7 +44,7 @@ public class UserService : IUserService
                 _dbContext.UserRoles,
                 user => user.Id,
                 role => role.UserId,
-                (user, role) => new UserDto(user.Id, user.UserName, user.BannedUntil, role.RoleId))
+                (user, role) => new UserDto(user.Id, user.UserName!, user.BannedUntil, role.RoleId))
             .AsEnumerable();
 
         return new PaginationDataDto<UserDto>(users, filteredUsersCount);
@@ -89,7 +89,7 @@ public class UserService : IUserService
         if (user == null)
             throw new NotFoundException("Не удалось найти пользователя");
         
-        return user.Email;
+        return user.Email!;
     }
 
     public async Task<DateTime> BanUserAsync(BanUserDto dto)

@@ -13,8 +13,8 @@ public static class MovieInfoToDto
             Id: movieInfo.Id,
             Name: movieInfo.Name,
             Rating: movieInfo.Rating,
-            PosterUrl: movieInfo.PosterURL,
-            Category: movieInfo.Category.Name
+            PosterUrl: movieInfo.PosterURL!,
+            Category: movieInfo.Category!.Name
         );
     }
 
@@ -25,7 +25,7 @@ public static class MovieInfoToDto
             Id: movieInfo.Id,
             Name: movieInfo.Name,
             Rating: movieInfo.Rating,
-            PosterUrl: movieInfo.PosterURL
+            PosterUrl: movieInfo.PosterURL!
         );
     }
 
@@ -49,7 +49,7 @@ public static class MovieInfoToDto
 
             Fees = new FeesDto
             (
-                World: $"{movieInfo.Fees?.World?.Value}{movieInfo.Fees?.World?.Currency}",
+                World: $"{movieInfo.Fees.World?.Value}{movieInfo.Fees?.World?.Currency}",
                 Russia: $"{movieInfo.Fees?.Russia?.Value}{movieInfo.Fees?.Russia?.Currency}",
                 Usa: $"{movieInfo.Fees?.USA?.Value}{movieInfo.Fees?.USA?.Currency}"
             ),
@@ -62,7 +62,7 @@ public static class MovieInfoToDto
                 .Select(g => g.Genre.Name)
                 .ToList(),
 
-            SeasonsInfo = movieInfo.SeasonsInfo
+            SeasonsInfo = movieInfo.SeasonsInfo!
                 .Select(s => new SeasonDto(s.Number, s.EpisodesCount))
                 .ToList(),
 

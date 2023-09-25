@@ -25,14 +25,14 @@ namespace DotNetflixAPI.Controllers
 		public async Task SendCodeAsync()
 		{
 			var user = await _userManager.GetUserAsync(HttpContext.User);
-			await _twoFAService.SendCodeAsync(user.Email);
+			await _twoFAService.SendCodeAsync(user!.Email!);
 		}
 
 		[HttpPost("[action]")]
 		public async Task<IActionResult> EnableAsync([FromBody] TwoFADto twoFA)
 		{
 			var user = await _userManager.GetUserAsync(HttpContext.User);
-			if (!_twoFAService.CheckCode(user.Email, twoFA.Code))
+			if (!_twoFAService.CheckCode(user!.Email!, twoFA.Code))
 				return BadRequest("Код не совпадает или устарел");
 			var enableResult = await _userManager.SetTwoFactorEnabledAsync(user, true);
 			if (!enableResult.Succeeded)

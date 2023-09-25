@@ -9,8 +9,8 @@ public static class UserToDto
     {
         return new UserDto
         (
-            Login: user.UserName,
-            Email: user.Email,
+            Login: user.UserName!,
+            Email: user.Email!,
             Birthdate: user.Birthday,
             Enabled2FA: user.TwoFactorEnabled
         );

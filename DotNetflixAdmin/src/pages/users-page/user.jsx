@@ -11,13 +11,13 @@ const User = ({ roles, user, onChange }) => {
 
     const onRoleUpdating = (values) => {
         axiosInstance.put('api/user/setrole', { ...values, userId: user.id })
-            .then(response => {
+            .then(_ => {
                 modal.success({
                     title: 'успешно обновлены данные для пользователя ' + user.name,
                     zIndex: 10001
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось обновить данные для пользователя ' + user.name,
                     zIndex: 10001
@@ -27,14 +27,14 @@ const User = ({ roles, user, onChange }) => {
 
     const onBanning = (values) => {
         axiosInstance.put('api/user/banuser', { ...values, userId: user.id })
-            .then(({ data }) => {
+            .then(_ => {
                 modal.success({
                     title: 'успешно обновлены данные для пользователя ' + user.name,
                     zIndex: 10001,
                     afterClose: onChange
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось обновить данные для пользователя ' + user.name,
                     zIndex: 10001
@@ -56,7 +56,7 @@ const User = ({ roles, user, onChange }) => {
                     afterClose: onChange
                 })
             })
-            .catch(error => {
+            .catch(_ => {
                 modal.error({
                     title: 'не удалось обновить данные для пользователя ' + user.name,
                     zIndex: 10001

@@ -1,0 +1,45 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:import/recommended"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "*.js",
+                "*.jsx"
+            ]
+        }
+    ],
+    "rules": {
+        "arrow-spacing": "warn",
+        "no-var": "warn",
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "_",
+                "argsIgnorePattern": "_"
+            }
+        ],
+        "no-debugger": "warn",
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "import/no-unresolved": "off"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2023
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "env": {
+        "node": true,
+        "browser": true,
+        "es6": true
+    }
+}

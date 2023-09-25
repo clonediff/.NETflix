@@ -47,9 +47,9 @@ const ChangeEmailForm = ({userData, setUserData}) => {
 
             <Modal title=""
                 open={showModal}
-                footer={[
+                footer={
                     <Button className="settings-submit-button" type="primary" onClick={() => navigate("../")}>Ok</Button>
-                ]}>
+                }>
                 <p>Почта изменена!</p>
             </Modal>
         </>
@@ -60,8 +60,8 @@ const ChangeEmailForm = ({userData, setUserData}) => {
             email: values.email,
             code: values.code
         })
-            .then(response => {
-                setUserData(x => ({...userData, email: values.email}))
+            .then(_ => {
+                setUserData(_ => ({...userData, email: values.email}))
                 setShowModal(true)
             })
             // TODO: catch error

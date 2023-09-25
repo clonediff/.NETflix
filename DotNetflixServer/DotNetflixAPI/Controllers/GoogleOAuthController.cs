@@ -9,19 +9,22 @@ namespace DotNetflixAPI.Controllers;
 public class OAuthController : ControllerBase
 {
     private readonly IGoogleOAuth _googleOAuthService;
-    
-    public OAuthController(IGoogleOAuth googleOAuthService)
+    private readonly IConfiguration _configuration;
+
+    public OAuthController(IGoogleOAuth googleOAuthService, IConfiguration configuration)
     {
         _googleOAuthService = googleOAuthService;
+        _configuration = configuration;
     }
 
     [HttpGet("google")]
     public async Task<IActionResult> ExternalLoginAsync([FromQuery] GoogleCallback callback)
     {
+        var baseUrl = _configuration["FrontendBaseUrl"];
         var canExternalLoginAsync = await _googleOAuthService.ExternalLoginAsync(callback.Code);
         if (canExternalLoginAsync)
-            return Redirect("http://localhost:3000");
-        
-        return Redirect("http://localhost:3000/login");
+            return Redirect($"{baseUrl}/");
+
+        return Redirect($"{baseUrl}/login");
     }
 }
