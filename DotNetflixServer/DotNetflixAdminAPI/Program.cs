@@ -100,9 +100,7 @@ if (!dbContext.Users.Any())
         Email = app.Configuration["SmtpSetting:FromAddress"],
         Birthday = new DateTime(2021, 9, 1, 0, 0, 0, DateTimeKind.Utc)
     };
-    var saPassword = app.Configuration["SAPassword"];
-    if (string.IsNullOrEmpty(saPassword))
-        throw new ArgumentNullException(nameof(saPassword), "Password for default admin user not set");
+    var saPassword = app.Configuration["SAPassword"]!;
     await userManager.CreateAsync(sa, saPassword);
     await userManager.AddToRoleAsync(sa, "admin");
 }
