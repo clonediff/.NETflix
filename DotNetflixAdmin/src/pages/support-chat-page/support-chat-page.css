@@ -1,0 +1,36 @@
+@import url(../../constants.css);
+
+.chat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border: 2px solid var(--headerBgColor);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.chat-item:not(:first-child) {
+    margin-top: 12px;
+}
+
+.chat-item:hover {
+    background-color: gainsboro;
+}
+
+.unread-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: var(--sidebarBgColor);
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.pagination {
+    display: flex;
+}

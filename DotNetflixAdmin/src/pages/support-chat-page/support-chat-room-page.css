@@ -1,0 +1,28 @@
+.chat-container {
+    height: calc(100vh - 112px);
+}
+
+.message-list {
+    height: 95%;
+    overflow-y: auto;
+}
+
+.message-list::-webkit-scrollbar {
+    display: none;
+}
+
+.message-wrapper {
+    display: flex;
+}
+
+.message-wrapper {
+    margin-bottom: 6px;
+}
+
+.message {
+    border-radius: 8px;
+    color: white;
+    padding: 4px 8px;
+    overflow-wrap: break-word;
+    max-width: 50%;
+}

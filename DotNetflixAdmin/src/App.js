@@ -10,6 +10,8 @@ import UpdateFilmPage from './pages/update-film-page/update-film'
 import FilmDetailsPage from './pages/film-datails-page/film-details-page'
 import { LoginPage } from './pages/login-page/login-page'
 import { useEffect } from 'react'
+import SupportChatPage from './pages/support-chat-page/support-chat-page'
+import { SupportChatRoomPage } from './pages/support-chat-page/support-chat-room-page'
 
 const App = () => {
     const isAuthenticated = localStorage.getItem('authenticated')
@@ -34,6 +36,8 @@ const App = () => {
                 <Route path='/users' element={ <UsersPage /> } />
                 <Route path='/subscriptions' element={ <SubscriptionPage /> } />
                 <Route path='/addsubscription' element={ <AddSubscriptionPage /> } />
+                <Route path='/support-chat/all' element={ <SupportChatPage /> } />
+                <Route path='/support-chat' element={ <SupportChatRoomPage /> } />
             </Routes>
         </Layout> : 
         <Routes>
