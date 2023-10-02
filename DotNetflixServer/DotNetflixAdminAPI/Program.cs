@@ -91,4 +91,20 @@ await using var dbContext = serviceScope.ServiceProvider.GetRequiredService<Appl
 
 await dbContext.Database.MigrateAsync();
 
+if (!dbContext.Users.Any())
+{
+    using var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var sa = new User
+    {
+        UserName = "SA",
+        Email = app.Configuration["SmtpSetting:FromAddress"],
+        Birthday = new DateTime(2021, 9, 1)
+    };
+    var saPassword = app.Configuration["SAPassword"];
+    if (string.IsNullOrEmpty(saPassword))
+        throw new ArgumentNullException("Password for default admin user not set");
+    await userManager.CreateAsync(sa, saPassword);
+    await userManager.AddToRoleAsync(sa, "admin");
+}
+
 app.Run();
