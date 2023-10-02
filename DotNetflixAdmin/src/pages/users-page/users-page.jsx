@@ -21,12 +21,14 @@ const UsersPage = () => {
             })
     }, [])
 
-    const fetchUsers = () => axiosInstance.get(`api/user/getusers?page=${page}`)
-        .then(({ data }) => {
-            setUsers(data.data)
-            setUsersCount(data.count)
-            setIsLoading(false)
-        })
+    const fetchUsers = () => {
+        axiosInstance.get(`api/user/getusers?page=${page}`)
+            .then(({ data }) => {
+                setUsers(data.data)
+                setUsersCount(data.count)
+                setIsLoading(false)
+            })
+    }
 
     useEffect(fetchUsers, [page])
 
