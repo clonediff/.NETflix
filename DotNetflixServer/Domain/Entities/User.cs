@@ -8,4 +8,5 @@ public class User : IdentityUser
     public DateTime? BannedUntil { get; set; }
     public List<UserSubscription> UserSubscriptions { get; set; } = null!;
     public List<Subscription> Subscriptions { get; set; } = null!;
+    public List<Message> Messages { get; set; } = default!;
 }
