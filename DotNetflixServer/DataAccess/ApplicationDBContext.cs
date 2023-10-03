@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess
 {
@@ -26,9 +27,17 @@ namespace DataAccess
 		public DbSet<SubscriptionMovieInfo> SubscriptionMovies { get; set; } = null!;
 		public DbSet<Message> Messages { get; set; } = default!;
 
-		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
+		private readonly IConfiguration _configuration;
+		private readonly IPasswordHasher<User> _passwordHasher;
+		private readonly ILookupNormalizer _keyNormalizer;
+
+		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options, IConfiguration configuration,
+			IPasswordHasher<User> passwordHasher, ILookupNormalizer keyNormalizer)
 			: base(options)
 		{
+			_configuration = configuration;
+			_passwordHasher = passwordHasher;
+			_keyNormalizer = keyNormalizer;
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -181,6 +190,28 @@ namespace DataAccess
 	                Name = "admin",
 	                NormalizedName = "ADMIN"
                 });
+
+            // Add super admin
+            var sa = new User
+            {
+	            Id = "SA",
+	            UserName = "SA",
+	            Email = _configuration["SmtpSetting:FromAddress"],
+	            Birthday = new DateTime(2021, 9, 1, 0, 0, 0, DateTimeKind.Utc)
+            };
+            var saPassword = _configuration["SAPassword"]!;
+            sa.PasswordHash = _passwordHasher.HashPassword(sa, saPassword);
+            sa.NormalizedUserName = _keyNormalizer.NormalizeName(sa.UserName);
+            sa.NormalizedEmail = _keyNormalizer.NormalizeEmail(sa.Email);
+            builder.Entity<User>()
+	            .HasData(sa);
+
+            builder.Entity<IdentityUserRole<string>>()
+	            .HasData(new IdentityUserRole<string>
+	            {
+		            RoleId = "3",
+		            UserId = sa.Id
+	            });
 		}
 
 		static T[]? GetData<T>()
