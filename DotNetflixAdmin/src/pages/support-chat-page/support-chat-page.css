@@ -1,5 +1,20 @@
 @import url(../../constants.css);
 
+.chat-container {
+    height: calc(100vh - 112px);
+    display: flex;
+    gap: 18px;
+}
+
+.chat-previews {
+    width: 30%;
+    overflow-y: auto;
+}
+
+.chat-previews::-webkit-scrollbar {
+    display: none;
+}
+
 .chat-item {
     display: flex;
     justify-content: space-between;
@@ -17,6 +32,13 @@
 
 .chat-item:hover {
     background-color: gainsboro;
+}
+
+.latest-message {
+    width: calc(100% - 50px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .unread-counter {

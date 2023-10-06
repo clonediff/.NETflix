@@ -1,5 +1,8 @@
-.chat-container {
+.room {
+    position: sticky;
+    width: 70%;
     height: calc(100vh - 112px);
+    top: 0px;
 }
 
 .message-list {

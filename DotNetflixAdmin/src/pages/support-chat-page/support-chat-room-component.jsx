@@ -1,7 +1,7 @@
-import { Form, Input } from "antd"
-import './support-chat-room-page.css'
+import { Form, Input } from 'antd'
+import './support-chat-room-component.css'
 
-export const SupportChatRoomPage = () => {
+export const SupportChatRoomComponent = () => {
     
     const [form] = Form.useForm()
 
@@ -11,7 +11,7 @@ export const SupportChatRoomPage = () => {
     }
 
     return (
-        <div className='chat-container'>
+        <div className='room'>
             <div className='message-list'>
                 <Message belongsToSender={ true } />
                 <Message belongsToSender={ true } />
