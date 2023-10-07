@@ -36,3 +36,15 @@
     margin-top: 4px;
     border: 2px solid var(--headerBgColor);
 }
+
+@media screen and (max-width: 1024px) {
+    .room {
+        height: calc(100vh - 84px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .room {
+        width: 95%;
+    }
+}

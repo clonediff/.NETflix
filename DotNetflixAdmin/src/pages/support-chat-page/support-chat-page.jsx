@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr'
-import { Pagination } from 'antd'
+import { Button, Pagination } from 'antd'
 import { axiosInstance } from '../../axiosInstance'
 import CustomSpin from '../../custom-spin/custom-spin'
 import SupportChatRoomComponent from './support-chat-room-component'
@@ -46,29 +46,32 @@ const SupportChatPage = () => {
         !isLoading
         ?
         <div className='chat-container'>
-            <div className='chat-previews'>
-                {
-                    chatPreviews.map(preview => (
-                        <ChatPreview 
-                            key={ preview.roomId }
-                            preview={ preview }
-                            onClick={ (roomId) => setSelectedRoom(roomId) } />
-                    ))
-                }
-                {
-                    chatPreviews.length !== 0
-                    ?
-                    <Pagination 
-                        className='pagination'
-                        responsive
-                        showSizeChanger={ false }
-                        pageSize={ 25 }
-                        total={ chatPreviewsCount }
-                        onChange={ fetchPreviews } />
-                    :
-                    null
-                }
-            </div>
+            {
+                chatPreviews.length !== 0
+                ?
+                <>
+                    <Button className='show-chats' size='small'>&gt;</Button>
+                    <div className='chat-previews'>
+                        {
+                            chatPreviews.map(preview => (
+                                <ChatPreview 
+                                    key={ preview.roomId }
+                                    preview={ preview }
+                                    onClick={ (roomId) => setSelectedRoom(roomId) } />
+                            ))
+                        }
+                        <Pagination 
+                            className='pagination'
+                            responsive
+                            showSizeChanger={ false }
+                            pageSize={ 25 }
+                            total={ chatPreviewsCount }
+                            onChange={ fetchPreviews } />
+                    </div>
+                </>
+                :
+                null
+            }
             {
                 selectedRoom ? <SupportChatRoomComponent roomId={ selectedRoom } connection={ connection } /> : null
             }

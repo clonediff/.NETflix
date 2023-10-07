@@ -6,6 +6,10 @@
     gap: 18px;
 }
 
+.show-chats {
+    display: none;
+}
+
 .chat-previews {
     width: 30%;
     overflow-y: auto;
@@ -55,4 +59,35 @@
 
 .pagination {
     display: flex;
+}
+
+@media screen and (max-width: 1024px) {
+    .chat-container {
+        height: calc(100vh - 84px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .show-chats {
+        display: block;
+    }
+    .show-chats:hover + .chat-previews {
+        left: 18px;
+    }
+    .chat-container {
+        gap: 4px;
+    }
+    .chat-previews {
+        position: absolute;
+        height: calc(100vh - 78px);
+        width: 300px;
+        padding-right: 18px;
+        left: -300px;
+        background-color: white;
+        transition: 0.3s;
+        z-index: 1;
+    }
+    .chat-previews:hover {
+        left: 18px;
+    }
 }
