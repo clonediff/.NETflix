@@ -11,17 +11,15 @@ import FilmDetailsPage from './pages/film-datails-page/film-details-page'
 import { LoginPage } from './pages/login-page/login-page'
 import { useEffect } from 'react'
 import SupportChatPage from './pages/support-chat-page/support-chat-page'
-import { SupportChatRoomPage } from './pages/support-chat-page/support-chat-room-page'
 
 const App = () => {
     const isAuthenticated = localStorage.getItem('authenticated')
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(isAuthenticated)
-            navigate("/")
-        else
+        if(!isAuthenticated) {
             navigate("/login")
+        }
     }, [])
 
     return (
@@ -36,8 +34,7 @@ const App = () => {
                 <Route path='/users' element={ <UsersPage /> } />
                 <Route path='/subscriptions' element={ <SubscriptionPage /> } />
                 <Route path='/addsubscription' element={ <AddSubscriptionPage /> } />
-                <Route path='/support-chat/all' element={ <SupportChatPage /> } />
-                <Route path='/support-chat' element={ <SupportChatRoomPage /> } />
+                <Route path='/support-chat' element={ <SupportChatPage /> } />
             </Routes>
         </Layout> : 
         <Routes>

@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
                 <Link to='/users' className='navigation-links'>Пользователи</Link>
                 <Link to='/subscriptions' className='navigation-links'>Подписки</Link>
                 <Link to='/addsubscription' className='navigation-links'>Добавить подписку</Link>
-                <Link to='/support-chat/all' className='navigation-links'>Чат поддержки</Link>
+                <Link to='/support-chat' className='navigation-links'>Чат поддержки</Link>
             </div>
             <div className='header'>
             </div>
@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
                     <Link to='/users' className='navigation-links'>Пользователи</Link>
                     <Link to='/subscriptions' className='navigation-links'>Подписки</Link>
                     <Link to='/addsubscription' className='navigation-links'>Добавить подписку</Link>
-                    <Link to='/support-chat/all' className='navigation-links'>Чат поддержки</Link>
+                    <Link to='/support-chat' className='navigation-links'>Чат поддержки</Link>
                 </div>
             </div>
             <div className='content'>

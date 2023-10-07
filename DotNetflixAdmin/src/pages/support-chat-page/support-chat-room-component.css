@@ -1,5 +1,10 @@
-.chat-container {
+@import url(../../constants.css);
+
+.room {
+    position: sticky;
+    width: 65%;
     height: calc(100vh - 112px);
+    top: 0px;
 }
 
 .message-list {
@@ -25,4 +30,9 @@
     padding: 4px 8px;
     overflow-wrap: break-word;
     max-width: 50%;
+}
+
+.message-input {
+    margin-top: 4px;
+    border: 2px solid var(--headerBgColor);
 }
