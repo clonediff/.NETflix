@@ -3,7 +3,7 @@ using Contracts.Messages;
 using Microsoft.AspNetCore.SignalR;
 using Services.Abstractions;
 
-namespace DotNetflixAPI.Hub;
+namespace DotNetflixAPI.Hubs;
 
 public class ChatHub : Hub<IClient>
 {

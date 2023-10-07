@@ -9,7 +9,7 @@ using IdentityPasswordGenerator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using DotNetflixAPI.Hub;
+using DotNetflixAPI.Hubs;
 using Services;
 using Services.Abstractions;
 using Services.Infrastructure.EmailService;
@@ -208,5 +208,6 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.MapHub<ChatHub>("/chatHub");
+app.MapHub<SupportChatHub>("/supportChatHub");
 
 app.Run();
