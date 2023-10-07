@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using DotNetflixAPI.Hubs;
+using MassTransit;
 using Services;
 using Services.Abstractions;
 using Services.Infrastructure.EmailService;
@@ -29,6 +30,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
 builder.Services.AddCors();
+
+builder.Services.AddMassTransit(configurator =>
+{
+	configurator.UsingInMemory((ctx, cfg) =>
+	{
+		cfg.ConfigureEndpoints(ctx);
+	});
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDBContext>(options =>

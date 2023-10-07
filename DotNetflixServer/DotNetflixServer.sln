@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mappers", "Mappers\Mappers.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mappers.Admin", "Mappers.Admin\Mappers.Admin.csproj", "{21AA2CC3-C80A-429E-AE9C-133E3DD2688A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Shared", "Contracts.Shared\Contracts.Shared.csproj", "{B9C093D6-358C-4A10-B395-56914D60276C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{21AA2CC3-C80A-429E-AE9C-133E3DD2688A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21AA2CC3-C80A-429E-AE9C-133E3DD2688A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21AA2CC3-C80A-429E-AE9C-133E3DD2688A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C093D6-358C-4A10-B395-56914D60276C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C093D6-358C-4A10-B395-56914D60276C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C093D6-358C-4A10-B395-56914D60276C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C093D6-358C-4A10-B395-56914D60276C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

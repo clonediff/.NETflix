@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Contracts.Messages;
+using Contracts.Shared;
+using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DotNetflixAPI.Hubs;
@@ -8,7 +10,14 @@ public class SupportChatHub : Hub<IClient>
 {
     private static readonly ConcurrentDictionary<string, List<string>> _userConnections = new();
     private const string _adminName = "Администратор";
-    
+
+    private readonly IBus _bus;
+
+    public SupportChatHub(IBus bus)
+    {
+        _bus = bus;
+    }
+
     public async Task SendAsync(SendMessageDto dto)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
@@ -30,6 +39,13 @@ public class SupportChatHub : Hub<IClient>
         }
         
         await Clients.GroupExcept(groupName, _userConnections[Context.UserIdentifier ?? _adminName]).ReceiveAsync(messageForReceiver);
+
+        await _bus.Publish(new SupportChatMessage(
+            Content: dto.Message,
+            SendingDate: sendingDate,
+            IsReadByAdmin: dto.RoomId is not null,
+            IsFromAdmin: dto.RoomId is not null,
+            RoomId: groupName));
     }
 
     public override Task OnConnectedAsync()
