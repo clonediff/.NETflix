@@ -48,42 +48,46 @@ const SupportChatRoomComponent = ({ roomId, connection }) => {
     }
 
     return (
-        !isLoading
-        ?
         <div className='room'>
-            <div className='message-list'>
-                {
-                    messages.map((m, i) => (
-                        <Message
-                            key={ i }
-                            senderName={ m.senderName }
-                            message={ m.message }
-                            date={ m.sendingDate }
-                            belongsToSender={ m.belongsToSender } />
-                    ))
-                }
-                <div ref={ messagesEnd }></div>
-            </div>
-            <Form form={ form } onFinish={ sendForm } >
-                <Form.Item
-                    name='message' 
-                    initialValue=''
-                    noStyle
-                    rules={[
+            {
+                !isLoading
+                ?
+                <>
+                    <div className='message-list'>
                         {
-                            required: true,
-                            message: 'введите сообщение'
+                            messages.map((m, i) => (
+                                <Message
+                                    key={ i }
+                                    senderName={ m.senderName }
+                                    message={ m.message }
+                                    date={ m.sendingDate }
+                                    belongsToSender={ m.belongsToSender } />
+                            ))
                         }
-                    ]}>
-                    <Input className='message-input' placeholder='введите сообщение' />
-                </Form.Item>
-                <Form.Item noStyle>
-                    <button type='submit' hidden />
-                </Form.Item>
-            </Form>
+                        <div ref={ messagesEnd }></div>
+                    </div>
+                    <Form form={ form } onFinish={ sendForm } >
+                        <Form.Item
+                            name='message' 
+                            initialValue=''
+                            noStyle
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'введите сообщение'
+                                }
+                            ]}>
+                            <Input className='message-input' placeholder='введите сообщение' />
+                        </Form.Item>
+                        <Form.Item noStyle>
+                            <button type='submit' hidden />
+                        </Form.Item>
+                    </Form>
+                </>
+                :
+                <CustomSpin />
+            }
         </div>
-        :
-        <CustomSpin />
     )
 }
 
