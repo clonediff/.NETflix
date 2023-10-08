@@ -6,6 +6,7 @@ public class Message
     public string Content { get; set; } = default!;
     public DateTime SendingDate { get; set; }
     public bool IsRead { get; set; }
+    public bool IsFromAdmin { get; set; }
     public string UserId { get; set; } = default!;
     public User User { get; set; } = default!;
 }
