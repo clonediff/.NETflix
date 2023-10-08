@@ -8,8 +8,8 @@ namespace DotNetflixAPI.Hubs;
 
 public class SupportChatHub : Hub<IClient>
 {
-    private static readonly ConcurrentDictionary<string, List<string>> _userConnections = new();
-    private const string _adminName = "Администратор";
+    private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
+    private const string AdminName = "Администратор";
 
     private readonly IBus _bus;
 
@@ -24,21 +24,21 @@ public class SupportChatHub : Hub<IClient>
         
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         
-        var userName = Context.User?.Identity?.Name ?? _adminName;
+        var userName = Context.User?.Identity?.Name ?? AdminName;
         var sendingDate = DateTime.Now;
         var messageForSender = new MessageDto(dto.Message, userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         if (Context.UserIdentifier is null)
         {
-            await Clients.GroupExcept(groupName, _userConnections[groupName]).ReceiveAsync(messageForSender);
+            await Clients.GroupExcept(groupName, UserConnections[groupName]).ReceiveAsync(messageForSender);
         }
         else
         {
             await Clients.User(Context.UserIdentifier!).ReceiveAsync(messageForSender);
         }
         
-        await Clients.GroupExcept(groupName, _userConnections[Context.UserIdentifier ?? _adminName]).ReceiveAsync(messageForReceiver);
+        await Clients.GroupExcept(groupName, UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
 
         await _bus.Publish(new SupportChatMessage(
             Content: dto.Message,
@@ -50,8 +50,8 @@ public class SupportChatHub : Hub<IClient>
 
     public override Task OnConnectedAsync()
     {
-        _userConnections.AddOrUpdate(
-            key: Context.UserIdentifier ?? _adminName,
+        UserConnections.AddOrUpdate(
+            key: Context.UserIdentifier ?? AdminName,
             addValue: new List<string>
             {
                 Context.ConnectionId
@@ -67,7 +67,7 @@ public class SupportChatHub : Hub<IClient>
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        _userConnections[Context.UserIdentifier ?? _adminName].Remove(Context.ConnectionId);
+        UserConnections[Context.UserIdentifier ?? AdminName].Remove(Context.ConnectionId);
 
         return Task.CompletedTask;
     }
