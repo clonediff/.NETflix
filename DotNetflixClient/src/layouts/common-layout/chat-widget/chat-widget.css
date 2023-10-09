@@ -1,0 +1,175 @@
+@import url(../../../constants.css);
+
+h2{
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 10%;
+    margin-inline-end: 10%;
+    font-weight: bold;
+}
+
+.chat_button {
+    right: 24px;
+    bottom: 24px;
+    z-index: 1;
+}
+
+/* The Modal (background) */
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    margin-bottom: 100px;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+  
+  /* Modal Content */
+.modal-content {
+    border-radius: 20px;
+    position: absolute;
+    right: 2em;
+    bottom: 7em;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 20em;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatemodal;
+    -webkit-animation-duration: 0.8s;
+    animation-name: animatemodal;
+    animation-duration: 0.8s
+}
+  
+  /* Add Animation */
+@-webkit-keyframes animatemodal {
+    from {opacity:0} 
+    to {opacity:1}
+}
+  
+@keyframes animatemodal {
+    from {opacity:0}
+    to {opacity:1}
+}
+
+  /* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+.modal-header {
+    height: 3em;
+    border-radius: 20px 20px 0 0;
+    padding: 2px 16px;
+    background-color: var(--search-bg-color);
+    color: white;
+}
+
+.modal-body {
+    padding: 2px 16px;
+    height: 20em;
+}
+
+.modal-footer {
+    height: 3em;
+    border-radius: 0 0 20px 20px;
+    padding: 2px 16px;
+    background-color: var(--search-bg-color);
+    color: white;
+}
+
+.message-enter  {
+    height: 2em !important;
+}
+
+.message-list {
+    height: 95%;
+    overflow-y: auto;
+}
+
+.message-list::-webkit-scrollbar {
+    display: none;
+}
+
+.message-wrapper {
+    display: flex;
+}
+
+.message-wrapper {
+    margin-bottom: 6px;
+}
+
+.message {
+    border-radius: 8px;
+    color: white;
+    padding: 4px 8px;
+    overflow-wrap: break-word;
+    max-width: 50%;
+}
+
+.message-input {
+    margin-top: 4px;
+    border: 2px solid var(--header-bg-color);
+}
+
+@media screen and (max-width: 920px) {
+    .modal-content{
+        bottom: 20%;
+    }
+    .modal-body  {
+        height: 15em;
+    }
+    .modal-content {
+        width: 15em;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .modal-body  {
+        height: 15em;
+    }
+    .modal-content {
+        width: 15em;
+    }
+}
+@media screen and (max-width: 600px) {
+    .modal-header{
+        height: 2em;
+    }
+    .modal-body  {
+        height: 15em;
+    }
+    .modal-content {
+        width: 15em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .modal-header{
+        height: 2em;
+    }
+    .modal-body  {
+        height: 13em;
+    }
+    .modal-content {
+        width: 11em;
+    }
+}
