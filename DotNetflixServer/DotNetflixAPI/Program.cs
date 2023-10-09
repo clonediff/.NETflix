@@ -13,6 +13,7 @@ using DotNetflixAPI.Hubs;
 using MassTransit;
 using Services;
 using Services.Abstractions;
+using Services.Infrastructure.Consumers;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
@@ -34,6 +35,7 @@ builder.Services.AddCors();
 
 builder.Services.AddMassTransit(configurator =>
 {
+	configurator.AddConsumer<SupportChatMessageConsumer>();
 	configurator.UsingInMemory((ctx, cfg) =>
 	{
 		cfg.ConfigureEndpoints(ctx);

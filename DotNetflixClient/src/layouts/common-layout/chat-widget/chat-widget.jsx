@@ -40,8 +40,8 @@ const ChatWidget = () => {
             connection.on('ReceiveAsync', (message) => {
                 setMessages(prevState => [ ...prevState, message ]);
             });
+            loadHistory();
         }
-        loadHistory();
     }, [isStarted])
 
     useEffect(() => {

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Abstractions;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAPI.Controllers;
@@ -10,15 +12,19 @@ namespace DotNetflixAPI.Controllers;
 public class SupportChatController : Controller
 {
     private readonly ISupportChatService _supportChatService;
+    private readonly IUserService _userService;
     
-    public SupportChatController(ISupportChatService supportChatService)
+    public SupportChatController(ISupportChatService supportChatService, IUserService userService)
     {
         _supportChatService = supportChatService;
+        _userService = userService;
     }
 
     [HttpGet("[action]")]
-    public IActionResult History([FromQuery]string roomId)
+    public async Task<IActionResult> History()
     {
-        return Ok(_supportChatService.GetHistory(roomId, true));
+        var userId = await _userService.GetUserIdAsync(HttpContext.User);
+        
+        return Ok(_supportChatService.GetHistory(userId!, false));
     }
 }
