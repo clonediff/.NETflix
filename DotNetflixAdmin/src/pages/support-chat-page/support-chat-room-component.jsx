@@ -4,7 +4,7 @@ import { axiosInstance } from '../../axiosInstance'
 import CustomSpin from '../../custom-spin/custom-spin'
 import './support-chat-room-component.css'
 
-const SupportChatRoomComponent = ({ roomId, connection, onLoad, onMessageSent }) => {
+const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMessage }) => {
     
     const [isLoading, setIsLoading] = useState(true)
     const [messages, setMessages] = useState([])
@@ -14,6 +14,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, onMessageSent })
     useEffect(() => {
         if (connection) {
             connection.on('ReceiveAsync', (message) => { 
+                updateLatestMessage(roomId, message.senderName, message.message)
                 setMessages(prevState => [ ...prevState, message ])
             })
         }
@@ -42,7 +43,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, onMessageSent })
 
     const sendForm = (values) => {
         form.setFieldValue('message', undefined)
-        onMessageSent(roomId, 'Администратор', values.message)
+        updateLatestMessage(roomId, 'Администратор', values.message)
         connection.invoke('SendAsync', {
             message: values.message,
             roomId: roomId

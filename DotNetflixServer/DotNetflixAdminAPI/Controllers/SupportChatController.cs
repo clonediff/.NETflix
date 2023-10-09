@@ -20,14 +20,13 @@ public class SupportChatController : Controller
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> Preview([FromQuery]int page)
+    public async Task<IActionResult> Preview([FromQuery] int page, [FromQuery] int size)
     {
-        int pageSize = 25;
-        return Ok(await _adminSupportChatService.GetPreviewsAsync(page, pageSize));
+        return Ok(await _adminSupportChatService.GetPreviewsAsync(page, size));
     }
 
     [HttpGet("[action]")]
-    public IActionResult History([FromQuery]string roomId)
+    public IActionResult History([FromQuery] string roomId)
     {
         return Ok(_supportChatService.GetHistory(roomId, true));
     }

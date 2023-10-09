@@ -35,7 +35,7 @@ const SupportChatPage = () => {
     }, [connection])
 
     const fetchPreviews = (page, _) => {
-        axiosInstance.get(`api/support-chat/preview/?page=${page}`)
+        axiosInstance.get(`api/support-chat/preview/?page=${page}&size=25`)
             .then(({ data }) => {
                 setChatPreviews(data.data)
                 setChatPreviewsCount(data.count)
@@ -92,7 +92,7 @@ const SupportChatPage = () => {
                     roomId={ selectedRoom } 
                     connection={ connection } 
                     onLoad={ markMessagesAsRead }
-                    onMessageSent={ updateMessagePreview } /> 
+                    updateLatestMessage={ updateMessagePreview } /> 
                 : 
                 null
             }
