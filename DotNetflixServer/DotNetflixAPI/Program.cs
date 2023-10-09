@@ -16,6 +16,7 @@ using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
+using Services.Shared.SupportChatService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -136,6 +137,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordGenerator, PasswordGenerator>();
 builder.Services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
+builder.Services.AddScoped<ISupportChatService, SupportChatService>();
 
 var app = builder.Build();
 
