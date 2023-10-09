@@ -1,5 +1,7 @@
-﻿using Contracts.Admin.Messages;
+﻿using Contracts.Admin.DataRepresentation;
+using Contracts.Admin.Messages;
 using DataAccess;
+using Domain.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,13 +36,12 @@ public class SupportChatController : Controller
                     LatestMessage = x.OrderByDescending(y => y.SendingDate).First(),
                     UnreadMessages = x.Count(y => !y.IsRead)
                 })
-            .Skip(pageSize * (page - 1))
-            .Take(pageSize)
+            .Paginate(page, pageSize)
             .AsEnumerable()
             .Select(x =>
                 new PreviewMessageDto(x.RoomId, x.LatestMessage.IsFromAdmin ? AdminName : x.LatestMessage.User.UserName!, x.LatestMessage.Content,
                     x.UnreadMessages))
             .ToList();
-        return Ok(new PreviewMessagesPageDto(messages, messages.Count));
+        return Ok(new PaginationDataDto<PreviewMessageDto>(messages, messages.Count));
     }
 }
