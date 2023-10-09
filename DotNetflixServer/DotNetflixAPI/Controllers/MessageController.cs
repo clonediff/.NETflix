@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Contracts.Messages;
+using Contracts.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;

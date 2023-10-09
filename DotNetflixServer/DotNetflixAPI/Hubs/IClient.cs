@@ -1,4 +1,4 @@
-﻿using Contracts.Messages;
+﻿using Contracts.Shared;
 
 namespace DotNetflixAPI.Hubs;
 

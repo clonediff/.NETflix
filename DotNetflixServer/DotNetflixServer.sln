@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mappers.Admin", "Mappers.Ad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Shared", "Contracts.Shared\Contracts.Shared.csproj", "{B9C093D6-358C-4A10-B395-56914D60276C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Shared", "Services.Shared\Services.Shared.csproj", "{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{B9C093D6-358C-4A10-B395-56914D60276C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9C093D6-358C-4A10-B395-56914D60276C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9C093D6-358C-4A10-B395-56914D60276C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

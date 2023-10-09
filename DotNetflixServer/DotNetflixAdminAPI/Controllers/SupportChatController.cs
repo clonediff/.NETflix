@@ -1,10 +1,7 @@
-﻿using Contracts.Admin.DataRepresentation;
-using Contracts.Admin.Messages;
-using DataAccess;
-using Domain.Extensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Services.Admin.Abstractions;
+using Services.Shared.SupportChatService;
 
 namespace DotNetflixAdminAPI.Controllers;
 
@@ -13,35 +10,32 @@ namespace DotNetflixAdminAPI.Controllers;
 [Authorize(Policy = "Admin")]
 public class SupportChatController : Controller
 {
-    private readonly ApplicationDBContext _context;
+    private readonly IAdminSupportChatService _adminSupportChatService;
+    private readonly ISupportChatService _supportChatService;
     
-    private const string AdminName = "Администратор";
-
-    public SupportChatController(ApplicationDBContext context)
+    public SupportChatController(IAdminSupportChatService adminSupportChatService, ISupportChatService supportChatService)
     {
-        _context = context;
+        _adminSupportChatService = adminSupportChatService;
+        _supportChatService = supportChatService;
     }
 
     [HttpGet("[action]")]
-    public IActionResult Preview(int page)
+    public async Task<IActionResult> Preview([FromQuery]int page)
     {
         int pageSize = 25;
-        var messages = _context.Messages
-            .Include(x => x.User)
-            .GroupBy(x => x.User)
-            .Select(x =>
-                new
-                {
-                    RoomId = x.Key.Id,
-                    LatestMessage = x.OrderByDescending(y => y.SendingDate).First(),
-                    UnreadMessages = x.Count(y => !y.IsRead)
-                })
-            .Paginate(page, pageSize)
-            .AsEnumerable()
-            .Select(x =>
-                new PreviewMessageDto(x.RoomId, x.LatestMessage.IsFromAdmin ? AdminName : x.LatestMessage.User.UserName!, x.LatestMessage.Content,
-                    x.UnreadMessages))
-            .ToList();
-        return Ok(new PaginationDataDto<PreviewMessageDto>(messages, messages.Count));
+        return Ok(await _adminSupportChatService.GetPreviewsAsync(page, pageSize));
+    }
+
+    [HttpGet("[action]")]
+    public IActionResult History([FromQuery]string roomId)
+    {
+        return Ok(_supportChatService.GetHistory(roomId, true));
+    }
+
+    [HttpPatch("[action]")]
+    public async Task<IActionResult> MarkAsRead([FromQuery] string roomId)
+    {
+        await _adminSupportChatService.MarkAsReadAsync(roomId);
+        return Ok();
     }
 }
