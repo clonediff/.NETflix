@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Services.Admin;
 using Services.Admin.Abstractions;
 using Services.Infrastructure.EmailService;
+using Services.Shared;
+using Services.Shared.SupportChatService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,8 @@ builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IFilmPersonService, FilmPersonService>();
 builder.Services.AddScoped<IEnumService, EnumService>();
 builder.Services.AddScoped<IAdminAuthService, AdminAuthService>();
+builder.Services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
+builder.Services.AddScoped<ISupportChatService, SupportChatService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
