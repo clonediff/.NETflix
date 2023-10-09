@@ -22,7 +22,7 @@ public class SupportChatController : Controller
     [HttpGet("[action]")]
     public async Task<IActionResult> Preview([FromQuery]int page)
     {
-        int pageSize = 25;
+        var pageSize = 25;
         return Ok(await _adminSupportChatService.GetPreviewsAsync(page, pageSize));
     }
 
