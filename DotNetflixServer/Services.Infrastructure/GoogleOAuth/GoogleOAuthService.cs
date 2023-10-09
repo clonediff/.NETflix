@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth.Google;
 
 namespace Services.Infrastructure.GoogleOAuth;
@@ -22,13 +23,15 @@ public class GoogleOAuthService : IGoogleOAuth
     private readonly GoogleSecrets _googleSecrets;
     private readonly PasswordOptions _passwordOptions;
     private readonly HttpContext _httpContext;
+    private readonly IEmailService _emailService;
 
     public GoogleOAuthService(IOptions<GoogleSecrets> googleSecrets,
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IPasswordGenerator passwordGenerator,
         HttpClient client,
-        IHttpContextAccessor contextAccessor)
+        IHttpContextAccessor contextAccessor, 
+        IEmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -41,6 +44,7 @@ public class GoogleOAuthService : IGoogleOAuth
             RequiredUniqueChars = 6,
         };
         _httpContext = contextAccessor.HttpContext!;
+        _emailService = emailService;
     }
 
 
@@ -83,13 +87,17 @@ public class GoogleOAuthService : IGoogleOAuth
         if (existingUser is null)
         {
             user = new User {Email = email, UserName = email};
+
+            await _emailService.SendEmailAsync(user.Email!, "Пароль от аккаунта на .Netflix",
+                $"Вы авторизовались через Google. Ваш пароль: {password}");
+            
             var identityRes = await _userManager.CreateAsync(user, password);
         
             if (identityRes.Succeeded)
             {
                 await _userManager.AddLoginAsync(user, info);
                 
-                await _userManager.AddClaimAsync(user, new Claim("level", "user"));
+                await _userManager.AddToRoleAsync(user, "user");
             }
             var loginRes = await _signInManager
                 .ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true, true);

@@ -9,12 +9,14 @@ using IdentityPasswordGenerator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using DotNetflixAPI.Hub;
+using DotNetflixAPI.Hubs;
+using MassTransit;
 using Services;
 using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
+using Services.Shared.SupportChatService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
 builder.Services.AddCors();
+
+builder.Services.AddMassTransit(configurator =>
+{
+	configurator.UsingInMemory((ctx, cfg) =>
+	{
+		cfg.ConfigureEndpoints(ctx);
+	});
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
@@ -127,6 +137,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordGenerator, PasswordGenerator>();
 builder.Services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
+builder.Services.AddScoped<ISupportChatService, SupportChatService>();
 
 var app = builder.Build();
 
@@ -208,5 +219,6 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.MapHub<ChatHub>("/chatHub");
+app.MapHub<SupportChatHub>("/supportChatHub");
 
 app.Run();

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Services.Admin.Abstractions\Services.Admin.Abstractions.csproj" />
     <ProjectReference Include="..\Services.Admin\Services.Admin.csproj" />
     <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
   </ItemGroup>
 
 </Project>

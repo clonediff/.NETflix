@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
     <PackageReference Include="IdentityPasswordGenerator" Version="1.0.5" />
+    <PackageReference Include="MassTransit" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.4" />
@@ -23,10 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contracts.Shared\Contracts.Shared.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 

@@ -1,0 +1,50 @@
+@import url(../../constants.css);
+
+.room {
+    position: sticky;
+    width: 65%;
+    height: calc(100vh - 112px);
+    top: 0px;
+}
+
+.message-list {
+    height: 95%;
+    overflow-y: auto;
+}
+
+.message-list::-webkit-scrollbar {
+    display: none;
+}
+
+.message-wrapper {
+    display: flex;
+}
+
+.message-wrapper {
+    margin-bottom: 6px;
+}
+
+.message {
+    border-radius: 8px;
+    color: white;
+    padding: 4px 8px;
+    overflow-wrap: break-word;
+    max-width: 50%;
+}
+
+.message-input {
+    margin-top: 4px;
+    border: 2px solid var(--headerBgColor);
+}
+
+@media screen and (max-width: 1024px) {
+    .room {
+        height: calc(100vh - 84px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .room {
+        width: 95%;
+    }
+}
