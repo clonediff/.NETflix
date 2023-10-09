@@ -42,6 +42,19 @@ const SupportChatPage = () => {
             })
     }
 
+    const markMessagesAsRead = (roomId) => {
+        const newChatPreview = chatPreviews.find(p => p.roomId === roomId)
+        newChatPreview.totalUnReadMessages = 0
+        setChatPreviews([ ...chatPreviews ])
+    }
+
+    const updateMessagePreview = (roomId, userName, latestMessage) => {
+        const newChatPreview = chatPreviews.find(p => p.roomId === roomId)
+        newChatPreview.userName = userName
+        newChatPreview.latestMessage = latestMessage
+        setChatPreviews([ ...chatPreviews ])
+    }
+
     return (
         !isLoading
         ?
@@ -73,7 +86,15 @@ const SupportChatPage = () => {
                 null
             }
             {
-                selectedRoom ? <SupportChatRoomComponent roomId={ selectedRoom } connection={ connection } /> : null
+                selectedRoom 
+                ? 
+                <SupportChatRoomComponent 
+                    roomId={ selectedRoom } 
+                    connection={ connection } 
+                    onLoad={ markMessagesAsRead }
+                    onMessageSent={ updateMessagePreview } /> 
+                : 
+                null
             }
         </div>
         :
@@ -85,7 +106,13 @@ const ChatPreview = ({ onClick, preview }) => {
     return (
         <div className='chat-item' onClick={ () => onClick(preview.roomId) }>
             <span className='latest-message'>{ preview.userName }: { preview.latestMessage }</span>
-            <span className='unread-counter'>{ preview.totalUnReadMessages }</span>
+            {
+                preview.totalUnReadMessages !== 0
+                ?
+                <span className='unread-counter'>{ preview.totalUnReadMessages }</span>
+                :
+                null
+            }
         </div>
     )
 }
