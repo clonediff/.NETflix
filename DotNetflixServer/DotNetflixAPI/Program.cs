@@ -13,10 +13,10 @@ using DotNetflixAPI.Hubs;
 using MassTransit;
 using Services;
 using Services.Abstractions;
-using Services.Infrastructure.Consumers;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
+using Services.Shared.RabbitMq;
 using Services.Shared.SupportChatService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,9 +35,10 @@ builder.Services.AddCors();
 
 builder.Services.AddMassTransit(configurator =>
 {
-	configurator.AddConsumer<SupportChatMessageConsumer>();
-	configurator.UsingInMemory((ctx, cfg) =>
+	configurator.UsingRabbitMq((ctx, cfg) =>
 	{
+		var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
+		cfg.Host(rabbitMqConfig.FullHostname);
 		cfg.ConfigureEndpoints(ctx);
 	});
 });
