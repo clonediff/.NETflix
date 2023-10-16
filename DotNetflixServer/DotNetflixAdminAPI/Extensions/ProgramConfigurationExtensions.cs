@@ -1,0 +1,79 @@
+﻿using DataAccess;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Services.Admin;
+using Services.Admin.Abstractions;
+using Services.Infrastructure.EmailService;
+using Services.Shared.SupportChatService;
+
+namespace DotNetflixAdminAPI.Extensions;
+
+public static class ProgramConfigurationExtensions
+{
+    public static IServiceCollection AddApplicationDb<TDbContext>(this IServiceCollection services, string? connectionString)
+        where TDbContext : DbContext
+    {
+        services.AddDbContext<TDbContext>(options =>
+        {
+            options.LogTo(Console.WriteLine);
+            options.UseSqlServer(connectionString);
+        });
+
+        services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDBContext>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddAuth(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("User", pb => pb
+                .RequireRole("user", "manager", "admin"));
+            options.AddPolicy("Manager", pb => pb
+                .RequireRole("manager", "admin"));
+            options.AddPolicy("Admin", pb => pb
+                .RequireRole("admin"));
+        });
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.HttpOnly = true;
+        });
+        return services;
+    }
+
+    public static IServiceCollection RegisterServices(this IServiceCollection services)
+    {
+        services.AddScoped<IFilmService, FilmService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
+        services.AddScoped<IFilmPersonService, FilmPersonService>();
+        services.AddScoped<IEnumService, EnumService>();
+        services.AddScoped<IAdminAuthService, AdminAuthService>();
+        services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
+        services.AddScoped<ISupportChatService, SupportChatService>();
+        
+        return services;
+    }
+
+    public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<EmailConfig>(configuration.GetSection("SmtpSetting"));
+        return services;
+    }
+    
+    public static async Task MigrateDatabase(this WebApplication app)
+    {
+        using var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+
+        await using var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+
+        await dbContext.Database.MigrateAsync();
+    }
+}
