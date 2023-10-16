@@ -4,6 +4,7 @@ using DotNetflixAPI.Middleware;
 using DataAccess;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
+using Services.Shared.RabbitMq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +13,14 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddSignalR();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 builder.Services
 	.AddEndpointsApiExplorer()
 	.AddSwaggerGen()
 	.AddCors()
 	.ConfigureOptions(builder.Configuration)
-	.AddMassTransitRabbitMq(builder.Configuration)
-	.AddApplicationDb<ApplicationDBContext>(connectionString, builder.Environment)
+	.AddMassTransitRabbitMq(rabbitMqConfig)
+	.AddApplicationDb(connectionString, builder.Environment)
 	.AddAuth()
 	.AddGoogleOAuth(builder.Configuration)
 	.RegisterServices()

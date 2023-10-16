@@ -11,10 +11,9 @@ namespace DotNetflixAdminAPI.Extensions;
 
 public static class ProgramConfigurationExtensions
 {
-    public static IServiceCollection AddApplicationDb<TDbContext>(this IServiceCollection services, string? connectionString)
-        where TDbContext : DbContext
+    public static IServiceCollection AddApplicationDb(this IServiceCollection services, string? connectionString)
     {
-        services.AddDbContext<TDbContext>(options =>
+        services.AddDbContext<ApplicationDBContext>(options =>
         {
             options.LogTo(Console.WriteLine);
             options.UseSqlServer(connectionString);

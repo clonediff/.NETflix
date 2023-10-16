@@ -23,13 +23,12 @@ namespace DotNetflixAPI.Extensions;
 public static class ProgramConfigurationExtensions
 {
     public static IServiceCollection AddMassTransitRabbitMq(this IServiceCollection services,
-        IConfiguration configuration)
+        RabbitMqConfig rabbitMqConfig)
     {
         services.AddMassTransit(configurator =>
         {
             configurator.UsingRabbitMq((ctx, cfg) =>
             {
-                var rabbitMqConfig = configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
                 cfg.Host(rabbitMqConfig.FullHostname);
                 cfg.ConfigureEndpoints(ctx);
             });
@@ -37,9 +36,8 @@ public static class ProgramConfigurationExtensions
         return services;
     }
 
-    public static IServiceCollection AddApplicationDb<TDbContext>(this IServiceCollection services,
+    public static IServiceCollection AddApplicationDb(this IServiceCollection services,
         string? connectionString, IWebHostEnvironment environment)
-        where TDbContext : DbContext
     {
         services.AddDbContext<ApplicationDBContext>(options =>
             {

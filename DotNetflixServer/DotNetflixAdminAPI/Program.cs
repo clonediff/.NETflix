@@ -13,7 +13,7 @@ builder.Services
     .AddSwaggerGen()
     .AddCors()
     .ConfigureOptions(builder.Configuration)
-    .AddApplicationDb<ApplicationDBContext>(connectionString)
+    .AddApplicationDb(connectionString)
     .AddAuth()
     .RegisterServices()
     .AddControllers()
