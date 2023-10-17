@@ -1,6 +1,7 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
 using DotNetflixAPI.Middleware;
@@ -15,7 +16,6 @@ using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
-using Services.Shared.RabbitMq;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAPI.Extensions;

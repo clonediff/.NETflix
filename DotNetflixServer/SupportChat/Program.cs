@@ -1,4 +1,4 @@
-using Services.Shared.RabbitMq;
+using Configuration.Shared.RabbitMq;
 using SupportChat.ServicesExtensions;
 
 var builder = WebApplication.CreateBuilder(args);

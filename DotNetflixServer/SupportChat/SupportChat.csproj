@@ -16,6 +16,7 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\Configuration.Shared\Configuration.Shared.csproj" />
       <ProjectReference Include="..\Contracts.Shared\Contracts.Shared.csproj" />
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />

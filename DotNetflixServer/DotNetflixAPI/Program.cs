@@ -1,10 +1,9 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using Configuration.Shared.RabbitMq;
 using DotNetflixAPI.Middleware;
-using DataAccess;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
-using Services.Shared.RabbitMq;
 
 var builder = WebApplication.CreateBuilder(args);
 

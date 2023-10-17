@@ -1,9 +1,9 @@
-﻿using DataAccess;
+﻿using Configuration.Shared.RabbitMq;
+using DataAccess;
 using Domain.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Services.Shared.RabbitMq;
 using SupportChat.Consumers;
 
 namespace SupportChat.ServicesExtensions;
