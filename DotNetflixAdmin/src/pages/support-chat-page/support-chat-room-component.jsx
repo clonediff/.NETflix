@@ -22,7 +22,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         loadHistory()
         setIsLoading(false)
         markMessagesAsRead()
-    }, [])
+    }, [roomId])
     
     useEffect(() => {    
         if (messagesEnd) {
