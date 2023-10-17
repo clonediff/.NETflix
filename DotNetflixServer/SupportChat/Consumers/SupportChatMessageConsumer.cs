@@ -3,7 +3,7 @@ using DataAccess;
 using Domain.Entities;
 using MassTransit;
 
-namespace Services.Infrastructure.Consumers;
+namespace SupportChat.Consumers;
 
 public class SupportChatMessageConsumer : IConsumer<SupportChatMessage>
 {

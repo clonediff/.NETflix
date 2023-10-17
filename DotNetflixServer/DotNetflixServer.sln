@@ -39,6 +39,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Application", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Admin.Application", "DotNetflix.Admin.Application\DotNetflix.Admin.Application.csproj", "{F4A9B224-2443-43DB-885E-07526D6620B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportChat", "SupportChat\SupportChat.csproj", "{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FA5A2799-258C-4215-A32C-094E3FC4F44A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.Shared", "Configuration.Shared\Configuration.Shared.csproj", "{F18CF318-699D-4309-895A-BB1701C0D3BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,11 +123,25 @@ Global
 		{F4A9B224-2443-43DB-885E-07526D6620B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4A9B224-2443-43DB-885E-07526D6620B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4A9B224-2443-43DB-885E-07526D6620B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F18CF318-699D-4309-895A-BB1701C0D3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18CF318-699D-4309-895A-BB1701C0D3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18CF318-699D-4309-895A-BB1701C0D3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18CF318-699D-4309-895A-BB1701C0D3BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {739CDCD3-510A-4F43-B549-1D1703769778}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B9C093D6-358C-4A10-B395-56914D60276C} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
+		{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
+		{F18CF318-699D-4309-895A-BB1701C0D3BA} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
+    {55D630EC-1C17-429A-B944-D83B606697CB} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
 	EndGlobalSection
 EndGlobal
