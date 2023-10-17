@@ -33,6 +33,7 @@ public static class ProgramConfigurationExtensions
                 cfg.ConfigureEndpoints(ctx);
             });
         });
+        
         return services;
     }
 
@@ -43,7 +44,8 @@ public static class ProgramConfigurationExtensions
             {
                 options.LogTo(Console.WriteLine);
                 options.UseSqlServer(connectionString);
-            }).AddIdentity<User, IdentityRole>(options =>
+            })
+            .AddIdentity<User, IdentityRole>(options =>
             {
                 if (environment.IsDevelopment())
                 {
@@ -88,7 +90,6 @@ public static class ProgramConfigurationExtensions
 
     public static IServiceCollection AddGoogleOAuth(this IServiceCollection services, IConfiguration configuration)
     {
-
         services.Configure<CookieAuthenticationOptions>(IdentityConstants.ExternalScheme, options =>
         {
             options.LoginPath = new PathString("/api/oauth/google");
@@ -100,9 +101,8 @@ public static class ProgramConfigurationExtensions
 
                 if (ctx.Request.Path.StartsWithSegments(new PathString("/api/oauth/google")))
                 {
-                    var properties = signInManager.ConfigureExternalAuthenticationProperties
-                    (GoogleDefaults.AuthenticationScheme,
-                        configuration.GetValue<string>("ApiOAuth"));
+                    var properties = signInManager.ConfigureExternalAuthenticationProperties(
+                        GoogleDefaults.AuthenticationScheme, configuration.GetValue<string>("ApiOAuth"));
                     await ctx.HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, properties);
                     return;
                 }
@@ -119,6 +119,7 @@ public static class ProgramConfigurationExtensions
                 options.ClientSecret = configuration.GetSection("GoogleOAuth")
                     .GetValue<string>("ClientSecret") ?? string.Empty;
             });
+        
         return services;
     }
 
@@ -126,6 +127,7 @@ public static class ProgramConfigurationExtensions
     {
         services.Configure<EmailConfig>(configuration.GetSection("SmtpSetting"));
         services.Configure<GoogleSecrets>(configuration.GetSection("GoogleOAuth"));
+        
         return services;
     }
 
@@ -146,6 +148,7 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
         services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
+        
         return services;
     }
 

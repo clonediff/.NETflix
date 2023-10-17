@@ -47,6 +47,6 @@ app.MapControllers();
 
 app.UseHttpsRedirection();
 
-await app.MigrateDatabase();
+await app.MigrateDatabaseAsync();
 
 app.Run();

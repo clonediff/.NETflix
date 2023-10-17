@@ -14,12 +14,11 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection AddApplicationDb(this IServiceCollection services, string? connectionString)
     {
         services.AddDbContext<ApplicationDBContext>(options =>
-        {
-            options.LogTo(Console.WriteLine);
-            options.UseSqlServer(connectionString);
-        });
-
-        services.AddIdentity<User, IdentityRole>()
+            {
+                options.LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString);
+            })
+            .AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDBContext>();
 
         return services;
@@ -43,6 +42,7 @@ public static class ProgramConfigurationExtensions
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.HttpOnly = true;
         });
+
         return services;
     }
 
@@ -57,7 +57,7 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IAdminAuthService, AdminAuthService>();
         services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
-        
+
         return services;
     }
 
@@ -66,8 +66,8 @@ public static class ProgramConfigurationExtensions
         services.Configure<EmailConfig>(configuration.GetSection("SmtpSetting"));
         return services;
     }
-    
-    public static async Task MigrateDatabase(this WebApplication app)
+
+    public static async Task MigrateDatabaseAsync(this WebApplication app)
     {
         using var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
 

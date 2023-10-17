@@ -13,12 +13,13 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection AddApplicationDb(this IServiceCollection services, string? connectionString)
     {
         services.AddDbContext<ApplicationDBContext>(options =>
-        {
-            options.LogTo(Console.WriteLine);
-            options.UseSqlServer(connectionString);
-        });
-        services.AddIdentity<User, IdentityRole>()
+            {
+                options.LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString);
+            })
+            .AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDBContext>();
+        
         return services;
     }
     
@@ -34,6 +35,7 @@ public static class ProgramConfigurationExtensions
                 cfg.ConfigureEndpoints(ctx);
             });
         });
+        
         return services;
     }
 }
