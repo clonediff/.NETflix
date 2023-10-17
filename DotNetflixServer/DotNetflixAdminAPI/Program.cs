@@ -1,4 +1,3 @@
-using DataAccess;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using DotNetflixAdminAPI.Extensions;

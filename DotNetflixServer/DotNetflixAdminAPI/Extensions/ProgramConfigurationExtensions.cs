@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain.Entities;
+using DotNetflix.Admin.Application;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.Admin;
@@ -51,12 +52,12 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IFilmService, FilmService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IFilmPersonService, FilmPersonService>();
         services.AddScoped<IEnumService, EnumService>();
         services.AddScoped<IAdminAuthService, AdminAuthService>();
         services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
+        services.AddApplicationServices();
 
         return services;
     }
