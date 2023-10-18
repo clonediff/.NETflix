@@ -2,4 +2,4 @@
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.ChangeSubscriptionAvailability;
 
-public record ChangeSubscriptionAvailabilityCommand(ChangeSubscriptionAvailabilityDto Dto) : ICommand;
+public record ChangeSubscriptionAvailabilityCommand(int Id, bool IsAvailable) : ICommand;

@@ -2,4 +2,4 @@
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.AddSubscription;
 
-public record AddSubscriptionCommand(AddSubscriptionDto Dto) : ICommand;
+public record AddSubscriptionCommand(string Name, int Cost, int? PeriodInDays) : ICommand;

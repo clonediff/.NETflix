@@ -17,10 +17,10 @@ internal class UpdateSubscriptionCommandHandler : ICommandHandler<UpdateSubscrip
     {
         _dbContext.Subscriptions.Update(new Subscription
         {
-            Id = request.Dto.Id,
-            Cost = request.Dto.Cost,
-            Name = request.Dto.Name,
-            PeriodInDays = request.Dto.PeriodInDays
+            Id = request.Id,
+            Cost = request.Cost,
+            Name = request.Name,
+            PeriodInDays = request.PeriodInDays
         });
 
         await _dbContext.SaveChangesAsync(cancellationToken);

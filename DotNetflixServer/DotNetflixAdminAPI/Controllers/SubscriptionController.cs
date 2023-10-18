@@ -65,7 +65,7 @@ public class SubscriptionController : ControllerBase
     [HttpPost("[action]")]
     public async Task AddAsync([FromBody] AddSubscriptionDto dto)
     {
-        var command = new AddSubscriptionCommand(dto);
+        var command = new AddSubscriptionCommand(dto.Name, dto.Cost, dto.PeriodInDays);
         await _mediator.Send(command);
     }
 
@@ -74,7 +74,7 @@ public class SubscriptionController : ControllerBase
     {
         try
         {
-            var command = new UpdateSubscriptionCommand(dto);
+            var command = new UpdateSubscriptionCommand(dto.Id, dto.Name, dto.Cost, dto.PeriodInDays);
             await _mediator.Send(command);
             return Ok();
         }
@@ -108,7 +108,7 @@ public class SubscriptionController : ControllerBase
     {
         try
         {
-            var command = new ChangeSubscriptionAvailabilityCommand(dto);
+            var command = new ChangeSubscriptionAvailabilityCommand(dto.Id, dto.IsAvailable);
             await _mediator.Send(command);
             return Ok();
         }

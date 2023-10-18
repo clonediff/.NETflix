@@ -17,9 +17,9 @@ internal class AddSubscriptionCommandHandler : ICommandHandler<AddSubscriptionCo
     {
         var subscription = new Subscription
         {
-            Name = request.Dto.Name,
-            PeriodInDays = request.Dto.PeriodInDays,
-            Cost = request.Dto.Cost,
+            Name = request.Name,
+            PeriodInDays = request.PeriodInDays,
+            Cost = request.Cost,
             IsAvailable = false
         };
 
