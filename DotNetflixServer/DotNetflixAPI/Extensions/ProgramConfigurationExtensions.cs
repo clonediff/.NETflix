@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
+using DotNetflix.Application;
 using DotNetflixAPI.Middleware;
 using IdentityPasswordGenerator;
 using MassTransit;
@@ -16,7 +17,9 @@ using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
+using Services.Shared.CodeGenerator;
 using Services.Shared.SupportChatService;
+using Services.Shared.TwoFactorAuthCodeService;
 
 namespace DotNetflixAPI.Extensions;
 
@@ -137,7 +140,6 @@ public static class ProgramConfigurationExtensions
         services.AddSingleton<IChatStorage, ChatStorage>();
         services.AddScoped<IFilmService, FilmService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<ITwoFAService, TwoFAService>();
         services.AddScoped<IAuthService, AuthServiceImpl>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ISubscriptionService, SubscriptionService>();
@@ -148,6 +150,9 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
         services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
+        services.AddTransient<ICodeGenerator, CodeGenerator>();
+        services.AddTransient<ITwoFactorAuthCodeService, TwoFactorAuthCodeService>();
+        services.AddApplicationServices();
         
         return services;
     }
