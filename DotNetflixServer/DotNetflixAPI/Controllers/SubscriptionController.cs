@@ -1,6 +1,11 @@
-﻿using Contracts;
-using Contracts.Subscriptions;
+﻿using Contracts.Shared;
 using Domain.Exceptions;
+using DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
+using DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
+using DotNetflix.Application.Features.Subscriptions.Queries.GetAllFilmNamesInSubscription;
+using DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;
+using DotNetflix.Application.Features.Subscriptions.Shared;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
@@ -12,13 +17,13 @@ namespace DotNetflixAPI.Controllers;
 [Authorize]
 public class SubscriptionController : ControllerBase
 {
-    private readonly ISubscriptionService _subscriptionService;
+    private readonly IMediator _mediator;
     private readonly IUserService _userService;
 
-    public SubscriptionController(ISubscriptionService subscriptionService, IUserService userService)
+    public SubscriptionController(IMediator mediator, IUserService userService)
     {
-        _subscriptionService = subscriptionService;
         _userService = userService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
@@ -26,13 +31,16 @@ public class SubscriptionController : ControllerBase
     {
         var userId = await _userService.GetUserIdAsync(User);
 
-        return _subscriptionService.GetAllSubscriptions(userId);
+        var query = new GetAllSubscriptionsForUserQuery(userId);
+        
+        return await _mediator.Send(query);
     }
 
     [HttpGet("[action]")]
-    public IAsyncEnumerable<string> GetAllFilmNames([FromQuery] int subscriptionId)
+    public async Task<IEnumerable<string>> GetAllFilmNamesAsync([FromQuery] int subscriptionId)
     {
-        return _subscriptionService.GetAllFilmNames(subscriptionId);
+        var query = new GetAllFilmNamesInSubscriptionQuery(subscriptionId);
+        return await _mediator.Send(query);
     }
 
     [HttpPost("[action]")]
@@ -45,7 +53,8 @@ public class SubscriptionController : ControllerBase
         
         try
         {
-            await _subscriptionService.PurchaseSubscriptionAsync(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
+            var command = new PurchaseSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
+            await _mediator.Send(command);
             return Ok();
         }
         catch (NotFoundException ex)
@@ -68,7 +77,8 @@ public class SubscriptionController : ControllerBase
         
         try
         {
-            await _subscriptionService.ExtendSubscriptionAsync(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
+            var command = new ExtendSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
+            await _mediator.Send(command);
             return Ok();
         }
         catch (NotFoundException ex)

@@ -1,6 +1,6 @@
-﻿using Contracts;
+﻿using Contracts.Shared;
 
-namespace Services.Abstractions;
+namespace Services.Shared.PaymentService;
 
 public interface IPaymentService
 {

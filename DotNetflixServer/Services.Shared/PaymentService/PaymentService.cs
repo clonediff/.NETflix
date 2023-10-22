@@ -1,8 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using Contracts;
-using Services.Abstractions;
+using Contracts.Shared;
 
-namespace Services;
+namespace Services.Shared.PaymentService;
 
 public class PaymentService : IPaymentService
 {
