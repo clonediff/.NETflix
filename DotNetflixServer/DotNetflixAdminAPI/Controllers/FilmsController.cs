@@ -1,10 +1,15 @@
-﻿using Contracts.Admin.DataRepresentation;
-using Contracts.Admin.Films;
-using Contracts.Admin.Films.Details;
-using Domain.Exceptions;
+﻿using DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
+using DotNetflix.Admin.Application.Features.Films.Commands.DeleteFilm;
+using DotNetflix.Admin.Application.Features.Films.Commands.UpdateFilm;
+using DotNetflix.Admin.Application.Features.Films.Mapping;
+using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
+using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmDetails;
+using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsCount;
+using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsFiltered;
+using DotNetflix.Admin.Application.Shared;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Admin.Abstractions;
 
 namespace DotNetflixAdminAPI.Controllers;
 
@@ -13,79 +18,70 @@ namespace DotNetflixAdminAPI.Controllers;
 [Authorize(Policy = "Manager")]
 public class FilmsController : ControllerBase
 {
-    private readonly IFilmService _filmService;
+    private readonly IMediator _mediator;
 
-    public FilmsController(IFilmService filmService)
+    public FilmsController(IMediator mediator)
     {
-        _filmService = filmService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
     public async Task<int> GetFilmsCountAsync()
     {
-        return await _filmService.GetFilmsCountAsync();
+        var query = new GetFilmsCountQuery();
+        return await _mediator.Send(query);
     }
 
     [HttpPost("[action]")]
     public async Task<IActionResult> AddFilmAsync([FromBody] AddFilmDto dto)
     {
-        await _filmService.AddFilmAsync(dto);
+        var command = dto.ToAddFilmCommand();
+        await _mediator.Send(command);
         return Ok();
     }
 
     [HttpGet("[action]")]
-    public async Task<PaginationDataDto<EnumDto<int>>> GetFilmsFilteredAsync([FromQuery] string? name, [FromQuery] int? page = 1)
+    public async Task<PaginationDataDto<EnumDto<int>>> GetFilmsFilteredAsync([FromQuery] string? name, [FromQuery] int? page = 1, [FromQuery] int? size = 25)
     {
-        return await _filmService.GetFilmsFilteredAsync(page!.Value, name);
+        var query = new GetFilmsFilteredQuery(name, page!.Value, size!.Value);
+        return await _mediator.Send(query);
     }
 
     [HttpGet("[action]")]
     public async Task<IActionResult> GetFilmById([FromQuery] int id)
     {
-        try
-        {
-            var film = await _filmService.GetFilmById(id);
-            return Ok(film);
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var query = new GetFilmByIdQuery(id);
+        var result = await _mediator.Send(query);
+
+        return result.Match<IActionResult>(
+            success: Ok,
+            failure: BadRequest);
     }
 
     [HttpDelete("[action]")]
     public async Task<IActionResult> DeleteAsync([FromQuery] int id)
     {
-        try
-        {
-            await _filmService.DeleteFilmAsync(id);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var command = new DeleteFilmCommand(id);
+        await _mediator.Send(command);
+        return Ok();
     }
 
     [HttpPut("[action]")]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateFilmDto dto)
     {
-        await _filmService.UpdateFilmAsync(dto);
-
+        var command = dto.ToUpdateFilmCommand();
+        await _mediator.Send(command);
         return Ok();
     }
 
     [HttpGet("[action]")]
     public async Task<IActionResult> GetFilmDetails([FromQuery] int id)
     {
-        try
-        {
-            var movie = await _filmService.GetFilmDetailsAsync(id);
-            return Ok(movie);
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var query = new GetFilmDetailsQuery(id);
+        var result = await _mediator.Send(query);
+
+        return result.Match<IActionResult>(
+            success: Ok,
+            failure: BadRequest);
     }
 }
