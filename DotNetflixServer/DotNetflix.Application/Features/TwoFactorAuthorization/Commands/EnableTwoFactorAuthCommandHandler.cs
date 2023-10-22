@@ -6,7 +6,7 @@ using Services.Shared.TwoFactorAuthCodeService;
 
 namespace DotNetflix.Application.Features.TwoFactorAuthorization.Commands;
 
-public class EnableTwoFactorAuthCommandHandler : ICommandHandler<EnableTwoFactorAuthCommand, Result<string, string>>
+internal class EnableTwoFactorAuthCommandHandler : ICommandHandler<EnableTwoFactorAuthCommand, Result<string, string>>
 {
     private readonly ITwoFactorAuthCodeService _twoFactorAuthCodeService;
     private readonly UserManager<User> _userManager;

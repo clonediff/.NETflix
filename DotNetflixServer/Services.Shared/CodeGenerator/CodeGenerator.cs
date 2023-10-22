@@ -11,6 +11,6 @@ public class CodeGenerator : ICodeGenerator
         {
             rng.GetBytes(randomBytes);
         }
-        return BitConverter.ToInt32(randomBytes, 0).ToString();
+        return Math.Abs(BitConverter.ToInt32(randomBytes, 0)).ToString();
     }
 }
