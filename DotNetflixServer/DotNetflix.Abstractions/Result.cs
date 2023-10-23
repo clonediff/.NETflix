@@ -4,24 +4,23 @@ public class Result<TSuccess, TFailure>
 {
     private readonly TSuccess? _success;
     private readonly TFailure? _failure;
-    
-    public bool IsSuccess { get; }
+    private readonly bool _sSuccess;
 
     public Result(TSuccess success)
     {
         _success = success;
-        IsSuccess = true;
+        _sSuccess = true;
     }
 
     public Result(TFailure failure)
     {
         _failure = failure;
-        IsSuccess = false;
+        _sSuccess = false;
     }
 
     public TResult Match<TResult>(Func<TSuccess, TResult> success, Func<TFailure, TResult> failure)
     {
-        return IsSuccess
+        return _sSuccess
             ? success(_success!)
             : failure(_failure!);
     }
