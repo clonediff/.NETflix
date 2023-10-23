@@ -2,7 +2,6 @@
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
-using Services.Shared.PaymentService;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
 
