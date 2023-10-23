@@ -1,6 +1,6 @@
 ﻿using Contracts.Movies;
 using Domain.Exceptions;
-using DotNetflix.Application.Features.User.Queries.GetUserId;
+using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;

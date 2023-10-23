@@ -2,7 +2,7 @@
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
 
-namespace DotNetflix.Application.Features.User.Queries.GetAllUserSubscriptions;
+namespace DotNetflix.Application.Features.Users.Queries.GetAllUserSubscriptions;
 
 internal class GetAllUserSubscriptionsQueryHandler : IQueryHandler<GetAllUserSubscriptionsQuery, IEnumerable<GetUserSubscriptionDto>>
 {

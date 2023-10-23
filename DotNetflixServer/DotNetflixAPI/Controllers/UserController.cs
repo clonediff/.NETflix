@@ -1,14 +1,13 @@
 ﻿using Contracts;
 using Contracts.ChangeUserData;
 using Domain.Entities;
-using DotNetflix.Application.Features.User.Queries.GetAllUserSubscriptions;
-using DotNetflix.Application.Features.User.Queries.GetUserId;
+using DotNetflix.Application.Features.Users.Queries.GetAllUserSubscriptions;
+using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using Mappers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
 using Services.Shared.TwoFactorAuthCodeService;
 
 namespace DotNetflixAPI.Controllers;

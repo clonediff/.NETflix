@@ -1,6 +1,5 @@
 ﻿using Contracts.Shared;
-using Domain.Exceptions;
-using DotNetflix.Application.Features.User.Queries.GetUserId;
+using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
 using DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 using DotNetflix.Application.Features.Subscriptions.Queries.GetAllFilmNamesInSubscription;
@@ -9,7 +8,6 @@ using DotNetflix.Application.Features.Subscriptions.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
 
 namespace DotNetflixAPI.Controllers;
 

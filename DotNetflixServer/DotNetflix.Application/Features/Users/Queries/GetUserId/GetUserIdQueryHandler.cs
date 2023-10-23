@@ -1,13 +1,14 @@
-﻿using DotNetflix.Abstractions.Cqrs;
+﻿using Domain.Entities;
+using DotNetflix.Abstractions.Cqrs;
 using Microsoft.AspNetCore.Identity;
 
-namespace DotNetflix.Application.Features.User.Queries.GetUserId;
+namespace DotNetflix.Application.Features.Users.Queries.GetUserId;
 
 internal class GetUserIdQueryHandler : IQueryHandler<GetUserIdQuery, string?>
 {
-    private readonly UserManager<Domain.Entities.User> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public GetUserIdQueryHandler(UserManager<Domain.Entities.User> userManager)
+    public GetUserIdQueryHandler(UserManager<User> userManager)
     {
         _userManager = userManager;
     }

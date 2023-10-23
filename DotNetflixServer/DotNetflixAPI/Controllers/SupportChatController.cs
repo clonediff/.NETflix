@@ -1,4 +1,4 @@
-﻿using DotNetflix.Application.Features.User.Queries.GetUserId;
+﻿using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
