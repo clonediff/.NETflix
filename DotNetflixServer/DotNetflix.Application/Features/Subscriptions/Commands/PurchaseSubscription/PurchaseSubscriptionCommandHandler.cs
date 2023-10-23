@@ -7,7 +7,7 @@ using Services.Shared.PaymentService;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 
-public class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubscriptionCommand>
+internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubscriptionCommand>
 {
     private readonly ApplicationDBContext _dbContext;
     private readonly IPaymentService _paymentService;

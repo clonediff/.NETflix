@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;
 
-public class GetAllSubscriptionsForUserQueryHandler : IQueryHandler<GetAllSubscriptionsForUserQuery, IEnumerable<AvailableSubscriptionDto>>
+internal class GetAllSubscriptionsForUserQueryHandler : IQueryHandler<GetAllSubscriptionsForUserQuery, IEnumerable<AvailableSubscriptionDto>>
 {
     private readonly ApplicationDBContext _dbContext;
 

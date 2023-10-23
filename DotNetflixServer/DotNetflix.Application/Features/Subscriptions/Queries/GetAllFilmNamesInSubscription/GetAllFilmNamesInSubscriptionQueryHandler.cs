@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.Subscriptions.Queries.GetAllFilmNamesInSubscription;
 
-public class GetAllFilmNamesInSubscriptionQueryHandler : IQueryHandler<GetAllFilmNamesInSubscriptionQuery, IEnumerable<string>>
+internal class GetAllFilmNamesInSubscriptionQueryHandler : IQueryHandler<GetAllFilmNamesInSubscriptionQuery, IEnumerable<string>>
 {
     private readonly ApplicationDBContext _dbContext;
 
