@@ -8,11 +8,12 @@
 
     <ItemGroup>
       <Folder Include="Behaviors\" />
-      <Folder Include="Features\" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\DotNetflix.Abstractions\DotNetflix.Abstractions.csproj" />
+      <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
     </ItemGroup>
 
 </Project>
