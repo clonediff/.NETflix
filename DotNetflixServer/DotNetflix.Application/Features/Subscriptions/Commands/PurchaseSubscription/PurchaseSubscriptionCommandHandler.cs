@@ -1,22 +1,18 @@
 ﻿using DataAccess;
 using Domain.Entities;
-using Domain.Exceptions;
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
-using Services.Shared.PaymentService;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 
 internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubscriptionCommand, Result<int, string>>
 {
     private readonly ApplicationDBContext _dbContext;
-    private readonly IPaymentService _paymentService;
 
-    public PurchaseSubscriptionCommandHandler(ApplicationDBContext dbContext, IPaymentService paymentService)
+    public PurchaseSubscriptionCommandHandler(ApplicationDBContext dbContext)
     {
         _dbContext = dbContext;
-        _paymentService = paymentService;
     }
 
     public async Task<Result<int, string>> Handle(PurchaseSubscriptionCommand request, CancellationToken cancellationToken)
@@ -32,9 +28,6 @@ internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubs
                 us.UserId == request.UserSubscriptionDto.UserId &&
                 us.SubscriptionId == request.UserSubscriptionDto.SubscriptionId))
             return "Неудалось приобрести данную подписку, так как она уже приобретена";
-
-        if (!_paymentService.PayByCard(request.CardDataDto, subscription.Cost))
-            return "Не удалось приобрести данную подписку, так как введены некорректные реквизиты к оплате";
 
         _dbContext.UserSubscriptions.Add(new UserSubscription
         {

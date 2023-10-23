@@ -1,5 +1,4 @@
 ﻿using Contracts.Shared;
-using Domain.Exceptions;
 using DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
 using DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 using DotNetflix.Application.Features.Subscriptions.Queries.GetAllFilmNamesInSubscription;
@@ -68,7 +67,6 @@ public class SubscriptionController : ControllerBase
         
         if (userId is null)
             return BadRequest();
-        
         
         var command = new ExtendSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
         var result = await _mediator.Send(command);
