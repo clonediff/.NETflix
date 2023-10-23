@@ -37,10 +37,13 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<IEnumerable<string>> GetAllFilmNamesAsync([FromQuery] int subscriptionId)
+    public async Task<IActionResult> GetAllFilmNamesAsync([FromQuery] int subscriptionId)
     {
         var query = new GetAllFilmNamesInSubscriptionQuery(subscriptionId);
-        return await _mediator.Send(query);
+        var result = await _mediator.Send(query);
+        return result.Match<IActionResult>(
+            Ok,
+            BadRequest);
     }
 
     [HttpPost("[action]")]
@@ -51,20 +54,11 @@ public class SubscriptionController : ControllerBase
         if (userId is null)
             return BadRequest();
         
-        try
-        {
-            var command = new PurchaseSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
-            await _mediator.Send(command);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (IncorrectOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var command = new PurchaseSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
+        var result = await _mediator.Send(command);
+        return result.Match<IActionResult>(
+            x => Ok(x),
+            BadRequest);
     }
 
     [HttpPut("[action]")]
@@ -75,19 +69,11 @@ public class SubscriptionController : ControllerBase
         if (userId is null)
             return BadRequest();
         
-        try
-        {
-            var command = new ExtendSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
-            await _mediator.Send(command);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (IncorrectOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        
+        var command = new ExtendSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
+        var result = await _mediator.Send(command);
+        return result.Match<IActionResult>(
+            x => Ok(x),
+            BadRequest);
     }
 }
