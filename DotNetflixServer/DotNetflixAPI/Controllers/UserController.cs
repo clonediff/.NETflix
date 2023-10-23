@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using Services.Shared.TwoFactorAuthCodeService;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -17,14 +18,14 @@ namespace DotNetflixAPI.Controllers;
 [Authorize]
 public class UserController : ControllerBase
 {
-    private readonly ITwoFAService _twoFAService;
+    private readonly ITwoFactorAuthCodeService _twoFactorAuthCodeService;
     private readonly UserManager<User> _userManager;
     private readonly IMediator _mediator;
 
-    public UserController(UserManager<User> userManager, ITwoFAService twoFAService, IMediator mediator)
+    public UserController(ITwoFactorAuthCodeService twoFactorAuthCodeService, UserManager<User> userManager, IMediator mediator)
     {
+        _twoFactorAuthCodeService = twoFactorAuthCodeService;
         _userManager = userManager;
-        _twoFAService = twoFAService;
         _mediator = mediator;
     }
 
@@ -53,7 +54,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> SetUserPassword([FromBody] UserChangePasswordDto chPass)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
-        if (!_twoFAService.CheckCode(user!.Email!, chPass.Code))
+        if (!_twoFactorAuthCodeService.CheckCode(user!.Email!, chPass.Code))
         {
             return BadRequest("Код не совпадает или устарел");
         }
@@ -67,7 +68,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> SetUserMail([FromBody] UserChangeMailDto chMail)
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
-        if (!_twoFAService.CheckCode(user!.Email!, chMail.Code))
+        if (!_twoFactorAuthCodeService.CheckCode(user!.Email!, chMail.Code))
         {
             return BadRequest("Код не совпадает или устарел");
         }

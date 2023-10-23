@@ -1,5 +1,4 @@
-﻿using Domain.Exceptions;
-using DotNetflix.Admin.Application.Features.Subscriptions.Commands.AddSubscription;
+﻿using DotNetflix.Admin.Application.Features.Subscriptions.Commands.AddSubscription;
 using DotNetflix.Admin.Application.Features.Subscriptions.Commands.ChangeSubscriptionAvailability;
 using DotNetflix.Admin.Application.Features.Subscriptions.Commands.DeleteSubscription;
 using DotNetflix.Admin.Application.Features.Subscriptions.Commands.UpdateFilmsInSubscription;
@@ -50,16 +49,12 @@ public class SubscriptionController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> UpdateFilmsInSubscriptionAsync([FromQuery] int subscriptionId, [FromBody] IDictionary<int, bool> movies)
     {
-        try
-        {
-            var command = new UpdateFilmsInSubscriptionCommand(subscriptionId, movies);
-            await _mediator.Send(command);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var command = new UpdateFilmsInSubscriptionCommand(subscriptionId, movies);
+        var result = await _mediator.Send(command);
+
+        return result.Match<IActionResult>(
+            success: x => Ok(x),
+            failure: BadRequest);
     }
     
     [HttpPost("[action]")]
@@ -72,49 +67,30 @@ public class SubscriptionController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateSubscriptionDto dto)
     {
-        try
-        {
-            var command = new UpdateSubscriptionCommand(dto.Id, dto.Name, dto.Cost, dto.PeriodInDays);
-            await _mediator.Send(command);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var command = new UpdateSubscriptionCommand(dto.Id, dto.Name, dto.Cost, dto.PeriodInDays);
+        await _mediator.Send(command);
+        return Ok();
     }
 
     [HttpDelete("[action]")]
     public async Task<IActionResult> DeleteAsync([FromQuery] int subscriptionId)
     {
-        try
-        {
-            var command = new DeleteSubscriptionCommand(subscriptionId);
-            await _mediator.Send(command);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (IncorrectOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var command = new DeleteSubscriptionCommand(subscriptionId);
+        var result = await _mediator.Send(command);
+
+        return result.Match<IActionResult>(
+            success: x => Ok(x),
+            failure: BadRequest);
     }
 
     [HttpPut("[action]")]
     public async Task<IActionResult> ChangeAvailabilityAsync([FromBody] ChangeSubscriptionAvailabilityDto dto)
     {
-        try
-        {
-            var command = new ChangeSubscriptionAvailabilityCommand(dto.Id, dto.IsAvailable);
-            await _mediator.Send(command);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var command = new ChangeSubscriptionAvailabilityCommand(dto.Id, dto.IsAvailable);
+        var result = await _mediator.Send(command);
+
+        return result.Match<IActionResult>(
+            success: x => Ok(x),
+            failure: BadRequest);
     }
 }

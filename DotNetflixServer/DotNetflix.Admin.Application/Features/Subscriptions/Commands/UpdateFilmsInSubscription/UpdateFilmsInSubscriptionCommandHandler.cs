@@ -1,12 +1,12 @@
 ﻿using DataAccess;
 using Domain.Entities;
-using Domain.Exceptions;
+using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.UpdateFilmsInSubscription;
 
-internal class UpdateFilmsInSubscriptionCommandHandler : ICommandHandler<UpdateFilmsInSubscriptionCommand>
+internal class UpdateFilmsInSubscriptionCommandHandler : ICommandHandler<UpdateFilmsInSubscriptionCommand, Result<int, string>>
 {
     private readonly ApplicationDBContext _dbContext;
 
@@ -15,14 +15,14 @@ internal class UpdateFilmsInSubscriptionCommandHandler : ICommandHandler<UpdateF
         _dbContext = dbContext;
     }
 
-    public async Task Handle(UpdateFilmsInSubscriptionCommand request, CancellationToken cancellationToken)
+    public async Task<Result<int, string>> Handle(UpdateFilmsInSubscriptionCommand request, CancellationToken cancellationToken)
     {
         var subscription = await _dbContext.Subscriptions
             .Include(s => s.SubscriptionMovies)
             .FirstOrDefaultAsync(x => x.Id == request.SubscriptionId, cancellationToken);
-        
+
         if (subscription is null)
-            throw new NotFoundException("Не удалось найти подписку");
+            return "Не удалось найти подписку";
 
         subscription.SubscriptionMovies.RemoveAll(x => request.Movies.ContainsKey(x.MovieInfoId) && !request.Movies[x.MovieInfoId]);
         subscription.SubscriptionMovies.AddRange(request.Movies
@@ -33,6 +33,6 @@ internal class UpdateFilmsInSubscriptionCommandHandler : ICommandHandler<UpdateF
                 SubscriptionId = request.SubscriptionId
             }));
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
