@@ -62,7 +62,7 @@ const UpdateFilmPage = () => {
     }
 
     const sendForm = (values) => {
-        const updatedFilm = initUpdatedFilm(location.pathname.split('/')[2], values, film, seasonsToDelete, initialFilmCrew, peopleToDelete)
+        const updatedFilm = initUpdatedFilm(location.pathname.split('/')[3], values, film, seasonsToDelete, initialFilmCrew, peopleToDelete)
         console.log(updatedFilm)
         axiosInstance.put('api/films/update', updatedFilm)
             .then(_ => {

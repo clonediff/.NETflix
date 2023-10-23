@@ -12,7 +12,6 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
         posterUrl: newFilmData.posterUrl,
         type: newFilmData.type.value ?? newFilmData.type,
         category: !newFilmData.category ? null : newFilmData.category.value ?? newFilmData.category,
-        // budget: newFilmData.budget ? { id: oldFilmData.budget?.id, value: newFilmData.budget, currency: newFilmData.budgetCurrency } : null,
         budget: initUpdateFilmBudget(oldFilmData, newFilmData),
         fees: initUpdatedFilmFees(oldFilmData, newFilmData),
         countries: newFilmData.countries.map(c => c.value ?? c),

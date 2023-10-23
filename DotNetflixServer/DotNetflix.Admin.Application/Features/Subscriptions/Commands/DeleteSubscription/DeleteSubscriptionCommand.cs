@@ -1,5 +1,6 @@
-﻿using DotNetflix.Abstractions.Cqrs;
+﻿using DotNetflix.Abstractions;
+using DotNetflix.Abstractions.Cqrs;
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.DeleteSubscription;
 
-public record DeleteSubscriptionCommand(int SubscriptionId) : ICommand;
+public record DeleteSubscriptionCommand(int SubscriptionId) : ICommand<Result<int, string>>;
