@@ -1,7 +1,6 @@
-﻿using Contracts;
-using Domain.Entities;
+﻿using Domain.Entities;
 
-namespace Mappers;
+namespace DotNetflix.Application.Shared.Mapping;
 
 public static class UserToDto
 {

@@ -1,14 +1,13 @@
-﻿using Contracts;
-using Contracts.ChangeUserData;
-using Domain.Entities;
+﻿using DotNetflix.Application.Features.Users.Commands.SetUserData;
+using DotNetflix.Application.Features.Users.Commands.SetUserMail;
+using DotNetflix.Application.Features.Users.Commands.SetUserPassword;
 using DotNetflix.Application.Features.Users.Queries.GetAllUserSubscriptions;
+using DotNetflix.Application.Features.Users.Queries.GetUser;
 using DotNetflix.Application.Features.Users.Queries.GetUserId;
-using Mappers;
+using DotNetflix.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Services.Shared.TwoFactorAuthCodeService;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -17,22 +16,18 @@ namespace DotNetflixAPI.Controllers;
 [Authorize]
 public class UserController : ControllerBase
 {
-    private readonly ITwoFactorAuthCodeService _twoFactorAuthCodeService;
-    private readonly UserManager<User> _userManager;
     private readonly IMediator _mediator;
 
-    public UserController(ITwoFactorAuthCodeService twoFactorAuthCodeService, UserManager<User> userManager, IMediator mediator)
+    public UserController(IMediator mediator)
     {
-        _twoFactorAuthCodeService = twoFactorAuthCodeService;
-        _userManager = userManager;
         _mediator = mediator;
     }
 
     [HttpGet("[action]")]
     public async Task<UserDto> GetUserAsync()
     {
-        var user = await _userManager.GetUserAsync(User);
-        return user?.ToUserDto()!;
+        var query = new GetUserQuery(User);
+        return await _mediator.Send(query);
     }
 
     [HttpGet("[action]")]
@@ -50,39 +45,32 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> SetUserPassword([FromBody] UserChangePasswordDto chPass)
+    public async Task<IActionResult> SetUserPasswordAsync([FromBody] UserChangePasswordDto chPass)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
-        if (!_twoFactorAuthCodeService.CheckCode(user!.Email!, chPass.Code))
-        {
-            return BadRequest("Код не совпадает или устарел");
-        }
-
-        user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, chPass.Password);
-        var changeRes = await _userManager.UpdateAsync(user);
-        return changeRes.Succeeded ? Ok("Пароль изменён") : BadRequest(changeRes.Errors);
+        var command = new SetUserPasswordCommand(User, chPass.Password, chPass.Code);
+        var result = await _mediator.Send(command);
+        return result.Match<IActionResult>(
+            Ok,
+            BadRequest);
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> SetUserMail([FromBody] UserChangeMailDto chMail)
+    public async Task<IActionResult> SetUserMailAsync([FromBody] UserChangeMailDto chMail)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
-        if (!_twoFactorAuthCodeService.CheckCode(user!.Email!, chMail.Code))
-        {
-            return BadRequest("Код не совпадает или устарел");
-        }
-
-        var changeRes = await _userManager.SetEmailAsync(user, chMail.Email);
-        return changeRes.Succeeded ? Ok("Почта изменена") : BadRequest(changeRes.Errors);
+        var command = new SetUserMailCommand(User, chMail.Email, chMail.Code);
+        var result = await _mediator.Send(command);
+        return result.Match<IActionResult>(
+            Ok,
+            BadRequest);
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> SetUserData([FromBody] UserChangeOrdinaryDto chOrdinary)
+    public async Task<IActionResult> SetUserDataAsync([FromBody] UserChangeOrdinaryDto chOrdinary)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
-        user!.UserName = chOrdinary.UserName;
-        user.Birthday = chOrdinary.Birthdate;
-        var changeRes = await _userManager.UpdateAsync(user);
-        return changeRes.Succeeded ? Ok("Данные изменены") : BadRequest(changeRes.Errors);
+        var command = new SetUserDataCommand(User, chOrdinary.Birthdate, chOrdinary.UserName);
+        var result = await _mediator.Send(command);
+        return result.Match<IActionResult>(
+            Ok,
+            BadRequest);
     }
 }
