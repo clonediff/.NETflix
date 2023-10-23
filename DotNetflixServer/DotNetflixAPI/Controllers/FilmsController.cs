@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using Contracts;
-using Contracts.Movies;
+﻿using Contracts.Movies;
 using Domain.Exceptions;
+using DotNetflix.Application.Features.User.Queries.GetUserId;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -13,12 +12,12 @@ namespace DotNetflixAPI.Controllers;
 public class FilmsController : ControllerBase
 {
     private readonly IFilmService _filmService;
-    private readonly IUserService _userService;
+    private readonly IMediator _mediator;
 
-    public FilmsController(IFilmService filmService, IUserService userService)
+    public FilmsController(IFilmService filmService, IMediator mediator)
     {
         _filmService = filmService;
-        _userService = userService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
@@ -36,7 +35,8 @@ public class FilmsController : ControllerBase
     [HttpGet("[action]")]
     public async Task<IActionResult> GetFilmById([FromQuery] int id)
     {
-        var userId = await _userService.GetUserIdAsync(User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
 
         try
         {

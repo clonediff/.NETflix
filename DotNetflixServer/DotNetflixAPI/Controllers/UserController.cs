@@ -1,7 +1,10 @@
 ﻿using Contracts;
 using Contracts.ChangeUserData;
 using Domain.Entities;
+using DotNetflix.Application.Features.User.Queries.GetAllUserSubscriptions;
+using DotNetflix.Application.Features.User.Queries.GetUserId;
 using Mappers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +19,13 @@ public class UserController : ControllerBase
 {
     private readonly ITwoFAService _twoFAService;
     private readonly UserManager<User> _userManager;
-    private readonly IUserService _userService;
+    private readonly IMediator _mediator;
 
-    public UserController(UserManager<User> userManager, ITwoFAService twoFAService, IUserService userService)
+    public UserController(UserManager<User> userManager, ITwoFAService twoFAService, IMediator mediator)
     {
         _userManager = userManager;
         _twoFAService = twoFAService;
-        _userService = userService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
@@ -35,12 +38,14 @@ public class UserController : ControllerBase
     [HttpGet("[action]")]
     public async Task<IActionResult> GetAllUserSubscriptionsAsync()
     {
-        var userId = await _userService.GetUserIdAsync(User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
 
         if (userId is null)
             return BadRequest();
 
-        var subscriptions = _userService.GetAllUserSubscriptions(userId);
+        var getAllUserSubscriptionsQuery = new GetAllUserSubscriptionsQuery(userId);
+        var subscriptions = await _mediator.Send(getAllUserSubscriptionsQuery);
         return Ok(subscriptions);
     }
 

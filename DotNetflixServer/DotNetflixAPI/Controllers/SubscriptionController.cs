@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Contracts.Subscriptions;
 using Domain.Exceptions;
+using DotNetflix.Application.Features.User.Queries.GetUserId;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
@@ -13,19 +15,19 @@ namespace DotNetflixAPI.Controllers;
 public class SubscriptionController : ControllerBase
 {
     private readonly ISubscriptionService _subscriptionService;
-    private readonly IUserService _userService;
+    private readonly IMediator _mediator;
 
-    public SubscriptionController(ISubscriptionService subscriptionService, IUserService userService)
+    public SubscriptionController(ISubscriptionService subscriptionService, IMediator mediator)
     {
         _subscriptionService = subscriptionService;
-        _userService = userService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
     public async Task<IEnumerable<AvailableSubscriptionDto>> GetAllSubscriptionsAsync()
     {
-        var userId = await _userService.GetUserIdAsync(User);
-
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
         return _subscriptionService.GetAllSubscriptions(userId);
     }
 
@@ -38,7 +40,8 @@ public class SubscriptionController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> PurchaseAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
-        var userId = await _userService.GetUserIdAsync(User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
         
         if (userId is null)
             return BadRequest();
@@ -61,7 +64,8 @@ public class SubscriptionController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> ExtendAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
-        var userId = await _userService.GetUserIdAsync(User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
         
         if (userId is null)
             return BadRequest();

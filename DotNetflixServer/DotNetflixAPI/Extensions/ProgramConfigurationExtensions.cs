@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
+using DotNetflix.Application;
 using DotNetflixAPI.Middleware;
 using IdentityPasswordGenerator;
 using MassTransit;
@@ -139,7 +140,6 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ITwoFAService, TwoFAService>();
         services.AddScoped<IAuthService, AuthServiceImpl>();
-        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
@@ -148,6 +148,7 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
         services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
+        services.AddApplicationServices();
         
         return services;
     }
