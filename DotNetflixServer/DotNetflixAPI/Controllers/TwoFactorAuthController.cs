@@ -4,9 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Services.Infrastructure.EmailService;
 using Services.Shared.CodeGenerator;
-using Services.Shared.TwoFactorAuthCodeService;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -15,19 +15,19 @@ namespace DotNetflixAPI.Controllers;
 [Authorize]
 public class TwoFactorAuthController : Controller
 {
-	private readonly ITwoFactorAuthCodeService _twoFactorAuthCodeService;
 	private readonly ICodeGenerator _codeGenerator;
 	private readonly UserManager<User> _userManager;
 	private readonly IMediator _mediator;
 	private readonly IEmailService _emailService;
+	private readonly IMemoryCache _memoryCache;
 
-	public TwoFactorAuthController(ITwoFactorAuthCodeService twoFactorAuthCodeService, ICodeGenerator codeGenerator, UserManager<User> userManager, IMediator mediator, IEmailService emailService)
+	public TwoFactorAuthController(ICodeGenerator codeGenerator, UserManager<User> userManager, IMediator mediator, IEmailService emailService, IMemoryCache memoryCache)
 	{
-		_twoFactorAuthCodeService = twoFactorAuthCodeService;
 		_codeGenerator = codeGenerator;
 		_userManager = userManager;
 		_mediator = mediator;
 		_emailService = emailService;
+		_memoryCache = memoryCache;
 	}
 
 	[HttpGet("[action]")]
@@ -36,7 +36,7 @@ public class TwoFactorAuthController : Controller
 		var user = await _userManager.GetUserAsync(HttpContext.User);
 		var code = _codeGenerator.GenerateCode();
 		await _emailService.SendEmailAsync(user!.Email!, "Код для двухфакторной аутентификации", code);
-		_twoFactorAuthCodeService.SetCode(user!.Email!, code, TimeSpan.FromMinutes(5));
+		_memoryCache.Set(user!.Email!, code, TimeSpan.FromMinutes(5));
 	}
 
 	[HttpPost("[action]")]

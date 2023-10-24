@@ -17,7 +17,8 @@ public static class ApplicationServicesRegistration
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
 
-        serviceCollection.RegisterBehavior(Assembly, typeof(IHasCardValidation), typeof(CardValidationBehavior<,>));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(IHasCardValidation), typeof(CardValidationBehavior<,>));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(IHasCodeValidation), typeof(CodeValidationBehavior<,>));
         
         return serviceCollection;
     }

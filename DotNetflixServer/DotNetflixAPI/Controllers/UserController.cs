@@ -1,4 +1,5 @@
-﻿using DotNetflix.Application.Features.Users.Commands.SetUserData;
+﻿using Domain.Entities;
+using DotNetflix.Application.Features.Users.Commands.SetUserData;
 using DotNetflix.Application.Features.Users.Commands.SetUserMail;
 using DotNetflix.Application.Features.Users.Commands.SetUserPassword;
 using DotNetflix.Application.Features.Users.Queries.GetAllUserSubscriptions;
@@ -7,6 +8,7 @@ using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using DotNetflix.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetflixAPI.Controllers;
@@ -17,10 +19,12 @@ namespace DotNetflixAPI.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly UserManager<User> _userManager;
 
-    public UserController(IMediator mediator)
+    public UserController(IMediator mediator, UserManager<User> userManager)
     {
         _mediator = mediator;
+        _userManager = userManager;
     }
 
     [HttpGet("[action]")]
@@ -47,7 +51,8 @@ public class UserController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> SetUserPasswordAsync([FromBody] UserChangePasswordDto chPass)
     {
-        var command = new SetUserPasswordCommand(User, chPass.Password, chPass.Code);
+        var user = await _userManager.GetUserAsync(User);
+        var command = new SetUserPasswordCommand(user!, chPass.Password, user!.Email!, chPass.Code);
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(
             Ok,
@@ -57,7 +62,8 @@ public class UserController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> SetUserMailAsync([FromBody] UserChangeMailDto chMail)
     {
-        var command = new SetUserMailCommand(User, chMail.Email, chMail.Code);
+        var user = await _userManager.GetUserAsync(User);
+        var command = new SetUserMailCommand(user!, chMail.Email, user!.Email!, chMail.Code);
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(
             Ok,
