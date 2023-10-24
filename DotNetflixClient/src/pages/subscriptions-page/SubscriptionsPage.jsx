@@ -54,10 +54,12 @@ export const SubscriptionsPage = () => {
                         zIndex: 10001
                     })
                 })
-                .catch(_ => modal.error({
-                    title: 'Не удалось оформить подписку',
-                    zIndex: 10001
-                })))
+                .catch(err => {
+                    modal.error({
+                        title: `Не удалось оформить подписку. ${err.response.data}`,
+                        zIndex: 10001
+                    })
+                }))
         setShowBuyModal(true)
     }
 
@@ -73,10 +75,12 @@ export const SubscriptionsPage = () => {
                     },
                     zIndex: 10001
                 }))
-                .catch(_ => modal.error({
-                    title: 'Не удалось оформить подписку',
-                    zIndex: 10001
-                })))
+                .catch(err => {
+                    modal.error({
+                        title: `Не удалось продлить подписку. ${err.response.data}`,
+                        zIndex: 10001
+                    })
+                }))
         setShowBuyModal(true)
     }
 

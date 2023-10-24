@@ -2,19 +2,16 @@
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
-using Services.Shared.PaymentService;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
 
 internal class ExtendSubscriptionCommandHandler : ICommandHandler<ExtendSubscriptionCommand, Result<int, string>>
 {
     private readonly ApplicationDBContext _dbContext;
-    private readonly IPaymentService _paymentService;
 
-    public ExtendSubscriptionCommandHandler(ApplicationDBContext dbContext, IPaymentService paymentService)
+    public ExtendSubscriptionCommandHandler(ApplicationDBContext dbContext)
     {
         _dbContext = dbContext;
-        _paymentService = paymentService;
     }
 
     public async Task<Result<int, string>> Handle(ExtendSubscriptionCommand request, CancellationToken cancellationToken)
@@ -33,9 +30,6 @@ internal class ExtendSubscriptionCommandHandler : ICommandHandler<ExtendSubscrip
 
         if (userSubscription.Expires is null)
             return "Нельзя продлевать бессрочные подписки";
-
-        if (!_paymentService.PayByCard(request.CardDataDto, userSubscription.Subscription.Cost))
-            return "Не удалось продлить данную подписку, так как введены некорректные реквизиты к оплате";
 
         if (userSubscription.Expires is not null)
             userSubscription.Expires = userSubscription.Expires! + TimeSpan.FromDays(userSubscription.Subscription.PeriodInDays!.Value);

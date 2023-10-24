@@ -5,4 +5,4 @@ using DotNetflix.Application.Features.Subscriptions.Shared;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 
-public record PurchaseSubscriptionCommand(UserSubscriptionDto UserSubscriptionDto, CardDataDto CardDataDto) : ICommand<Result<int, string>>;
+public record PurchaseSubscriptionCommand(UserSubscriptionDto UserSubscriptionDto, CardDataDto CardDataDto) : ICommand<Result<int, string>>, IHasCardValidation;

@@ -17,7 +17,6 @@ using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
-using Services.Shared.PaymentService;
 using Services.Shared.CodeGenerator;
 using Services.Shared.SupportChatService;
 using Services.Shared.TwoFactorAuthCodeService;
@@ -142,7 +141,6 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IFilmService, FilmService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IAuthService, AuthServiceImpl>();
-        services.AddScoped<IPaymentService, PaymentService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient();
         services.AddHttpContextAccessor();

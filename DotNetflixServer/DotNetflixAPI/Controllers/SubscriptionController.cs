@@ -68,7 +68,6 @@ public class SubscriptionController : ControllerBase
         if (userId is null)
             return BadRequest();
         
-        
         var command = new ExtendSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto);
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(

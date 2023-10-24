@@ -27,9 +27,9 @@ internal class GetAllSubscriptionsForUserQueryHandler : IQueryHandler<GetAllSubs
 
         return Task.FromResult(
             _dbContext.Subscriptions
-            .Where(s => s.IsAvailable || userSubscriptionIds.Contains(s.Id))
-            .Include(s => s.Movies)
-            .Select(s => new AvailableSubscriptionDto(s.Id, s.Name, s.Cost, s.PeriodInDays, userSubscriptionIds.Contains(s.Id), s.Movies.Select(m => m.Name)))
-            .AsEnumerable());
+                .Where(s => s.IsAvailable || userSubscriptionIds.Contains(s.Id))
+                .Include(s => s.Movies)
+                .Select(s => new AvailableSubscriptionDto(s.Id, s.Name, s.Cost, s.PeriodInDays, userSubscriptionIds.Contains(s.Id), s.Movies.Select(m => m.Name)))
+                .AsEnumerable());
     }
 }
