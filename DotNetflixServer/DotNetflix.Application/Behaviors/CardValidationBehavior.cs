@@ -5,16 +5,15 @@ using MediatR;
 
 namespace DotNetflix.Application.Behaviors;
 
-public class CardValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class CardValidationBehavior<TRequest, TSuccess> : IPipelineBehavior<TRequest, Result<TSuccess, string>>
     where TRequest : IHasCardValidation 
-    where TResponse : class
 {
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<Result<TSuccess, string>> Handle(TRequest request, RequestHandlerDelegate<Result<TSuccess, string>> next, CancellationToken cancellationToken)
     {
         if (!Regex.IsMatch(request.CardDataDto.CardNumber, @"\d*\d*", RegexOptions.None, TimeSpan.FromSeconds(5))
             || request.CardDataDto.CVV_CVC is < 100 or > 999 || request.CardDataDto.ExpirationDate < DateTime.Now)
         {
-            return (new Result<int, string>("Введены некорректные реквизиты к оплате.") as TResponse)!;
+            return "Введены некорректные реквизиты к оплате.";
         }
 
         return await next();
