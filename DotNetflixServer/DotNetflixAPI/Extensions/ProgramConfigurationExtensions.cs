@@ -142,8 +142,6 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IAuthService, AuthServiceImpl>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ISubscriptionService, SubscriptionService>();
-        services.AddScoped<IPaymentService, PaymentService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient();
         services.AddHttpContextAccessor();
