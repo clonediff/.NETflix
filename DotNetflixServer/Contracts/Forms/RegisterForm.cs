@@ -20,6 +20,6 @@ public class RegisterForm
     
     [Required]
     [DataType(DataType.Password)]
-    [Compare("Password")]
+    [Compare(nameof(Password), ErrorMessage = "Пароли не совпадают!")]
     public string ConfirmPassword { get; set; } = null!;
 }
