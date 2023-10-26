@@ -16,7 +16,7 @@ internal class EnableTwoFactorAuthCommandHandler : ICommandHandler<EnableTwoFact
 
     public async Task<Result<string, string>> Handle(EnableTwoFactorAuthCommand request, CancellationToken cancellationToken)
     {
-        var enableResult = await _userManager.SetTwoFactorEnabledAsync(request.User, true);
+        var enableResult = await _userManager.ConfirmEmailAsync(request.User, request.Token);
         
         return enableResult.Succeeded
             ? new Result<string, string>(success: "Двухфакторная аутентификация подключена")

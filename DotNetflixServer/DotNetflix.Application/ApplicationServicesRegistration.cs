@@ -18,7 +18,7 @@ public static class ApplicationServicesRegistration
         });
 
         serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(IHasCardValidation), typeof(CardValidationBehavior<,>));
-        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(IHasCodeValidation), typeof(CodeValidationBehavior<,>));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(IHasTokenValidation), typeof(CodeValidationBehavior<,>));
         
         return serviceCollection;
     }

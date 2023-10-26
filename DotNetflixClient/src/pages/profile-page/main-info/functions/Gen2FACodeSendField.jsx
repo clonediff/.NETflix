@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import "../MainInfo.css"
 import { Input, Form, Button } from "antd"
 
-export default function Gen2FACodeSendField() {
+export default function Gen2FACodeSendField(codeType, newEmail) {
 
     const [codeSend, setCodeSend] = useState(false)
     const [remainedToResend, setRemainedToResend] = useState(0)
@@ -13,7 +13,7 @@ export default function Gen2FACodeSendField() {
     }, [remainedToResend])
 
     const sendCode = () => {
-        axiosInstance.get('api/TwoFactorAuth/SendCode')
+        axiosInstance.get(`api/Token/${codeType}${newEmail ? `?newEmail=${newEmail}` : ''}`)
             .then(_ => {
                 setCodeSend(true)
                 setRemainedToResend(120)

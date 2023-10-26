@@ -17,7 +17,7 @@ internal class SetUserMailCommandHandler : ICommandHandler<SetUserMailCommand, R
 
     public async Task<Result<string, string>> Handle(SetUserMailCommand request, CancellationToken cancellationToken)
     {
-        var changeRes = await _userManager.SetEmailAsync(request.User, request.Email);
+        var changeRes = await _userManager.ChangeEmailAsync(request.User, request.Email, request.Token);
 
         return changeRes.ToResult("Почта изменена");
     }

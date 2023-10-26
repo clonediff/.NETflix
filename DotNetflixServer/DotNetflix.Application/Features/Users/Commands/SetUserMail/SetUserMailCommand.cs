@@ -4,4 +4,4 @@ using DotNetflix.Abstractions.Cqrs;
 
 namespace DotNetflix.Application.Features.Users.Commands.SetUserMail;
 
-public record SetUserMailCommand(User User, string Email, string Key, string Code) : ICommand<Result<string, string>>, IHasCodeValidation;
+public record SetUserMailCommand(User User, string Email, string Key, string Token) : ICommand<Result<string, string>>, IHasTokenValidation;

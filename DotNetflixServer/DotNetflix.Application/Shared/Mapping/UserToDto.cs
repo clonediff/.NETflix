@@ -11,7 +11,7 @@ public static class UserToDto
             Login: user.UserName!,
             Email: user.Email!,
             Birthdate: user.Birthday,
-            Enabled2FA: user.TwoFactorEnabled
+            Enabled2FA: user.EmailConfirmed
         );
     }
 }

@@ -1,23 +1,25 @@
-﻿using DotNetflix.Abstractions;
+﻿using Domain.Entities;
+using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using MediatR;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Behaviors;
 
 public class CodeValidationBehavior<TRequest, TSuccess> : IPipelineBehavior<TRequest, Result<TSuccess, string>>
-    where TRequest : IHasCodeValidation
+    where TRequest : IHasTokenValidation
 {
-    private readonly IMemoryCache _memoryCache;
+    private readonly UserManager<User> _userManager;
 
-    public CodeValidationBehavior(IMemoryCache memoryCache)
+    public CodeValidationBehavior(UserManager<User> userManager)
     {
-        _memoryCache = memoryCache;
+        _userManager = userManager;
     }
 
     public async Task<Result<TSuccess, string>> Handle(TRequest request, RequestHandlerDelegate<Result<TSuccess, string>> next, CancellationToken cancellationToken)
     {
-        if (!_memoryCache.TryGetValue<string>(request.Key, out var savedCode) || savedCode != request.Code)
+        var isVerifySuccess = await _userManager.VerifyUserTokenAsync(request.User, TokenOptions.DefaultProvider, request.Key, request.Token);
+        if (!isVerifySuccess)
         {
             return "Код не совпадает или устарел";
         }

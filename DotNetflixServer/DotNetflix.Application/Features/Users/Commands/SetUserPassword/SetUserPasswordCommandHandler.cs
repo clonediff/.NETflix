@@ -17,8 +17,7 @@ internal class SetUserPasswordCommandHandler : ICommandHandler<SetUserPasswordCo
 
     public async Task<Result<string, string>> Handle(SetUserPasswordCommand request, CancellationToken cancellationToken)
     {
-        request.User.PasswordHash = _userManager.PasswordHasher.HashPassword(request.User, request.Password);
-        var changeRes = await _userManager.UpdateAsync(request.User);
+        var changeRes = await _userManager.ResetPasswordAsync(request.User, request.Token, request.Password);
 
         return changeRes.ToResult("Пароль изменён");
     }

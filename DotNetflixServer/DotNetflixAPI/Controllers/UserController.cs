@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using DotNetflix.Application.Features.TwoFactorAuthorization.Commands;
 using DotNetflix.Application.Features.Users.Commands.SetUserData;
 using DotNetflix.Application.Features.Users.Commands.SetUserMail;
 using DotNetflix.Application.Features.Users.Commands.SetUserPassword;
@@ -52,7 +53,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> SetUserPasswordAsync([FromBody] UserChangePasswordDto chPass)
     {
         var user = await _userManager.GetUserAsync(User);
-        var command = new SetUserPasswordCommand(user!, chPass.Password, user!.Email!, chPass.Code);
+        var command = new SetUserPasswordCommand(user!, chPass.Password, UserManager<User>.ResetPasswordTokenPurpose, chPass.Token);
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(
             Ok,
@@ -63,7 +64,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> SetUserMailAsync([FromBody] UserChangeMailDto chMail)
     {
         var user = await _userManager.GetUserAsync(User);
-        var command = new SetUserMailCommand(user!, chMail.Email, user!.Email!, chMail.Code);
+        var command = new SetUserMailCommand(user!, chMail.Email, UserManager<User>.GetChangeEmailTokenPurpose(chMail.Email), chMail.Token);
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(
             Ok,
@@ -78,5 +79,17 @@ public class UserController : ControllerBase
         return result.Match<IActionResult>(
             Ok,
             BadRequest);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Enable2FAAsync([FromBody] EnableTwoFactorAuthDto dto)
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var command = new EnableTwoFactorAuthCommand(user!, UserManager<User>.ConfirmEmailTokenPurpose, dto.Token);
+        var result = await _mediator.Send(command);
+
+        return result.Match<IActionResult>(
+            success: Ok,
+            failure: BadRequest);
     }
 }
