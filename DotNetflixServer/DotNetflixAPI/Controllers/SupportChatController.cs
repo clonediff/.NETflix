@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
+﻿using DotNetflix.Application.Features.Users.Queries.GetUserId;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAPI.Controllers;
@@ -12,18 +12,19 @@ namespace DotNetflixAPI.Controllers;
 public class SupportChatController : Controller
 {
     private readonly ISupportChatService _supportChatService;
-    private readonly IUserService _userService;
+    private readonly IMediator _mediator;
     
-    public SupportChatController(ISupportChatService supportChatService, IUserService userService)
+    public SupportChatController(ISupportChatService supportChatService, IMediator mediator)
     {
         _supportChatService = supportChatService;
-        _userService = userService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
     public async Task<IActionResult> History()
     {
-        var userId = await _userService.GetUserIdAsync(HttpContext.User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
         
         return Ok(_supportChatService.GetHistory(userId!, false));
     }

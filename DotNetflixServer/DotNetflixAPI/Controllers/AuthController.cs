@@ -1,5 +1,5 @@
-﻿using Contracts;
-using Contracts.Forms;
+﻿using Contracts.Forms;
+using DotNetflix.Application.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;

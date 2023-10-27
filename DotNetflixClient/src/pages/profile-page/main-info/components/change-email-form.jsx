@@ -11,7 +11,8 @@ const ChangeEmailForm = ({userData, setUserData}) => {
     
     const navigate = useNavigate()
 
-    const {content} = Gen2FACodeSendField();
+    const [newEmail, setNewEmail] = useState('')
+    const {content} = Gen2FACodeSendField('SendChangeMailToken', newEmail);
     const [showModal, setShowModal] = useState(false)
 
     return(
@@ -32,7 +33,7 @@ const ChangeEmailForm = ({userData, setUserData}) => {
                     ]}
                     initialValue = {userData.email}>
 
-                    <Input />
+                    <Input onChange={e => setNewEmail(e.target.value)} />
                 </Form.Item>
                 <Form.Item >
                     {content}
@@ -58,7 +59,7 @@ const ChangeEmailForm = ({userData, setUserData}) => {
     function SendChangedData (values) {
         axiosInstance.put('api/User/SetUserMail', {
             email: values.email,
-            code: values.code
+            token: values.code
         })
             .then(_ => {
                 setUserData(_ => ({...userData, email: values.email}))

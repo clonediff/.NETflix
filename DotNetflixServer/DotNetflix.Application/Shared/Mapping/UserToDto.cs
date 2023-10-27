@@ -1,7 +1,6 @@
-﻿using Contracts;
-using Domain.Entities;
+﻿using Domain.Entities;
 
-namespace Mappers;
+namespace DotNetflix.Application.Shared.Mapping;
 
 public static class UserToDto
 {
@@ -12,7 +11,7 @@ public static class UserToDto
             Login: user.UserName!,
             Email: user.Email!,
             Birthdate: user.Birthday,
-            Enabled2FA: user.TwoFactorEnabled
+            Enabled2FA: user.EmailConfirmed
         );
     }
 }

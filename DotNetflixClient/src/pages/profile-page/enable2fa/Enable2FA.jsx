@@ -19,7 +19,7 @@ export const Enable2FA = ({user, setUser}) => {
     }, [remainedToResend])
 
     const sendCode = () => {
-        axiosInstance.get('api/TwoFactorAuth/SendCode')
+        axiosInstance.get('api/Token/Send2FAToken')
             .then(_ => {
                 setCodeSend(true)
                 setRemainedToResend(120)
@@ -29,8 +29,8 @@ export const Enable2FA = ({user, setUser}) => {
     }
 
     const sendEnableRequest = (val) => {
-        axiosInstance.post('api/TwoFactorAuth/Enable', {
-            code: val.code
+        axiosInstance.post('api/User/Enable2FA', {
+            token: val.code
         })
             .then(_ => {
                 setUser(x => ({...x, enabled2FA: true}))

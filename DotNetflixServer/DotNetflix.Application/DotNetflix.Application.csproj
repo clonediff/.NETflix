@@ -14,4 +14,9 @@
       <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.5" />
+    </ItemGroup>
+
 </Project>
