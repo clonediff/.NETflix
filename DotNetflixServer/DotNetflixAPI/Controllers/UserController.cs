@@ -84,7 +84,7 @@ public class UserController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> Enable2FAAsync([FromBody] EnableTwoFactorAuthDto dto)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await _userManager.GetUserAsync(User);
         var command = new EnableTwoFactorAuthCommand(user!, UserManager<User>.ConfirmEmailTokenPurpose, dto.Token);
         var result = await _mediator.Send(command);
 

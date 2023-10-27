@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Behaviors;
 
-public class CodeValidationBehavior<TRequest, TSuccess> : IPipelineBehavior<TRequest, Result<TSuccess, string>>
+public class TokenValidationBehavior<TRequest, TSuccess> : IPipelineBehavior<TRequest, Result<TSuccess, string>>
     where TRequest : IHasTokenValidation
 {
     private readonly UserManager<User> _userManager;
 
-    public CodeValidationBehavior(UserManager<User> userManager)
+    public TokenValidationBehavior(UserManager<User> userManager)
     {
         _userManager = userManager;
     }

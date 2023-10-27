@@ -39,7 +39,7 @@ public class TokenController : ControllerBase
     [HttpGet("[action]")]
     public async Task SendChangeMailTokenAsync([FromQuery] string newEmail)
     {
-        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await _userManager.GetUserAsync(User);
         var code = await _userManager.GenerateChangeEmailTokenAsync(user!, newEmail);
         await _emailService.SendEmailAsync(user!.Email!, $"Код для изменения почты с {user.Email} на {newEmail}", code);
     }

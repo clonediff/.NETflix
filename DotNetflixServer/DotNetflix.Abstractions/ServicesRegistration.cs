@@ -13,7 +13,7 @@ public static class ServicesRegistration
     private static readonly Type ResultType = typeof(Result<,>);
 
     public static IServiceCollection RegisterBehaviorReturningResult(this IServiceCollection serviceCollection, Assembly assembly,
-        Type? constraintType, Type behaviorType)
+        Type behaviorType, Type? constraintType = null)
     {
         var generics = assembly
             .GetTypes()

@@ -17,7 +17,6 @@ using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
-using Services.Shared.CodeGenerator;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAPI.Extensions;
@@ -146,77 +145,8 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
         services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
-        services.AddTransient<ICodeGenerator, CodeGenerator>();
         services.AddApplicationServices();
         
         return services;
-    }
-
-    public static WebApplication MapBackupData(this WebApplication app)
-    {
-        app.Map("/backupData", async (ApplicationDBContext db) =>
-        {
-            const string folderPath = "../Domain/jsons";
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            await WriteDbSetAsync(db.Countries, folderPath, x => { x.Movies = null!; });
-            await WriteDbSetAsync(db.CountryMovieInfo, folderPath, x => { x.Country = null!; });
-            await WriteDbSetAsync(db.CurrencyValues, folderPath);
-            await WriteDbSetAsync(db.Fees, folderPath, x =>
-            {
-                x.USA = null;
-                x.Russia = null;
-                x.World = null;
-            });
-            await WriteDbSetAsync(db.Genres, folderPath, x => { x.Movies = null!; });
-            await WriteDbSetAsync(db.GenreMovieInfo, folderPath, x => { x.Genre = null!; });
-            await WriteDbSetAsync(db.Persons, folderPath, x => { x.Proffessions = null!; });
-            await WriteDbSetAsync(db.PersonProffessionInMovie, folderPath, x => { x.Person = null!; });
-            await WriteDbSetAsync(db.SeasonsInfos, folderPath, x => { x.MovieInfo = null!; });
-            await WriteDbSetAsync(db.Types, folderPath);
-            await WriteDbSetAsync(db.Movies, folderPath,
-                x =>
-                {
-                    x.Budget = null;
-                    x.Proffessions = null!;
-                    x.Category = null;
-                    x.Countries = null!;
-                    x.Fees = null!;
-                    x.Genres = null!;
-                    x.SeasonsInfo = null;
-                    x.Type = null!;
-                });
-            await WriteDbSetAsync(db.Categories, folderPath);
-            await WriteDbSetAsync(db.Professions, folderPath);
-            await WriteDbSetAsync(db.Subscriptions, folderPath, x =>
-            {
-                x.Movies = null!;
-                x.Users = null!;
-                x.UserSubscriptions = null!;
-                x.SubscriptionMovies = null!;
-            });
-            await WriteDbSetAsync(db.SubscriptionMovies, folderPath);
-        });
-
-        return app;
-    }
-
-    private static async Task WriteDbSetAsync<T>(DbSet<T> source, string folderPath, Action<T>? changeDataRecord = null)
-        where T : class
-    {
-        var data = source.ToArray();
-        if (changeDataRecord is not null)
-        {
-            Array.ForEach(data, changeDataRecord);
-        }
-
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            //WriteIndented = true
-        });
-        await File.WriteAllTextAsync(Path.Combine(folderPath, $"{typeof(T).Name}.txt"), json);
     }
 }
