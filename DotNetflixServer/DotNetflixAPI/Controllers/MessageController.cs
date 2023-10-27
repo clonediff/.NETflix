@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using Contracts.Shared;
+using DotNetflix.Application.Features.UserChat.Mapping;
+using DotNetflix.Application.Features.UserChat.Queries.GetAllMessages;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -11,21 +13,20 @@ namespace DotNetflixAPI.Controllers;
 [Authorize]
 public class MessageController : ControllerBase
 {
-    private readonly IChatStorage _chatStorage;
+    private readonly IMediator _mediator;
 
-    public MessageController(IChatStorage chatStorage)
+    public MessageController(IMediator mediator)
     {
-        _chatStorage = chatStorage;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
-    public IEnumerable<MessageDto> GetAll()
+    public async Task<IEnumerable<MessageDto>> GetAll()
     {
-        return _chatStorage.GetAllMessages()
-            .Select(m => new MessageDto(
-                Message: m.Message,
-                SenderName: m.SenderName,
-                SendingDate: m.SendingDate,
-                BelongsToSender: m.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)));
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var query = new GetAllMessagesQuery();
+        var messages = await _mediator.Send(query);
+
+        return messages.Select(m => m.ToMessageDto(userId!));
     }
 }
