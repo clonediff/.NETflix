@@ -1,4 +1,4 @@
-﻿using DotNetflix.Admin.Application.Features.Enums.GetAllEnums;
+﻿using DotNetflix.Admin.Application.Features.Enums.Queries.GetAllEnums;
 using DotNetflix.Admin.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

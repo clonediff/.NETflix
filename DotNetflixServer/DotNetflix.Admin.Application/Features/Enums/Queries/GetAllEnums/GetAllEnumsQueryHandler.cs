@@ -3,7 +3,7 @@ using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace DotNetflix.Admin.Application.Features.Enums.GetAllEnums;
+namespace DotNetflix.Admin.Application.Features.Enums.Queries.GetAllEnums;
 
 internal class GetAllEnumsQueryHandler
     : IQueryHandler<GetAllEnumsQuery, IDictionary<string, IEnumerable<EnumDto<int>>>>
