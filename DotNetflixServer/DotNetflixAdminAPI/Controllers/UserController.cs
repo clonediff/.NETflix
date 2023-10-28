@@ -1,15 +1,14 @@
-﻿using Contracts.Admin.Users;
-using DotNetflix.Admin.Application.Features.Users.Commands.BanUser;
+﻿using DotNetflix.Admin.Application.Features.Users.Commands.BanUser;
 using DotNetflix.Admin.Application.Features.Users.Commands.SetRole;
 using DotNetflix.Admin.Application.Features.Users.Commands.UnbanUser;
 using DotNetflix.Admin.Application.Features.Users.Mapping;
 using DotNetflix.Admin.Application.Features.Users.Queries.GetAllRoles;
 using DotNetflix.Admin.Application.Features.Users.Queries.GetUserCount;
+using DotNetflix.Admin.Application.Features.Users.Queries.GetUsersFiltered;
 using DotNetflix.Admin.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Admin.Abstractions;
 
 namespace DotNetflixAdminAPI.Controllers
 {
@@ -18,13 +17,11 @@ namespace DotNetflixAdminAPI.Controllers
     [Authorize(Policy = "Admin")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
         private readonly IMediator _mediator;
 
-        public UserController(IMediator mediator, IUserService userService)
+        public UserController(IMediator mediator)
         {
             _mediator = mediator;
-            _userService = userService;
         }
 
         [HttpGet("[action]")]
@@ -40,9 +37,9 @@ namespace DotNetflixAdminAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<Contracts.Admin.DataRepresentation.PaginationDataDto<UserDto>> GetUsers([FromQuery] string? name, [FromQuery] int? page = 1)
-        { 
-            return await _userService.GetUsersFilteredAsync(page!.Value, name);
+        public async Task<PaginationDataDto<UserDto>> GetUsers([FromQuery] string? name, [FromQuery] int? page = 1)
+        {
+            return await _mediator.Send(new GetUsersFilteredQuery(name, page!.Value));
         }
 
         [HttpPut("[action]")]

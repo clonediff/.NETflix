@@ -49,7 +49,6 @@ public static class ProgramConfigurationExtensions
 
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFilmPersonService, FilmPersonService>();
         services.AddScoped<IEnumService, EnumService>();
