@@ -1,5 +1,5 @@
 using Domain.Entities;
-using DotNetflix.Admin.Application.Features.Persons.Shared;
+using DotNetflix.Admin.Application.Features.Persons.Queries.GetAll;
 
 namespace DotNetflix.Admin.Application.Features.Persons.Mapping;
 

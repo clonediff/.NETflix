@@ -1,5 +1,4 @@
 ﻿using DotNetflix.Admin.Application.Features.Persons.Queries.GetAll;
-using DotNetflix.Admin.Application.Features.Persons.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
