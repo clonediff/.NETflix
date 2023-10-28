@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Enums.GetAllEnums;
 
-public class GetAllEnumsQueryHandler
+internal class GetAllEnumsQueryHandler
     : IQueryHandler<GetAllEnumsQuery, IDictionary<string, IEnumerable<EnumDto<int>>>>
 {
     private readonly ApplicationDBContext _dbContext;
