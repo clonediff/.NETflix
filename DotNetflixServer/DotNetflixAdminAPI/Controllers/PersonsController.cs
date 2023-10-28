@@ -1,7 +1,8 @@
-﻿using Contracts.Admin.Films;
+﻿using DotNetflix.Admin.Application.Features.Persons.GetAll;
+using DotNetflix.Admin.Application.Features.Persons.Shared;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Admin.Abstractions;
 
 namespace DotNetflixAdminAPI.Controllers;
 
@@ -10,16 +11,16 @@ namespace DotNetflixAdminAPI.Controllers;
 [Authorize(Policy = "Manager")]
 public class PersonsController : ControllerBase
 {
-    private readonly IFilmPersonService _filmPersonService;
+    private readonly IMediator _mediator;
 
-    public PersonsController(IFilmPersonService filmPersonService)
+    public PersonsController(IMediator mediator)
     {
-        _filmPersonService = filmPersonService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
-    public IEnumerable<PersonDto> GetAll()
+    public async Task<IEnumerable<PersonDto>> GetAll()
     {
-        return _filmPersonService.GetAll();
+        return await _mediator.Send(new GetAllPersonsQuery());
     }
 }
