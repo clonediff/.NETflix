@@ -1,7 +1,8 @@
-﻿using Contracts.Admin.DataRepresentation;
+﻿using DotNetflix.Admin.Application.Features.Films.Queries.GetAllEnums;
+using DotNetflix.Admin.Application.Shared;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Admin.Abstractions;
 
 namespace DotNetflixAdminAPI.Controllers;
 
@@ -10,46 +11,16 @@ namespace DotNetflixAdminAPI.Controllers;
 [Authorize(Policy = "Manager")]
 public class EnumsController : Controller
 {
-    private readonly IEnumService _enumService;
+    private readonly IMediator _mediator;
 
-    public EnumsController(IEnumService enumService)
+    public EnumsController(IMediator mediator)
     {
-        _enumService = enumService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
-    public IDictionary<string, IEnumerable<EnumDto<int>>> GetAll()
+    public async Task<IDictionary<string, IEnumerable<EnumDto<int>>>> GetAll()
     {
-        return _enumService.GetAll();
-    }
-
-    [HttpGet("[action]")]
-    public IEnumerable<EnumDto<int>> GetTypes()
-    {
-        return _enumService.GetTypes();
-    }
-
-    [HttpGet("[action]")]
-    public IEnumerable<EnumDto<int>> GetCountries()
-    {
-        return _enumService.GetCountries();
-    }
-
-    [HttpGet("[action]")]
-    public IEnumerable<EnumDto<int>> GetGenres()
-    {
-        return _enumService.GetGenres();
-    }
-
-    [HttpGet("[action]")]
-    public IEnumerable<EnumDto<int>> GetCategories()
-    {
-        return _enumService.GetCategories();
-    }
-
-    [HttpGet("[action]")]
-    public IEnumerable<EnumDto<int>> GetProfessions()
-    {
-        return _enumService.GetProfessions();
+        return await _mediator.Send(new GetAllEnumsQuery());
     }
 }
