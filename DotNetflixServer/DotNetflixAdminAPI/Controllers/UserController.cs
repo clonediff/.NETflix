@@ -1,10 +1,11 @@
-﻿using Contracts.Admin.DataRepresentation;
-using Contracts.Admin.Users;
+﻿using Contracts.Admin.Users;
 using DotNetflix.Admin.Application.Features.Users.Commands.BanUser;
 using DotNetflix.Admin.Application.Features.Users.Commands.SetRole;
 using DotNetflix.Admin.Application.Features.Users.Commands.UnbanUser;
 using DotNetflix.Admin.Application.Features.Users.Mapping;
+using DotNetflix.Admin.Application.Features.Users.Queries.GetAllRoles;
 using DotNetflix.Admin.Application.Features.Users.Queries.GetUserCount;
+using DotNetflix.Admin.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,13 +34,13 @@ namespace DotNetflixAdminAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<EnumDto<string>> GetAllRoles()
+        public async Task<IEnumerable<EnumDto<string>>> GetAllRoles()
         {
-            return _userService.GetAllRoles();
+            return await _mediator.Send(new GetAllRolesQuery());
         }
 
         [HttpGet("[action]")]
-        public async Task<PaginationDataDto<UserDto>> GetUsers([FromQuery] string? name, [FromQuery] int? page = 1)
+        public async Task<Contracts.Admin.DataRepresentation.PaginationDataDto<UserDto>> GetUsers([FromQuery] string? name, [FromQuery] int? page = 1)
         { 
             return await _userService.GetUsersFilteredAsync(page!.Value, name);
         }

@@ -18,19 +18,6 @@ public class UserService : IUserService
         _dbContext = dbContext;
     }
 
-    public async Task<int> GetUsersCountAsync()
-    {
-        return await _dbContext.Users.CountAsync();
-    }
-
-    public IEnumerable<EnumDto<string>> GetAllRoles()
-    {
-        return _dbContext.Roles
-            .AsNoTracking()
-            .Select(r => new EnumDto<string>(r.Id, r.Name!))
-            .AsEnumerable();
-    }
-
     public async Task<PaginationDataDto<UserDto>> GetUsersFilteredAsync(int page, string? name)
     {
         var filteredUsers = _dbContext.Users

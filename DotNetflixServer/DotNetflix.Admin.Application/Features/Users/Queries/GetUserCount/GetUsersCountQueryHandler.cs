@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Users.Queries.GetUserCount;
 
-public class GetUsersCountQueryHandler : IQueryHandler<GetUsersCountQuery, int>
+internal class GetUsersCountQueryHandler : IQueryHandler<GetUsersCountQuery, int>
 {
     private readonly ApplicationDBContext _dbContext;
 
