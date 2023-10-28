@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Users.Queries.GetUsersFiltered;
 
-public class GetUsersFilteredQueryHandler : IQueryHandler<GetUsersFilteredQuery , PaginationDataDto<UserDto>>
+internal class GetUsersFilteredQueryHandler : IQueryHandler<GetUsersFilteredQuery , PaginationDataDto<UserDto>>
 {
     private readonly ApplicationDBContext _dbContext;
 

@@ -71,5 +71,5 @@ namespace DotNetflixAdminAPI.Controllers
                 success: _ => Ok(),
                 failure: BadRequest);
         }
-    } 
+    }
 }
