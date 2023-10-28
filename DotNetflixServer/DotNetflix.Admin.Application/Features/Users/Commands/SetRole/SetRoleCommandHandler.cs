@@ -31,10 +31,7 @@ internal class SetRoleCommandHandler : ICommandHandler<SetRoleCommand, Result<bo
         var user = await _dbContext.Users.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
-        if (user == null)
-            return "Не удалось найти пользователя";
-        
-        if (user.BannedUntil != null)
+        if (user!.BannedUntil != null)
             return "Нельзя менять роль заблокированным пользователям";
         
         var userRoles = await _dbContext.UserRoles

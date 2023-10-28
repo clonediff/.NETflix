@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Behaviors\" />
       <Folder Include="Features\Users\Shared\" />
     </ItemGroup>
 

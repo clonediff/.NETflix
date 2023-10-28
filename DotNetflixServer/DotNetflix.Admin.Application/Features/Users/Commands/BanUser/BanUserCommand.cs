@@ -3,4 +3,4 @@ using DotNetflix.Abstractions.Cqrs;
 
 namespace DotNetflix.Admin.Application.Features.Users.Commands.BanUser;
 
-public record BanUserCommand(string UserId, int Days) : ICommand<Result<DateTime,string>>;
+public record BanUserCommand(string UserId, int Days) : ICommand<Result<DateTime,string>> , IHasUserIdValidation;

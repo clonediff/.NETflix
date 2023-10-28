@@ -23,10 +23,7 @@ internal class UnbanUserCommandHandler : ICommandHandler<UnbanUserCommand, Resul
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
-
-        if (user == null)
-            return "Не удалось найти пользователя";
-
+        
         if (user.BannedUntil == null)
             return "Нельзя разблокировать уже разблокированного пользователя";
 
