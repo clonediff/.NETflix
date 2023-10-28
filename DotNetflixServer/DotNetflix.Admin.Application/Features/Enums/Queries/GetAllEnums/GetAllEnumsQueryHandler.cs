@@ -19,33 +19,33 @@ internal class GetAllEnumsQueryHandler
         GetAllEnumsQuery request,
         CancellationToken cancellationToken)
     {
-        var getTypesTask = _dbContext.Types.AsNoTracking()
+        var getTypes = await _dbContext.Types.AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getCountriesTask = _dbContext.Countries.AsNoTracking()
+        var getCountries = await _dbContext.Countries.AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getGenresTask = _dbContext.Genres.AsNoTracking()
+        var getGenres = await _dbContext.Genres.AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getCategoriesTask = _dbContext.Categories.AsNoTracking()
+        var getCategories = await _dbContext.Categories.AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getProfessionsTask = _dbContext.Professions.AsNoTracking()
+        var getProfessions = await _dbContext.Professions.AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
         return new Dictionary<string, IEnumerable<EnumDto<int>>>
         {
-            ["types"] = await getTypesTask,
-            ["countries"] = await getCountriesTask,
-            ["genres"] = await getGenresTask,
-            ["categories"] = await getCategoriesTask,
-            ["professions"] = await getProfessionsTask
+            ["types"] =  getTypes,
+            ["countries"] =  getCountries,
+            ["genres"] =  getGenres,
+            ["categories"] =  getCategories,
+            ["professions"] =  getProfessions
         };
     }
 }
