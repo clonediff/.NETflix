@@ -1,5 +1,4 @@
 using DataAccess;
-using Domain.Exceptions;
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
