@@ -11,7 +11,7 @@ const ChangePassForm = () => {
 
     const navigate = useNavigate()
 
-    const {content} = Gen2FACodeSendField();
+    const {content} = Gen2FACodeSendField("SendChangePasswordToken");
     const [showModal, setShowModal] = useState(false)
 
     return(
@@ -79,7 +79,7 @@ const ChangePassForm = () => {
     function SendChangedData (values) {
         axiosInstance.put('api/User/SetUserPassword', {
             password: values.password,
-            code: values.code
+            token: values.code
         })
             .then(_ => {
                 setShowModal(true)

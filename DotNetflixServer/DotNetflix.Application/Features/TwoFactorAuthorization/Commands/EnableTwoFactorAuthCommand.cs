@@ -4,4 +4,4 @@ using DotNetflix.Abstractions.Cqrs;
 
 namespace DotNetflix.Application.Features.TwoFactorAuthorization.Commands;
 
-public record EnableTwoFactorAuthCommand(User User, string Email, string Code) : ICommand<Result<string, string>>;
+public record EnableTwoFactorAuthCommand(User User, string Key, string Token) : ICommand<Result<string, string>>, IHasTokenValidation;

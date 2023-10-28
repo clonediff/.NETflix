@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
-using Contracts;
 using Contracts.AuthDto;
 using Contracts.Forms;
+using DotNetflix.Application.Shared;
 
 namespace Services.Abstractions;
 

@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
-using Contracts;
 using Contracts.AuthDto;
 using Contracts.Forms;
 using Domain.Entities;
-using Mappers;
+using DotNetflix.Application.Shared;
+using DotNetflix.Application.Shared.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Services.Abstractions;
 

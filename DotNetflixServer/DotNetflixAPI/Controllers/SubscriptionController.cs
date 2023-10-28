@@ -1,4 +1,5 @@
 ﻿using Contracts.Shared;
+using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
 using DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 using DotNetflix.Application.Features.Subscriptions.Queries.GetAllFilmNamesInSubscription;
@@ -7,7 +8,6 @@ using DotNetflix.Application.Features.Subscriptions.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -17,22 +17,20 @@ namespace DotNetflixAPI.Controllers;
 public class SubscriptionController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IUserService _userService;
 
-    public SubscriptionController(IMediator mediator, IUserService userService)
+    public SubscriptionController(IMediator mediator)
     {
-        _userService = userService;
         _mediator = mediator;
     }
 
     [HttpGet("[action]")]
     public async Task<IEnumerable<AvailableSubscriptionDto>> GetAllSubscriptionsAsync()
     {
-        var userId = await _userService.GetUserIdAsync(User);
-
-        var query = new GetAllSubscriptionsForUserQuery(userId);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
+        var getAllSubscriptionsForUserQuery = new GetAllSubscriptionsForUserQuery(userId);
         
-        return await _mediator.Send(query);
+        return await _mediator.Send(getAllSubscriptionsForUserQuery);
     }
 
     [HttpGet("[action]")]
@@ -48,7 +46,8 @@ public class SubscriptionController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> PurchaseAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
-        var userId = await _userService.GetUserIdAsync(User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
         
         if (userId is null)
             return BadRequest();
@@ -63,7 +62,8 @@ public class SubscriptionController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> ExtendAsync([FromQuery] int subscriptionId, [FromBody] CardDataDto cardDataDto)
     {
-        var userId = await _userService.GetUserIdAsync(User);
+        var getUserIdQuery = new GetUserIdQuery(User);
+        var userId = await _mediator.Send(getUserIdQuery);
         
         if (userId is null)
             return BadRequest();

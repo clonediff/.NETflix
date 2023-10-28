@@ -1,5 +1,3 @@
-using System.Collections;
-using Contracts;
 using Contracts.Movies;
 using DataAccess;
 using Domain.Entities;
@@ -13,12 +11,10 @@ namespace Services;
 public class FilmService : IFilmService
 {
     private readonly ApplicationDBContext _dbContext;
-    private readonly IUserService _userService;
 
-    public FilmService(ApplicationDBContext dbContext, IUserService userService)
+    public FilmService(ApplicationDBContext dbContext)
     {
         _dbContext = dbContext;
-        _userService = userService;
     }
 
     public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch(MovieSearchDto dto)
@@ -102,7 +98,7 @@ public class FilmService : IFilmService
 
     public async Task<MovieForMoviePageDto> GetFilmByIdAsync(int filmId, string? userId)
     {
-        var availableMovies = await _userService.GetAvailableFilmIdsAsync(userId);
+        var availableMovies = await GetAvailableFilmIdsAsync(userId);
         
         if (_dbContext.SubscriptionMovies.Any(sm => sm.MovieInfoId == filmId) && !availableMovies.Contains(filmId))
         {
@@ -133,5 +129,20 @@ public class FilmService : IFilmService
             throw new NotFoundException("Не удалось найти запрашиваемый контент");
 
         return movie.ToMovieForMoviePageDto();
+    }
+
+    // TODO: исправить в NETFLIX-73
+    private async Task<IEnumerable<int>> GetAvailableFilmIdsAsync(string? userId)
+    {
+        if (userId is null)
+            return Enumerable.Empty<int>();
+        
+        var user = await _dbContext.Users
+            .Where(u => u.Id == userId)
+            .Include(u => u.Subscriptions)
+            .ThenInclude(s => s.Movies)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        
+        return user!.Subscriptions.SelectMany(s => s.Movies.Select(m => m.Id));
     }
 }

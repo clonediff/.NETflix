@@ -25,8 +25,11 @@ public static class ApplicationServicesRegistration
                     ValidationBehavior<RegistrationCommand, string>>();
         });
 
-        serviceCollection.RegisterBehavior(Assembly, typeof(IHasCardValidation), typeof(CardValidationBehavior<,>));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(CardValidationBehavior<,>), typeof(IHasCardValidation));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(TokenValidationBehavior<,>), typeof(IHasTokenValidation));
+        
         serviceCollection.AddValidatorsFromAssembly(Assembly);
+
         return serviceCollection;
     }
 }

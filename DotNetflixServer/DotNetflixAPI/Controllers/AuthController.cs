@@ -2,8 +2,8 @@
 using DotNetflix.Application.Features.Authentication.Commands.Login;
 using DotNetflix.Application.Features.Authentication.Commands.Logout;
 using DotNetflix.Application.Features.Authentication.Commands.Register;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace DotNetflixAPI.Controllers;
 
