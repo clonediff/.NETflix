@@ -1,7 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Configuration.Shared.RabbitMq;
+﻿using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
 using DotNetflix.Application;
@@ -136,7 +133,6 @@ public static class ProgramConfigurationExtensions
     {
         services.AddMemoryCache();
         services.AddSingleton<IChatStorage, ChatStorage>();
-        services.AddScoped<IFilmService, FilmService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IAuthService, AuthServiceImpl>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();

@@ -1,4 +1,4 @@
-﻿namespace Contracts.Movies;
+﻿namespace DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 
 public record MovieSearchDto(
     string? Type, 

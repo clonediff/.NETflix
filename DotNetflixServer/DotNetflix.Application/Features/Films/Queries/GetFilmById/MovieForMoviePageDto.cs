@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace Contracts.Movies;
+﻿namespace DotNetflix.Application.Features.Films.Queries.GetFilmById;
 
 public class MovieForMoviePageDto
 {
