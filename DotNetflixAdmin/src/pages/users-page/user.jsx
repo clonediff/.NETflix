@@ -84,7 +84,7 @@ const User = ({ roles, user, onChange }) => {
                     user.bannedUntil 
                     ?
                     <Space.Compact>
-                        <div className='ban-info left-border-radius'>Забанен до { user.bannedUntil }</div>
+                        <div className='ban-info left-border-radius'>Забанен до { new Date(user.bannedUntil).toLocaleDateString('ru-ru') }</div>
                         <button className='ban-button unban-color right-border-radius' onClick={ onUnbanning }>Разблокировать</button>
                     </Space.Compact>
                     :
