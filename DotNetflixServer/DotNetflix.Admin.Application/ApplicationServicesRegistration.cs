@@ -2,6 +2,8 @@
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Behaviors;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNetflix.Admin.Application;
@@ -15,6 +17,10 @@ public static class ApplicationServicesRegistration
 
         serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(UserIdValidationBehavior<,>), typeof(IHasUserIdValidation));
 
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(ValidationBehavior<,>),
+            typeof(IRequest<Result<string, string>>));
+        serviceCollection.AddValidatorsFromAssembly(Assembly);
+        
         return serviceCollection;
     }
 }
