@@ -3,8 +3,6 @@ using Domain.Entities;
 using DotNetflix.Admin.Application;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Services.Admin;
-using Services.Admin.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Shared.SupportChatService;
 
@@ -49,12 +47,7 @@ public static class ProgramConfigurationExtensions
 
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IFilmPersonService, FilmPersonService>();
-        services.AddScoped<IEnumService, EnumService>();
-        services.AddScoped<IAdminAuthService, AdminAuthService>();
-        services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
         services.AddApplicationServices();
 

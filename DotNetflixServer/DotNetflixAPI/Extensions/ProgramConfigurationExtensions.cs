@@ -132,9 +132,7 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         services.AddMemoryCache();
-        services.AddScoped<IFilmService, FilmService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IAuthService, AuthServiceImpl>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient();
         services.AddHttpContextAccessor();

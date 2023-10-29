@@ -27,7 +27,7 @@ internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubs
         if (_dbContext.UserSubscriptions.Any(us =>
                 us.UserId == request.UserSubscriptionDto.UserId &&
                 us.SubscriptionId == request.UserSubscriptionDto.SubscriptionId))
-            return "Неудалось приобрести данную подписку, так как она уже приобретена";
+            return "Не удалось приобрести данную подписку, так как она уже приобретена";
 
         _dbContext.UserSubscriptions.Add(new UserSubscription
         {

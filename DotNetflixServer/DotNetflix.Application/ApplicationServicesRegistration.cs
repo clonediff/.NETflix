@@ -2,6 +2,10 @@
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Application.Behaviors;
+using DotNetflix.Application.Features.Authentication.Commands.Login;
+using DotNetflix.Application.Features.Authentication.Commands.Register;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNetflix.Application;
@@ -19,7 +23,10 @@ public static class ApplicationServicesRegistration
 
         serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(CardValidationBehavior<,>), typeof(IHasCardValidation));
         serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(TokenValidationBehavior<,>), typeof(IHasTokenValidation));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(ValidationBehavior<,>), typeof(IRequest<Result<string, string>>)); 
         
+        serviceCollection.AddValidatorsFromAssembly(Assembly);
+
         return serviceCollection;
     }
 }
