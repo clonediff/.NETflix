@@ -22,8 +22,7 @@ internal class BanUserCommandHandler : ICommandHandler<BanUserCommand, Result<Da
 
     public async Task<Result<DateTime,string>> Handle(BanUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users
-            .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.UserId);
 
         if (user!.BannedUntil != null)
             return "Нельзя заблокировать уже заблокированного пользователя";
