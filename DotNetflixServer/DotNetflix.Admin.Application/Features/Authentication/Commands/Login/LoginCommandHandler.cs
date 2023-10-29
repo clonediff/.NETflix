@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Admin.Application.Features.Authentication.Commands.Login;
 
-public class LoginCommandHandler : ICommandHandler<LoginCommand, Result<string, string>>
+internal class LoginCommandHandler : ICommandHandler<LoginCommand, Result<string, string>>
 {
     private readonly SignInManager<User> _signInManager;
 

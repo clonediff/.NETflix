@@ -1,5 +1,4 @@
-﻿using Contracts.Admin.Authentication.Login;
-using DotNetflix.Admin.Application.Features.Authentication.Commands.Login;
+﻿using DotNetflix.Admin.Application.Features.Authentication.Commands.Login;
 using DotNetflix.Admin.Application.Features.Authentication.Commands.Logout;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

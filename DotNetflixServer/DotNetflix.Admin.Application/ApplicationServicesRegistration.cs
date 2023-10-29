@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Behaviors;
 using FluentValidation;
 using MediatR;

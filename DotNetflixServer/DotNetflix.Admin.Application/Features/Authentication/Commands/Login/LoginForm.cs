@@ -1,4 +1,4 @@
-﻿namespace Contracts.Admin.Authentication.Login;
+﻿namespace DotNetflix.Admin.Application.Features.Authentication.Commands.Login;
 
 public class LoginForm
 {

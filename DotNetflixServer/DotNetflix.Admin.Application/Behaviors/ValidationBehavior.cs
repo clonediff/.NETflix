@@ -5,7 +5,7 @@ using MediatR;
 namespace DotNetflix.Admin.Application.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, Result<TResponse, string>> 
-    where TRequest : notnull
+    where TRequest : IRequest<Result<TResponse, string>>
 {
 
     private readonly IEnumerable<IValidator<TRequest>> _validators;

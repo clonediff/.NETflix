@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Admin.Application.Features.Authentication.Commands.Logout;
 
-public class LogoutCommandHandler : ICommandHandler<LogoutCommand>
+internal class LogoutCommandHandler : ICommandHandler<LogoutCommand>
 {
     private readonly SignInManager<User> _signInManager;
 
