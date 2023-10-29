@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DotNetflix.Admin.Application.Features.AdminSupportChat.Commands.MarkAsRead;
+using DotNetflix.Admin.Application.Features.AdminSupportChat.Queries.GetPreviews;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Admin.Abstractions;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAdminAPI.Controllers;
@@ -10,19 +12,21 @@ namespace DotNetflixAdminAPI.Controllers;
 [Authorize(Policy = "Admin")]
 public class SupportChatController : Controller
 {
-    private readonly IAdminSupportChatService _adminSupportChatService;
     private readonly ISupportChatService _supportChatService;
+    private readonly IMediator _mediator;
     
-    public SupportChatController(IAdminSupportChatService adminSupportChatService, ISupportChatService supportChatService)
+    public SupportChatController(ISupportChatService supportChatService, IMediator mediator)
     {
-        _adminSupportChatService = adminSupportChatService;
         _supportChatService = supportChatService;
+        _mediator = mediator;
     }
 
     [HttpGet("[action]")]
     public async Task<IActionResult> Preview([FromQuery] int page, [FromQuery] int size)
     {
-        return Ok(await _adminSupportChatService.GetPreviewsAsync(page, size));
+        var query = new GetPreviewsQuery(page, size);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpGet("[action]")]
@@ -34,7 +38,8 @@ public class SupportChatController : Controller
     [HttpPatch("[action]")]
     public async Task<IActionResult> MarkAsRead([FromQuery] string roomId)
     {
-        await _adminSupportChatService.MarkAsReadAsync(roomId);
+        var command = new MarkAsReadCommand(roomId);
+        await _mediator.Send(command);
         return Ok();
     }
 }

@@ -1,26 +1,24 @@
-﻿using Contracts.Admin.DataRepresentation;
-using Contracts.Admin.Messages;
-using DataAccess;
+﻿using DataAccess;
 using Domain.Extensions;
+using DotNetflix.Abstractions.Cqrs;
 using Microsoft.EntityFrameworkCore;
-using Services.Admin.Abstractions;
 
-namespace Services.Admin;
+namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Queries.GetPreviews;
 
-public class AdminSupportChatService : IAdminSupportChatService
+public class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, PaginationDataDto<PreviewMessageDto>>
 {
-    private readonly ApplicationDBContext _context;
+    private readonly ApplicationDBContext _dbContext;
     
     private const string AdminName = "Администратор";
 
-    public AdminSupportChatService(ApplicationDBContext context)
+    public GetPreviewsQueryHandler(ApplicationDBContext dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
-    
-    public async Task<PaginationDataDto<PreviewMessageDto>> GetPreviewsAsync(int page, int pageSize)
+
+    public async Task<PaginationDataDto<PreviewMessageDto>> Handle(GetPreviewsQuery request, CancellationToken cancellationToken)
     {
-        var rooms = _context.Messages
+        var rooms = _dbContext.Messages
             .Include(x => x.User)
             .GroupBy(x => x.User)
             .Select(x =>
@@ -31,22 +29,15 @@ public class AdminSupportChatService : IAdminSupportChatService
                     UnreadMessages = x.Count(y => !y.IsRead)
                 });
         
-        var totalRoomsCount = await rooms.CountAsync(); 
+        var totalRoomsCount = await rooms.CountAsync(cancellationToken: cancellationToken); 
         
         var resultRooms = rooms 
-            .Paginate(page, pageSize)
+            .Paginate(request.Page, request.PageSize)
             .AsEnumerable()
             .Select(x =>
                 new PreviewMessageDto(x.RoomId, x.LatestMessage.IsFromAdmin ? AdminName : x.LatestMessage.User.UserName!, x.LatestMessage.Content,
                     x.UnreadMessages))
             .ToList();
         return new PaginationDataDto<PreviewMessageDto>(resultRooms, totalRoomsCount);
-    }
-
-    public async Task MarkAsReadAsync(string roomId)
-    {
-        await _context.Messages
-            .Where(x => x.UserId == roomId)
-            .ExecuteUpdateAsync(x => x.SetProperty(m => m.IsRead, true));
     }
 }
