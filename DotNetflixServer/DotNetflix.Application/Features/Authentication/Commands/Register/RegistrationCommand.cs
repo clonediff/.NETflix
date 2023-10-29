@@ -5,4 +5,4 @@ using DotNetflix.Abstractions.Cqrs;
 namespace DotNetflix.Application.Features.Authentication.Commands.Register;
 
 public record RegistrationCommand(string Email, string UserName, DateTime Birthday,
-    string Password, string ConfirmPassword) : ICommand<Result<string, IEnumerable<string>>>;
+    string Password, string ConfirmPassword) : ICommand<Result<string, string>>;

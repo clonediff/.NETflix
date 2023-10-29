@@ -14,23 +14,19 @@ public class RegistrationCommandValidator : AbstractValidator<RegistrationComman
         
         RuleFor(x => x.Email)
             .NotEmpty()
-            .NotNull()
             .EmailAddress()
             .WithMessage("Email-адрес должен быть заполнен!");
         
         RuleFor(x => x.UserName)
             .NotEmpty()
-            .NotNull()
             .WithMessage("Имя пользователя должно быть заполнено!");
         
         RuleFor(x => x.Birthday)
             .NotEmpty()
-            .NotNull()
             .WithMessage("Дата рождения должна быть заполнена!");
         
         RuleFor(x => x.ConfirmPassword)
             .NotEmpty()
-            .NotNull()
             .WithMessage("Подтверждение пароля должно быть заполнено!");
         
         RuleFor(x => x.ConfirmPassword)
@@ -39,7 +35,6 @@ public class RegistrationCommandValidator : AbstractValidator<RegistrationComman
         
         RuleFor(x => x.Password)
             .NotEmpty()
-            .NotNull()
             .WithMessage("Пароль должен быть заполнен!");
 
         RuleFor(x => x)

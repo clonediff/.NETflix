@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Features.Authentication.Commands.Register;
 
-internal class RegistrationCommandHandler : ICommandHandler<RegistrationCommand, Result<string, IEnumerable<string>>>
+internal class RegistrationCommandHandler : ICommandHandler<RegistrationCommand, Result<string, string>>
 {
     private readonly UserManager<User> _userManager;
 
@@ -14,7 +14,7 @@ internal class RegistrationCommandHandler : ICommandHandler<RegistrationCommand,
         _userManager = userManager;
     }
 
-    public async Task<Result<string, IEnumerable<string>>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string, string>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
     {
         var user = new User
         {
@@ -26,11 +26,11 @@ internal class RegistrationCommandHandler : ICommandHandler<RegistrationCommand,
         var creatingResult = await _userManager.CreateAsync(user, request.Password);
         if (!creatingResult.Succeeded)
         {
-            return new[] {"Ошибка регистрации. Попробуйте снова!"};
+            return new Result<string, string>(failure: "Ошибка регистрации. Попробуйте снова!");
         }
 
         await _userManager.AddToRoleAsync(user, "user");
 
-        return "Вы успешно зарегистрировались!";
+        return new Result<string, string>(success: "Вы успешно зарегистрировались!");
     }
 }

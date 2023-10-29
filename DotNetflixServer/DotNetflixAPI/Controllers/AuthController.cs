@@ -1,5 +1,4 @@
-﻿using Contracts.Forms;
-using DotNetflix.Application.Features.Authentication.Commands.Login;
+﻿using DotNetflix.Application.Features.Authentication.Commands.Login;
 using DotNetflix.Application.Features.Authentication.Commands.Logout;
 using DotNetflix.Application.Features.Authentication.Commands.Register;
 using Microsoft.AspNetCore.Mvc;

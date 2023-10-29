@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Features.Authentication.Commands.Login;
 
-internal class LoginCommandHandler : ICommandHandler<LoginCommand, Result<string, IEnumerable<string>>>
+internal class LoginCommandHandler : ICommandHandler<LoginCommand, Result<string, string>>
 {
     private readonly SignInManager<User> _signInManager;
 
@@ -14,12 +14,12 @@ internal class LoginCommandHandler : ICommandHandler<LoginCommand, Result<string
         _signInManager = signInManager;
     }
 
-    public async Task<Result<string, IEnumerable<string>>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string, string>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var result = await _signInManager.PasswordSignInAsync(request.Username, request.Password, request.RememberUser, false);
 
         return result.Succeeded
-            ? "Вы успешно вошли в аккаунт!"
-            : new[]{"Неверный логин или пароль!"};
+            ? new Result<string, string>(success: "Вы успешно вошли в аккаунт!")
+            : new Result<string, string>(failure: "Неверный логин или пароль!");
     }
 }

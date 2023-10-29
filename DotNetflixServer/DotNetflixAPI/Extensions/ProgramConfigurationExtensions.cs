@@ -138,7 +138,6 @@ public static class ProgramConfigurationExtensions
         services.AddSingleton<IChatStorage, ChatStorage>();
         services.AddScoped<IFilmService, FilmService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IAuthService, AuthServiceImpl>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient();
         services.AddHttpContextAccessor();
