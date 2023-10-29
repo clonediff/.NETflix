@@ -1,11 +1,23 @@
-﻿using Contracts;
-using Contracts.Movies;
-using Domain.Entities;
+﻿using Domain.Entities;
+using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
+using DotNetflix.Application.Features.Films.Queries.GetFilmById;
+using DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 
-namespace Mappers;
+namespace DotNetflix.Application.Features.Films.Mapping;
 
 public static class MovieInfoToDto
 {
+    public static MovieForSearchPageDto ToMovieForSearchPageDto(this MovieInfo movieInfo)
+    {
+        return new MovieForSearchPageDto
+        (
+            Id: movieInfo.Id,
+            Name: movieInfo.Name,
+            Rating: movieInfo.Rating,
+            PosterUrl: movieInfo.PosterURL!
+        );
+    }
+    
     public static MovieForMainPageDto ToMovieForMainPageDto(this MovieInfo movieInfo)
     {
         return new MovieForMainPageDto
@@ -15,17 +27,6 @@ public static class MovieInfoToDto
             Rating: movieInfo.Rating,
             PosterUrl: movieInfo.PosterURL!,
             Category: movieInfo.Category!.Name
-        );
-    }
-
-    public static MovieForSearchPageDto ToMovieForSearchPageDto(this MovieInfo movieInfo)
-    {
-        return new MovieForSearchPageDto
-        (
-            Id: movieInfo.Id,
-            Name: movieInfo.Name,
-            Rating: movieInfo.Rating,
-            PosterUrl: movieInfo.PosterURL!
         );
     }
 
@@ -49,7 +50,7 @@ public static class MovieInfoToDto
 
             Fees = new FeesDto
             (
-                World: $"{movieInfo.Fees.World?.Value}{movieInfo.Fees?.World?.Currency}",
+                World: $"{movieInfo.Fees?.World?.Value}{movieInfo.Fees?.World?.Currency}",
                 Russia: $"{movieInfo.Fees?.Russia?.Value}{movieInfo.Fees?.Russia?.Currency}",
                 Usa: $"{movieInfo.Fees?.USA?.Value}{movieInfo.Fees?.USA?.Currency}"
             ),

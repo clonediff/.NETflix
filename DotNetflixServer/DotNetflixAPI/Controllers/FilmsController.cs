@@ -1,9 +1,9 @@
-﻿using Contracts.Movies;
-using Domain.Exceptions;
+﻿using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
+using DotNetflix.Application.Features.Films.Queries.GetFilmById;
+using DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -11,25 +11,28 @@ namespace DotNetflixAPI.Controllers;
 [Route("api/[controller]")]
 public class FilmsController : ControllerBase
 {
-    private readonly IFilmService _filmService;
     private readonly IMediator _mediator;
 
-    public FilmsController(IFilmService filmService, IMediator mediator)
+    public FilmsController(IMediator mediator)
     {
-        _filmService = filmService;
         _mediator = mediator;
     }
 
     [HttpGet("[action]")]
-    public IDictionary<string, IEnumerable<MovieForMainPageDto>> GetAllFilms()
+    public async Task<IDictionary<string, IEnumerable<MovieForMainPageDto>>> GetAllFilmsAsync()
     {
-        return _filmService.GetAllFilms();
+        var query = new GetAllFilmsQuery();
+        var result = await _mediator.Send(query);
+        return result;
     }
     
     [HttpGet("[action]")]
-    public IEnumerable<MovieForSearchPageDto> GetFilmsBySearch([FromQuery] MovieSearchDto dto)
+    public async Task<IEnumerable<MovieForSearchPageDto>> GetFilmsBySearchAsync([FromQuery] MovieSearchDto dto)
     {
-        return _filmService.GetFilmsBySearch(dto);
+        var query = new GetFilmsBySearchQuery(dto.Type, dto.Name, dto.Year, dto.Country, dto.Genres, dto.Actors,
+            dto.Director);
+        var result = await _mediator.Send(query);
+        return result;
     }
 
     [HttpGet("[action]")]
@@ -38,18 +41,10 @@ public class FilmsController : ControllerBase
         var getUserIdQuery = new GetUserIdQuery(User);
         var userId = await _mediator.Send(getUserIdQuery);
 
-        try
-        {
-            var movie = await _filmService.GetFilmByIdAsync(id, userId);
-            return Ok(movie);
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (IncorrectOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var getFilmByIdQuery = new GetFilmByIdQuery(id, userId);
+        var result = await _mediator.Send(getFilmByIdQuery);
+        return result.Match<IActionResult>(
+            Ok, 
+            BadRequest);
     }
 }
