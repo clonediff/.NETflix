@@ -51,7 +51,6 @@ public static class ProgramConfigurationExtensions
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IEnumService, EnumService>();
         services.AddScoped<IAdminAuthService, AdminAuthService>();
         services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
         services.AddScoped<ISupportChatService, SupportChatService>();

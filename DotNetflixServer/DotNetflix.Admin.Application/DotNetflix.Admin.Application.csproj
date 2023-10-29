@@ -9,6 +9,7 @@
     <ItemGroup>
       <Folder Include="Behaviors\" />
       <Folder Include="Features\Persons\Queries\" />
+      <Folder Include="Features\Enums\Queries\" />
     </ItemGroup>
 
     <ItemGroup>
