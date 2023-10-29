@@ -1,3 +1,3 @@
-﻿namespace Contracts.Admin.DataRepresentation;
+namespace Contracts.Admin.DataRepresentation;
 
 public record EnumDto<TKey>(TKey Id, string Name);

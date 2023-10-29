@@ -7,9 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Behaviors\" />
-        <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-        <ProjectReference Include="..\DotNetflix.Abstractions\DotNetflix.Abstractions.csproj" />
+      <Folder Include="Behaviors\" />
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\DotNetflix.Abstractions\DotNetflix.Abstractions.csproj" />
+      <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
