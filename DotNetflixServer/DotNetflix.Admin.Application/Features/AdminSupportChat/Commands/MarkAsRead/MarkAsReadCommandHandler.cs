@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Commands.MarkAsRead;
 
-public class MarkAsReadCommandHandler : ICommandHandler<MarkAsReadCommand>
+internal class MarkAsReadCommandHandler : ICommandHandler<MarkAsReadCommand>
 {
     private readonly ApplicationDBContext _dbContext;
 

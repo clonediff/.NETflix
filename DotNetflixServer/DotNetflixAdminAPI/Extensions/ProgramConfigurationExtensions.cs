@@ -3,8 +3,6 @@ using Domain.Entities;
 using DotNetflix.Admin.Application;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Services.Admin;
-using Services.Admin.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Shared.SupportChatService;
 

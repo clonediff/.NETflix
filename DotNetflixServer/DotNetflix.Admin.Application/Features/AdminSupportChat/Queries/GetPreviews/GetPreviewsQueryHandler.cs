@@ -1,11 +1,12 @@
 ﻿using DataAccess;
 using Domain.Extensions;
 using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.Admin.Application.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Queries.GetPreviews;
 
-public class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, PaginationDataDto<PreviewMessageDto>>
+internal class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, PaginationDataDto<PreviewMessageDto>>
 {
     private readonly ApplicationDBContext _dbContext;
     
