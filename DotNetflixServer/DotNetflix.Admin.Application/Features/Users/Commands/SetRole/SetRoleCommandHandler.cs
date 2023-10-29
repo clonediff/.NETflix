@@ -1,4 +1,5 @@
 using DataAccess;
+using Domain.Entities;
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using Microsoft.AspNetCore.Identity;
@@ -11,11 +12,14 @@ internal class SetRoleCommandHandler : ICommandHandler<SetRoleCommand, Result<bo
 {
     private readonly ApplicationDBContext _dbContext;
     private readonly IEmailService _emailService;
+    private readonly UserManager<User> _userManager;
 
     public SetRoleCommandHandler(
         IEmailService emailService,
-        ApplicationDBContext dbContext)
+        ApplicationDBContext dbContext,
+        UserManager<User> userManager)
     {
+        _userManager = userManager;
         _emailService = emailService;
         _dbContext = dbContext;
     }
@@ -28,8 +32,7 @@ internal class SetRoleCommandHandler : ICommandHandler<SetRoleCommand, Result<bo
         if (role == null)
             return "Не удалось найти роль";
 
-        var user = await _dbContext.Users.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.UserId);
 
         if (user!.BannedUntil != null)
             return "Нельзя менять роль заблокированным пользователям";

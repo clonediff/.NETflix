@@ -1,29 +1,28 @@
-using DataAccess;
+using Domain.Entities;
 using DotNetflix.Abstractions;
 using DotNetflix.Abstractions.Cqrs;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Admin.Application.Behaviors;
 
 public class UserIdValidationBehavior<TRequest, TSuccess> : IPipelineBehavior<TRequest, Result<TSuccess, string>>
     where TRequest : IHasUserIdValidation
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly UserManager<User> _userManager;
 
-    public UserIdValidationBehavior(ApplicationDBContext dbContext)
+    public UserIdValidationBehavior(UserManager<User> userManager)
     {
-        _dbContext = dbContext;
+        _userManager = userManager;
     }
     public async Task<Result<TSuccess, string>> Handle(
         TRequest request,
         RequestHandlerDelegate<Result<TSuccess, string>> next,
         CancellationToken cancellationToken)
     {
-        var existUserWithThisId = await _dbContext.Users.AsNoTracking()
-            .AnyAsync(x => x.Id == request.UserId, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.UserId);
         
-        if (!existUserWithThisId)
+        if (user == null)
             return "Не удалось найти пользователя";
         
         return await next();
