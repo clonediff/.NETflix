@@ -50,8 +50,6 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IFilmPersonService, FilmPersonService>();
-        services.AddScoped<IEnumService, EnumService>();
         services.AddScoped<IAdminAuthService, AdminAuthService>();
         services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
