@@ -8,11 +8,14 @@
 
     <ItemGroup>
       <Folder Include="Behaviors\" />
+      <Folder Include="Features\Persons\Queries\" />
+      <Folder Include="Features\Enums\Queries\" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\DotNetflix.Abstractions\DotNetflix.Abstractions.csproj" />
+      <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

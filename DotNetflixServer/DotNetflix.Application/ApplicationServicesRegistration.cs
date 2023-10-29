@@ -18,13 +18,12 @@ public static class ApplicationServicesRegistration
     {
         serviceCollection.AddMediatR(config =>
         {
-            config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            config.RegisterServicesFromAssembly(Assembly);
         });
 
         serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(CardValidationBehavior<,>), typeof(IHasCardValidation));
         serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(TokenValidationBehavior<,>), typeof(IHasTokenValidation));
-        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(ValidationBehavior<,>),
-            typeof(IRequest<Result<string, string>>));
+        serviceCollection.RegisterBehaviorReturningResult(Assembly, typeof(ValidationBehavior<,>), typeof(IRequest<Result<string, string>>)); 
         
         serviceCollection.AddValidatorsFromAssembly(Assembly);
 
