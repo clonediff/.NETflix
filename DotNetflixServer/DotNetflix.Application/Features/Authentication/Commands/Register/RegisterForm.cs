@@ -7,7 +7,7 @@ public class RegisterForm
     
     public string UserName { get; set; } = default!;
 
-    public DateTime Birthday { get; set; } = default!;
+    public DateTime Birthday { get; set; }
     
     public string Password { get; set; } = default!;
     

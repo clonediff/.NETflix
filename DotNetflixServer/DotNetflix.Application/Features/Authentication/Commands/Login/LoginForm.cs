@@ -6,5 +6,5 @@ public class LoginForm
     
     public string Password { get; set; } = default!;
 
-    public bool Remember { get; set; } = default!;
+    public bool Remember { get; set; }
 }
