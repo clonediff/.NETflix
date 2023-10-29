@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Services;
-using Services.Abstractions;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
@@ -132,7 +130,6 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         services.AddMemoryCache();
-        services.AddSingleton<IChatStorage, ChatStorage>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient();

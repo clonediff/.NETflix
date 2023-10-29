@@ -1,27 +1,28 @@
 ﻿using System.Collections.Concurrent;
-using Contracts.Messages;
 using Contracts.Shared;
+using DotNetflix.Application.Features.UserChat.Commands.PutMessage;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Services.Abstractions;
 
 namespace DotNetflixAPI.Hubs;
 
 public class ChatHub : Hub<IClient>
 {
     private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
-    private readonly IChatStorage _chatStorage;
+    private readonly IMediator _mediator;
 
-    public ChatHub(IChatStorage chatStorage)
+    public ChatHub(IMediator mediator)
     {
-        _chatStorage = chatStorage;
+        _mediator = mediator;
     }
 
     public async Task SendAsync(string message)
     {
         var userName = Context.User!.Identity!.Name;
         var date = DateTime.Now;
-        
-        _chatStorage.PutMessage(new UserMessageDto(message, userName!, date, Context.UserIdentifier!));
+
+        var command = new PutMessageCommand(message, date, Context.UserIdentifier!);
+        await _mediator.Send(command);
 
         var userMessage = new MessageDto(message, userName!, date, true);
 

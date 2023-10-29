@@ -26,6 +26,7 @@ namespace DataAccess
 		public DbSet<UserSubscription> UserSubscriptions { get; set; } = null!;
 		public DbSet<SubscriptionMovieInfo> SubscriptionMovies { get; set; } = null!;
 		public DbSet<Message> Messages { get; set; } = default!;
+		public DbSet<UserChatMessage> UserChatMessages { get; set; } = default!;
 
 		private readonly IConfiguration _configuration;
 		private readonly IPasswordHasher<User> _passwordHasher;
@@ -112,6 +113,11 @@ namespace DataAccess
 			builder.Entity<Message>()
 				.HasOne(m => m.User);
 
+			builder.Entity<User>()
+				.HasMany(u => u.UserChatMessages);
+			builder.Entity<UserChatMessage>()
+				.HasOne(m => m.User);
+				
 			// Data
 			var categories = GetData<Category>();
 			builder.Entity<Category>()
