@@ -12,14 +12,13 @@ export const ProfilePage = () => {
     const [userData, setUserData] = useState({})
 
     useEffect(() => {
-        axiosInstance.get("api/auth/getuser")
+        axiosInstance.get("api/user/getuser")
             .then(response => {
                 if (response.data)
                     setUserData(response.data)
                 else
                     navigate("/login")
             })
-            // TODO: может переделать надо будет
             .catch((error) => {
                 if(error.response.status === 404)
                     navigate("/login") 

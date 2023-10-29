@@ -134,7 +134,6 @@ public static class ProgramConfigurationExtensions
         services.AddMemoryCache();
         services.AddSingleton<IChatStorage, ChatStorage>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IAuthService, AuthServiceImpl>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient();
         services.AddHttpContextAccessor();

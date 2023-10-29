@@ -1,8 +1,8 @@
-﻿using Contracts.Forms;
-using DotNetflix.Application.Shared;
-using Microsoft.AspNetCore.Authorization;
+﻿using DotNetflix.Application.Features.Authentication.Commands.Login;
+using DotNetflix.Application.Features.Authentication.Commands.Logout;
+using DotNetflix.Application.Features.Authentication.Commands.Register;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
+using MediatR;
 
 namespace DotNetflixAPI.Controllers;
 
@@ -10,52 +10,38 @@ namespace DotNetflixAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IMediator _mediator;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IMediator mediator)
     {
-        _authService = authService;
+        _mediator = mediator;
     }
 
     [HttpPost("[action]")]
     public async Task<IActionResult> Login([FromBody] LoginForm form)
     {
-        //тут нужно будет сделать функционал с запоминанием пользователя(через Services.AddAuthentication().AddCookie())
-        if (!ModelState.IsValid) return BadRequest("Проверьте введённые вами данные на корректность");
-        var loginResult = await _authService.Login(form);
-        if (loginResult.IsSuccess)
-        {
-            return Ok("Вы успешно вошли в аккаунт!");
-        }
-        return BadRequest(loginResult.ErrorMessage);
-    }
-
-    [HttpGet("[action]")]
-    public async Task<IActionResult> Logout()
-    { 
-        await _authService.Logout();
-        return Ok("Вы успешно вышли из аккаунта");
+        var loginCommand = new LoginCommand(form.UserName,form.Password, form.Remember);
+        var result = await _mediator.Send(loginCommand);
+        return result.Match<IActionResult>(success: Ok, 
+            failure: BadRequest);
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Register([FromBody]RegisterForm form)
+    public async Task<IActionResult> Register([FromBody] RegisterForm form)
     {
-        //сделать функционал с отправкой сообщения пользователю, если человек пытается зарегистрироваться по его майлу
-        if (!ModelState.IsValid) return BadRequest("Проверьте введённые вами данные на корректность");
-        var registerResult = await _authService.Register(form);
-        if (registerResult.IsSuccess)
-        {
-            return Ok("Пользователь успешно зарегистрирован!");
-        }
-        return BadRequest(registerResult.ErrorMessage);
+        var registrationCommand = new RegistrationCommand(form.Email, form.UserName, 
+            form.Birthday, form.Password, form.ConfirmPassword);
+        
+        var result = await _mediator.Send(registrationCommand);
+        return result.Match<IActionResult>(success: Ok, 
+            failure: BadRequest);
     }
-
-    [HttpGet("[action]")]
-    [Authorize]
-    public async Task<UserDto> GetUserAsync()
+    
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Logout()
     {
-        var userClaims = User;
-        var user = await _authService.GetUserAsync(userClaims);
-        return user;
+        var logoutCommand = new LogoutCommand();
+        await _mediator.Send(logoutCommand);                                                                        
+        return Ok("Вы успешно вышли из аккаунта");
     }
 }
