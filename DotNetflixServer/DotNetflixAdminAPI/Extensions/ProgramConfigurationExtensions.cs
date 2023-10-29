@@ -53,7 +53,6 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFilmPersonService, FilmPersonService>();
         services.AddScoped<IEnumService, EnumService>();
-        services.AddScoped<IAdminAuthService, AdminAuthService>();
         services.AddScoped<IAdminSupportChatService, AdminSupportChatService>();
         services.AddScoped<ISupportChatService, SupportChatService>();
         services.AddApplicationServices();

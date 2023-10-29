@@ -1,6 +1,8 @@
-﻿using Contracts.Admin.Authentication;
+﻿using Contracts.Admin.Authentication.Login;
+using DotNetflix.Admin.Application.Features.Authentication.Commands.Login;
+using DotNetflix.Admin.Application.Features.Authentication.Commands.Logout;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Services.Admin.Abstractions;
 
 namespace DotNetflixAdminAPI;
 
@@ -8,29 +10,27 @@ namespace DotNetflixAdminAPI;
 [Route("api/[controller]")]
 public class AdminAuthController : ControllerBase
 {
-    private readonly IAdminAuthService _authService;
+    private readonly IMediator _mediator;
 
-    public AdminAuthController(IAdminAuthService authService)
+    public AdminAuthController(IMediator mediator)
     {
-        _authService = authService;
+        _mediator = mediator;
     }
     
     [HttpPost("[action]")]
     public async Task<IActionResult> Login([FromBody] LoginForm form)
     {
-        if (!ModelState.IsValid) return BadRequest("Проверьте введённые вами данные на корректность");
-        var loginResult = await _authService.Login(form);
-        if (loginResult.IsSuccess)
-        {
-            return Ok("Вы успешно вошли в аккаунт!");
-        }
-        return BadRequest(loginResult.ErrorMessage);
+        var loginCommand = new LoginCommand(form.UserName, form.Password);
+        var result = await _mediator.Send(loginCommand);
+        return result.Match<IActionResult>(success: Ok, 
+            failure: BadRequest);
     }
 
-    [HttpGet("[action]")]
+    [HttpPost("[action]")]
     public async Task<IActionResult> Logout()
     { 
-        await _authService.Logout();
-        return Ok("Вы успешно вышли из аккаунта");
+        var logoutCommand = new LogoutCommand();
+        await _mediator.Send(logoutCommand);                                                                        
+        return Ok("Вы успешно вышли из аккаунта!");
     }
 }
