@@ -28,6 +28,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
             .ToList();
 
         if (result.Count == 0) return await next();
-        return result.Aggregate((firstFailure, secondFailure) => $"{firstFailure} {secondFailure}");;
+        return result.Aggregate((firstFailure, secondFailure) => $"{firstFailure} {secondFailure}");
     }
 }
