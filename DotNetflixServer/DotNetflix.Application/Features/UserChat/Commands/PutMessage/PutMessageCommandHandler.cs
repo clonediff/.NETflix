@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using Domain.Entities;
 using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.Application.Features.UserChat.Mapping;
 
 namespace DotNetflix.Application.Features.UserChat.Commands.PutMessage;
 
@@ -15,12 +16,7 @@ internal class PutMessageCommandHandler : ICommandHandler<PutMessageCommand>
 
     public async Task Handle(PutMessageCommand request, CancellationToken cancellationToken)
     {
-        var userChatMessage = new UserChatMessage
-        {
-            Content = request.Message,
-            SendingDate = request.SendingDate,
-            UserId = request.UserId
-        };
+        var userChatMessage = request.ToUserChatMessage();
 
         _dbContext.UserChatMessages.Add(userChatMessage);
 

@@ -23,7 +23,7 @@ const ChatPage = () => {
                 .build()
             setConnection(newConnection)
         }
-        axiosInstance.get('api/message/getall')
+        axiosInstance.get('api/userchat/getall')
             .then(({ data }) => {
                 setMessages(data)
             })
@@ -91,18 +91,6 @@ const ChatPage = () => {
 
 const Message = ({ senderName, message, date, belongsToSender }) => {
 
-    const getTime = (date) => {
-        let hours = date.getHours()
-        if (hours < 10) {
-            hours = '0' + hours
-        }
-        let minutes = date.getMinutes()
-        if (minutes < 10) {
-            minutes = '0' + minutes
-        }
-        return `${hours}:${minutes}`
-    }
-
     return (
         <div className='message-wrapper' style={{ flexDirection: belongsToSender ? 'row-reverse' : 'row' }}>
             <div className='message' style={{ backgroundColor: belongsToSender ? 'var(--search-bg-color)' : 'var(--main-bg-color)' }}>
@@ -110,7 +98,7 @@ const Message = ({ senderName, message, date, belongsToSender }) => {
                 { message }
                 <div className='message-time'>
                     {
-                        getTime(new Date(date))
+                        new Date(date).toLocaleString()
                     }
                 </div>
             </div>

@@ -11,11 +11,11 @@ namespace DotNetflixAPI.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class MessageController : ControllerBase
+public class UserChatController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public MessageController(IMediator mediator)
+    public UserChatController(IMediator mediator)
     {
         _mediator = mediator;
     }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.UserChat.Queries.GetAllMessages;
 
-internal class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQuery, IEnumerable<GetAllMessagesDto>>
+internal class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQuery, IOrderedEnumerable<GetAllMessagesDto>>
 {
     private readonly ApplicationDBContext _dbContext;
 
@@ -14,12 +14,14 @@ internal class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQuery, I
         _dbContext = dbContext;
     }
 
-    public Task<IEnumerable<GetAllMessagesDto>> Handle(GetAllMessagesQuery request, CancellationToken cancellationToken)
+    public Task<IOrderedEnumerable<GetAllMessagesDto>> Handle(GetAllMessagesQuery request, CancellationToken cancellationToken)
     {
         return Task.FromResult(_dbContext.UserChatMessages
             .AsNoTracking()
             .Include(m => m.User)
             .Select(m => m.ToGetAllMessagesDto())
-            .AsEnumerable());
+            .AsEnumerable()
+            .OrderBy(m => m.SendingDate)
+        );
     }
 }
