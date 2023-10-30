@@ -11,7 +11,7 @@ public static class ApplicationServicesRegistration
     {
         serviceCollection.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly));
 
-        serviceCollection.RegisterBehaviorReturningResult(Assembly);
+        serviceCollection.RegisterBehaviorsReturningResult(Assembly);
         
         return serviceCollection;
     }

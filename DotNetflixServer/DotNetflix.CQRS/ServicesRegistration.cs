@@ -13,31 +13,31 @@ public static class ServicesRegistration
     private static readonly Type PipelineBehaviorType = typeof(IPipelineBehavior<,>);
     private static readonly Type ResultType = typeof(Result<,>);
 
-    public static IServiceCollection RegisterBehaviorReturningResult(this IServiceCollection serviceCollection, Assembly assembly)
+    public static IServiceCollection RegisterBehaviorsReturningResult(this IServiceCollection serviceCollection, Assembly assembly)
     {
         var types = assembly.GetTypes();
         
-        var behaviors = types
+        var behaviorTypes = types
             .Where(x => x
                 .GetInterfaces()
                 .Where(i => i.IsGenericType)
                 .Any(i => i.GetGenericTypeDefinition() == PipelineBehaviorType))
             .Select(x => new
             {
-                Behavior = x,
-                BehaviorConstraints = x
+                BehaviorType = x,
+                BehaviorTypeConstraints = x
                     .GetGenericArguments()[0]
                     .GetGenericParameterConstraints()
             })
             .ToList();
-        
-        var generics = types
+
+        var behaviors = types
             .Where(x => x.GetInterfaces().Where(i => i.IsGenericType).Any(i =>
             {
                 var genericTypeDefinition = i.GetGenericTypeDefinition();
                 var genericArguments = i.GetGenericArguments();
                 return (genericTypeDefinition == QueryType || genericTypeDefinition == CommandType)
-                       && genericArguments[0].IsGenericType 
+                       && genericArguments[0].IsGenericType
                        && genericArguments[0].GetGenericTypeDefinition() == ResultType;
             }))
             .Select(x =>
@@ -46,25 +46,22 @@ public static class ServicesRegistration
                 var successTypeForIpbImpl = resultTypeForIpb.GetGenericArguments()[0];
 
                 var ipb = PipelineBehaviorType.MakeGenericType(x, resultTypeForIpb);
-                var ipbImpls = behaviors
-                    .Where(b => b.BehaviorConstraints.Length == 0 || b.BehaviorConstraints
-                        .Any(x.IsAssignableTo))
-                    .Select(b => b.Behavior.MakeGenericType(x, successTypeForIpbImpl))
-                    .ToList();
-                
+                var ipbImpls = behaviorTypes
+                    .Where(b => !b.BehaviorTypeConstraints.Any() || b.BehaviorTypeConstraints.Any(x.IsAssignableTo))
+                    .Select(b => b.BehaviorType.MakeGenericType(x, successTypeForIpbImpl));
+
                 return new
                 {
                     Ipb = ipb,
                     IpbImpls = ipbImpls,
                 };
             })
-            .Where(x => x.IpbImpls.Any())
-            .ToList();
+            .Where(x => x.IpbImpls.Any());
 
-        foreach (var generic in generics)
+        foreach (var behavior in behaviors)
         {
-            serviceCollection.TryAddEnumerable(generic.IpbImpls
-                .Select(x => new ServiceDescriptor(generic.Ipb, x, ServiceLifetime.Transient)));
+            serviceCollection.TryAddEnumerable(behavior.IpbImpls
+                .Select(x => new ServiceDescriptor(behavior.Ipb, x, ServiceLifetime.Transient)));
         }
 
         return serviceCollection;
