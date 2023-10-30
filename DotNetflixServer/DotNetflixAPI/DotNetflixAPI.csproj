@@ -29,12 +29,10 @@
     <ProjectReference Include="..\Configuration.Shared\Configuration.Shared.csproj" />
     <ProjectReference Include="..\Contracts.Shared\Contracts.Shared.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\DotNetflix.Application\DotNetflix.Application.csproj" />
     <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
     <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
-    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-﻿using Contracts.AuthDto;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Infrastructure.GoogleOAuth;
+using Services.Infrastructure.GoogleOAuth.Google;
 
 namespace DotNetflixAPI.Controllers;
 

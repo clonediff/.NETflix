@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using Contracts.Messages;
 using Contracts.Shared;
+using DotNetflixAPI.Dto;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
