@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using DotNetflix.Application.Features.TwoFactorAuthorization.Commands;
+using DotNetflix.Application.Features.TwoFactorAuthorization.Commands.EnableTwoFactorAuth;
 using DotNetflix.Application.Features.Users.Commands.SetUserData;
 using DotNetflix.Application.Features.Users.Commands.SetUserMail;
 using DotNetflix.Application.Features.Users.Commands.SetUserPassword;

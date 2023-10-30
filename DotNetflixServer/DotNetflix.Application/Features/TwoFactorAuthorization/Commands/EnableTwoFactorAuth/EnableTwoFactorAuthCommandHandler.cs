@@ -3,7 +3,7 @@ using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
-namespace DotNetflix.Application.Features.TwoFactorAuthorization.Commands;
+namespace DotNetflix.Application.Features.TwoFactorAuthorization.Commands.EnableTwoFactorAuth;
 
 internal class EnableTwoFactorAuthCommandHandler : ICommandHandler<EnableTwoFactorAuthCommand, Result<string, string>>
 {

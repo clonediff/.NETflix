@@ -6,6 +6,8 @@ import './main-page.css'
 
 const MainPage = () => {
 
+    const isAuthenticated = localStorage.getItem('authenticated')
+
     const [grouppedFilms, setGrouppedFilms] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -30,11 +32,17 @@ const MainPage = () => {
                             category={ group[0] }
                             films={ group[1] }/>)
                 }
-                <div className='chat-link'>
-                    <a href='/chat'>
-                        Присоединяйся к беседе в нашем чате
-                    </a>
-                </div>
+                {
+                    isAuthenticated
+                    ?
+                    <div className='chat-link'>
+                        <a href='/chat'>
+                            Присоединяйся к беседе в нашем чате
+                        </a>
+                    </div>
+                    :
+                    null
+                }
             </div>
         </CommonLayout>
     )
