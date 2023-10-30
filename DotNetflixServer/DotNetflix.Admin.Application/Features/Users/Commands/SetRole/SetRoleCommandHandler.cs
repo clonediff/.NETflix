@@ -1,7 +1,7 @@
 using DataAccess;
 using Domain.Entities;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure.EmailService;

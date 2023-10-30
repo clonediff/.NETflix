@@ -1,6 +1,6 @@
 ﻿using DataAccess;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;

@@ -1,7 +1,8 @@
 ﻿using Contracts.Shared;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Application.Features.Subscriptions.Shared;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
+using DotNetflix.CQRS.BehaviorMarkers;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 

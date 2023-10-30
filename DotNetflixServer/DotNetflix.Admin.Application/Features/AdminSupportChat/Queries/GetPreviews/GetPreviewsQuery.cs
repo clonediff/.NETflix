@@ -1,5 +1,5 @@
-﻿using DotNetflix.Abstractions.Cqrs;
-using DotNetflix.Admin.Application.Shared;
+﻿using DotNetflix.Admin.Application.Shared;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Queries.GetPreviews;
 

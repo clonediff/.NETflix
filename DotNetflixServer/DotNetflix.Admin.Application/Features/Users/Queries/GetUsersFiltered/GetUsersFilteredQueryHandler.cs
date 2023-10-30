@@ -1,8 +1,7 @@
 using DataAccess;
 using Domain.Extensions;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Shared;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Users.Queries.GetUsersFiltered;

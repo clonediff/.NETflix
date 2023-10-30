@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using Domain.Entities;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.UpdateFilm;

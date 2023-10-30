@@ -9,7 +9,7 @@
     <ItemGroup>
       <Folder Include="Behaviors\" />
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-      <ProjectReference Include="..\DotNetflix.Abstractions\DotNetflix.Abstractions.csproj" />
+      <ProjectReference Include="..\DotNetflix.CQRS\DotNetflix.CQRS.csproj" />
       <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
     </ItemGroup>
 

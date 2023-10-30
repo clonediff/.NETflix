@@ -1,5 +1,5 @@
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Application.Features.Authentication.Commands.Login;
 

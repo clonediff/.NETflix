@@ -1,13 +1,12 @@
-﻿using DotNetflix.Abstractions;
+﻿using DotNetflix.CQRS;
 using FluentValidation;
 using MediatR;
 
 namespace DotNetflix.Application.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, Result<TResponse, string>> 
-    where TRequest : IRequest<Result<TResponse,string>>
+    where TRequest : notnull
 {
-
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
     public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)

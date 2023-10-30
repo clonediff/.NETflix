@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Application.Shared;
 using DotNetflix.Application.Shared.Mapping;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Features.Users.Queries.GetUser;

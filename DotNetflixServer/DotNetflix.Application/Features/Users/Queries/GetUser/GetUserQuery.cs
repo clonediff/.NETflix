@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Application.Shared;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Application.Features.Users.Queries.GetUser;
 

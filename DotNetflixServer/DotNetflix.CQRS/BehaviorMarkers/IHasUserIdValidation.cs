@@ -1,4 +1,4 @@
-namespace DotNetflix.Abstractions.Cqrs;
+namespace DotNetflix.CQRS.BehaviorMarkers;
 
 public interface IHasUserIdValidation
 {

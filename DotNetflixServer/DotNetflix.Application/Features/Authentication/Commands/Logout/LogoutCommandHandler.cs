@@ -1,5 +1,5 @@
 using Domain.Entities;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Features.Authentication.Commands.Logout;

@@ -1,5 +1,4 @@
-﻿
-using DotNetflix.Abstractions.Cqrs;
+﻿using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Commands.MarkAsRead;
 

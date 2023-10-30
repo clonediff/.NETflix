@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Admin.Application.Features.Authentication.Commands.Login;

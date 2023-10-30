@@ -1,5 +1,6 @@
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
+using DotNetflix.CQRS.BehaviorMarkers;
 
 namespace DotNetflix.Admin.Application.Features.Users.Commands.BanUser;
 

@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.BehaviorMarkers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 

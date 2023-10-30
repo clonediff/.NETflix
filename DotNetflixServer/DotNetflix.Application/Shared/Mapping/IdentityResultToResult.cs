@@ -1,4 +1,4 @@
-﻿using DotNetflix.Abstractions;
+﻿using DotNetflix.CQRS;
 using Microsoft.AspNetCore.Identity;
 
 namespace DotNetflix.Application.Shared.Mapping;

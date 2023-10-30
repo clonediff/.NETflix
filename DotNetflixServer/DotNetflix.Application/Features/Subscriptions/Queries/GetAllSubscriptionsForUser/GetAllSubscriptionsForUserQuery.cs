@@ -1,4 +1,4 @@
-﻿using DotNetflix.Abstractions.Cqrs;
+﻿using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;
 

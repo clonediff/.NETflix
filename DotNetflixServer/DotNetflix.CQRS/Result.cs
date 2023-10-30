@@ -1,4 +1,4 @@
-﻿namespace DotNetflix.Abstractions;
+﻿namespace DotNetflix.CQRS;
 
 public class Result<TSuccess, TFailure>
 {

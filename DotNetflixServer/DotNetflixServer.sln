@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Shared", "Contrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Shared", "Services.Shared\Services.Shared.csproj", "{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Abstractions", "DotNetflix.Abstractions\DotNetflix.Abstractions.csproj", "{55D630EC-1C17-429A-B944-D83B606697CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.CQRS", "DotNetflix.CQRS\DotNetflix.CQRS.csproj", "{55D630EC-1C17-429A-B944-D83B606697CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Application", "DotNetflix.Application\DotNetflix.Application.csproj", "{D7FFBE25-54B9-4340-A6E4-87059397534C}"
 EndProject

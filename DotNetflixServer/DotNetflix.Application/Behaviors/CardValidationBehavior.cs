@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.BehaviorMarkers;
 using MediatR;
 
 namespace DotNetflix.Application.Behaviors;

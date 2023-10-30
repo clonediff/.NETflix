@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace DotNetflix.Abstractions.Cqrs;
+namespace DotNetflix.CQRS.Abstractions;
 
 public interface IQuery<out TResponse> : IRequest<TResponse> { }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace DotNetflix.Abstractions.Cqrs;
+namespace DotNetflix.CQRS.Abstractions;
 
 public interface ICommand : IRequest { }
 

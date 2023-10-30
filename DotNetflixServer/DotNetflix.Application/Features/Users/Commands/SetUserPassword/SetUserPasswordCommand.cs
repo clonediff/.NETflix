@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
+using DotNetflix.CQRS.BehaviorMarkers;
 
 namespace DotNetflix.Application.Features.Users.Commands.SetUserPassword;
 

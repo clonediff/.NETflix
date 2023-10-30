@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using Domain.Entities;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Application.Features.Films.Mapping;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;

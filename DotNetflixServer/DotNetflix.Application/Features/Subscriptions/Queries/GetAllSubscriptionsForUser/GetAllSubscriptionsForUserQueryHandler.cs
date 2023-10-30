@@ -1,5 +1,5 @@
 ﻿using DataAccess;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;

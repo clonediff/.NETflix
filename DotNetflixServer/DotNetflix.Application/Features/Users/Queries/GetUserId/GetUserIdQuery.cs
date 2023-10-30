@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Application.Features.Users.Queries.GetUserId;
 

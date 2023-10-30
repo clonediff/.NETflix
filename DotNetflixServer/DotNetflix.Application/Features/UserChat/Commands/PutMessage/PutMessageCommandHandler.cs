@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using Domain.Entities;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Application.Features.UserChat.Mapping;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Application.Features.UserChat.Commands.PutMessage;
 

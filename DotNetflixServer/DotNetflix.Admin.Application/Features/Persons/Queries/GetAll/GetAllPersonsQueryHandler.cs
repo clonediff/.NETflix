@@ -1,6 +1,6 @@
 using DataAccess;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Features.Persons.Mapping;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Persons.Queries.GetAll;

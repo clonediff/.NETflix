@@ -1,7 +1,7 @@
 ﻿using DataAccess;
-using DotNetflix.Abstractions;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
+using DotNetflix.CQRS;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;

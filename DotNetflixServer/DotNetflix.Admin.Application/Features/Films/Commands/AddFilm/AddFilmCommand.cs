@@ -1,5 +1,5 @@
-﻿using DotNetflix.Abstractions.Cqrs;
-using DotNetflix.Admin.Application.Features.Films.Shared;
+﻿using DotNetflix.Admin.Application.Features.Films.Shared;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
 

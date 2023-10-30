@@ -1,8 +1,8 @@
 ﻿using DataAccess;
 using Domain.Extensions;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Features.Subscriptions.Mapping;
 using DotNetflix.Admin.Application.Shared;
+using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Queries.GetSubscriptionsFiltered;

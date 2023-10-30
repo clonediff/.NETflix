@@ -1,4 +1,4 @@
-﻿using DotNetflix.Abstractions.Cqrs;
+﻿using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Admin.Application.Features.Authentication.Commands.Logout;
 

@@ -1,6 +1,6 @@
 ﻿using DataAccess;
-using DotNetflix.Abstractions.Cqrs;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
 

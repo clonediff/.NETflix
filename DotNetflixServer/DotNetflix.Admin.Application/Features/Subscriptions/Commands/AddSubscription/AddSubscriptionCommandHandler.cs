@@ -1,6 +1,6 @@
 ﻿using DataAccess;
 using Domain.Entities;
-using DotNetflix.Abstractions.Cqrs;
+using DotNetflix.CQRS.Abstractions;
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.AddSubscription;
 
