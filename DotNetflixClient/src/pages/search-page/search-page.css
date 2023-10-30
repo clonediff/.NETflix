@@ -1,0 +1,72 @@
+@import url(../../constants.css);
+
+.title {
+    color: white;
+    grid-column: 1 / 8;
+    font-weight: 700;
+    margin-left: 20px;
+}
+
+.films-searched {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 100px auto;
+    justify-items: center;
+    min-height: 100%;
+    height: auto;
+    width: 100%;
+    background-color: var(--main-bg-color);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.films-searched-skeleton {
+    display: flex;
+    grid-column: 1 / 8;
+}
+
+.not-found-span {
+    color: white;
+    grid-column: 1 / 8;
+}
+
+@media screen and (max-width: 1000px) {
+    .films-searched {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .title {
+        grid-column: 1 / 7;
+    }
+    .not-found-span {
+        grid-column: 1 / 7;
+    }
+}
+
+@media screen and (max-width: 910px) {
+    .films-searched {
+        grid-template-rows: 40px auto;
+    }
+    .title {
+        font-size: 18px;
+        margin-left: 30px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .title {
+        font-size: 14px;
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .films-searched {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .title {
+        grid-column: 1 / 5;
+    }
+    .not-found-span {
+        grid-column: 1 / 5;
+    }
+}

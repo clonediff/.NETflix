@@ -1,0 +1,36 @@
+
+@import url(../../constants.css);
+
+.simple-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    background-color: var(--header-bg-color);
+    z-index: 1;
+}
+
+.simple-logo {
+    color: red;
+    font-weight: 700;
+    font-size: 44px;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 920px) {
+    .simple-header {
+        height: 40px;
+    }
+    .simple-logo {
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .simple-header {
+        height: 28px;
+    }
+    .simple-logo {
+        font-size: 24px;
+    }
+}

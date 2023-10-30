@@ -1,0 +1,36 @@
+@use "../../../constants.css"
+@use "../../../mixins.sass"
+
+.login
+    display: flex
+    flex-direction: row
+    align-content: center
+    justify-content: center
+    flex-wrap: wrap
+    max-width: 20em
+    margin: 20px
+    .login__form
+        padding-top: 20px
+        display: flex
+        flex-direction: column
+        align-content: start
+        justify-content: center
+        flex-wrap: wrap
+        transition: 0.4s
+        label
+            color: white
+        .item
+            width: 20em
+            @include mixins.respond-to(handhelds)
+                width: 10em
+            @include mixins.respond-to(medium-screens)
+                width: 15em
+    .socials 
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        width: 15em
+        gap: 10px
+        color: white
+        font-size: 14px

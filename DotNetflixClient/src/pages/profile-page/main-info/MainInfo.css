@@ -1,0 +1,36 @@
+.settings-form {
+    max-width: 300px;
+}
+.settings-tfa-enabled {
+    display: grid;
+    padding-bottom: 20px;
+}
+.settings-link {
+    color: white;
+}
+.settings-link:hover {
+    color: red;
+}
+.ant-btn.settings-request-code:hover{
+    border-color: red;
+    color: red;
+}
+.settings-submit-button{
+    background-color: var(--header-bg-color);
+    color: white;
+    width: 100%;
+    font-weight: 500;
+}
+.ant-btn.settings-submit-button:hover {
+    color: red;
+    background-color: var(--header-bg-color);
+}
+.ant-btn.settings-submit-button:disabled {
+    color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.04);
+}
+.settings-return-link{
+    display: flex;
+    color: aliceblue;
+    margin-bottom: 20px;
+}

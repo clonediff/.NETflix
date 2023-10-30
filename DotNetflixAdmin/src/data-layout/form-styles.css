@@ -1,0 +1,8 @@
+.add-form {
+    border: 2px solid rgb(33, 150, 243);
+    border-radius: 4px;
+}
+
+.form-item {
+    margin: 12px;
+}

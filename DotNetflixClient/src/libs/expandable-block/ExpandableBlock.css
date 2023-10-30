@@ -1,0 +1,7 @@
+.pointer{
+    cursor: pointer;
+}
+
+.dashed-underline{
+    border-bottom: 1px dashed black;
+}

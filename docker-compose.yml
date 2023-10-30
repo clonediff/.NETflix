@@ -1,0 +1,102 @@
+version: "3.9"
+
+services:
+  RabbitMq:
+    image: rabbitmq:3-alpine
+    ports:
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+  SupportChat:
+    image: aspnetdotnetflixsupportchat
+    container_name: dotnetflixsupportchat
+    ports:
+      - "7280:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+      - RabbitMqConfig__Username=admin
+      - RabbitMqConfig__Password=admin
+      - RabbitMqConfig__Hostname=RabbitMq
+      - RabbitMqConfig__Port=5672
+      - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
+    build:
+      context: ./DotNetflixServer
+      dockerfile: DockerfileSupportChat
+    depends_on:
+      - mssql
+      - RabbitMq
+  DotNetflixAPI:
+    image: aspnetdotnetflixapi
+    container_name: dotnetflixserver
+    ports:
+      - "7289:443"
+    environment:
+      - RabbitMqConfig__Username=admin
+      - RabbitMqConfig__Password=admin
+      - RabbitMqConfig__Hostname=RabbitMq
+      - RabbitMqConfig__Port=5672
+      - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
+      - SmtpSetting__FromPassword=gomlmldthveiefjr
+      - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+      - GoogleOAuth:ClientId=${GoogleOAuthClientId}
+      - GoogleOAuth:ClientSecret=${GoogleOAuthClientSecret}
+      - ASPNETCORE_ENVIRONMENT:Production
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KestrelCertifPass}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    build:
+      context: ./DotNetflixServer
+      dockerfile: DockerfileDotNetflixAPI
+    depends_on:
+      - mssql
+      - DotNetflixAdminAPI
+      - RabbitMq
+  DotNetflixAdminAPI:
+    image: aspnetdotdetflixadminapi
+    container_name: dotnetflixserveradmin
+    ports:
+      - "7298:443"
+    environment:
+      - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
+      - SmtpSetting__FromPassword=gomlmldthveiefjr
+      - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+      - ASPNETCORE_ENVIRONMENT:Production
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KestrelCertifPass}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    build:
+      context: ./DotNetflixServer
+      dockerfile: DockerfileDotNetflixAdminAPI
+    depends_on:
+      - mssql
+  DotNetflixAPIClient:
+    image: dotnetflixapiclient
+    container_name: dotnetflixserverclient
+    ports:
+      - "3000:3000"
+    build:
+      context: ./DotNetflixClient
+      dockerfile: Dockerfile
+    depends_on:
+      - DotNetflixAPI
+  DotNetflixAPIClientAdmin:
+    image: dotnetflixadminapiclient
+    container_name: dotnetflixserveradminclient
+    ports:
+      - "3001:3001"
+    build:
+      context: ./DotNetflixAdmin
+      dockerfile: Dockerfile
+    depends_on:
+      - DotNetflixAdminAPI
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1414:1433"
+    volumes:
+      - ~/apps/mssql/data:/var/lib/mssqlql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=pmwPmN1Hgh0SDd2f1TfX!
+  

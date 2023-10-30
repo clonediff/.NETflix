@@ -1,0 +1,13 @@
+.payment-modal .ant-modal-content{
+    background-color: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 0, 0, 0.6);
+    color: red;
+}
+
+.payment-form{
+    color: white;
+}
+
+.payment-form .ant-form-item-required{
+    color: white !important;
+}

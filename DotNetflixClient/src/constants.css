@@ -1,0 +1,17 @@
+:root {
+    --header-bg-color: rgb(0, 20, 36);
+    --main-bg-color: rgb(0, 30, 54);
+    --film-page-bg-color: rgb(0, 20, 36, 90%);
+    --search-bg-color: rgb(0, 52, 94);
+    --placeholder-color: rgb(192, 192, 192);
+}
+
+.pageStyle{
+    min-height: 800px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    background-image: url("../public/dotnetflix-bgi.jpg");
+    background-size: cover;
+    height: 100%;
+}
