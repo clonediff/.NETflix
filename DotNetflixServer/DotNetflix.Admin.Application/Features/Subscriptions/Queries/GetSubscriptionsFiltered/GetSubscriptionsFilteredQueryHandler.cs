@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using Domain.Extensions;
 using DotNetflix.Admin.Application.Features.Subscriptions.Mapping;
 using DotNetflix.Admin.Application.Shared;
@@ -9,16 +9,16 @@ namespace DotNetflix.Admin.Application.Features.Subscriptions.Queries.GetSubscri
 
 internal class GetSubscriptionsFilteredQueryHandler : IQueryHandler<GetSubscriptionsFilteredQuery, PaginationDataDto<GetSubscriptionsFilteredDto>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetSubscriptionsFilteredQueryHandler(ApplicationDBContext dbContext)
+    public GetSubscriptionsFilteredQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<PaginationDataDto<GetSubscriptionsFilteredDto>> Handle(GetSubscriptionsFilteredQuery request, CancellationToken cancellationToken)
     {
-        var filteredSubscriptions = _dbContext.Subscriptions
+        var filteredSubscriptions = _dbContext.Set<Subscription>()
             .Where(x => request.Name == null || x.Name.Contains(request.Name))
             .Include(s => s.Users);
         

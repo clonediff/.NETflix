@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using Domain.Extensions;
 using DotNetflix.Admin.Application.Shared;
 using DotNetflix.CQRS.Abstractions;
@@ -8,18 +8,18 @@ namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Queries.GetPrev
 
 internal class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, PaginationDataDto<PreviewMessageDto>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
     
     private const string AdminName = "Администратор";
 
-    public GetPreviewsQueryHandler(ApplicationDBContext dbContext)
+    public GetPreviewsQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<PaginationDataDto<PreviewMessageDto>> Handle(GetPreviewsQuery request, CancellationToken cancellationToken)
     {
-        var rooms = _dbContext.Messages
+        var rooms = _dbContext.Set<Message>()
             .Include(x => x.User)
             .GroupBy(x => x.User)
             .Select(x =>

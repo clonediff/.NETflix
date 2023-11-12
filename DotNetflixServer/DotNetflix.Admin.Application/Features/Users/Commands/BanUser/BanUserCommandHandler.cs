@@ -2,7 +2,6 @@ using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure.EmailService;
 
 namespace DotNetflix.Admin.Application.Features.Users.Commands.BanUser;

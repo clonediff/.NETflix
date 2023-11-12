@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,16 +6,16 @@ namespace DotNetflix.Application.Features.Users.Queries.GetAllUserSubscriptions;
 
 internal class GetAllUserSubscriptionsQueryHandler : IQueryHandler<GetAllUserSubscriptionsQuery, IEnumerable<GetUserSubscriptionDto>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetAllUserSubscriptionsQueryHandler(ApplicationDBContext dbContext)
+    public GetAllUserSubscriptionsQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public Task<IEnumerable<GetUserSubscriptionDto>> Handle(GetAllUserSubscriptionsQuery request, CancellationToken cancellationToken)
     {
-        var userSubscriptions = _dbContext.UserSubscriptions
+        var userSubscriptions = _dbContext.Set<UserSubscription>()
             .Where(us => us.UserId == request.UserId)
             .Include(s => s.Subscription);
 

@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.Application.Features.Films.Mapping;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
@@ -8,9 +8,9 @@ namespace DotNetflix.Application.Features.Films.Queries.GetFilmById;
 
 internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<MovieForMoviePageDto, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetFilmByIdQueryHandler(ApplicationDBContext dbContext)
+    public GetFilmByIdQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -20,11 +20,11 @@ internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<
     {
         var availableMovies = await GetAvailableFilmIdsAsync(request.UserId);
 
-        if (_dbContext.SubscriptionMovies.Any(sm => sm.MovieInfoId == request.FilmId) &&
+        if (_dbContext.Set<SubscriptionMovieInfo>().Any(sm => sm.MovieInfoId == request.FilmId) &&
             !availableMovies.Contains(request.FilmId))
             return "Оформите подписку, чтобы получить доступ к данному контенту";
 
-        var movie = await _dbContext.Movies
+        var movie = await _dbContext.Set<MovieInfo>()
             .Where(m => m.Id == request.FilmId)
             .Include(movie => movie.Type)
             .Include(movie => movie.Category)
@@ -55,7 +55,7 @@ internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<
         if (userId is null)
             return Enumerable.Empty<int>();
         
-        var user = await _dbContext.Users
+        var user = await _dbContext.Set<User>()
             .Where(u => u.Id == userId)
             .Include(u => u.Subscriptions)
             .ThenInclude(s => s.Movies)

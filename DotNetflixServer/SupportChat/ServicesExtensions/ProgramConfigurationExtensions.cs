@@ -19,6 +19,8 @@ public static class ProgramConfigurationExtensions
             })
             .AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDBContext>();
+
+        services.AddScoped<DbContext, ApplicationDBContext>();
         
         return services;
     }

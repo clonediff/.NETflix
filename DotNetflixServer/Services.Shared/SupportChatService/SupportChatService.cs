@@ -1,15 +1,15 @@
 ﻿using Contracts.Shared;
-using DataAccess;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services.Shared.SupportChatService;
 
 public class SupportChatService : ISupportChatService
 {
-    private readonly ApplicationDBContext _context;
+    private readonly DbContext _context;
     private const string AdminName = "Администратор";
 
-    public SupportChatService(ApplicationDBContext context)
+    public SupportChatService(DbContext context)
     {
         _context = context;
     }
@@ -17,7 +17,7 @@ public class SupportChatService : ISupportChatService
 
     public IEnumerable<MessageDto> GetHistory(string roomId, bool senderIsAdmin)
     {
-        return _context.Messages
+        return _context.Set<Message>()
             .Include(x => x.User)
             .Where(x => x.UserId == roomId)
             .Select(x => new MessageDto(x.Content, x.IsFromAdmin ? AdminName : x.User.UserName!, x.SendingDate,

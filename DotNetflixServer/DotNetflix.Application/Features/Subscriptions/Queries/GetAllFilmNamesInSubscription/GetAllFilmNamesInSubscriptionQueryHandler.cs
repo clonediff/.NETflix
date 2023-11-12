@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -7,16 +7,16 @@ namespace DotNetflix.Application.Features.Subscriptions.Queries.GetAllFilmNamesI
 
 internal class GetAllFilmNamesInSubscriptionQueryHandler : IQueryHandler<GetAllFilmNamesInSubscriptionQuery, Result<IEnumerable<string>, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetAllFilmNamesInSubscriptionQueryHandler(ApplicationDBContext dbContext)
+    public GetAllFilmNamesInSubscriptionQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Result<IEnumerable<string>, string>> Handle(GetAllFilmNamesInSubscriptionQuery request, CancellationToken cancellationToken)
     {
-        var subscription = await _dbContext.Subscriptions
+        var subscription = await _dbContext.Set<Subscription>()
             .Where(s => s.Id == request.SubscriptionId)
             .Include(s => s.Movies)
             .FirstOrDefaultAsync(s => s.Id == request.SubscriptionId, cancellationToken);

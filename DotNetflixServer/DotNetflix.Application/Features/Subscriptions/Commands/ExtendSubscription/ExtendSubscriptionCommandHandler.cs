@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -7,16 +7,16 @@ namespace DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscript
 
 internal class ExtendSubscriptionCommandHandler : ICommandHandler<ExtendSubscriptionCommand, Result<int, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public ExtendSubscriptionCommandHandler(ApplicationDBContext dbContext)
+    public ExtendSubscriptionCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Result<int, string>> Handle(ExtendSubscriptionCommand request, CancellationToken cancellationToken)
     {
-        var userSubscription = await _dbContext.UserSubscriptions
+        var userSubscription = await _dbContext.Set<UserSubscription>()
             .Where(us =>
                 us.UserId == request.UserSubscriptionDto.UserId &&
                 us.SubscriptionId == request.UserSubscriptionDto.SubscriptionId)

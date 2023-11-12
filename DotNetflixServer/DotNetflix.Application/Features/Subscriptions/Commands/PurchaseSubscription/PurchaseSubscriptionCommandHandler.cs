@@ -1,5 +1,4 @@
-﻿using DataAccess;
-using Domain.Entities;
+﻿using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +7,9 @@ namespace DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscri
 
 internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubscriptionCommand, Result<int, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public PurchaseSubscriptionCommandHandler(ApplicationDBContext dbContext)
+    public PurchaseSubscriptionCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -18,18 +17,18 @@ internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubs
     public async Task<Result<int, string>> Handle(PurchaseSubscriptionCommand request, CancellationToken cancellationToken)
     {
         var subscription =
-            await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == request.UserSubscriptionDto.SubscriptionId,
+            await _dbContext.Set<Subscription>().FirstOrDefaultAsync(x => x.Id == request.UserSubscriptionDto.SubscriptionId,
                 cancellationToken);
 
         if (subscription is null || !subscription.IsAvailable)
             return "Не удалось найти подписку";
 
-        if (_dbContext.UserSubscriptions.Any(us =>
+        if (_dbContext.Set<UserSubscription>().Any(us =>
                 us.UserId == request.UserSubscriptionDto.UserId &&
                 us.SubscriptionId == request.UserSubscriptionDto.SubscriptionId))
             return "Не удалось приобрести данную подписку, так как она уже приобретена";
 
-        _dbContext.UserSubscriptions.Add(new UserSubscription
+        _dbContext.Set<UserSubscription>().Add(new UserSubscription
         {
             UserId = request.UserSubscriptionDto.UserId,
             SubscriptionId = request.UserSubscriptionDto.SubscriptionId,
