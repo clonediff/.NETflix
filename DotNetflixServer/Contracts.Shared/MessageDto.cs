@@ -1,3 +1,3 @@
 ﻿namespace Contracts.Shared;
 
-public record MessageDto(string Message, string SenderName, DateTime SendingDate, bool BelongsToSender);
+public record MessageDto(object Message, string SenderName, DateTime SendingDate, bool BelongsToSender);

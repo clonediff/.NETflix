@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using Contracts.Shared;
+﻿using Contracts.Shared;
 using DotNetflixAPI.Dto;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
@@ -8,7 +7,6 @@ namespace DotNetflixAPI.Hubs;
 
 public class SupportChatHub : Hub<IClient>
 {
-    private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
     private const string AdminName = "Администратор";
 
     private readonly IBus _bus;
@@ -31,14 +29,14 @@ public class SupportChatHub : Hub<IClient>
 
         if (Context.UserIdentifier is null)
         {
-            await Clients.GroupExcept(groupName, UserConnections[groupName]).ReceiveAsync(messageForSender);
+            await Clients.GroupExcept(groupName, ConnectionStore.UserConnections[groupName]).ReceiveAsync(messageForSender);
         }
         else
         {
             await Clients.User(Context.UserIdentifier!).ReceiveAsync(messageForSender);
         }
         
-        await Clients.GroupExcept(groupName, UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
+        await Clients.GroupExcept(groupName, ConnectionStore.UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
 
         await _bus.Publish(new SupportChatMessage(
             Content: dto.Message,
@@ -50,7 +48,7 @@ public class SupportChatHub : Hub<IClient>
 
     public override Task OnConnectedAsync()
     {
-        UserConnections.AddOrUpdate(
+        ConnectionStore.UserConnections.AddOrUpdate(
             key: Context.UserIdentifier ?? AdminName,
             addValue: new List<string>
             {
@@ -67,7 +65,7 @@ public class SupportChatHub : Hub<IClient>
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        UserConnections[Context.UserIdentifier ?? AdminName].Remove(Context.ConnectionId);
+        ConnectionStore.UserConnections[Context.UserIdentifier ?? AdminName].Remove(Context.ConnectionId);
 
         return Task.CompletedTask;
     }
