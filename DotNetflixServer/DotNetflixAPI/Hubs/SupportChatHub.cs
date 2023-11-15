@@ -35,7 +35,7 @@ public class SupportChatHub : Hub<IClient>
         }
         else
         {
-            await Clients.User(Context.UserIdentifier!).ReceiveAsync(messageForSender);
+            await Clients.Caller.ReceiveAsync(messageForSender);
         }
         
         await Clients.GroupExcept(groupName, UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
@@ -46,6 +46,13 @@ public class SupportChatHub : Hub<IClient>
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,
             RoomId: groupName));
+    }
+
+    public async Task ConnectToGroupAsync(ConnectToRoomDto dto)
+    {
+        if (dto.PrevRoomId is not null)
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, dto.PrevRoomId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, dto.RoomId);
     }
 
     public override Task OnConnectedAsync()

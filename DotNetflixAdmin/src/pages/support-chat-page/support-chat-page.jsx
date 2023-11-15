@@ -12,6 +12,7 @@ const SupportChatPage = () => {
     const [chatPreviews, setChatPreviews] = useState([])
     const [chatPreviewsCount, setChatPreviewsCount] = useState(0)
     const [selectedRoom, setSelectedRoom] = useState(undefined)
+    const [prevSelectedRoom, setPrevSelectedRoom] = useState(undefined)
     const [connection, setConnection] = useState(null)
 
     useEffect(() => {
@@ -70,7 +71,7 @@ const SupportChatPage = () => {
                                 <ChatPreview 
                                     key={ preview.roomId }
                                     preview={ preview }
-                                    onClick={ (roomId) => setSelectedRoom(roomId) } />
+                                    onClick={ (roomId) => { setPrevSelectedRoom(selectedRoom); setSelectedRoom(roomId) } } />
                             ))
                         }
                         <Pagination 
@@ -89,6 +90,7 @@ const SupportChatPage = () => {
                 selectedRoom 
                 ? 
                 <SupportChatRoomComponent 
+                    prevRoomId={ prevSelectedRoom }
                     roomId={ selectedRoom } 
                     connection={ connection } 
                     onLoad={ markMessagesAsRead }

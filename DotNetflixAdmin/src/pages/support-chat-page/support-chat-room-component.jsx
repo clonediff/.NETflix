@@ -4,7 +4,7 @@ import { axiosInstance } from '../../axiosInstance'
 import CustomSpin from '../../custom-spin/custom-spin'
 import './support-chat-room-component.css'
 
-const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMessage }) => {
+const SupportChatRoomComponent = ({ prevRoomId, roomId, connection, onLoad, updateLatestMessage }) => {
     
     const [isLoading, setIsLoading] = useState(true)
     const [messages, setMessages] = useState([])
@@ -13,13 +13,14 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
 
     useEffect(() => {
         if (connection) {
-            connection.on('ReceiveAsync', (message) => { 
+            connection.on('ReceiveAsync', (message) => {
                 updateLatestMessage(roomId, message.senderName, message.message)
                 setMessages(prevState => [ ...prevState, message ])
             })
         }
         onLoad(roomId)
         loadHistory()
+        connectToRoom()
         setIsLoading(false)
         markMessagesAsRead()
     }, [roomId])
@@ -28,8 +29,18 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         if (messagesEnd) {
             messagesEnd.current?.scrollIntoView({ behavior: 'smooth' })
         }
+        markMessagesAsRead()
     }, [messages])
 
+    const connectToRoom = () => {
+        if (connection.state !== "Connected")
+            connection.start()
+        connection.invoke('ConnectToGroupAsync', {
+            prevRoomId: prevRoomId,
+            roomId: roomId
+        })
+    }
+    
     const loadHistory = () => {
         axiosInstance.get(`api/support-chat/history?roomId=${roomId}`)
             .then(({ data }) => {
@@ -42,6 +53,8 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
     }
 
     const sendForm = (values) => {
+        if (connection.state !== "Connected")
+            connection.start()
         form.setFieldValue('message', undefined)
         updateLatestMessage(roomId, 'Администратор', values.message)
         connection.invoke('SendAsync', {
@@ -80,7 +93,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
                                     message: 'введите сообщение'
                                 }
                             ]}>
-                            <Input className='message-input' placeholder='введите сообщение' />
+                            <Input className='message-input' placeholder='введите сообщение' autoFocus/>
                         </Form.Item>
                         <Form.Item noStyle>
                             <button type='submit' hidden />
