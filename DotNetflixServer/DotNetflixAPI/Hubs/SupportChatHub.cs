@@ -27,18 +27,15 @@ public class SupportChatHub : Hub<IClient>
         await SendAsync(groupName, dto, x => x);
     }
 
-    public async Task SendFilesAsync(SendMessageDto<IEnumerable<int[]>> dto)
+    public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
         
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         
-        foreach (var file in dto.Message)
-        {
-            var image = new ImageDto("data:img/png;base64,", file.Select(x => (byte) x).ToArray());
-        
-            await SendAsync(groupName, dto, _ => image);
-        }
+        var image = new ImageDto($"data:{contentType};base64,", dto.Message.Select(x => (byte) x).ToArray());
+    
+        await SendAsync(groupName, dto, _ => image);
     }
 
     private async Task SendAsync<TInMessage, TOutMessage>(string groupName, SendMessageDto<TInMessage> dto, Func<TInMessage, TOutMessage> transformer)
@@ -65,8 +62,6 @@ public class SupportChatHub : Hub<IClient>
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,
             RoomId: groupName));
-
-        await Clients.Caller.ReceiveAsync(messageForSender);
     }
 
     public override Task OnConnectedAsync()

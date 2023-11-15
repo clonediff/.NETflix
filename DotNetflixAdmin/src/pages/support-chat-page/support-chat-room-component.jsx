@@ -52,7 +52,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         updateLatestMessage(roomId, 'Администратор', values.message)
         connection.invoke('SendMessageAsync', {
             message: values.message,
-            roomId: 'roomId'
+            roomId: roomId
         })
     }
     
@@ -60,24 +60,30 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         if (files.length === 0) {
             return
         }
-        updateLatestMessage(roomId, 'Администратор', files)
-        connection.invoke('SendFilesAsync', {
-            message: files,
-            roomId: roomId
+        updateLatestMessage(roomId, 'Администратор', {})
+        files.forEach(f => {
+            sendFile(f)
         })
         setFiles([])
+    }
+
+    const sendFile = (file) => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+            const bytes = new Uint8Array(reader.result)
+            connection.invoke('SendFilesAsync', {
+                message: Array.from(bytes),
+                roomId: roomId
+            }, file.type)
+        }
+        reader.readAsArrayBuffer(file)
     }
 
     const uploadProps = {
         multiple: true,
         listType: 'picture',
         beforeUpload: (file) => {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                const imageData = new Uint8Array(reader.result)
-                setFiles([ ...files, Array.from(imageData) ])
-            }
-            reader.readAsArrayBuffer(file)
+            setFiles([ ...files, file ])
             return false
         },
         onRemove: (file) => {
@@ -129,7 +135,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
                         </Form.Item>
                         <Upload { ...uploadProps }>
                             <Button
-                                disabled={ files.length >= 10 }
+                                disabled={ files.length >= 5 }
                                 className='upload-button margin-left'
                                 icon={ <UploadOutlined /> }>
                             </Button>
