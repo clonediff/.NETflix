@@ -51,7 +51,7 @@ const SupportChatPage = () => {
     const updateMessagePreview = (roomId, userName, latestMessage) => {
         const newChatPreview = chatPreviews.find(p => p.roomId === roomId)
         newChatPreview.userName = userName
-        newChatPreview.latestMessage = latestMessage
+        newChatPreview.latestMessage = typeof latestMessage === 'string' ? latestMessage : 'файл'
         setChatPreviews([ ...chatPreviews ])
     }
 

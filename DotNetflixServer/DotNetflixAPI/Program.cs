@@ -9,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+	options.MaximumReceiveMessageSize = 10 * 1024 * 1024 * 8;
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;

@@ -45,39 +45,39 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
     }
 
     const sendForm = (values) => {
-        console.log(values)
         if (values.message === '') {
             return
         }
         form.setFieldValue('message', undefined)
         updateLatestMessage(roomId, 'Администратор', values.message)
-        connection.invoke('SendAsync', {
+        connection.invoke('SendMessageAsync', {
             message: values.message,
-            roomId: roomId
+            roomId: 'roomId'
         })
     }
     
-    const sendFiles = () => {        
-        console.log(files)
+    const sendFiles = () => {     
         if (files.length === 0) {
             return
         }
-        const formData = new FormData()
-        files.forEach(f => {
-            formData.append('files', f)
+        updateLatestMessage(roomId, 'Администратор', files)
+        connection.invoke('SendFilesAsync', {
+            message: files,
+            roomId: roomId
         })
-        axiosInstance.post(`https://localhost:7289/api/support-chat/uploadFile?roomId=${roomId}`, formData)
-            .then(() => {
-                setFiles([])
-            })
-            .catch(e => console.log(e))
+        setFiles([])
     }
 
     const uploadProps = {
         multiple: true,
         listType: 'picture',
         beforeUpload: (file) => {
-            setFiles([ ...files, file ])
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                const imageData = new Uint8Array(reader.result)
+                setFiles([ ...files, Array.from(imageData) ])
+            }
+            reader.readAsArrayBuffer(file)
             return false
         },
         onRemove: (file) => {

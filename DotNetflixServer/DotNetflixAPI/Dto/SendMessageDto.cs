@@ -1,3 +1,3 @@
 ﻿namespace DotNetflixAPI.Dto;
 
-public record SendMessageDto(string Message, string? RoomId);
+public record SendMessageDto<TMessage>(TMessage Message, string? RoomId);

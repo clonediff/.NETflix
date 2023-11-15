@@ -21,12 +21,12 @@ public class UserChatController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<IEnumerable<MessageDto>> GetAll()
+    public async Task<IEnumerable<MessageDtoBase>> GetAll()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var query = new GetAllMessagesQuery();
         var messages = await _mediator.Send(query);
 
-        return messages.Select(m => m.ToMessageDto(userId!));
+        return messages.Select(m => m.ToMessageDtoBase(userId!));
     }
 }
