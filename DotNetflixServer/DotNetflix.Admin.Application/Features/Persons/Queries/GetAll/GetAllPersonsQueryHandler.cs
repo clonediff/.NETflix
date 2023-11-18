@@ -18,7 +18,6 @@ internal class GetAllPersonsQueryHandler : IQueryHandler<GetAllPersonsQuery, IEn
         GetAllPersonsQuery request,
         CancellationToken cancellationToken)
     {
-        //TODO: сваггер умирает в случае, если тут DbContext
         return await _dbContext.Set<Person>().AsNoTracking()
             .Select(p => p.ToPersonsDto())
             .ToListAsync(cancellationToken);
