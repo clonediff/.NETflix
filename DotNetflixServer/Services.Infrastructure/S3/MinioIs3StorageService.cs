@@ -4,16 +4,16 @@ using Minio.Exceptions;
 
 namespace Services.Infrastructure.S3;
 
-public class MinioS3Storage : IS3Storage
+public class MinioS3StorageService : IS3StorageService
 {
     private readonly IMinioClient _minioClient;
 
-    public MinioS3Storage(IMinioClient minioClient)
+    public MinioS3StorageService(IMinioClient minioClient)
     {
         _minioClient = minioClient;
     }
     
-    public async Task CreateBucket(string bucketIdentifier)
+    public async Task CreateBucketAsync(string bucketIdentifier)
     {
         var args = new MakeBucketArgs()
             .WithBucket(bucketIdentifier);
@@ -21,7 +21,7 @@ public class MinioS3Storage : IS3Storage
         await _minioClient.MakeBucketAsync(args);
     }   
 
-    public async Task RemoveBucket(string bucketIdentifier)
+    public async Task RemoveBucketAsync(string bucketIdentifier)
     {
         var args = new RemoveBucketArgs()
             .WithBucket(bucketIdentifier);
@@ -29,7 +29,7 @@ public class MinioS3Storage : IS3Storage
         await _minioClient.RemoveBucketAsync(args);
     }
 
-    public async Task<bool> BucketExist(string bucketIdentifier)
+    public async Task<bool> BucketExistAsync(string bucketIdentifier)
     {
         var args = new BucketExistsArgs()
             .WithBucket(bucketIdentifier);
@@ -37,7 +37,7 @@ public class MinioS3Storage : IS3Storage
         return await _minioClient.BucketExistsAsync(args);
     }
 
-    public async Task PutFileInBucket(Stream fileStream, string fileIdentifier, string bucketIdentifier)
+    public async Task PutFileInBucketAsync(Stream fileStream, string fileIdentifier, string bucketIdentifier)
     {
         var args = new PutObjectArgs()
             .WithBucket(bucketIdentifier)
@@ -48,7 +48,7 @@ public class MinioS3Storage : IS3Storage
         await _minioClient.PutObjectAsync(args);
     }
 
-    public async Task RemoveFileFromBucket(string fileIdentifier, string bucketIdentifier)
+    public async Task RemoveFileFromBucketAsync(string fileIdentifier, string bucketIdentifier)
     {
         var args = new RemoveObjectArgs()
             .WithBucket(bucketIdentifier)
@@ -57,7 +57,7 @@ public class MinioS3Storage : IS3Storage
         await _minioClient.RemoveObjectAsync(args);
     }
 
-    public async Task<Stream?> GetFileFromBucket(string fileIdentifier, string bucketIdentifier)
+    public async Task<Stream?> GetFileFromBucketAsync(string fileIdentifier, string bucketIdentifier)
     {
         var response = new MemoryStream();
         var args = new GetObjectArgs()
