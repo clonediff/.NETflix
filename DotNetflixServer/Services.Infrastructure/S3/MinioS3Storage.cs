@@ -78,6 +78,7 @@ public class MinioS3Storage : IS3Storage
             return null;
         }
 
+        response.Position = 0;
         return response;
     }
 }
