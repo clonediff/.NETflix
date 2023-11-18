@@ -3,7 +3,6 @@ using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLogging();
 builder.Services.AddMinio(configuration =>
 {
     configuration.WithSSL(false);

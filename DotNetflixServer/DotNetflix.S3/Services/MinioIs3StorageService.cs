@@ -7,13 +7,10 @@ namespace DotNetflix.S3.Services;
 public class MinioS3StorageService : IS3StorageService
 {
     private readonly IMinioClient _minioClient;
-    private readonly ILogger _logger;
-
     public MinioS3StorageService(
         IMinioClient minioClient,
         ILoggerFactory loggerFactory)
     {
-        _logger = loggerFactory.CreateLogger(nameof(MinioS3StorageService));
         _minioClient = minioClient;
     }
     
@@ -23,8 +20,6 @@ public class MinioS3StorageService : IS3StorageService
             .WithBucket(bucketIdentifier);
 
         await _minioClient.MakeBucketAsync(args);
-        
-        _logger.LogInformation("Bucket '{bucketIdentifier}' was created",bucketIdentifier);
     }   
 
     public async Task RemoveBucketAsync(string bucketIdentifier)
@@ -33,8 +28,6 @@ public class MinioS3StorageService : IS3StorageService
             .WithBucket(bucketIdentifier);
 
         await _minioClient.RemoveBucketAsync(args);
-        
-        _logger.LogInformation("Bucket '{bucketIdentifier}' was removed",bucketIdentifier);
     }
 
     public async Task<bool> BucketExistAsync(string bucketIdentifier)

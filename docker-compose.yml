@@ -6,8 +6,8 @@ services:
     container_name: dotnetflixs3
     restart: always
     build:
-      context: ./DotNetflixServer/DotNetflix.S3/
-      dockerfile: Dockerfile
+      context: ./DotNetflixServer/
+      dockerfile: DockerfileDotnetflixS3
     depends_on:
       - MinioS3
     environment:
