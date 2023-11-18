@@ -35,7 +35,7 @@ public interface IS3Storage
     /// </summary>
     /// <param name="fileIdentifier">уникальный идентификатор файла</param>
     /// <param name="bucketIdentifier">уникальный идентификатор бакета</param>
-    public Task RemoveFileInBucket(string fileIdentifier, string bucketIdentifier);
+    public Task RemoveFileFromBucket(string fileIdentifier, string bucketIdentifier);
     
     /// <summary>
     /// Получить файл из бакета

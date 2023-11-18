@@ -4,7 +4,7 @@ using Minio.Exceptions;
 
 namespace Services.Infrastructure.S3;
 
-public class MinioS3Storage
+public class MinioS3Storage : IS3Storage
 {
     private readonly IMinioClient _minioClient;
 
