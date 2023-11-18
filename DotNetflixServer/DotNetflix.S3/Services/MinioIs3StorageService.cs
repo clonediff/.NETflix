@@ -7,20 +7,19 @@ namespace DotNetflix.S3.Services;
 public class MinioS3StorageService : IS3StorageService
 {
     private readonly IMinioClient _minioClient;
-    public MinioS3StorageService(
-        IMinioClient minioClient,
-        ILoggerFactory loggerFactory)
+
+    public MinioS3StorageService(IMinioClient minioClient)
     {
         _minioClient = minioClient;
     }
-    
+
     public async Task CreateBucketAsync(string bucketIdentifier)
     {
         var args = new MakeBucketArgs()
             .WithBucket(bucketIdentifier);
 
         await _minioClient.MakeBucketAsync(args);
-    }   
+    }
 
     public async Task RemoveBucketAsync(string bucketIdentifier)
     {
