@@ -1,6 +1,12 @@
 version: "3.9"
 
 services:
+  MinioS3:
+    image: minio/minio
+    container_name: dotnetflixminio
+    ports:
+      - "9000:9000"
+    command: server /storage
   RabbitMq:
     image: rabbitmq:3-alpine
     ports:
