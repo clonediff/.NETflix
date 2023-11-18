@@ -2,7 +2,7 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 
-namespace Services.Infrastructure.S3;
+namespace DotNetflix.S3.Services;
 
 public class MinioS3StorageService : IS3StorageService
 {
