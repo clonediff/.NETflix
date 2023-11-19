@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using Contracts.Shared;
+﻿using Contracts.Shared;
 using DotNetflixAPI.Dto;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;

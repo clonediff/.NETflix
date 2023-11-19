@@ -72,7 +72,7 @@ const SupportChatPage = () => {
                                 <ChatPreview 
                                     key={ preview.roomId }
                                     preview={ preview }
-                                    onClick={ (roomId) => { setSelectedRoom(roomId) } } />
+                                    onClick={ (roomId) => setSelectedRoom(roomId) } />
                             ))
                         }
                         <Pagination 
