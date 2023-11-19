@@ -132,11 +132,13 @@ public static class ProgramConfigurationExtensions
         services.AddMemoryCache();
         services.AddScoped<IEmailService, EmailService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
-        services.AddHttpClient();
+        services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:7126");
+        });
+        services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
         services.AddHttpContextAccessor();
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
-        services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
-        services.AddScoped<ISupportChatService, SupportChatService>();
         services.AddApplicationServices();
         
         return services;

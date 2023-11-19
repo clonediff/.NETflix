@@ -48,7 +48,10 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<ISupportChatService, SupportChatService>();
+        services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:7126");
+        });
         services.AddApplicationServices();
 
         return services;

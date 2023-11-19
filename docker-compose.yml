@@ -4,24 +4,31 @@ services:
   DotNetflixS3:
     image: aspnetdotnetflixs3
     container_name: dotnetflixs3
-    restart: always
     build:
       context: ./DotNetflixServer/
       dockerfile: DockerfileDotnetflixS3
     depends_on:
       - MinioS3
+      - RabbitMq
     environment:
       - MinioS3__AccessKey=minioadmin
       - MinioS3__SecretKey=minioadmin
       - MinioS3__Timeout=5000
       - MinioS3__Endpoint=dotnetflixminio:9000
+      - RabbitMqConfig__Username=admin
+      - RabbitMqConfig__Password=admin
+      - RabbitMqConfig__Hostname=RabbitMq
+      - RabbitMqConfig__Port=5672
   MinioS3:
     image: minio/minio
-    container_name: dotnetflixminio
-    restart: always
-    command: server /storage
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server --console-address ":9001" /data/
   RabbitMq:
     image: rabbitmq:3-alpine
+    container_name: rabbitmq
     ports:
       - "5672:5672"
     environment:

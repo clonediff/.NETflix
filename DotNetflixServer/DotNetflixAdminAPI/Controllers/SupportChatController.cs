@@ -30,9 +30,10 @@ public class SupportChatController : Controller
     }
 
     [HttpGet("[action]")]
-    public IActionResult History([FromQuery] string roomId)
+    public async Task<IActionResult> History([FromQuery] string roomId)
     {
-        return Ok(_supportChatService.GetHistory(roomId, true));
+        var history = await _supportChatService.GetHistoryAsync(roomId, true);
+        return Ok(history);
     }
 
     [HttpPatch("[action]")]

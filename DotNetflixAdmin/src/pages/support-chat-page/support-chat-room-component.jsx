@@ -23,7 +23,6 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         }
         onLoad(roomId)
         loadHistory()
-        setIsLoading(false)
         markMessagesAsRead()
     }, [roomId])
     
@@ -32,11 +31,12 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
             messagesEnd.current?.scrollIntoView({ behavior: 'smooth' })
         }
     }, [messages])
-
+    
     const loadHistory = () => {
         axiosInstance.get(`api/support-chat/history?roomId=${roomId}`)
-            .then(({ data }) => {
+        .then(({ data }) => {
                 setMessages(data)
+                setIsLoading(false)
             })
     }
 
@@ -124,7 +124,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
                             <Button 
                                 className='upload-button'
                                 onClick={ sendFiles }>
-                                Отправить
+                                Отправить файл
                             </Button>
                         </Form.Item>
                         <Form.Item
