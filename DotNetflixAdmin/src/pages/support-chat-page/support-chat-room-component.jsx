@@ -25,7 +25,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         setIsLoading(false)
         markMessagesAsRead()
     }, [roomId])
-    
+
     useEffect(() => {    
         if (messagesEnd) {
             messagesEnd.current?.scrollIntoView({ behavior: 'smooth' })
