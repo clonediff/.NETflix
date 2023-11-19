@@ -18,15 +18,31 @@ public class SupportChatHub : Hub<IClient>
         _bus = bus;
     }
 
-    public async Task SendAsync(SendMessageDto dto)
+    public async Task SendMessageAsync(SendMessageDto<string> dto)
+    {
+        var groupName = dto.RoomId ?? Context.UserIdentifier!;
+        
+        await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+        await SendAsync(groupName, dto, x => x);
+    }
+
+    public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
         
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         
-        var userName = Context.User?.Identity?.Name ?? AdminName;
+        var image = new ImageDto($"data:{contentType};base64,", dto.Message.Select(x => (byte) x).ToArray());
+    
+        await SendAsync(groupName, dto, _ => image);
+    }
+
+    private async Task SendAsync<TInMessage, TOutMessage>(string groupName, SendMessageDto<TInMessage> dto, Func<TInMessage, TOutMessage> transformer)
+    {
         var sendingDate = DateTime.Now;
-        var messageForSender = new MessageDto(dto.Message, userName, sendingDate, true);
+        var userName = Context.User?.Identity?.Name ?? AdminName;
+        var messageForSender = MessageDtoFactory.Create(transformer(dto.Message), userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         if (Context.UserIdentifier is null)
@@ -39,9 +55,9 @@ public class SupportChatHub : Hub<IClient>
         }
         
         await Clients.GroupExcept(groupName, UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
-
+        
         await _bus.Publish(new SupportChatMessage(
-            Content: dto.Message,
+            Content: dto.Message as string ?? $"file_{dto.RoomId}_{sendingDate}",
             SendingDate: sendingDate,
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,

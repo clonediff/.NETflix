@@ -59,7 +59,7 @@ const ChatWidget = () => {
 
     const sendForm = (values) => {
         form.setFieldValue('message', undefined);
-        connection.invoke('SendAsync', {
+        connection.invoke('SendMessageAsync', {
             message: values.message,
             roomId: null
         });
