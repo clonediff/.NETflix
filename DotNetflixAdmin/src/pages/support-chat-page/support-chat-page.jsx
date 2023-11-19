@@ -34,6 +34,14 @@ const SupportChatPage = () => {
         }
     }, [connection])
 
+    useEffect(() => {
+        if (connection && !selectedRoom) {
+            connection.on('ReceiveAsync', (message) => {
+                updateMessagePreview(message.roomId, message.senderName, message.message)
+            })
+        }
+    }, [chatPreviewsCount])
+    
     const fetchPreviews = (page, _) => {
         axiosInstance.get(`api/support-chat/preview/?page=${page}&size=25`)
             .then(({ data }) => {
