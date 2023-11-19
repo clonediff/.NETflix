@@ -1,6 +1,25 @@
 version: "3.9"
 
 services:
+  DotNetflixS3:
+    image: aspnetdotnetflixs3
+    container_name: dotnetflixs3
+    restart: always
+    build:
+      context: ./DotNetflixServer/
+      dockerfile: DockerfileDotnetflixS3
+    depends_on:
+      - MinioS3
+    environment:
+      - MinioS3__AccessKey=minioadmin
+      - MinioS3__SecretKey=minioadmin
+      - MinioS3__Timeout=5000
+      - MinioS3__Endpoint=dotnetflixminio:9000
+  MinioS3:
+    image: minio/minio
+    container_name: dotnetflixminio
+    restart: always
+    command: server /storage
   RabbitMq:
     image: rabbitmq:3-alpine
     ports:
