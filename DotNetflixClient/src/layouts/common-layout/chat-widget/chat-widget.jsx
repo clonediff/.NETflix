@@ -38,7 +38,6 @@ const ChatWidget = () => {
     useEffect(() => {
         if (isStarted) {
             connection.on('ReceiveAsync', (message) => {
-                debugger;
                 setMessages(prevState => [ ...prevState, message ]);
             });
             loadHistory();
