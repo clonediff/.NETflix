@@ -27,16 +27,12 @@ public class SupportChatHub : Hub<IClient>
         var messageForSender = new MessageDto(groupName, dto.Message, userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
+        var (adminMessage, userMessage) = (messageForReceiver, messageForSender);
         if (Context.UserIdentifier is null)
-        {
-            await Clients.Clients(AdminConnections).ReceiveAsync(messageForSender);
-            await Clients.User(groupName).ReceiveAsync(messageForReceiver);
-        }
-        else
-        {
-            await Clients.User(groupName).ReceiveAsync(messageForSender);
-            await Clients.Clients(AdminConnections).ReceiveAsync(messageForReceiver);
-        }
+            (adminMessage, userMessage) = (messageForSender, messageForReceiver);
+
+        await Clients.Clients(AdminConnections).ReceiveAsync(adminMessage);
+        await Clients.User(groupName).ReceiveAsync(userMessage);
 
         await _bus.Publish(new SupportChatMessage(
             Content: dto.Message,
