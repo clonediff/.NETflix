@@ -14,12 +14,12 @@ public class SupportChatService : ISupportChatService
         _context = context;
     }
 
-    public IEnumerable<MessageDto> GetHistory(string roomId, bool senderIsAdmin)
+    public IEnumerable<SupportChatMessageDto> GetHistory(string roomId, bool senderIsAdmin)
     {
         return _context.Messages
             .Include(x => x.User)
             .Where(x => x.UserId == roomId)
-            .Select(x => new MessageDto(roomId, x.Content, x.IsFromAdmin ? AdminName : x.User.UserName!, x.SendingDate,
+            .Select(x => new SupportChatMessageDto(roomId, x.Content, x.IsFromAdmin ? AdminName : x.User.UserName!, x.SendingDate,
                 senderIsAdmin == x.IsFromAdmin));
     }
 }

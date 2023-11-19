@@ -24,7 +24,7 @@ public class ChatHub : Hub<IClient>
         var command = new PutMessageCommand(message, date, Context.UserIdentifier!);
         await _mediator.Send(command);
 
-        var userMessage = new MessageDto("", message, userName!, date, true);
+        var userMessage = new MessageDto(message, userName!, date, true);
 
         await Clients.User(Context.UserIdentifier!).ReceiveAsync(userMessage);
         await Clients.AllExcept(UserConnections[Context.UserIdentifier!]).ReceiveAsync(userMessage with { BelongsToSender = false});

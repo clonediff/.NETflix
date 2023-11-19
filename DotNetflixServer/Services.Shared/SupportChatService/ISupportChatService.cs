@@ -4,5 +4,5 @@ namespace Services.Shared.SupportChatService;
 
 public interface ISupportChatService
 {
-    IEnumerable<MessageDto> GetHistory(string roomId, bool senderIsAdmin);
+    IEnumerable<SupportChatMessageDto> GetHistory(string roomId, bool senderIsAdmin);
 }

@@ -23,7 +23,7 @@ public class SupportChatHub : Hub<IClient>
         
         var userName = Context.User?.Identity?.Name ?? AdminName;
         var sendingDate = DateTime.Now;
-        var messageForSender = new MessageDto(groupName, dto.Message, userName, sendingDate, true);
+        var messageForSender = new SupportChatMessageDto(groupName, dto.Message, userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         var (adminMessage, userMessage) = (messageForReceiver, messageForSender);
