@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Collections.Immutable;
 using Contracts.Shared;
 using DotNetflixAPI.Dto;
 using MassTransit;
@@ -8,7 +8,7 @@ namespace DotNetflixAPI.Hubs;
 
 public class SupportChatHub : Hub<IClient>
 {
-    private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
+    private static readonly List<string> AdminConnections = new();
     private const string AdminName = "Администратор";
 
     private readonly IBus _bus;
@@ -22,23 +22,21 @@ public class SupportChatHub : Hub<IClient>
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
         
-        await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-        
         var userName = Context.User?.Identity?.Name ?? AdminName;
         var sendingDate = DateTime.Now;
-        var messageForSender = new MessageDto(dto.Message, userName, sendingDate, true);
+        var messageForSender = new MessageDto(groupName, dto.Message, userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         if (Context.UserIdentifier is null)
         {
-            await Clients.GroupExcept(groupName, UserConnections[groupName]).ReceiveAsync(messageForSender);
+            await Clients.Clients(AdminConnections).ReceiveAsync(messageForSender);
+            await Clients.User(groupName).ReceiveAsync(messageForReceiver);
         }
         else
         {
-            await Clients.Caller.ReceiveAsync(messageForSender);
+            await Clients.User(groupName).ReceiveAsync(messageForSender);
+            await Clients.Clients(AdminConnections).ReceiveAsync(messageForReceiver);
         }
-        
-        await Clients.GroupExcept(groupName, UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
 
         await _bus.Publish(new SupportChatMessage(
             Content: dto.Message,
@@ -48,33 +46,16 @@ public class SupportChatHub : Hub<IClient>
             RoomId: groupName));
     }
 
-    public async Task ConnectToGroupAsync(ConnectToRoomDto dto)
-    {
-        if (dto.PrevRoomId is not null)
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, dto.PrevRoomId);
-        await Groups.AddToGroupAsync(Context.ConnectionId, dto.RoomId);
-    }
-
     public override Task OnConnectedAsync()
     {
-        UserConnections.AddOrUpdate(
-            key: Context.UserIdentifier ?? AdminName,
-            addValue: new List<string>
-            {
-                Context.ConnectionId
-            },
-            updateValueFactory: (_, value) =>
-            {
-                value.Add(Context.ConnectionId);
-                return value;
-            });
-        
+        if (Context.UserIdentifier is null)
+            AdminConnections.Add(Context.ConnectionId);
         return Task.CompletedTask;
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        UserConnections[Context.UserIdentifier ?? AdminName].Remove(Context.ConnectionId);
+        AdminConnections.Remove(Context.ConnectionId);
 
         return Task.CompletedTask;
     }

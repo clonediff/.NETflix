@@ -4,7 +4,7 @@ import { axiosInstance } from '../../axiosInstance'
 import CustomSpin from '../../custom-spin/custom-spin'
 import './support-chat-room-component.css'
 
-const SupportChatRoomComponent = ({ prevRoomId, roomId, connection, onLoad, updateLatestMessage }) => {
+const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMessage }) => {
     
     const [isLoading, setIsLoading] = useState(true)
     const [messages, setMessages] = useState([])
@@ -13,14 +13,15 @@ const SupportChatRoomComponent = ({ prevRoomId, roomId, connection, onLoad, upda
 
     useEffect(() => {
         if (connection) {
+            connection.off('ReceiveAsync')
             connection.on('ReceiveAsync', (message) => {
-                updateLatestMessage(roomId, message.senderName, message.message)
-                setMessages(prevState => [ ...prevState, message ])
+                updateLatestMessage(message.roomId, message.senderName, message.message)
+                if (message.roomId === roomId)
+                    setMessages(prevState => [ ...prevState, message ])
             })
         }
         onLoad(roomId)
         loadHistory()
-        connectToRoom()
         setIsLoading(false)
         markMessagesAsRead()
     }, [roomId])
@@ -31,15 +32,6 @@ const SupportChatRoomComponent = ({ prevRoomId, roomId, connection, onLoad, upda
         }
         markMessagesAsRead()
     }, [messages])
-
-    const connectToRoom = () => {
-        if (connection.state !== "Connected")
-            connection.start()
-        connection.invoke('ConnectToGroupAsync', {
-            prevRoomId: prevRoomId,
-            roomId: roomId
-        })
-    }
     
     const loadHistory = () => {
         axiosInstance.get(`api/support-chat/history?roomId=${roomId}`)
@@ -56,7 +48,6 @@ const SupportChatRoomComponent = ({ prevRoomId, roomId, connection, onLoad, upda
         if (connection.state !== "Connected")
             connection.start()
         form.setFieldValue('message', undefined)
-        updateLatestMessage(roomId, 'Администратор', values.message)
         connection.invoke('SendAsync', {
             message: values.message,
             roomId: roomId

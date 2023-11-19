@@ -8,6 +8,7 @@ public static class GetAllMessagesDtoToMessageDto
     public static MessageDto ToMessageDto(this GetAllMessagesDto dto, string userId)
     {
         return new MessageDto(
+            "",
             Message: dto.Message,
             SenderName: dto.SenderName,
             SendingDate: dto.SendingDate,
