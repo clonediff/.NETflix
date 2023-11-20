@@ -23,6 +23,7 @@ internal partial class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery,
         var rooms = _dbContext.Messages
             .Include(x => x.User)
             .GroupBy(x => x.User)
+            .OrderByDescending(g => g.Max(x => x.SendingDate))
             .Select(x =>
                 new
                 {

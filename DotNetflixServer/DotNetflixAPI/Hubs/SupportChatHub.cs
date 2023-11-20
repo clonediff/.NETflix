@@ -51,8 +51,8 @@ public class SupportChatHub : Hub<ISupportChatClient>
         if (Context.UserIdentifier is null)
             (adminMessage, userMessage) = (messageForSender, messageForReceiver);
 
-        await Clients.Clients(AdminConnections).ReceiveAsync(adminMessage as dynamic);
-        await Clients.User(groupName).ReceiveAsync(userMessage as dynamic);
+        await Clients.Clients(AdminConnections).ReceiveAsync(adminMessage);
+        await Clients.User(groupName).ReceiveAsync(userMessage);
 
         await _bus.Publish(new SupportChatMessage(
             Content: content,

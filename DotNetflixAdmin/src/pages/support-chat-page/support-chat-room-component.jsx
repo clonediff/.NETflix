@@ -53,8 +53,8 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         }
         if (connection.state !== "Connected")
             connection.start()
-        form.setFieldValue('message', undefined)
-        connection.invoke('SendAsync', {
+        form.setFieldValue('message', '')
+        connection.invoke('SendMessageAsync', {
             message: values.message,
             roomId: roomId
         })
@@ -64,7 +64,6 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         if (files.length === 0) {
             return
         }
-        updateLatestMessage(roomId, 'Администратор', {})
         files.forEach(f => {
             sendFile(f)
         })
@@ -161,7 +160,7 @@ const Message = ({ senderName, message, date, belongsToSender }) => {
             <div className='message' style={{ backgroundColor: belongsToSender ? 'var(--sidebarBgColor)' : 'var(--headerBgColor)' }}>
                 <div><strong>{ senderName }</strong></div>    
                     {
-                        typeof message === 'string'
+                        typeof message === 'string' || !message
                             ? <div>{ message }</div>
                             : <img width={ '100%' } src={ `${message.header}${message.bytes}` } />
                     }
