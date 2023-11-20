@@ -1,5 +1,4 @@
-﻿using DataAccess;
-using Domain.Entities;
+﻿using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +7,9 @@ namespace DotNetflix.Admin.Application.Features.Films.Commands.UpdateFilm;
 
 internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public UpdateFilmCommandHandler(ApplicationDBContext dbContext)
+    public UpdateFilmCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -19,11 +18,11 @@ internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
     {
         var movie = request.ToMovieInfo();
 
-        _dbContext.CountryMovieInfo.RemoveRange(
-            _dbContext.CountryMovieInfo.Where(cmi => cmi.MovieInfoId == request.Id));
+        _dbContext.Set<CountryMovieInfo>().RemoveRange(
+            _dbContext.Set<CountryMovieInfo>().Where(cmi => cmi.MovieInfoId == request.Id));
         
-        _dbContext.CountryMovieInfo.AddRange(
-            _dbContext.Countries
+        _dbContext.Set<CountryMovieInfo>().AddRange(
+            _dbContext.Set<Country>()
                 .Where(c => request.Countries.Contains(c.Id))
                 .Select(c => new CountryMovieInfo
                 {
@@ -31,11 +30,11 @@ internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
                     MovieInfoId = request.Id
                 }));
 
-        _dbContext.GenreMovieInfo.RemoveRange(
-            _dbContext.GenreMovieInfo.Where(gmi => gmi.MovieInfoId == request.Id));
+        _dbContext.Set<GenreMovieInfo>().RemoveRange(
+            _dbContext.Set<GenreMovieInfo>().Where(gmi => gmi.MovieInfoId == request.Id));
         
-        _dbContext.GenreMovieInfo.AddRange(
-            _dbContext.Genres
+        _dbContext.Set<GenreMovieInfo>().AddRange(
+            _dbContext.Set<Genre>()
                 .Where(g => request.Genres.Contains(g.Id))
                 .Select(g => new GenreMovieInfo
                 {
@@ -45,13 +44,13 @@ internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
 
         if (request.SeasonsToDelete.Count != 0)
         {
-            _dbContext.SeasonsInfos.RemoveRange(
-                _dbContext.SeasonsInfos.Where(si => request.SeasonsToDelete.Contains(si.Id)));
+            _dbContext.Set<SeasonsInfo>().RemoveRange(
+                _dbContext.Set<SeasonsInfo>().Where(si => request.SeasonsToDelete.Contains(si.Id)));
         }
 
         if (request.PeopleToDelete.Count != 0)
         {
-            _dbContext.PersonProffessionInMovie.RemoveRange(
+            _dbContext.Set<PersonProffessionInMovie>().RemoveRange(
                 request.PeopleToDelete.Select(ptd => new PersonProffessionInMovie
                 {
                     PersonId = ptd.PersonId,
@@ -60,13 +59,13 @@ internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
                 }));
         }
 
-        _dbContext.Movies.Update(movie);
+        _dbContext.Set<MovieInfo>().Update(movie);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
         
         if (movie.Fees is null && request.Fees.Id != 0)
         {
-            var fees = await _dbContext.Fees.FirstOrDefaultAsync(f => f.Id == request.Fees.Id, cancellationToken);
+            var fees = await _dbContext.Set<Fees>().FirstOrDefaultAsync(f => f.Id == request.Fees.Id, cancellationToken);
 
             _dbContext.Entry(fees!).State = EntityState.Deleted;
 

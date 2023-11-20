@@ -1,15 +1,15 @@
 ﻿using Contracts.Shared;
-using DataAccess;
 using Domain.Entities;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 namespace SupportChat.Consumers;
 
 public class SupportChatMessageConsumer : IConsumer<SupportChatMessage>
 {
-    private readonly ApplicationDBContext _context;
+    private readonly DbContext _context;
 
-    public SupportChatMessageConsumer(ApplicationDBContext context)
+    public SupportChatMessageConsumer(DbContext context)
     {
         _context = context;
     }
@@ -25,7 +25,7 @@ public class SupportChatMessageConsumer : IConsumer<SupportChatMessage>
             IsRead = context.Message.IsReadByAdmin
         };
 
-        _context.Messages.Add(message);
+        _context.Set<Message>().Add(message);
         await _context.SaveChangesAsync();
     }
 }

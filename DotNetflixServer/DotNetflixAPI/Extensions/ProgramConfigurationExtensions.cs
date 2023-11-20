@@ -59,6 +59,8 @@ public static class ProgramConfigurationExtensions
             .AddEntityFrameworkStores<ApplicationDBContext>()
             .AddDefaultTokenProviders();
 
+        services.AddScoped<DbContext, ApplicationDBContext>();
+        
         return services;
     }
 

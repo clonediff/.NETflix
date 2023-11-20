@@ -1,14 +1,14 @@
-﻿using DataAccess;
-using Domain.Entities;
+﻿using Domain.Entities;
 using DotNetflix.CQRS.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.AddSubscription;
 
 internal class AddSubscriptionCommandHandler : ICommandHandler<AddSubscriptionCommand>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public AddSubscriptionCommandHandler(ApplicationDBContext dbContext)
+    public AddSubscriptionCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -23,7 +23,7 @@ internal class AddSubscriptionCommandHandler : ICommandHandler<AddSubscriptionCo
             IsAvailable = false
         };
 
-        _dbContext.Subscriptions.Add(subscription);
+        _dbContext.Set<Subscription>().Add(subscription);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

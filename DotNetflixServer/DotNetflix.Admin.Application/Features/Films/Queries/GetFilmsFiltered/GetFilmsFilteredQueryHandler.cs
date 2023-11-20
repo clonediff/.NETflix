@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using Domain.Extensions;
 using DotNetflix.Admin.Application.Shared;
 using DotNetflix.CQRS.Abstractions;
@@ -8,16 +8,16 @@ namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsFiltered;
 
 internal class GetFilmsFilteredQueryHandler : IQueryHandler<GetFilmsFilteredQuery, PaginationDataDto<EnumDto<int>>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetFilmsFilteredQueryHandler(ApplicationDBContext dbContext)
+    public GetFilmsFilteredQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<PaginationDataDto<EnumDto<int>>> Handle(GetFilmsFilteredQuery request, CancellationToken cancellationToken)
     {
-        var filteredMovies = _dbContext.Movies
+        var filteredMovies = _dbContext.Set<MovieInfo>()
             .Where(x => request.Name == null || x.Name.Contains(request.Name));
 
         var filteredMoviesCount = await filteredMovies.CountAsync(cancellationToken);

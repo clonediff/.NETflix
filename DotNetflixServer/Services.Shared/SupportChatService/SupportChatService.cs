@@ -1,6 +1,5 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Contracts.Shared;
-using DataAccess;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +7,11 @@ namespace Services.Shared.SupportChatService;
 
 public partial class SupportChatService : ISupportChatService
 {
-    private readonly ApplicationDBContext _context;
+    private readonly DbContext _context;
     private readonly HttpClient _httpClient;
     private const string AdminName = "Администратор";
 
-    public SupportChatService(ApplicationDBContext context, HttpClient httpClient)
+    public SupportChatService(DbContext context, HttpClient httpClient)
     {
         _context = context;
         _httpClient = httpClient;
@@ -20,7 +19,7 @@ public partial class SupportChatService : ISupportChatService
 
     public async Task<IEnumerable<dynamic>> GetHistoryAsync(string roomId, bool senderIsAdmin)
     {
-        var messages = _context.Messages
+        var messages = _context.Set<Message>()
             .Where(x => x.UserId == roomId)
             .Include(x => x.User)
             .AsEnumerable();

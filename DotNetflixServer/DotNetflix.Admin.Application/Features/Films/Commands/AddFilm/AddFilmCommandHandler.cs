@@ -1,14 +1,15 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
 using DotNetflix.CQRS.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
 
 internal class AddFilmCommandHandler : ICommandHandler<AddFilmCommand>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public AddFilmCommandHandler(ApplicationDBContext dbContext)
+    public AddFilmCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -17,7 +18,7 @@ internal class AddFilmCommandHandler : ICommandHandler<AddFilmCommand>
     {
         var movie = request.ToMovieInfo();
         
-        _dbContext.Movies.Add(movie);
+        _dbContext.Set<MovieInfo>().Add(movie);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
