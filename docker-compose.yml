@@ -4,6 +4,8 @@ services:
   DotNetflixS3:
     image: aspnetdotnetflixs3
     container_name: dotnetflixs3
+    ports:
+      - "7126:80"
     build:
       context: ./DotNetflixServer/
       dockerfile: DockerfileDotnetflixS3
@@ -14,7 +16,7 @@ services:
       - MinioS3__AccessKey=minioadmin
       - MinioS3__SecretKey=minioadmin
       - MinioS3__Timeout=5000
-      - MinioS3__Endpoint=dotnetflixminio:9000
+      - MinioS3__Endpoint=minio:9000
       - RabbitMqConfig__Username=admin
       - RabbitMqConfig__Password=admin
       - RabbitMqConfig__Hostname=RabbitMq
@@ -64,7 +66,7 @@ services:
       - RabbitMqConfig__Port=5672
       - FrontendBaseUrl=http://localhost:3000
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - MinioApiBaseUrl=https://localhost:7126
+      - MinioApiBaseUrl=http://dotnetflixs3
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - OAuth__ApiOAuth=http://localhost:7289/api/oauth/google
@@ -88,7 +90,7 @@ services:
       - "7298:443"
     environment:
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - MinioApiBaseUrl=https://localhost:7126
+      - MinioApiBaseUrl=http://dotnetflixs3
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - ASPNETCORE_ENVIRONMENT:Production

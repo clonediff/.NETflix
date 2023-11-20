@@ -58,6 +58,8 @@ const ChatWidget = () => {
     }
 
     const sendForm = (values) => {
+        if (connection.state !== "Connected")
+            connection.start()
         form.setFieldValue('message', undefined);
         connection.invoke('SendMessageAsync', {
             message: values.message,
@@ -121,7 +123,7 @@ const ChatWidget = () => {
                             }
                         ]} 
                         noStyle>
-                        <Input className='message-input' placeholder='введите сообщение' autoComplete='off' />
+                        <Input className='message-input' placeholder='введите сообщение' autoComplete='off' autoFocus/>
                     </Form.Item>
                     <Form.Item noStyle>
                         <button type='submit' hidden />

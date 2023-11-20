@@ -26,20 +26,20 @@ public partial class SupportChatService : ISupportChatService
             .AsEnumerable();
             
         return await Task.WhenAll(messages
-            .Select(x => CreateMessageAsync(x, senderIsAdmin == x.IsFromAdmin)));
+            .Select(x => CreateMessageAsync(roomId, x, senderIsAdmin == x.IsFromAdmin)));
     }
 
-    private async Task<dynamic> CreateMessageAsync(Message message, bool belongsToSender)
+    private async Task<dynamic> CreateMessageAsync(string roomId, Message message, bool belongsToSender)
     {
         if (FileRegex().IsMatch(message.Content))
         {
-            return await CreateFileMessageAsync(message, belongsToSender);
+            return await CreateFileMessageAsync(roomId, message, belongsToSender);
         }
         
-        return new MessageDto<string>(message.Content, message.IsFromAdmin ? AdminName : message.User.UserName!, message.SendingDate, belongsToSender);
+        return new SupportChatMessageDto<string>(roomId, message.Content, message.IsFromAdmin ? AdminName : message.User.UserName!, message.SendingDate, belongsToSender);
     }
 
-    private async Task<MessageDto<ImageDto>> CreateFileMessageAsync(Message message, bool belongsToSender)
+    private async Task<SupportChatMessageDto<ImageDto>> CreateFileMessageAsync(string roomId, Message message, bool belongsToSender)
     {
         var parts = message.Content.Split('_');
         var bucketName = parts[1];
@@ -52,7 +52,7 @@ public partial class SupportChatService : ISupportChatService
 
         var image = new ImageDto($"data:{contentType};base64,", memoryStream.ToArray());
             
-        return new MessageDto<ImageDto>(image, message.IsFromAdmin ? AdminName : message.User.UserName!, message.SendingDate, belongsToSender);
+        return new SupportChatMessageDto<ImageDto>(roomId, image, message.IsFromAdmin ? AdminName : message.User.UserName!, message.SendingDate, belongsToSender);
     }
 
     [GeneratedRegex(@"file_.+_.+_.+\/.+")]

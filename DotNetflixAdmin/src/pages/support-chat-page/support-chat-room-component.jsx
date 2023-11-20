@@ -16,20 +16,23 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
 
     useEffect(() => {
         if (connection) {
-            connection.on('ReceiveAsync', (message) => { 
-                updateLatestMessage(roomId, message.senderName, message.message)
-                setMessages(prevState => [ ...prevState, message ])
+            connection.off('ReceiveAsync')
+            connection.on('ReceiveAsync', (message) => {
+                updateLatestMessage(message.roomId, message.senderName, message.message)
+                if (message.roomId === roomId)
+                    setMessages(prevState => [ ...prevState, message ])
             })
         }
         onLoad(roomId)
         loadHistory()
         markMessagesAsRead()
     }, [roomId])
-    
+
     useEffect(() => {    
         if (messagesEnd) {
             messagesEnd.current?.scrollIntoView({ behavior: 'smooth' })
         }
+        markMessagesAsRead()
     }, [messages])
     
     const loadHistory = () => {
@@ -48,8 +51,9 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         if (values.message === '') {
             return
         }
-        form.setFieldValue('message', undefined)
-        updateLatestMessage(roomId, 'Администратор', values.message)
+        if (connection.state !== "Connected")
+            connection.start()
+        form.setFieldValue('message', '')
         connection.invoke('SendMessageAsync', {
             message: values.message,
             roomId: roomId
@@ -60,7 +64,6 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
         if (files.length === 0) {
             return
         }
-        updateLatestMessage(roomId, 'Администратор', {})
         files.forEach(f => {
             sendFile(f)
         })
@@ -131,7 +134,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
                             name='message' 
                             initialValue=''
                             noStyle>
-                            <Input className='message-input margin-left' placeholder='введите сообщение' />
+                            <Input className='message-input margin-left' placeholder='введите сообщение' autoFocus />
                         </Form.Item>
                         <Upload { ...uploadProps }>
                             <Button
@@ -157,7 +160,7 @@ const Message = ({ senderName, message, date, belongsToSender }) => {
             <div className='message' style={{ backgroundColor: belongsToSender ? 'var(--sidebarBgColor)' : 'var(--headerBgColor)' }}>
                 <div><strong>{ senderName }</strong></div>    
                     {
-                        typeof message === 'string'
+                        typeof message === 'string' || !message
                             ? <div>{ message }</div>
                             : <img width={ '100%' } src={ `${message.header}${message.bytes}` } />
                     }
