@@ -1,4 +1,4 @@
-using DataAccess;
+using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Persons.Mapping;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +7,9 @@ namespace DotNetflix.Admin.Application.Features.Persons.Queries.GetAll;
 
 internal class GetAllPersonsQueryHandler : IQueryHandler<GetAllPersonsQuery, IEnumerable<PersonDto>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetAllPersonsQueryHandler(ApplicationDBContext dbContext)
+    public GetAllPersonsQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -18,7 +18,7 @@ internal class GetAllPersonsQueryHandler : IQueryHandler<GetAllPersonsQuery, IEn
         GetAllPersonsQuery request,
         CancellationToken cancellationToken)
     {
-        return await _dbContext.Persons.AsNoTracking()
+        return await _dbContext.Set<Person>().AsNoTracking()
             .Select(p => p.ToPersonsDto())
             .ToListAsync(cancellationToken);
     }

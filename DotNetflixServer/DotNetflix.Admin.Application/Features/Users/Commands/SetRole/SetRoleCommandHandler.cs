@@ -1,4 +1,3 @@
-using DataAccess;
 using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
@@ -10,13 +9,13 @@ namespace DotNetflix.Admin.Application.Features.Users.Commands.SetRole;
 
 internal class SetRoleCommandHandler : ICommandHandler<SetRoleCommand, Result<bool, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
     private readonly IEmailService _emailService;
     private readonly UserManager<User> _userManager;
 
     public SetRoleCommandHandler(
         IEmailService emailService,
-        ApplicationDBContext dbContext,
+        DbContext dbContext,
         UserManager<User> userManager)
     {
         _userManager = userManager;
@@ -26,7 +25,7 @@ internal class SetRoleCommandHandler : ICommandHandler<SetRoleCommand, Result<bo
 
     public async Task<Result<bool, string>> Handle(SetRoleCommand request, CancellationToken cancellationToken)
     {
-        var role = await _dbContext.Roles.AsNoTracking()
+        var role = await _dbContext.Set<IdentityRole>().AsNoTracking()
             .FirstOrDefaultAsync(r => r.Id == request.RoleId, cancellationToken);
 
         if (role == null)
@@ -37,12 +36,12 @@ internal class SetRoleCommandHandler : ICommandHandler<SetRoleCommand, Result<bo
         if (user!.BannedUntil != null)
             return "Нельзя менять роль заблокированным пользователям";
         
-        var userRoles = await _dbContext.UserRoles
+        var userRoles = await _dbContext.Set<IdentityUserRole<string>>()
             .Where(x => x.UserId == request.UserId)
             .ToListAsync(cancellationToken);
 
-        _dbContext.UserRoles.RemoveRange(userRoles);
-        _dbContext.UserRoles.Add(new IdentityUserRole<string>
+        _dbContext.Set<IdentityUserRole<string>>().RemoveRange(userRoles);
+        _dbContext.Set<IdentityUserRole<string>>().Add(new IdentityUserRole<string>
         {
             RoleId = request.RoleId,
             UserId = request.UserId,

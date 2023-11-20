@@ -14,7 +14,7 @@ builder.Services
     .ConfigureOptions(builder.Configuration)
     .AddApplicationDb(connectionString)
     .AddAuth()
-    .RegisterServices()
+    .RegisterServices(builder.Configuration)
     .AddControllers()
     .AddJsonOptions(options =>
     {

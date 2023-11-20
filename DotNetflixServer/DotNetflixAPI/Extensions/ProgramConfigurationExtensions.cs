@@ -59,6 +59,8 @@ public static class ProgramConfigurationExtensions
             .AddEntityFrameworkStores<ApplicationDBContext>()
             .AddDefaultTokenProviders();
 
+        services.AddScoped<DbContext, ApplicationDBContext>();
+        
         return services;
     }
 
@@ -127,16 +129,18 @@ public static class ProgramConfigurationExtensions
         return services;
     }
 
-    public static IServiceCollection RegisterServices(this IServiceCollection services)
+    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMemoryCache();
         services.AddScoped<IEmailService, EmailService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
-        services.AddHttpClient();
+        services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["MinioApiBaseUrl"]!);
+        });
+        services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
         services.AddHttpContextAccessor();
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
-        services.AddScoped<IGoogleOAuth, GoogleOAuthService>();
-        services.AddScoped<ISupportChatService, SupportChatService>();
         services.AddApplicationServices();
         
         return services;

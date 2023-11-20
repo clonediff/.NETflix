@@ -1,5 +1,4 @@
-﻿using DataAccess;
-using Domain.Entities;
+﻿using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +7,16 @@ namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.UpdateFil
 
 internal class UpdateFilmsInSubscriptionCommandHandler : ICommandHandler<UpdateFilmsInSubscriptionCommand, Result<int, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public UpdateFilmsInSubscriptionCommandHandler(ApplicationDBContext dbContext)
+    public UpdateFilmsInSubscriptionCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Result<int, string>> Handle(UpdateFilmsInSubscriptionCommand request, CancellationToken cancellationToken)
     {
-        var subscription = await _dbContext.Subscriptions
+        var subscription = await _dbContext.Set<Subscription>()
             .Include(s => s.SubscriptionMovies)
             .FirstOrDefaultAsync(x => x.Id == request.SubscriptionId, cancellationToken);
 

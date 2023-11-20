@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
@@ -8,16 +8,16 @@ namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
 
 internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<GetFilmByIdDto, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetFilmByIdQueryHandler(ApplicationDBContext dbContext)
+    public GetFilmByIdQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Result<GetFilmByIdDto, string>> Handle(GetFilmByIdQuery request, CancellationToken cancellationToken)
     {
-        var film = await _dbContext.Movies
+        var film = await _dbContext.Set<MovieInfo>()
             .AsNoTracking()
             .Where(m => m.Id == request.Id)
             .Include(m => m.Genres)

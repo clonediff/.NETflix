@@ -1,5 +1,4 @@
-﻿using DataAccess;
-using Domain.Entities;
+﻿using Domain.Entities;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,9 +6,9 @@ namespace DotNetflix.Admin.Application.Features.Films.Commands.DeleteFilm;
 
 internal class DeleteFilmCommandHandler : ICommandHandler<DeleteFilmCommand>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public DeleteFilmCommandHandler(ApplicationDBContext dbContext)
+    public DeleteFilmCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }

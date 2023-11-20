@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,17 +6,17 @@ namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Commands.MarkAs
 
 internal class MarkAsReadCommandHandler : ICommandHandler<MarkAsReadCommand>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public MarkAsReadCommandHandler(ApplicationDBContext dbContext)
+    public MarkAsReadCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
     {
-        await _dbContext.Messages
-            .Where(x => x.UserId == request.RoomId)
+        await _dbContext.Set<Message>()
+            .Where(x => x.UserId == request.RoomId && !x.IsRead)
             .ExecuteUpdateAsync(x => x
                 .SetProperty(m => m.IsRead, true), cancellationToken: cancellationToken);
     }

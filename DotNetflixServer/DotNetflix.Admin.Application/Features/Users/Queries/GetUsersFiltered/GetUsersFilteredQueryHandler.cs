@@ -1,23 +1,24 @@
-using DataAccess;
+using Domain.Entities;
 using Domain.Extensions;
 using DotNetflix.Admin.Application.Shared;
 using DotNetflix.CQRS.Abstractions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Users.Queries.GetUsersFiltered;
 
 internal class GetUsersFilteredQueryHandler : IQueryHandler<GetUsersFilteredQuery , PaginationDataDto<UserDto>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetUsersFilteredQueryHandler(ApplicationDBContext dbContext)
+    public GetUsersFilteredQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
     
     public async Task<PaginationDataDto<UserDto>> Handle(GetUsersFilteredQuery request, CancellationToken cancellationToken)
     {
-        var filteredUsers = _dbContext.Users.AsNoTracking()
+        var filteredUsers = _dbContext.Set<User>().AsNoTracking()
             .Where(x => request.Name == null || x.UserName!.Contains(request.Name));
 
         var filteredUsersCount = await filteredUsers.CountAsync(cancellationToken);
@@ -25,7 +26,7 @@ internal class GetUsersFilteredQueryHandler : IQueryHandler<GetUsersFilteredQuer
         var users = filteredUsers
             .Paginate(request.Page, 25)
             .Join(
-                _dbContext.UserRoles,
+                _dbContext.Set<IdentityUserRole<string>>(),
                 user => user.Id,
                 role => role.UserId,
                 (user, role) => new UserDto(user.Id, user.UserName!, user.BannedUntil, role.RoleId))

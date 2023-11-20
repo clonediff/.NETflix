@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using Domain.Entities;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -7,24 +7,24 @@ namespace DotNetflix.Admin.Application.Features.Subscriptions.Commands.DeleteSub
 
 internal class DeleteSubscriptionCommandHandler : ICommandHandler<DeleteSubscriptionCommand, Result<int, string>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public DeleteSubscriptionCommandHandler(ApplicationDBContext dbContext)
+    public DeleteSubscriptionCommandHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Result<int, string>> Handle(DeleteSubscriptionCommand request, CancellationToken cancellationToken)
     {
-        var subscription = await _dbContext.Subscriptions.FirstOrDefaultAsync(x => x.Id == request.SubscriptionId, cancellationToken);
+        var subscription = await _dbContext.Set<Subscription>().FirstOrDefaultAsync(x => x.Id == request.SubscriptionId, cancellationToken);
 
         if (subscription is null)
             return "Не удалось найти подписку";
 
-        if (_dbContext.UserSubscriptions.Any(us => us.SubscriptionId == request.SubscriptionId))
+        if (_dbContext.Set<UserSubscription>().Any(us => us.SubscriptionId == request.SubscriptionId))
             return "Не удалось удалить подписку";
 
-        _dbContext.Subscriptions.Remove(subscription);
+        _dbContext.Set<Subscription>().Remove(subscription);
 
         return await _dbContext.SaveChangesAsync(cancellationToken);
     }

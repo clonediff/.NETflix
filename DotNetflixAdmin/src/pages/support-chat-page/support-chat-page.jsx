@@ -10,7 +10,7 @@ const SupportChatPage = () => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [chatPreviews, setChatPreviews] = useState([])
-    const [chatPreviewsCount, setChatPreviewsCount] = useState(0)
+    const [chatPreviewsCount, setChatPreviewsCount] = useState(-1)
     const [selectedRoom, setSelectedRoom] = useState(undefined)
     const [connection, setConnection] = useState(null)
 
@@ -25,20 +25,29 @@ const SupportChatPage = () => {
             setConnection(newConnection)
         }
         fetchPreviews(1, null)
-        setIsLoading(false)
     }, [])
-
+    
     useEffect(() => {
         if (connection) {
             connection.start()
         }
     }, [connection])
 
+    useEffect(() => {
+        if (connection && !selectedRoom) {
+            connection.off('ReceiveAsync')
+            connection.on('ReceiveAsync', (message) => {
+                updateMessagePreview(message.roomId, message.senderName, message.message)
+            })
+        }
+    }, [chatPreviewsCount])
+
     const fetchPreviews = (page, _) => {
         axiosInstance.get(`api/support-chat/preview/?page=${page}&size=25`)
-            .then(({ data }) => {
+        .then(({ data }) => {
                 setChatPreviews(data.data)
                 setChatPreviewsCount(data.count)
+                setIsLoading(false)
             })
     }
 
@@ -49,10 +58,19 @@ const SupportChatPage = () => {
     }
 
     const updateMessagePreview = (roomId, userName, latestMessage) => {
-        const newChatPreview = chatPreviews.find(p => p.roomId === roomId)
+        let newChatPreview = chatPreviews.find(p => p.roomId === roomId)
+        if (!newChatPreview) {
+            newChatPreview = {
+                roomId: roomId,
+                totalUnReadMessages: 0
+            }
+            setChatPreviewsCount(x => x + 1)
+        }
         newChatPreview.userName = userName
-        newChatPreview.latestMessage = latestMessage
-        setChatPreviews([ ...chatPreviews ])
+        newChatPreview.latestMessage = typeof latestMessage === 'string' ? latestMessage : 'файл'
+        if (roomId !== selectedRoom)
+            newChatPreview.totalUnReadMessages += 1;
+        setChatPreviews([ newChatPreview, ...chatPreviews.filter(x => x !== newChatPreview) ])
     }
 
     return (

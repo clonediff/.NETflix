@@ -1,8 +1,6 @@
-﻿using Contracts.Shared;
-
-namespace Services.Shared.SupportChatService;
+﻿namespace Services.Shared.SupportChatService;
 
 public interface ISupportChatService
 {
-    IEnumerable<MessageDto> GetHistory(string roomId, bool senderIsAdmin);
+    Task<IEnumerable<dynamic>> GetHistoryAsync(string roomId, bool senderIsAdmin);
 }

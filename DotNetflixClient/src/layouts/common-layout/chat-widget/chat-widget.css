@@ -33,6 +33,8 @@ h2{
   
   /* Modal Content */
 .modal-content {
+    display: flex;
+    flex-direction: column;
     border-radius: 20px;
     position: absolute;
     right: 2em;
@@ -41,7 +43,8 @@ h2{
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 20em;
+    width: 25em;
+    height: 30em;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatemodal;
     -webkit-animation-duration: 0.8s;
@@ -73,10 +76,10 @@ h2{
     color: #000;
     text-decoration: none;
     cursor: pointer;
-  }
+}
 
 .modal-header {
-    height: 3em;
+    height: 10%;
     border-radius: 20px 20px 0 0;
     padding: 2px 16px;
     background-color: var(--search-bg-color);
@@ -84,20 +87,22 @@ h2{
 }
 
 .modal-body {
+    display: block;
     padding: 2px 16px;
-    height: 20em;
+    height: 70%;
+    transition: 0.4s;
 }
 
 .modal-footer {
-    height: 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 20%;
     border-radius: 0 0 20px 20px;
     padding: 2px 16px;
     background-color: var(--search-bg-color);
     color: white;
-}
-
-.message-enter  {
-    height: 2em !important;
+    transition: 0.4s;
 }
 
 .message-list {
@@ -125,51 +130,102 @@ h2{
     max-width: 50%;
 }
 
-.message-input {
-    margin-top: 4px;
+.chat-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-list {
+    height: 95%;
+    overflow-x: auto;
+}
+
+.text-input {
+    width: calc(100% - 100px);
+    height: 60%;
+    background-color: var(--main-bg-color);
+    color: white;
+    font-size: 16px;
+    padding: 0px 8px;
+    border-radius: 8px;
+    word-wrap: break-word;
+    border: none;
+}
+
+.text-input::placeholder {
+    color: #dddddd95;
+}
+
+.upload-button {
     border: 2px solid var(--header-bg-color);
+}
+
+.upload {
+    border: 2px solid var(--header-bg-color);
+    border-radius: 4px;
+    background-color: white;
+    padding: 5px 6px;
+}
+
+.upload:hover {
+    color: #4096ff;
+    border-color: #4096ff;
+    transition: 0.4s;
+}
+
+.preview-list {
+    display: flex;
+    transition: 0.4s;
+}
+
+.file-preview {
+    display: flex;
+    align-content: center;
+    position: relative;
+    width: 20%;
+    height: 100%;
+    margin-right: 5px;
+    background-color: var(--header-bg-color);
+}
+
+.file-preview .delete-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 100;
+    font-size: 20px;
+    margin-top: -5px;
+}
+
+.file-preview .delete-button:hover,
+.file-preview .delete-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 920px) {
     .modal-content{
+        height: 35em;
         bottom: 20%;
     }
-    .modal-body  {
-        height: 15em;
-    }
-    .modal-content {
-        width: 15em;
-    }
+    
 }
 
 @media screen and (max-width: 760px) {
-    .modal-body  {
-        height: 15em;
-    }
-    .modal-content {
-        width: 15em;
-    }
+    
+    
 }
 @media screen and (max-width: 600px) {
-    .modal-header{
-        height: 2em;
-    }
-    .modal-body  {
-        height: 15em;
-    }
     .modal-content {
-        width: 15em;
+        height: 30em;
+        width: 20em;
     }
 }
 
 @media screen and (max-width: 400px) {
-    .modal-header{
-        height: 2em;
-    }
-    .modal-body  {
-        height: 13em;
-    }
     .modal-content {
-        width: 11em;
+        height: 30em;
+        width: 17em;
     }
 }

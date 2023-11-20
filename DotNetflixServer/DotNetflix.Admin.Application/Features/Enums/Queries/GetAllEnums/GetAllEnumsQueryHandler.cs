@@ -1,4 +1,4 @@
-using DataAccess;
+using Domain.Entities;
 using DotNetflix.Admin.Application.Shared;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +8,9 @@ namespace DotNetflix.Admin.Application.Features.Enums.Queries.GetAllEnums;
 internal class GetAllEnumsQueryHandler
     : IQueryHandler<GetAllEnumsQuery, IDictionary<string, IEnumerable<EnumDto<int>>>>
 {
-    private readonly ApplicationDBContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    public GetAllEnumsQueryHandler(ApplicationDBContext dbContext)
+    public GetAllEnumsQueryHandler(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -19,23 +19,23 @@ internal class GetAllEnumsQueryHandler
         GetAllEnumsQuery request,
         CancellationToken cancellationToken)
     {
-        var getTypes = await _dbContext.Types.AsNoTracking()
+        var getTypes = await _dbContext.Set<Types>().AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getCountries = await _dbContext.Countries.AsNoTracking()
+        var getCountries = await _dbContext.Set<Country>().AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getGenres = await _dbContext.Genres.AsNoTracking()
+        var getGenres = await _dbContext.Set<Genre>().AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getCategories = await _dbContext.Categories.AsNoTracking()
+        var getCategories = await _dbContext.Set<Category>().AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
-        var getProfessions = await _dbContext.Professions.AsNoTracking()
+        var getProfessions = await _dbContext.Set<Profession>().AsNoTracking()
             .Select(x => new EnumDto<int>(x.Id, x.Name))
             .ToListAsync(cancellationToken);
 
