@@ -46,10 +46,13 @@ public static class ProgramConfigurationExtensions
         return services;
     }
 
-    public static IServiceCollection RegisterServices(this IServiceCollection services)
+    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<ISupportChatService, SupportChatService>();
+        services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["MinioApiBaseUrl"]!);
+        });
         services.AddApplicationServices();
 
         return services;

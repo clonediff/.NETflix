@@ -25,7 +25,8 @@ public class SupportChatController : Controller
     {
         var getUserIdQuery = new GetUserIdQuery(User);
         var userId = await _mediator.Send(getUserIdQuery);
+        var history = await _supportChatService.GetHistoryAsync(userId!, false);
         
-        return Ok(_supportChatService.GetHistory(userId!, false));
+        return Ok(history);
     }
 }

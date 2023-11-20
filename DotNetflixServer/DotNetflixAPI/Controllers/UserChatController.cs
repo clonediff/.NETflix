@@ -21,7 +21,7 @@ public class UserChatController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<IEnumerable<MessageDto>> GetAll()
+    public async Task<IEnumerable<MessageDto<string>>> GetAll()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var query = new GetAllMessagesQuery();
