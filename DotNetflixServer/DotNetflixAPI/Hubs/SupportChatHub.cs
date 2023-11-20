@@ -1,14 +1,13 @@
-﻿using System.Collections.Concurrent;
-using Contracts.Shared;
+﻿using Contracts.Shared;
 using DotNetflixAPI.Dto;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
 namespace DotNetflixAPI.Hubs;
 
-public class SupportChatHub : Hub<IClient>
+public class SupportChatHub : Hub<ISupportChatClient>
 {
-    private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
+    private static readonly List<string> AdminConnections = new();
     private const string AdminName = "Администратор";
 
     private readonly IBus _bus;
@@ -21,43 +20,42 @@ public class SupportChatHub : Hub<IClient>
     public async Task SendMessageAsync(SendMessageDto<string> dto)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
+        var sendingDate = DateTime.Now;
         
-        await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-        await SendAsync(groupName, dto, x => x);
+        await SendAsync(groupName, sendingDate, dto.Message, dto, x => x);
     }
 
     public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
+        var sendingDate = DateTime.Now;
+        var fileExtension = contentType.Split('/')[1];
+        var content = $"file_{dto.RoomId}_{sendingDate:s}.{fileExtension}_{contentType}";
+        var buffer = dto.Message.Select(x => (byte) x).ToArray();
+        var image = new ImageDto($"data:{contentType};base64,", buffer);
+
+        await SendAsync(groupName, sendingDate, content, dto, _ => image);
         
-        await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-        
-        var image = new ImageDto($"data:{contentType};base64,", dto.Message.Select(x => (byte) x).ToArray());
-    
-        await SendAsync(groupName, dto, _ => image);
+        await _bus.Publish(new FileMessage(buffer, $"{sendingDate:s}.{fileExtension}", groupName));
     }
 
-    private async Task SendAsync<TInMessage, TOutMessage>(string groupName, SendMessageDto<TInMessage> dto, Func<TInMessage, TOutMessage> transformer)
+    private async Task SendAsync<TInMessage, TOutMessage>(string groupName, DateTime sendingDate, string content,
+        SendMessageDto<TInMessage> dto, 
+        Func<TInMessage, TOutMessage> transformer)
     {
-        var sendingDate = DateTime.Now;
         var userName = Context.User?.Identity?.Name ?? AdminName;
-        var messageForSender = MessageDtoFactory.Create(transformer(dto.Message), userName, sendingDate, true);
+        var messageForSender = new SupportChatMessageDto<TOutMessage>(groupName, transformer(dto.Message), userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
+        var (adminMessage, userMessage) = (messageForReceiver, messageForSender);
         if (Context.UserIdentifier is null)
-        {
-            await Clients.GroupExcept(groupName, UserConnections[groupName]).ReceiveAsync(messageForSender);
-        }
-        else
-        {
-            await Clients.User(Context.UserIdentifier!).ReceiveAsync(messageForSender);
-        }
-        
-        await Clients.GroupExcept(groupName, UserConnections[Context.UserIdentifier ?? AdminName]).ReceiveAsync(messageForReceiver);
-        
+            (adminMessage, userMessage) = (messageForSender, messageForReceiver);
+
+        await Clients.Clients(AdminConnections).ReceiveAsync(adminMessage);
+        await Clients.User(groupName).ReceiveAsync(userMessage);
+
         await _bus.Publish(new SupportChatMessage(
-            Content: dto.Message as string ?? $"file_{dto.RoomId}_{sendingDate}",
+            Content: content,
             SendingDate: sendingDate,
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,
@@ -66,24 +64,14 @@ public class SupportChatHub : Hub<IClient>
 
     public override Task OnConnectedAsync()
     {
-        UserConnections.AddOrUpdate(
-            key: Context.UserIdentifier ?? AdminName,
-            addValue: new List<string>
-            {
-                Context.ConnectionId
-            },
-            updateValueFactory: (_, value) =>
-            {
-                value.Add(Context.ConnectionId);
-                return value;
-            });
-        
+        if (Context.UserIdentifier is null)
+            AdminConnections.Add(Context.ConnectionId);
         return Task.CompletedTask;
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        UserConnections[Context.UserIdentifier ?? AdminName].Remove(Context.ConnectionId);
+        AdminConnections.Remove(Context.ConnectionId);
 
         return Task.CompletedTask;
     }

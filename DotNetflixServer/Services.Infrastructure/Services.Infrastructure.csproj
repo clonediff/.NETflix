@@ -10,7 +10,6 @@
       <PackageReference Include="DotNetflixOAuth" Version="1.0.1" />
       <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
       <PackageReference Include="IdentityPasswordGenerator" Version="1.0.5" />
-      <PackageReference Include="MassTransit" Version="8.1.1" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     </ItemGroup>
 

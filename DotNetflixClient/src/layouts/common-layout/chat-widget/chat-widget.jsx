@@ -61,6 +61,8 @@ const ChatWidget = () => {
     }
 
     const sendForm = (values) => {
+        if (connection.state !== "Connected")
+            connection.start()
         form.setFieldValue('message', undefined);
         connection.invoke('SendMessageAsync', {
             message: values.message,
@@ -203,7 +205,7 @@ const ChatWidget = () => {
                                 }
                             ]} 
                             noStyle>
-                            <Input className='text-input' placeholder='введите сообщение' autoComplete='off' />
+                            <Input className='text-input' placeholder='введите сообщение' autoComplete='off' autoFocus />
                         </Form.Item>
                         <Button
                             onClick={ sendFiles }

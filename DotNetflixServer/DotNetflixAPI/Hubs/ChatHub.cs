@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace DotNetflixAPI.Hubs;
 
-public class ChatHub : Hub<IClient>
+public class ChatHub : Hub<IUserChatClient>
 {
     private static readonly ConcurrentDictionary<string, List<string>> UserConnections = new();
     private readonly IMediator _mediator;
@@ -24,10 +24,11 @@ public class ChatHub : Hub<IClient>
         var command = new PutMessageCommand(message, date, Context.UserIdentifier!);
         await _mediator.Send(command);
 
-        var userMessage = MessageDtoFactory.Create(message, userName!, date, true);
+        var messageForSender = new MessageDto<string>(message, userName!, date, true);
+        var messageForReceiver = messageForSender with { BelongsToSender = false };
 
-        await Clients.User(Context.UserIdentifier!).ReceiveAsync(userMessage);
-        await Clients.AllExcept(UserConnections[Context.UserIdentifier!]).ReceiveAsync(userMessage with { BelongsToSender = false});
+        await Clients.User(Context.UserIdentifier!).ReceiveAsync(messageForSender);
+        await Clients.AllExcept(UserConnections[Context.UserIdentifier!]).ReceiveAsync(messageForReceiver);
     }
 
     public override Task OnConnectedAsync()

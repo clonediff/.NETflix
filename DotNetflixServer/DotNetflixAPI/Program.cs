@@ -11,7 +11,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddSignalR(options =>
 {
-	options.MaximumReceiveMessageSize = 10 * 1024 * 1024 * 8;
+	options.MaximumReceiveMessageSize = 10 * 1024 * 1024;
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -25,7 +25,7 @@ builder.Services
 	.AddApplicationDb(connectionString, builder.Environment)
 	.AddAuth()
 	.AddGoogleOAuth(builder.Configuration)
-	.RegisterServices()
+	.RegisterServices(builder.Configuration)
 	.AddControllers()
 	.AddJsonOptions(options => 
 	{

@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using System.Text.RegularExpressions;
+using DataAccess;
 using Domain.Extensions;
 using DotNetflix.Admin.Application.Shared;
 using DotNetflix.CQRS.Abstractions;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.AdminSupportChat.Queries.GetPreviews;
 
-internal class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, PaginationDataDto<PreviewMessageDto>>
+internal partial class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, PaginationDataDto<PreviewMessageDto>>
 {
     private readonly ApplicationDBContext _dbContext;
     
@@ -22,6 +23,7 @@ internal class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, Paginat
         var rooms = _dbContext.Messages
             .Include(x => x.User)
             .GroupBy(x => x.User)
+            .OrderByDescending(g => g.Max(x => x.SendingDate))
             .Select(x =>
                 new
                 {
@@ -36,9 +38,12 @@ internal class GetPreviewsQueryHandler : IQueryHandler<GetPreviewsQuery, Paginat
             .Paginate(request.Page, request.PageSize)
             .AsEnumerable()
             .Select(x =>
-                new PreviewMessageDto(x.RoomId, x.LatestMessage.IsFromAdmin ? AdminName : x.LatestMessage.User.UserName!, x.LatestMessage.Content,
-                    x.UnreadMessages))
+                new PreviewMessageDto(x.RoomId, x.LatestMessage.IsFromAdmin ? AdminName : x.LatestMessage.User.UserName!,
+                    FileRegex().IsMatch(x.LatestMessage.Content) ? "файл" : x.LatestMessage.Content, x.UnreadMessages))
             .ToList();
         return new PaginationDataDto<PreviewMessageDto>(resultRooms, totalRoomsCount);
     }
+
+    [GeneratedRegex("file_.+_.+_.+\\/.+")]
+    private static partial Regex FileRegex();
 }
