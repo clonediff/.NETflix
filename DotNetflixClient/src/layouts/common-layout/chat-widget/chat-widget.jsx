@@ -122,7 +122,6 @@ const ChatWidget = () => {
     const onFileDelete = (event) => {
         let id = event.target.id;
         let fileName = event.target.dataset.filename;
-        console.log(messages);
         setPreviews(previews.filter(preview => preview.id !== id));
         setFiles(files.filter(file => file.name !== fileName));
     }
