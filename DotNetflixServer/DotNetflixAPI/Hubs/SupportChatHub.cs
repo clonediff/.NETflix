@@ -30,7 +30,7 @@ public class SupportChatHub : Hub<ISupportChatClient>
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
         var sendingDate = DateTime.Now;
         var fileExtension = contentType.Split('/')[1];
-        var content = $"file_{dto.RoomId}_{sendingDate:s}.{fileExtension}_{contentType}";
+        var content = $"file_{groupName}_{sendingDate:s}.{fileExtension}_{contentType}";
         var buffer = dto.Message.Select(x => (byte) x).ToArray();
         var image = new ImageDto($"data:{contentType};base64,", buffer);
 
