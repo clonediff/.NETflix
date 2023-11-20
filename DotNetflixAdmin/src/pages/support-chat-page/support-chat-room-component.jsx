@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, Form, Input, Upload } from 'antd'
+import { Button, Form, Input, Upload, Image } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { axiosInstance } from '../../axiosInstance'
 import CustomSpin from '../../custom-spin/custom-spin'
@@ -162,7 +162,7 @@ const Message = ({ senderName, message, date, belongsToSender }) => {
                     {
                         typeof message === 'string' || !message
                             ? <div>{ message }</div>
-                            : <img width={ '100%' } src={ `${message.header}${message.bytes}` } />
+                            : <Image width={ '100%' } src={ `${message.header}${message.bytes}` } />
                     }
                 <div>
                     {
