@@ -25,7 +25,7 @@ builder.Services
 	.AddApplicationDb(connectionString, builder.Environment)
 	.AddAuth()
 	.AddGoogleOAuth(builder.Configuration)
-	.RegisterServices()
+	.RegisterServices(builder.Configuration)
 	.AddControllers()
 	.AddJsonOptions(options => 
 	{
