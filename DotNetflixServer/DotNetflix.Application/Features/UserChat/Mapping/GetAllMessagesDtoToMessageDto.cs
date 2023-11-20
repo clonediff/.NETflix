@@ -5,9 +5,9 @@ namespace DotNetflix.Application.Features.UserChat.Mapping;
 
 public static class GetAllMessagesDtoToMessageDto
 {
-    public static MessageDto ToMessageDto(this GetAllMessagesDto dto, string userId)
+    public static MessageDto<string> ToMessageDto(this GetAllMessagesDto dto, string userId)
     {
-        return new MessageDto(
+        return new MessageDto<string>(
             Message: dto.Message,
             SenderName: dto.SenderName,
             SendingDate: dto.SendingDate,

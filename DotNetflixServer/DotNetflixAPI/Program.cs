@@ -9,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+	options.MaximumReceiveMessageSize = 10 * 1024 * 1024;
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
@@ -22,7 +25,7 @@ builder.Services
 	.AddApplicationDb(connectionString, builder.Environment)
 	.AddAuth()
 	.AddGoogleOAuth(builder.Configuration)
-	.RegisterServices()
+	.RegisterServices(builder.Configuration)
 	.AddControllers()
 	.AddJsonOptions(options => 
 	{

@@ -25,9 +25,8 @@ const SupportChatPage = () => {
             setConnection(newConnection)
         }
         fetchPreviews(1, null)
-        setIsLoading(false)
     }, [])
-
+    
     useEffect(() => {
         if (connection) {
             connection.start()
@@ -41,12 +40,13 @@ const SupportChatPage = () => {
             })
         }
     }, [chatPreviewsCount])
-    
+
     const fetchPreviews = (page, _) => {
         axiosInstance.get(`api/support-chat/preview/?page=${page}&size=25`)
-            .then(({ data }) => {
+        .then(({ data }) => {
                 setChatPreviews(data.data)
                 setChatPreviewsCount(data.count)
+                setIsLoading(false)
             })
     }
 
@@ -59,7 +59,7 @@ const SupportChatPage = () => {
     const updateMessagePreview = (roomId, userName, latestMessage) => {
         const newChatPreview = chatPreviews.find(p => p.roomId === roomId)
         newChatPreview.userName = userName
-        newChatPreview.latestMessage = latestMessage
+        newChatPreview.latestMessage = typeof latestMessage === 'string' ? latestMessage : 'файл'
         if (roomId !== selectedRoom)
             newChatPreview.totalUnReadMessages += 1;
         setChatPreviews([ newChatPreview, ...chatPreviews.filter(x => x !== newChatPreview) ])
