@@ -33,7 +33,7 @@
 }
 
 .message-input {
-    width: calc(100% - 150px);
+    width: calc(100% - 190px);
     margin-top: 4px;
     border: 2px solid var(--headerBgColor);
 }

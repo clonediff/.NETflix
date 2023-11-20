@@ -25,20 +25,20 @@ const SupportChatPage = () => {
             setConnection(newConnection)
         }
         fetchPreviews(1, null)
-        setIsLoading(false)
     }, [])
-
+    
     useEffect(() => {
         if (connection) {
             connection.start()
         }
     }, [connection])
-
+    
     const fetchPreviews = (page, _) => {
         axiosInstance.get(`api/support-chat/preview/?page=${page}&size=25`)
-            .then(({ data }) => {
+        .then(({ data }) => {
                 setChatPreviews(data.data)
                 setChatPreviewsCount(data.count)
+                setIsLoading(false)
             })
     }
 

@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Authentication.OAuth;
-
-namespace Services.Infrastructure.GoogleOAuth;
+﻿namespace Services.Infrastructure.GoogleOAuth;
 
 public interface IGoogleOAuth
 {
