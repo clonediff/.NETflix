@@ -1,9 +1,8 @@
-import { FileTextOutlined } from '@ant-design/icons';
+import { FileTextOutlined, UploadOutlined, SendOutlined } from '@ant-design/icons';
 import { useState, useEffect, useRef } from 'react';
 import { axiosInstance } from '../../../AxiosInstance'
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr'
 import { Form, Input, FloatButton, Button, Image } from 'antd'
-import { UploadOutlined, SendOutlined } from '@ant-design/icons'
 import './chat-widget.css'
 
 const ChatWidget = () => {
