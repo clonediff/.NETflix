@@ -1,4 +1,4 @@
 ﻿namespace Contracts.Shared;
 
-public record SupportChatMessageDto(string RoomId, string Message, string SenderName, DateTime SendingDate,
-    bool BelongsToSender) : MessageDto(Message, SenderName, SendingDate, BelongsToSender);
+public record SupportChatMessageDto<TMessage>(string RoomId, TMessage Message, string SenderName, DateTime SendingDate,
+    bool BelongsToSender) : MessageDto<TMessage>(Message, SenderName, SendingDate, BelongsToSender);
