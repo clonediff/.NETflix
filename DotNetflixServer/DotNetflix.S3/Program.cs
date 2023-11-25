@@ -5,6 +5,8 @@ using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 
 builder.Services.AddMasstransitRabbitMq(rabbitMqConfig);
@@ -22,6 +24,8 @@ builder.Services.AddMinio(configuration =>
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.MapGet("api/files/{bucketName}/{fileName}", async (string bucketName, string fileName, IS3StorageService storageService) =>
 {

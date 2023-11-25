@@ -7,6 +7,8 @@ using DotNetflixAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddSignalR(options =>
@@ -34,6 +36,8 @@ builder.Services
 	});
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 

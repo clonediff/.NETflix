@@ -7,29 +7,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflixAPI", "DotNetflix
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{05FA0998-0ED0-41E3-A791-CE2E40AA18C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflixAdminAPI", "DotNetflixAdminAPI\DotNetflixAdminAPI.csproj", "{D5FAC362-14B3-431B-B710-B831FACAF2F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflixAdminAPI", "DotNetflixAdminAPI\DotNetflixAdminAPI.csproj", "{D5FAC362-14B3-431B-B710-B831FACAF2F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Infrastructure", "Services.Infrastructure\Services.Infrastructure.csproj", "{57740040-850B-4489-81AB-BD5F18579C69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Infrastructure", "Services.Infrastructure\Services.Infrastructure.csproj", "{57740040-850B-4489-81AB-BD5F18579C69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{2CAFD652-9FC6-45E0-95D1-663EBE6B60E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{2CAFD652-9FC6-45E0-95D1-663EBE6B60E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Shared", "Contracts.Shared\Contracts.Shared.csproj", "{B9C093D6-358C-4A10-B395-56914D60276C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts.Shared", "Contracts.Shared\Contracts.Shared.csproj", "{B9C093D6-358C-4A10-B395-56914D60276C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Shared", "Services.Shared\Services.Shared.csproj", "{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Shared", "Services.Shared\Services.Shared.csproj", "{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.CQRS", "DotNetflix.CQRS\DotNetflix.CQRS.csproj", "{55D630EC-1C17-429A-B944-D83B606697CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflix.CQRS", "DotNetflix.CQRS\DotNetflix.CQRS.csproj", "{55D630EC-1C17-429A-B944-D83B606697CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Application", "DotNetflix.Application\DotNetflix.Application.csproj", "{D7FFBE25-54B9-4340-A6E4-87059397534C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflix.Application", "DotNetflix.Application\DotNetflix.Application.csproj", "{D7FFBE25-54B9-4340-A6E4-87059397534C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Admin.Application", "DotNetflix.Admin.Application\DotNetflix.Admin.Application.csproj", "{F4A9B224-2443-43DB-885E-07526D6620B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflix.Admin.Application", "DotNetflix.Admin.Application\DotNetflix.Admin.Application.csproj", "{F4A9B224-2443-43DB-885E-07526D6620B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportChat", "SupportChat\SupportChat.csproj", "{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupportChat", "SupportChat\SupportChat.csproj", "{37BFBDBD-51A1-4307-BAEE-A73319FD3F2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FA5A2799-258C-4215-A32C-094E3FC4F44A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.Shared", "Configuration.Shared\Configuration.Shared.csproj", "{F18CF318-699D-4309-895A-BB1701C0D3BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration.Shared", "Configuration.Shared\Configuration.Shared.csproj", "{F18CF318-699D-4309-895A-BB1701C0D3BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.S3", "DotNetflix.S3\DotNetflix.S3.csproj", "{046A2AAA-7DDB-4D10-BC5C-678E3C18C339}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflix.S3", "DotNetflix.S3\DotNetflix.S3.csproj", "{046A2AAA-7DDB-4D10-BC5C-678E3C18C339}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{DC588D99-37B1-4C7D-AB9D-2271A09C606E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Aspire.AppHost", "DotNetflix.Aspire.AppHost\DotNetflix.Aspire.AppHost.csproj", "{30EB5F22-731C-478F-B014-918B080CA21D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetflix.Aspire.ServiceDefaults", "DotNetflix.Aspire.ServiceDefaults\DotNetflix.Aspire.ServiceDefaults.csproj", "{C589DC19-3F76-4229-9A94-D40FCA4F375C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,17 +95,27 @@ Global
 		{046A2AAA-7DDB-4D10-BC5C-678E3C18C339}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{046A2AAA-7DDB-4D10-BC5C-678E3C18C339}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{046A2AAA-7DDB-4D10-BC5C-678E3C18C339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30EB5F22-731C-478F-B014-918B080CA21D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30EB5F22-731C-478F-B014-918B080CA21D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30EB5F22-731C-478F-B014-918B080CA21D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30EB5F22-731C-478F-B014-918B080CA21D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C589DC19-3F76-4229-9A94-D40FCA4F375C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C589DC19-3F76-4229-9A94-D40FCA4F375C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C589DC19-3F76-4229-9A94-D40FCA4F375C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C589DC19-3F76-4229-9A94-D40FCA4F375C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {739CDCD3-510A-4F43-B549-1D1703769778}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B9C093D6-358C-4A10-B395-56914D60276C} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
 		{47A40B6E-DD7E-4E6B-B196-4C0F9D8F94CC} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
-		{F18CF318-699D-4309-895A-BB1701C0D3BA} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
 		{55D630EC-1C17-429A-B944-D83B606697CB} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
+		{F18CF318-699D-4309-895A-BB1701C0D3BA} = {FA5A2799-258C-4215-A32C-094E3FC4F44A}
+		{30EB5F22-731C-478F-B014-918B080CA21D} = {DC588D99-37B1-4C7D-AB9D-2271A09C606E}
+		{C589DC19-3F76-4229-9A94-D40FCA4F375C} = {DC588D99-37B1-4C7D-AB9D-2271A09C606E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {739CDCD3-510A-4F43-B549-1D1703769778}
 	EndGlobalSection
 EndGlobal

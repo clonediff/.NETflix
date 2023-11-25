@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>bbfb7bd1-cd44-4397-8726-4fd16ccaa6e8</UserSecretsId>
@@ -13,12 +13,12 @@
     <PackageReference Include="MassTransit" Version="8.1.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1" />
     <PackageReference Include="MediatR" Version="12.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.2.23128.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.2.23128.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-preview.2.23128.3">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -31,6 +31,7 @@
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\DotNetflix.Application\DotNetflix.Application.csproj" />
+    <ProjectReference Include="..\DotNetflix.Aspire.ServiceDefaults\DotNetflix.Aspire.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
     <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
   </ItemGroup>
