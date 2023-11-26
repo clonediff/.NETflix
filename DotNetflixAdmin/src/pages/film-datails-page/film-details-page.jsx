@@ -13,7 +13,6 @@ const FilmDetailsPage = () => {
         setIsLoading(true)
         axiosInstance.get(`api/films/getfilmdetails?id=${location.pathname.split('/')[3]}`)
             .then(({ data }) => {
-                console.log(data)
                 setFilm(data)
                 setIsLoading(false)
             })

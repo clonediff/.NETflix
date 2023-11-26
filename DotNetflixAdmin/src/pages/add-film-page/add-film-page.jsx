@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { axiosInstance } from '../../axiosInstance'
-import { useForm } from 'antd/es/form/Form';
-import { Button, Form, Input, InputNumber, Modal, Select, Space } from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { useForm } from 'antd/es/form/Form'
+import { Button, Form, Input, InputNumber, Modal, Select, Space, Upload, Image } from 'antd'
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import ReactPlayer from 'react-player'
 import './add-film-page.css'
 import '../../data-layout/form-styles.css'
 
@@ -21,6 +22,12 @@ const AddFilmPage = () => {
 
     const [people, setPeople] = useState([])
     const [isFilmCrewEmpty, setIsFilmCrewEmpty] = useState(false)
+
+    const [trailers, setTrailers] = useState([])
+    const trailersEnd = useRef(null)
+
+    const [posters, setPosters] = useState([])
+    const postersEnd = useRef(null)
 
     useEffect(() => {
         axiosInstance.get('api/enums/getall')
@@ -66,6 +73,37 @@ const AddFilmPage = () => {
                 return Promise.resolve()
             }
         })
+
+    const getUploadProps = (setFiles, files, end, nodeFactory) => {
+        return {
+            multiple: true,
+            beforeUpload: x => {
+                setFiles([ ...files, x ])
+                return false
+            },
+            onRemove: x => {
+                const index = files.indexOf(x)
+                files.splice(index, 1)
+                setFiles([ ...files ])
+            },
+            onChange: x => {
+                if (x.status !== 'removed' && x.status !== 'error' && end) {
+                    end.current?.scrollIntoView({ behavior: 'smooth' })
+                }
+            },
+            itemRender: (_, { originFileObj }, __, { remove }) => {
+                const url = URL.createObjectURL(originFileObj)
+                return (
+                    <div style={{ marginTop: 8 }}>
+                        { nodeFactory(url) }
+                        <Button danger onClick={ remove }>
+                            Убрать
+                        </Button>
+                    </div>
+                )
+            },
+        }
+    }
 
     return (
         <Form form={ form } className='add-form' onFinish={ sendForm }>
@@ -300,6 +338,32 @@ const AddFilmPage = () => {
                     )
                 }
             </Form.List>
+            <Form.Item
+                className='form-item'
+                name='trailers'>
+                <Upload { ...getUploadProps(setTrailers, trailers, trailersEnd, 
+                    url => (<ReactPlayer controls width='70%' height='70%' url={ url } />)) }>
+                    <Button
+                        icon={ <UploadOutlined /> }>
+                        Добавить трейлеры
+                    </Button>
+                </Upload>
+            </Form.Item>
+            <div ref={ trailersEnd }></div>
+            <Form.Item
+                className='form-item'
+                name='posters'>
+                <Upload { ...getUploadProps(setPosters, posters, postersEnd,
+                    url => (<div style={{ marginBottom: 4 }}>
+                                <Image width='70%' src={ url } />
+                            </div>)) }>
+                    <Button
+                        icon={ <UploadOutlined /> }>
+                        Добавить постеры
+                    </Button>
+                </Upload>
+            </Form.Item>
+            <div ref={ postersEnd }></div>
             <Form.Item>
                 <Button htmlType='submit' className='form-item'>Добавить</Button>
             </Form.Item>
