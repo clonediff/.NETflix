@@ -38,13 +38,15 @@ public static class MovieInfoToGetFilmByIdDto
             : transformer(dto);
     }
 
-    public static FeesDto GetFeesDto(Fees fees)
+    public static FeesDto? GetFeesDto(Fees? fees)
     {
-        return new FeesDto(
-            Id: fees.Id,
-            FeesWorld: GetNullableDto(fees.World, x => new CurrencyValueDto(x.Id, x.Value, x.Currency)),
-            FeesRussia: GetNullableDto(fees.Russia, x => new CurrencyValueDto(x.Id, x.Value, x.Currency)),
-            FeesUsa: GetNullableDto(fees.USA, x => new CurrencyValueDto(x.Id, x.Value, x.Currency))
-        );
+        return fees is null
+            ? null
+            : new FeesDto(
+                Id: fees.Id,
+                FeesWorld: GetNullableDto(fees.World, x => new CurrencyValueDto(x.Id, x.Value, x.Currency)),
+                FeesRussia: GetNullableDto(fees.Russia, x => new CurrencyValueDto(x.Id, x.Value, x.Currency)),
+                FeesUsa: GetNullableDto(fees.USA, x => new CurrencyValueDto(x.Id, x.Value, x.Currency))
+            );
     }
 }

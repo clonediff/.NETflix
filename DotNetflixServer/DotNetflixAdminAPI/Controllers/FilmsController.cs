@@ -6,6 +6,7 @@ using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmDetails;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsCount;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsFiltered;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 using DotNetflix.Admin.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +34,10 @@ public class FilmsController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> AddFilmAsync([FromBody] AddFilmDto dto)
+    public async Task<IActionResult> AddFilmAsync(
+        [FromForm] AddFilmDto dto,
+        [FromForm] IEnumerable<IFormFile> trailers,
+        [FromForm] IEnumerable<IFormFile> posters)
     {
         var command = dto.ToAddFilmCommand();
         await _mediator.Send(command);

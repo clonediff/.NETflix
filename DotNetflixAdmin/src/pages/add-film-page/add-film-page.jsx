@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { axiosInstance } from '../../axiosInstance'
 import { useForm } from 'antd/es/form/Form'
-import { Button, Form, Input, InputNumber, Modal, Select, Space, Upload, Image } from 'antd'
+import { Button, Form, Input, InputNumber, Modal, Select, Space, Upload, Image, DatePicker } from 'antd'
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import ReactPlayer from 'react-player'
 import './add-film-page.css'
@@ -23,10 +23,7 @@ const AddFilmPage = () => {
     const [people, setPeople] = useState([])
     const [isFilmCrewEmpty, setIsFilmCrewEmpty] = useState(false)
 
-    const [trailers, setTrailers] = useState([])
     const trailersEnd = useRef(null)
-
-    const [posters, setPosters] = useState([])
     const postersEnd = useRef(null)
 
     useEffect(() => {
@@ -41,7 +38,28 @@ const AddFilmPage = () => {
     }, [])
 
     const sendForm = (values) => {
-        axiosInstance.post('api/films/addfilm', values)
+        const formData = new FormData()
+        Object.entries(values).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                value.forEach((i, index) => {
+                    if (typeof i !== 'object') {
+                        formData.append(`${key}[]`, i)
+                    } else {
+                        Object.entries(i).forEach(([iKey, iValue]) => {
+                            if (iValue && (key !== 'trailersMetaData' || ['name', 'date', 'language', 'resolution'].includes(iKey))
+                                && (key !== 'postersMetaData' || ['name', 'resolution'].includes(iKey))) {
+                                formData.append(`${key}[${index}][${iKey}]`, iValue)
+                            }
+                        })
+                    }
+                })
+            } else if (value) {
+                formData.append(key, value)
+            }
+        })
+        values.trailersMetaData?.forEach(x => formData.append('trailers', x.video.file))
+        values.postersMetaData?.forEach(x => formData.append('posters', x.picture.file))
+        axiosInstance.post('api/films/addFilm', formData)
             .then(_ => {
                 modal.success({
                     title: 'фильм успешно добавлен',
@@ -74,17 +92,10 @@ const AddFilmPage = () => {
             }
         })
 
-    const getUploadProps = (setFiles, files, end, nodeFactory) => {
+    const getUploadProps = (mediaName, end, nodeFactory, detacher) => {
         return {
-            multiple: true,
-            beforeUpload: x => {
-                setFiles([ ...files, x ])
+            beforeUpload: _ => {
                 return false
-            },
-            onRemove: x => {
-                const index = files.indexOf(x)
-                files.splice(index, 1)
-                setFiles([ ...files ])
             },
             onChange: x => {
                 if (x.status !== 'removed' && x.status !== 'error' && end) {
@@ -96,12 +107,16 @@ const AddFilmPage = () => {
                 return (
                     <div style={{ marginTop: 8 }}>
                         { nodeFactory(url) }
-                        <Button danger onClick={ remove }>
-                            Убрать
+                        <Button onClick={ () => {
+                            remove()
+                            detacher()
+                        } }>
+                            Открепить {mediaName}
                         </Button>
                     </div>
                 )
             },
+            maxCount: 1
         }
     }
 
@@ -338,31 +353,101 @@ const AddFilmPage = () => {
                     )
                 }
             </Form.List>
-            <Form.Item
-                className='form-item'
-                name='trailers'>
-                <Upload { ...getUploadProps(setTrailers, trailers, trailersEnd, 
-                    url => (<ReactPlayer controls width='70%' height='70%' url={ url } />)) }>
-                    <Button
-                        icon={ <UploadOutlined /> }>
-                        Добавить трейлеры
-                    </Button>
-                </Upload>
-            </Form.Item>
+            <Form.List name='trailersMetaData'>
+                {
+                    (fields, { add, remove }) => (
+                        <>
+                            {
+                                fields.map((field, index) => (
+                                    <div key={ field.key }>
+                                        { index === 0 ? <div className='form-label'>Трейлеры</div> : null }
+                                        <MediaSpace
+                                            baseName={ field.name }
+                                            mediaName='трейлер'
+                                            mediaFormName='video'
+                                            remove={ remove }
+                                            getUploadProps={ (detacher) => getUploadProps('видео', trailersEnd,
+                                                url => (<ReactPlayer controls width='70%' height='70%' url={ url } />), detacher) }
+                                            formFields={[
+                                                {
+                                                    label: 'Название',
+                                                    name: 'name',
+                                                    message: 'Введите название',
+                                                    type: 'string'
+                                                },
+                                                {
+                                                    label: 'Дата выхода',
+                                                    name: 'date',
+                                                    message: 'Введите дату',
+                                                    type: 'date'
+                                                },
+                                                {
+                                                    label: 'Язык',
+                                                    name: 'language',
+                                                    message: 'Выберите язык',
+                                                    type: 'array',
+                                                    data: ['Русский', 'Английский']
+                                                },
+                                                {
+                                                    label: 'Разрешение',
+                                                    name: 'resolution',
+                                                    message: 'Выберите разрешение',
+                                                    type: 'array',
+                                                    data: ['360', '720', '1080', '4K']
+                                                }
+                                            ]} />
+                                    </div>
+                                ))
+                            }
+                            <Form.Item className='form-item'>
+                                <Button onClick={ add } icon={ <PlusOutlined /> }>Добавить трейлер</Button>
+                            </Form.Item>
+                        </>
+                    )
+                }
+            </Form.List>
             <div ref={ trailersEnd }></div>
-            <Form.Item
-                className='form-item'
-                name='posters'>
-                <Upload { ...getUploadProps(setPosters, posters, postersEnd,
-                    url => (<div style={{ marginBottom: 4 }}>
-                                <Image width='70%' src={ url } />
-                            </div>)) }>
-                    <Button
-                        icon={ <UploadOutlined /> }>
-                        Добавить постеры
-                    </Button>
-                </Upload>
-            </Form.Item>
+            <Form.List name='postersMetaData'>
+                {
+                    (fields, { add, remove }) => (
+                        <>
+                            {
+                                fields.map((field, index) => (
+                                    <div key={ field.key }>
+                                        { index === 0 ? <div className='form-label'>Постеры</div> : null }
+                                        <MediaSpace
+                                            baseName={ field.name }
+                                            mediaName='постер'
+                                            mediaFormName='picture'
+                                            remove={ remove }
+                                            getUploadProps={ (detacher) => getUploadProps('постер', postersEnd,
+                                                url => (<div style={{ marginBottom: 4 }}>
+                                                    <Image width='70%' src={ url } />
+                                                </div>), detacher) }
+                                            formFields={[
+                                                {
+                                                    label: 'Название',
+                                                    name: 'name',
+                                                    message: 'Введите название',
+                                                    type: 'string'
+                                                },
+                                                {
+                                                    label: 'Разрешение',
+                                                    name: 'resolution',
+                                                    message: 'Введите разрешение',
+                                                    type: 'string'
+                                                }
+                                            ]}     />
+                                    </div>
+                                ))
+                            }
+                            <Form.Item className='form-item'>
+                                <Button onClick={ add } icon={ <PlusOutlined /> }>Добавить постер</Button>
+                            </Form.Item>
+                        </>
+                    )
+                }
+            </Form.List>
             <div ref={ postersEnd }></div>
             <Form.Item>
                 <Button htmlType='submit' className='form-item'>Добавить</Button>
@@ -507,10 +592,76 @@ export const PeopleSpace = ({ personId, name, removeHandler, people, professions
             </Button>
             <Button 
                 icon={ <MinusCircleOutlined /> } 
-                onClick={ () => removeHandler(name, personId, form.getFieldValue(['people', name, 'professionId']).value ?? form.getFieldValue(['people', name, 'professionId'])) }>
+                onClick={ () => removeHandler(name, personId, form.getFieldValue(['people', name, 'professionId'])?.value ?? form.getFieldValue(['people', name, 'professionId'])) }>
                 Убрать участника
             </Button>
         </Space>
+    )
+}
+
+const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps, remove, formFields }) => {
+
+    const mediaValidator = () => ({
+        validator(_, value) {
+            if (value && value.fileList.length > 0) {
+                return Promise.resolve()
+            } else {
+                return Promise.reject(new Error(`Прикрепите ${mediaName}`))
+            }
+        }
+    })
+
+    const [isMediaAttached, setIsMediaAttached] = useState(false)
+
+    const renderFormInput = (inputType, options) => {
+        switch (inputType) {
+            case 'string':
+                return (<Input />)
+            case 'date':
+                return (<DatePicker />)
+            case 'array':
+                return (
+                    <Select>
+                        {
+                            options.map(o => (<Select.Option key={ o }>{ o }</Select.Option>))
+                        }
+                    </Select>
+                )
+            default:
+                return null
+        }
+    }
+
+    return (
+        <>
+            <Form.Item name={[baseName, mediaFormName]} valuePropName='file' className='form-item'
+                rules={[ mediaValidator ]}>
+                <Upload { ...getUploadProps(() => setIsMediaAttached(false)) }>
+                    {
+                        !isMediaAttached &&
+                        <Button onClick={ () => setIsMediaAttached(true) } icon={ <UploadOutlined /> }>
+                            Прикрепить постер
+                        </Button>
+                    }
+                </Upload>
+            </Form.Item>
+            {
+                formFields.map((field, index) => (
+                    <Form.Item key={ index } label={ field.label } name={[baseName, field.name]} className='form-item'
+                        rules={[
+                            {
+                                required: true,
+                                message: field.message
+                            }
+                        ]}>
+                        { renderFormInput(field.type, field.data) }
+                    </Form.Item>
+                ))
+            }
+            <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(baseName) } className='form-item'>
+                Убрать { mediaName }
+            </Button>
+        </>
     )
 }
 
