@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Contracts.Shared;
-using DotNetflix.Storage.Services;
+﻿using Contracts.Shared;
 using DotNetflix.Storage.Services.S3;
 using MassTransit;
 
