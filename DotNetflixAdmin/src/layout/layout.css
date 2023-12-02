@@ -86,7 +86,7 @@ a {
     }
     .burger-navigation {
         position: fixed;
-        top: -180px;
+        top: -200px;
         display: grid;
         justify-content: center;
         width: 200px;

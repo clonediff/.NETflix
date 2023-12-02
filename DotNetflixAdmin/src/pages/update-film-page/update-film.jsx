@@ -2,11 +2,11 @@ import { useEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { MediaSpace, PeopleSpace, SeasonsSpace } from '../add-film-page/add-film-page'
 import { Button, Form, Input, Modal, Select, Image } from 'antd'
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons'
 import ReactPlayer from 'react-player'
-import { axiosInstance } from '../../axiosInstance';
-import { initForm, initUpdatedFilm } from './helpers';
-import CustomSpin from '../../custom-spin/custom-spin';
+import { axiosInstance } from '../../axiosInstance'
+import { initForm, initUpdatedFilm } from './helpers'
+import CustomSpin from '../../custom-spin/custom-spin'
 
 const UpdateFilmPage = () => {
     
