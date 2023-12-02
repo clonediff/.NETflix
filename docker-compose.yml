@@ -21,6 +21,12 @@ services:
       - RabbitMqConfig__Password=admin
       - RabbitMqConfig__Hostname=RabbitMq
       - RabbitMqConfig__Port=5672
+      - ConnectionStrings__Redis=storageRedis:6379,password=${StorageRedisPassword}
+  RedisAuth:
+    container_name: storageRedis
+    image: redis:7.2.3-alpine3.18
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${StorageRedisPassword}
   MinioS3:
     image: minio/minio
     container_name: minio

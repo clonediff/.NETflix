@@ -1,7 +1,4 @@
-using System.IO;
-using System.Threading.Tasks;
-
-namespace DotNetflix.Storage.Services;
+namespace DotNetflix.Storage.Services.S3;
 
 public interface IS3StorageService
 {
