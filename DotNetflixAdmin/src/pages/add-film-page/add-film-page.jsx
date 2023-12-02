@@ -92,7 +92,7 @@ const AddFilmPage = () => {
             }
         })
 
-    const getUploadProps = (mediaName, end, nodeFactory, detacher) => {
+    const getUploadProps = (end, detacher, nodeFactory) => {
         return {
             beforeUpload: _ => {
                 return false
@@ -111,7 +111,7 @@ const AddFilmPage = () => {
                             remove()
                             detacher()
                         } }>
-                            Открепить {mediaName}
+                            Открепить файл
                         </Button>
                     </div>
                 )
@@ -365,9 +365,9 @@ const AddFilmPage = () => {
                                             baseName={ field.name }
                                             mediaName='трейлер'
                                             mediaFormName='video'
-                                            remove={ remove }
-                                            getUploadProps={ (detacher) => getUploadProps('видео', trailersEnd,
-                                                url => (<ReactPlayer controls width='70%' height='70%' url={ url } />), detacher) }
+                                            removeHandler={ () => remove(field.name) }
+                                            getUploadProps={ (detacher) => getUploadProps(trailersEnd, detacher,
+                                                url => (<ReactPlayer controls width='70%' height='70%' url={ url } />)) }
                                             formFields={[
                                                 {
                                                     label: 'Название',
@@ -400,7 +400,7 @@ const AddFilmPage = () => {
                                 ))
                             }
                             <Form.Item className='form-item'>
-                                <Button onClick={ add } icon={ <PlusOutlined /> }>Добавить трейлер</Button>
+                                <Button onClick={ () => add() } icon={ <PlusOutlined /> }>Добавить трейлер</Button>
                             </Form.Item>
                         </>
                     )
@@ -419,11 +419,11 @@ const AddFilmPage = () => {
                                             baseName={ field.name }
                                             mediaName='постер'
                                             mediaFormName='picture'
-                                            remove={ remove }
-                                            getUploadProps={ (detacher) => getUploadProps('постер', postersEnd,
+                                            removeHandler={ () => remove(field.name) }
+                                            getUploadProps={ (detacher) => getUploadProps(postersEnd, detacher,
                                                 url => (<div style={{ marginBottom: 4 }}>
-                                                    <Image width='70%' src={ url } />
-                                                </div>), detacher) }
+                                                            <Image width='70%' src={ url } />
+                                                        </div>)) }
                                             formFields={[
                                                 {
                                                     label: 'Название',
@@ -437,12 +437,12 @@ const AddFilmPage = () => {
                                                     message: 'Введите разрешение',
                                                     type: 'string'
                                                 }
-                                            ]}     />
+                                            ]} />
                                     </div>
                                 ))
                             }
                             <Form.Item className='form-item'>
-                                <Button onClick={ add } icon={ <PlusOutlined /> }>Добавить постер</Button>
+                                <Button onClick={ () => add() } icon={ <PlusOutlined /> }>Добавить постер</Button>
                             </Form.Item>
                         </>
                     )
@@ -599,19 +599,20 @@ export const PeopleSpace = ({ personId, name, removeHandler, people, professions
     )
 }
 
-const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps, remove, formFields }) => {
+export const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps, defaultFile, removeHandler, formFields }) => {
 
     const mediaValidator = () => ({
         validator(_, value) {
-            if (value && value.fileList.length > 0) {
+            if (value && value.fileList.length > 0 || skipValidation) {
                 return Promise.resolve()
             } else {
-                return Promise.reject(new Error(`Прикрепите ${mediaName}`))
+                return Promise.reject(new Error(`Прикрепите файл`))
             }
         }
     })
 
     const [isMediaAttached, setIsMediaAttached] = useState(false)
+    const [skipValidation, setSkipValidation] = useState(!!defaultFile)
 
     const renderFormInput = (inputType, options) => {
         switch (inputType) {
@@ -636,11 +637,15 @@ const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps, remove
         <>
             <Form.Item name={[baseName, mediaFormName]} valuePropName='file' className='form-item'
                 rules={[ mediaValidator ]}>
-                <Upload { ...getUploadProps(() => setIsMediaAttached(false)) }>
+                <Upload defaultFileList={ defaultFile && [defaultFile] } 
+                    { ...getUploadProps(() => {
+                        setSkipValidation(false)
+                        setIsMediaAttached(false)
+                    }) }>
                     {
                         !isMediaAttached &&
                         <Button onClick={ () => setIsMediaAttached(true) } icon={ <UploadOutlined /> }>
-                            Прикрепить постер
+                            Прикрепить файл
                         </Button>
                     }
                 </Upload>
@@ -658,7 +663,7 @@ const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps, remove
                     </Form.Item>
                 ))
             }
-            <Button icon={ <MinusCircleOutlined /> } onClick={ () => remove(baseName) } className='form-item'>
+            <Button icon={ <MinusCircleOutlined /> } onClick={ removeHandler } className='form-item'>
                 Убрать { mediaName }
             </Button>
         </>

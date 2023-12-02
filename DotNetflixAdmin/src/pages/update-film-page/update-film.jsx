@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
-import { PeopleSpace, SeasonsSpace } from '../add-film-page/add-film-page'
-import { Button, Form, Input, Modal, Select } from 'antd'
+import { MediaSpace, PeopleSpace, SeasonsSpace } from '../add-film-page/add-film-page'
+import { Button, Form, Input, Modal, Select, Image } from 'antd'
 import { PlusOutlined } from '@ant-design/icons';
+import ReactPlayer from 'react-player'
 import { axiosInstance } from '../../axiosInstance';
 import { initForm, initUpdatedFilm } from './helpers';
 import CustomSpin from '../../custom-spin/custom-spin';
@@ -17,7 +18,6 @@ const UpdateFilmPage = () => {
     const [isFilmCrewEmpty, setIsFilmCrewEmpty] = useState(false)
     const [seasonsToDelete, setSeasonsToDelete] = useState([])
     const [peopleToDelete, setPeopleToDelete] = useState([])
-    const [initialFilmCrew, setInitialFilmCrew] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [options, setOptions] = useState({
         types: [],
@@ -27,13 +27,24 @@ const UpdateFilmPage = () => {
         professions: []
     })
 
+    const [trailersToDelete, setTrailersToDelete] = useState([])
+    const [trailersMetaDataToDelete, setTrailersMetaDataToDelete] = useState([])
+    const trailersEnd = useRef(null)
+
+    const [postersToDelete, setPostersToDelete] = useState([])
+    const [postersMetaDataToDelete, setPostersMetaDataToDelete] = useState([])
+    const postersEnd = useRef(null)
+
     useEffect(() => {
         axiosInstance.get(`api/films/getfilmbyid?id=${location.pathname.split('/')[3]}`)
             .then(({ data }) => {
                 setSeasonsToDelete([])
                 setPeopleToDelete([])
+                setTrailersToDelete([])
+                setPostersToDelete([])
+                setTrailersMetaDataToDelete([])
+                setPostersMetaDataToDelete([])
                 setFilm(data)
-                setInitialFilmCrew(data.filmCrew.map(fc => ({ personId: fc.id, professionId: fc.professionId })))
                 form.setFieldsValue(initForm(data))
                 setIsLoading(false)
             })
@@ -61,9 +72,29 @@ const UpdateFilmPage = () => {
         }
     }
 
+    const removeTrailerHandler = (name, trailerName, trailerId, remover) => {
+        remover && remover(name)
+        if (trailerName) {
+            setTrailersToDelete(prev => [ ...prev, trailerName ])
+        }
+        if (trailerId) {
+            setTrailersMetaDataToDelete(prev => [ ...prev, trailerId ])
+        }
+    }
+    
+    const removePosterHandler = (name, posterName, posterId, remover) => {
+        remover && remover(name)
+        if (posterName) {
+            setPostersToDelete(prev => [ ...prev, posterName ])
+        }
+        if (posterId) {
+            setPostersMetaDataToDelete(prev => [ ...prev, posterId ])
+        }
+    }
+
     const sendForm = (values) => {
-        const updatedFilm = initUpdatedFilm(location.pathname.split('/')[3], values, film, seasonsToDelete, initialFilmCrew, peopleToDelete)
-        console.log(updatedFilm)
+        const updatedFilm = initUpdatedFilm(location.pathname.split('/')[3], values, film, seasonsToDelete, peopleToDelete,
+            trailersToDelete, postersToDelete, trailersMetaDataToDelete, postersMetaDataToDelete)
         axiosInstance.put('api/films/update', updatedFilm)
             .then(_ => {
                 modal.success({
@@ -99,6 +130,35 @@ const UpdateFilmPage = () => {
 
     const filterOptions = (inputValue, option) => {
         return option.label.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1;
+    }
+
+    const getUploadProps = (end, detacher, externalRemover, node, nodeFactory) => {
+        return {
+            beforeUpload: _ => {
+                return false
+            },
+            onChange: x => {
+                if (x.status !== 'removed' && x.status !== 'error' && end) {
+                    end.current?.scrollIntoView({ behavior: 'smooth' })
+                }
+            },
+            itemRender: (_, file, __, { remove }) => {
+                const url = (!!file.originFileObj || Object.entries(file).length > 0) && URL.createObjectURL(file.originFileObj ?? file)
+                return (
+                    <div style={{ marginTop: 8 }}>
+                        { url ? nodeFactory(url) : node }
+                        <Button onClick={ () => {
+                            remove()
+                            detacher()
+                            externalRemover()
+                        } }>
+                            Открепить файл
+                        </Button>
+                    </div>
+                )
+            },
+            maxCount: 1
+        }
     }
 
     return(
@@ -336,6 +396,114 @@ const UpdateFilmPage = () => {
                             {
                                 isFilmCrewEmpty ? <div className='form-label' style={{ color: '#ff4d4f' }}>Добавьте участников фильма</div> : null
                             }
+                        </>
+                    )
+                }
+            </Form.List>
+            <Form.List name='trailersMetaData'>
+                {
+                    (fields, { add, remove }) => (
+                        <>
+                            {
+                                fields.map((field, index) => (
+                                    <div key={ field.key }>
+                                        { index === 0 ? <div className='form-label'>Трейлеры</div> : null }
+                                        <MediaSpace
+                                            baseName={ field.name }
+                                            mediaName='трейлер'
+                                            mediaFormName='video'
+                                            removeHandler={ () => removeTrailerHandler(field.name, 
+                                                index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index]?.name,
+                                                index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index]?.id, remove) }
+                                            defaultFile={ index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) ? {} : form.getFieldValue(['trailersMetaData', field.name, 'video'])?.file }
+                                            getUploadProps={ (detacher) => getUploadProps(trailersEnd, detacher,
+                                                () => removeTrailerHandler(field.name, index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index].name),
+                                                index < film.trailersMetaData.length && <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/${film.name}/${film.trailersMetaData[index].name}` }]} />,
+                                                url => (<ReactPlayer controls width='70%' height='70%' url={ url } />)) }
+                                            formFields={[
+                                                {
+                                                    label: 'Название',
+                                                    name: 'name',
+                                                    message: 'Введите название',
+                                                    type: 'string'
+                                                },
+                                                {
+                                                    label: 'Дата выхода',
+                                                    name: 'date',
+                                                    message: 'Введите дату',
+                                                    type: 'date'
+                                                },
+                                                {
+                                                    label: 'Язык',
+                                                    name: 'language',
+                                                    message: 'Выберите язык',
+                                                    type: 'array',
+                                                    data: ['Русский', 'Английский']
+                                                },
+                                                {
+                                                    label: 'Разрешение',
+                                                    name: 'resolution',
+                                                    message: 'Выберите разрешение',
+                                                    type: 'array',
+                                                    data: ['360', '720', '1080', '4K']
+                                                }
+                                            ]} />
+                                    </div>
+                                ))
+                            }
+                            <Form.Item className='form-item'>
+                                <Button onClick={ () => add() } icon={ <PlusOutlined /> }>Добавить трейлер</Button>
+                            </Form.Item>
+                        </>
+                    )
+                }
+            </Form.List>
+            <div ref={ trailersEnd }></div>
+            <Form.List name='postersMetaData'>
+                {
+                    (fields, { add, remove }) => (
+                        <>
+                            {
+                                fields.map((field, index) => (
+                                    <div key={ field.key }>
+                                        { index === 0 ? <div className='form-label'>Постеры</div> : null }
+                                        <MediaSpace
+                                            baseName={ field.name }
+                                            mediaName='постер'
+                                            mediaFormName='picture'
+                                            removeHandler={ () => removePosterHandler(field.name, 
+                                                index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index]?.name,
+                                                index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index]?.id, remove) }
+                                            defaultFile={ index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) ? {} : form.getFieldValue(['postersMetaData', field.name, 'picture'])?.file }
+                                            getUploadProps={ (detacher) => getUploadProps(postersEnd, detacher, 
+                                                () => removePosterHandler(field.name, index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index].name),
+                                                index < film.postersMetaData.length &&
+                                                <div style={{ marginBottom: 4 }}>
+                                                    <Image width='70%' src={ `https://localhost:7126/api/files/${film.name}/${film.postersMetaData[index].name}` } />
+                                                </div>,
+                                                url => (<div style={{ marginBottom: 4 }}>
+                                                            <Image width='70%' src={ url } />
+                                                        </div>)) }
+                                            formFields={[
+                                                {
+                                                    label: 'Название',
+                                                    name: 'name',
+                                                    message: 'Введите название',
+                                                    type: 'string'
+                                                },
+                                                {
+                                                    label: 'Разрешение',
+                                                    name: 'resolution',
+                                                    message: 'Введите разрешение',
+                                                    type: 'string'
+                                                }
+                                            ]} />
+                                    </div>
+                                ))
+                            }
+                            <Form.Item className='form-item'>
+                                <Button onClick={ () => add() } icon={ <PlusOutlined /> }>Добавить постер</Button>
+                            </Form.Item>
                         </>
                     )
                 }
