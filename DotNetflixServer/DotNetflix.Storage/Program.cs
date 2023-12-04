@@ -1,11 +1,15 @@
 using Configuration.Shared.RabbitMq;
 using DotNetflix.Storage.Extensions;
-using DotNetflix.Storage.Services;
+using DotNetflix.Storage.Services.S3;
+using DotNetflix.Storage.Services.TemporaryStorageMetadata;
 using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
+
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration.GetConnectionString("Redis"));
 
 builder.Services.AddMasstransitRabbitMq(rabbitMqConfig);
 
@@ -20,6 +24,7 @@ builder.Services.AddMinio(configuration =>
 });
 
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
+builder.Services.AddSingleton<ITemporaryStorageMetadataService, RedisStorageService>();
 
 var app = builder.Build();
 

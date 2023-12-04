@@ -1,10 +1,8 @@
-using System.IO;
-using System.Threading.Tasks;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 
-namespace DotNetflix.Storage.Services;
+namespace DotNetflix.Storage.Services.S3;
 
 public class MinioS3StorageService : IS3StorageService
 {
