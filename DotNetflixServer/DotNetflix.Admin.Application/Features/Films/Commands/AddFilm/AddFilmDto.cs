@@ -25,4 +25,6 @@ public record AddFilmDto(
     int[] Countries, 
     int[] Genres, 
     AddSeasonDto[]? Seasons, 
-    AddOrUpdateFilmCrewDto[] People);
+    AddOrUpdateFilmCrewDto[] People,
+    IEnumerable<TrailerMetaDataDto>? TrailersMetaData,
+    IEnumerable<PosterMetaDataDto>? PostersMetaData);

@@ -43,7 +43,7 @@ public static class UpdateFilmCommandToMovieInfo
 
     private static Fees GetFees(FeesDto dto)
     {
-        return dto.FeesWorld is not null && dto.FeesRussia is not null && dto.FeesUsa is not null
+        return dto.FeesWorld is not null || dto.FeesRussia is not null || dto.FeesUsa is not null
             ? new Fees
                 {
                     Id = dto.Id,

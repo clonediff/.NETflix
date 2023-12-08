@@ -33,7 +33,10 @@ public class FilmsController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> AddFilmAsync([FromBody] AddFilmDto dto)
+    public async Task<IActionResult> AddFilmAsync(
+        [FromForm] AddFilmDto dto,
+        [FromForm] IEnumerable<IFormFile> trailers,
+        [FromForm] IEnumerable<IFormFile> posters)
     {
         var command = dto.ToAddFilmCommand();
         await _mediator.Send(command);
@@ -67,7 +70,10 @@ public class FilmsController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateFilmDto dto)
+    public async Task<IActionResult> UpdateAsync(
+        [FromForm] UpdateFilmDto dto,
+        [FromForm] IEnumerable<IFormFile> trailers, 
+        [FromForm] IEnumerable<IFormFile> posters)
     {
         var command = dto.ToUpdateFilmCommand();
         await _mediator.Send(command);

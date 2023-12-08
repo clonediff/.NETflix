@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,16 @@ internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<
         if (film is null)
             return "Не удалось найти фильм";
 
-        return film.ToGetFilmByIdDto();
+        var trailers = new List<TrailerMetaDataDto>
+        {
+            new TrailerMetaDataDto($"{request.Id}-{Guid.NewGuid()}", "test", DateTime.Now, "Русский", "720")
+        };
+
+        var posters = new List<PosterMetaDataDto>
+        {
+            new PosterMetaDataDto($"{request.Id}-{Guid.NewGuid()}", "test", "1920x1080")
+        };
+
+        return film.ToGetFilmByIdDto(trailers, posters);
     }
 }
