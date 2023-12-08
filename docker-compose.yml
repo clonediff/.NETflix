@@ -1,14 +1,14 @@
 version: "3.9"
 
 services:
-  DotNetflixS3:
-    image: aspnetdotnetflixs3
-    container_name: dotnetflixs3
+  DotNetflixStorage:
+    image: aspnetdotnetflixstorage
+    container_name: dotnetflixstorage
     ports:
       - "7126:80"
     build:
       context: ./DotNetflixServer/
-      dockerfile: DockerfileDotnetflixS3
+      dockerfile: DockerfileDotnetflixStorage
     depends_on:
       - MinioS3
       - RabbitMq
