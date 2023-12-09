@@ -12,6 +12,8 @@ services:
     depends_on:
       - MinioS3
       - RabbitMq
+      - MongoStorage
+      - RedisStorage
     environment:
       - MinioS3__AccessKey=minioadmin
       - MinioS3__SecretKey=minioadmin
@@ -22,7 +24,12 @@ services:
       - RabbitMqConfig__Hostname=RabbitMq
       - RabbitMqConfig__Port=5672
       - ConnectionStrings__Redis=storageRedis:6379,password=${StorageRedisPassword}
-  RedisAuth:
+      - ConnectionStrings__MongoDb=mongodb://mongodb:27017
+  MongoStorage:
+    image: mongo:6-jammy
+    container_name: mongodb
+    restart: always
+  RedisStorage:
     container_name: storageRedis
     image: redis:7.2.3-alpine3.18
     restart: always

@@ -1,5 +1,7 @@
 using Configuration.Shared.RabbitMq;
 using DotNetflix.Storage.Extensions;
+using DotNetflix.Storage.Services.PermanentStorageMetadata;
+using DotNetflix.Storage.Services.PermanentStorageMetadata.Models;
 using DotNetflix.Storage.Services.S3;
 using DotNetflix.Storage.Services.TemporaryStorageMetadata;
 using Minio;
@@ -23,8 +25,12 @@ builder.Services.AddMinio(configuration =>
         builder.Configuration["MinioS3:SecretKey"]!);
 });
 
+builder.Services.AddMongoDb(builder.Configuration);
+
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
 builder.Services.AddSingleton<ITemporaryStorageMetadataService, RedisStorageService>();
+builder.Services.AddSingleton<IPermanentStorageMetadata<MovieTrailerMetadata>, MongoDbStorage<MovieTrailerMetadata>>();
+builder.Services.AddSingleton<IPermanentStorageMetadata<MoviePosterMetadata>, MongoDbStorage<MoviePosterMetadata>>();
 
 var app = builder.Build();
 
