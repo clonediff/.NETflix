@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Contracts.Shared;
+using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
 using DotNetflix.Admin.Application.Features.Films.Shared;
 using DotNetflix.Admin.Application.Shared;

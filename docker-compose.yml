@@ -19,6 +19,7 @@ services:
       - MinioS3__SecretKey=minioadmin
       - MinioS3__Timeout=5000
       - MinioS3__Endpoint=minio:9000
+      - TemporaryBucketName=temp
       - RabbitMqConfig__Username=admin
       - RabbitMqConfig__Password=admin
       - RabbitMqConfig__Hostname=RabbitMq
@@ -28,10 +29,14 @@ services:
   MongoStorage:
     image: mongo:6-jammy
     container_name: mongodb
+    ports:
+      - "27017:27017"
     restart: always
   RedisStorage:
-    container_name: storageRedis
     image: redis:7.2.3-alpine3.18
+    container_name: storageRedis
+    ports:
+      - "6379:6379"
     restart: always
     command: redis-server --save 20 1 --loglevel warning --requirepass ${StorageRedisPassword}
   MinioS3:
@@ -79,7 +84,7 @@ services:
       - RabbitMqConfig__Port=5672
       - FrontendBaseUrl=http://localhost:3000
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - MinioApiBaseUrl=http://dotnetflixs3
+      - StorageApiBaseUrl=http://dotnetflixs3
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - OAuth__ApiOAuth=http://localhost:7289/api/oauth/google
@@ -103,7 +108,7 @@ services:
       - "7298:443"
     environment:
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - MinioApiBaseUrl=http://dotnetflixs3
+      - StorageApiBaseUrl=http://dotnetflixs3
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - ASPNETCORE_ENVIRONMENT:Production

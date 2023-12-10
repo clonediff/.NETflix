@@ -25,7 +25,7 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
             formData.append(`seasons[${index}][id]`, s.id)
             formData.append(`seasons[${index}][number]`, s.number)
             formData.append(`seasons[${index}][episodesCount]`, s.episodesCount)
-        }),
+        })
     newFilmData.people
         .filter(p => oldFilmData.filmCrew.every(old => (old.id !== p.id?.value ?? p.id) && (old.professionId !== p.professionId.value ?? p.professionId)))
         .map(p => ({ id: p.id?.value ?? p.id, name: p.name, photo: p.photo, professionId: p.professionId.value ?? p.professionId }))
@@ -41,28 +41,53 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
         formData.append(`peopleToDelete[${index}][professionId]`, p.professionId)
     })
     trailersToDelete.concat(postersToDelete).forEach(f => formData.append('filesToDelete[]', f))
-    newFilmData.trailersMetaData?.map((m, i) => ({ id: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) ? oldFilmData.trailersMetaData[i].id : undefined, language: m.language.value ?? m.language, resolution: m.resolution.value ?? m.resolution, name: m.name, date: m.date, video: m.video }))
-        .filter(t => oldFilmData.trailersMetaData.every(old => {
+    newFilmData.trailersMetaData
+        ?.map((m, i) => ({ 
+            id: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) ? oldFilmData.trailersMetaData[i].id : undefined,
+            language: m.language.value ?? m.language,
+            resolution: m.resolution.value ?? m.resolution,
+            name: m.name,
+            fileName: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) ? `${oldFilmData.trailersMetaData[i].id}.${(m.video?.file?.name?.split('.')?.splice(-1) ?? oldFilmData.trailersMetaData[i].fileName.split('.').splice(-1))[0]}` : `.${m.video.file.name.split('.').splice(-1)[0]}`,
+            onlyVideoChanged: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) && m.video && oldFilmData.trailersMetaData.every(old => {
+                const oldDate = new Date(old.data)
+                return old.name === m.name && old.fileName.endsWith(`.${m.video.file.name.split('.').splice(-1)[0]}`) && oldDate.getFullYear() === m.date.year() && oldDate.getMonth() === m.date.month() && oldDate.getDate() === m.date.date() && old.language === m.language && old.resolution === m.resolution
+            }),
+            date: m.date,
+            video: m.video
+        }))
+        .filter(t => !t.id || t.onlyVideoChanged || oldFilmData.trailersMetaData.every(old => {
             const oldDate = new Date(old.date)
-            return !t.id || old.name !== t.name || oldDate.getFullYear() !== t.date.year() || oldDate.getMonth() !== t.date.month() || oldDate.getDate() !== t.date.date() || old.language !== t.language || old.resolution !== t.resolution
+            return old.name !== t.name || old.fileName !== t.fileName || oldDate.getFullYear() !== t.date.year() || oldDate.getMonth() !== t.date.month() || oldDate.getDate() !== t.date.date() || old.language !== t.language || old.resolution !== t.resolution
         }))
         .forEach((m, index) => {
-            m.id && formData.append(`trailersMetaData[${index}][id]`, m.id)
-            formData.append(`trailersMetaData[${index}][name]`, m.name)
-            formData.append(`trailersMetaData[${index}][date]`, m.date.format('YYYY-MM-DD'))
-            formData.append(`trailersMetaData[${index}][language]`, m.language)
-            formData.append(`trailersMetaData[${index}][resolution]`, m.resolution)
+            (m.id && !m.onlyVideoChanged) && formData.append(`trailersMetaData[${index}][id]`, m.id)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][name]`, m.name)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][fileName]`, m.fileName)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][date]`, m.date.format('YYYY-MM-DD'))
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][language]`, m.language)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][resolution]`, m.resolution)
             m.video && formData.append('trailers', m.video.file)
-            m.video && formData.append('filesToAdd[]', m.name)
+            m.video && formData.append('filesToAdd[]', m.fileName)
         })
-    newFilmData.postersMetaData?.map((m, i) => ({ id: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) ? oldFilmData.postersMetaData[i].id : undefined, name: m.name, resolution: m.resolution, picture: m.picture }))
-        .filter(p => oldFilmData.postersMetaData.every(old => !p.id || old.name !== p.name || old.resolution !== p.resolution))
+    newFilmData.postersMetaData
+        ?.map((m, i) => ({
+            id: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) ? oldFilmData.postersMetaData[i].id : undefined,
+            name: m.name,
+            fileName: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) ? `${oldFilmData.postersMetaData[i].id}.${(m.picture?.file?.name?.split('.')?.splice(-1) ?? oldFilmData.postersMetaData[i].fileName.split('.').splice(-1))[0]}` : `.${m.picture.file.name.split('.').splice(-1)[0]}`,
+            onlyPictureChanged: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) && m.picture && oldFilmData.postersMetaData.every(old => {
+                return old.name === m.name && old.fileName.endsWith(`.${m.picture.file.name.split('.').splice(-1)[0]}`) && old.resolution === m.resolution
+            }),
+            resolution: m.resolution,
+            picture: m.picture
+        }))
+        .filter(p => !p.id || p.onlyPictureChanged || oldFilmData.postersMetaData.every(old => old.name !== p.name || old.fileName !== p.filmName || old.resolution !== p.resolution))
         .forEach((m, index) => {
-            m.id && formData.append(`postersMetaData[${index}][id]`, m.id)
-            formData.append(`postersMetaData[${index}][name]`, m.name)
-            formData.append(`postersMetaData[${index}][resolution]`, m.resolution)
+            (m.id && !m.onlyPictureChanged) && formData.append(`postersMetaData[${index}][id]`, m.id)
+            !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][name]`, m.name)
+            !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][fileName]`, m.fileName)
+            !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][resolution]`, m.resolution)
             m.picture && formData.append('posters', m.picture.file)
-            m.picture && formData.append('filesToAdd[]', m.name)
+            m.picture && formData.append('filesToAdd[]', m.fileName)
         })
     trailersMetaDataToDelete.concat(postersMetaDataToDelete).forEach(m => formData.append('metaDataToDelete[]', m))
 

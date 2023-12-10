@@ -1,20 +1,23 @@
 ﻿using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
+using DotNetflix.Admin.Application.Features.Films.Services;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.UpdateFilm;
 
-internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
+internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand, IEnumerable<Guid>>
 {
     private readonly DbContext _dbContext;
+    private readonly IMovieMetaDataService _movieMetaDataService;
 
-    public UpdateFilmCommandHandler(DbContext dbContext)
+    public UpdateFilmCommandHandler(DbContext dbContext, IMovieMetaDataService movieMetaDataService)
     {
         _dbContext = dbContext;
+        _movieMetaDataService = movieMetaDataService;
     }
 
-    public async Task Handle(UpdateFilmCommand request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Guid>> Handle(UpdateFilmCommand request, CancellationToken cancellationToken)
     {
         var movie = request.ToMovieInfo();
 
@@ -85,5 +88,35 @@ internal class UpdateFilmCommandHandler : ICommandHandler<UpdateFilmCommand>
             
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+
+        foreach (var trailerMetaData in request.TrailersMetaData.Where(x => x.Id is not null))
+        {
+            await _movieMetaDataService.UpdateMetaDataAsync(request.Id, trailerMetaData.Id!.Value, "trailers", trailerMetaData);
+        }
+
+        foreach (var posterMetaData in request.PostersMetaData.Where(x => x.Id is not null))
+        {
+            await _movieMetaDataService.UpdateMetaDataAsync(request.Id, posterMetaData.Id!.Value, "posters", posterMetaData);
+        }
+
+        var trailerIds = Enumerable.Empty<Guid>();
+        var posterIds = Enumerable.Empty<Guid>();
+
+        if (request.TrailersMetaData.Any(x => x.Id is null))
+        {
+            trailerIds = await _movieMetaDataService.AddMetaDataAsync(request.Id, "trailers", request.TrailersMetaData);
+        }
+
+        if (request.PostersMetaData.Any(x => x.Id is null))
+        {
+            posterIds = await _movieMetaDataService.AddMetaDataAsync(request.Id, "posters", request.PostersMetaData);
+        }
+
+        foreach (var guid in request.MetaDataToDelete)
+        {
+            await _movieMetaDataService.DeleteMetaDataAsync(guid);
+        }
+
+        return trailerIds.Concat(posterIds);
     }
 }

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <Folder Include="Behaviors\" />
+      <ProjectReference Include="..\Configuration.Shared\Configuration.Shared.csproj" />
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\DotNetflix.CQRS\DotNetflix.CQRS.csproj" />
       <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
@@ -17,6 +18,7 @@
       <PackageReference Include="DotNetflixOAuth" Version="1.0.1" />
       <PackageReference Include="FluentValidation" Version="11.8.0" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

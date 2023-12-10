@@ -136,7 +136,7 @@ public static class ProgramConfigurationExtensions
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
         {
-            client.BaseAddress = new Uri(configuration["MinioApiBaseUrl"]!);
+            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
         });
         services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
         services.AddHttpContextAccessor();

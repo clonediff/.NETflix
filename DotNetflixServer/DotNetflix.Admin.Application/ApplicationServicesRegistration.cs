@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using DotNetflix.Admin.Application.Features.Films.Services;
 using DotNetflix.CQRS;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,8 @@ public static class ApplicationServicesRegistration
         serviceCollection.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly));
 
         serviceCollection.RegisterBehaviorsReturningResult(Assembly);
+
+        serviceCollection.AddTransient<IMovieMetaDataService, MovieMetaDataService>();
         
         return serviceCollection;
     }

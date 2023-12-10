@@ -1,4 +1,5 @@
 using Configuration.Shared.RabbitMq;
+using DotNetflix.Storage.Endpoints;
 using DotNetflix.Storage.Extensions;
 using DotNetflix.Storage.Services.PermanentStorageMetadata;
 using DotNetflix.Storage.Services.PermanentStorageMetadata.Models;
@@ -29,18 +30,10 @@ builder.Services.AddMongoDb(builder.Configuration);
 
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
 builder.Services.AddSingleton<ITemporaryStorageMetadataService, RedisStorageService>();
-builder.Services.AddSingleton<IPermanentStorageMetadata<MovieTrailerMetadata>, MongoDbStorage<MovieTrailerMetadata>>();
-builder.Services.AddSingleton<IPermanentStorageMetadata<MoviePosterMetadata>, MongoDbStorage<MoviePosterMetadata>>();
 
 var app = builder.Build();
 
-app.MapGet("api/files/{bucketName}/{fileName}", async (string bucketName, string fileName, IS3StorageService storageService) =>
-{
-    var stream = await storageService.GetFileFromBucketAsync(fileName, bucketName);
-
-    return stream is not null
-        ? Results.Stream(stream)
-        : Results.NotFound();
-});
+app.MapFileEndpoints(builder.Configuration);
+app.MapMetadataEndpoints();
 
 app.Run();

@@ -99,12 +99,12 @@ const FilmDetailsPage = () => {
                         ? 
                         film.trailersMetaData.map(tmd => (
                             <div key={ tmd.id }>
-                                <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/${film.name}/${tmd.name}` }]} />
+                                <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/${location.pathname.split('/')[3]}/${tmd.name}` }]} />
                                 <div>
                                     <b>Название: </b> { tmd.name }
                                 </div>
                                 <div>
-                                    <b>Дата выхода: </b> { tmd.date }
+                                    <b>Дата выхода: </b> { new Date(tmd.date).toLocaleDateString() }
                                 </div>
                                 <div>
                                     <b>Язык: </b> { tmd.language }
@@ -124,9 +124,9 @@ const FilmDetailsPage = () => {
                         ? 
                         film.postersMetaData.map(pmd => (
                             <div key={ pmd.id }>
-                                <Image width='70%' src={ `https://localhost:7126/api/files/${film.name}/${pmd.name}` } />
+                                <Image width='70%' src={ `https://localhost:7126/api/files/${location.pathname.split('/')[3]}/${pmd.name}` } />
                                 <div>
-                                    <b>Название: </b> { pmd.name }
+                                    <b>Название: </b> { pmd.name.split('.').slice(0, -1) }
                                 </div>
                                 <div>
                                     <b>Разрешение: </b> { pmd.resolution }

@@ -48,9 +48,13 @@ const AddFilmPage = () => {
                         Object.entries(i).forEach(([iKey, iValue]) => {
                             if (iValue && (key !== 'trailersMetaData' || ['name', 'date', 'language', 'resolution'].includes(iKey))
                                 && (key !== 'postersMetaData' || ['name', 'resolution'].includes(iKey))) {
-                                formData.append(`${key}[${index}][${iKey}]`, iValue)
+                                formData.append(`${key}[${index}][${iKey}]`, 
+                                    iKey === 'name' ? `${iValue}.${(i.video ?? i.picture).file.name.split('.').splice(-1)[0]}` : iValue)
                             }
                         })
+                        if (key == 'trailersMetaData' || key == 'postersMetaData') {
+                            formData.append(`${key}[${index}][fileName]`, `.${(i.video ?? i.picture).file.name.split('.').splice(-1)[0]}`)
+                        }
                     }
                 })
             } else if (value) {
@@ -59,6 +63,7 @@ const AddFilmPage = () => {
         })
         values.trailersMetaData?.forEach(x => formData.append('trailers', x.video.file))
         values.postersMetaData?.forEach(x => formData.append('posters', x.picture.file))
+
         axiosInstance.post('api/films/addFilm', formData)
             .then(_ => {
                 modal.success({
