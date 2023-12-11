@@ -42,12 +42,12 @@ public class FilmsController : ControllerBase
         [FromForm] IEnumerable<IFormFile> posters)
     {
         var command = dto.ToAddFilmCommand();
-        var response = await _mediator.Send(command);
+        var movieId = await _mediator.Send(command);
 
-        await _fileService.AddFilesAsync(response.MovieId, trailers.Concat(posters),
+        await _fileService.AddFilesAsync(movieId, trailers.Concat(posters),
             command.TrailersMetaData
-                .Zip(response.TrailerIds, (x, y) => $"{y}{x.FileName}")
-                .Concat(command.PostersMetaData.Zip(response.PosterIds, (x, y) => $"{y}{x.FileName}"))
+                .Select(x => x.FileName)
+                .Concat(command.PostersMetaData.Select(x => x.FileName))
                 .ToList());
         
         return Ok();
@@ -92,16 +92,11 @@ public class FilmsController : ControllerBase
         [FromForm] IEnumerable<IFormFile> posters)
     {
         var command = dto.ToUpdateFilmCommand();
-        var metaDataIds = await _mediator.Send(command);
+        await _mediator.Send(command);
 
         await _fileService.DeleteFilesAsync(dto.Id, (dto.FilesToDelete ?? Enumerable.Empty<string>()).ToList());
         await _fileService.AddFilesAsync(dto.Id, trailers.Concat(posters), 
-            (dto.FilesToAdd ?? Enumerable.Empty<string>())
-                .Where(x => !x.StartsWith('.'))
-                .Concat((dto.FilesToAdd ?? Enumerable.Empty<string>())
-                    .Where(x => x.StartsWith('.'))
-                    .Zip(metaDataIds, (x, y) => $"{y}{x}"))
-                .ToList());
+            (dto.FilesToAdd ?? Enumerable.Empty<string>()).ToList());
         
         return Ok();
     }

@@ -40,22 +40,15 @@ public class MovieMetaDataService : IMovieMetaDataService
         });
     }
 
-    public async Task<IEnumerable<Guid>> AddMetaDataAsync<TMetaData>(int movieId, string metaDataType, IEnumerable<TMetaData> metadata)
+    public async Task AddMetaDataAsync<TMetaData>(int movieId, string metaDataType, IEnumerable<TMetaData> metadata)
     {
         _httpClient.DefaultRequestHeaders.Remove(MetaDataTypeHeaderName);
         _httpClient.DefaultRequestHeaders.Add(MetaDataTypeHeaderName, metaDataType);
         
-        var response = await _httpClient.PostAsJsonAsync($"/api/metadata/{movieId}", metadata, new JsonSerializerOptions
+        await _httpClient.PostAsJsonAsync($"/api/metadata/{movieId}", metadata, new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         });
-
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadFromJsonAsync<IEnumerable<Guid>>() ?? Enumerable.Empty<Guid>();
-        }
-
-        return Enumerable.Empty<Guid>();
     }
 
     public async Task DeleteMetaDataAsync(Guid metaDataId)

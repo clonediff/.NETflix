@@ -27,4 +27,4 @@ public record UpdateFilmCommand(
     List<DeletePersonFromFilmDto> PeopleToDelete,
     IEnumerable<TrailerMetaDataDto> TrailersMetaData,
     IEnumerable<PosterMetaDataDto> PostersMetaData,
-    IEnumerable<Guid> MetaDataToDelete) : ICommand<IEnumerable<Guid>>;
+    IEnumerable<Guid> MetaDataToDelete) : ICommand;
