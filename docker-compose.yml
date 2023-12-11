@@ -32,16 +32,12 @@ services:
     ports:
       - "27017:27017"
     restart: always
-    ports:
-      - "27017:27017"
   RedisStorage:
     image: redis:7.2.3-alpine3.18
     container_name: storageRedis
     ports:
       - "6379:6379"
     restart: always
-    ports:
-      - "6379:6379"
     command: redis-server --save 20 1 --loglevel warning --requirepass ${StorageRedisPassword}
   MinioS3:
     image: minio/minio
