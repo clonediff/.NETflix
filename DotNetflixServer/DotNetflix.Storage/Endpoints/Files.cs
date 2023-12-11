@@ -11,8 +11,9 @@ public static class Files
     {
         var temporaryBucketName = configuration["TemporaryBucketName"]!;
         
-        app.MapGet("api/files/{bucketName}/{fileName}", async (string bucketName, string fileName, IS3StorageService storageService) =>
+        app.MapGet("api/files/{movieId:int}/{fileName}", async (int movieId, string fileName, IS3StorageService storageService) =>
         {
+            var bucketName = $"film-{movieId}";
             var stream = await storageService.GetFileFromBucketAsync(fileName, bucketName);
 
             return stream is not null
@@ -20,8 +21,12 @@ public static class Files
                 : NotFound();
         });
 
-        app.MapPost("api/files/{bucketName}/{fileName}", async (string bucketName, string fileName, [FromForm] IFormFile file, IS3StorageService storageService, ITemporaryStorageMetadataService temporaryStorage) =>
-        {            
+        app.MapPost("api/files/{movieId:int}", async (
+            int movieId,  
+            [FromForm] IFormFileCollection files,
+            IS3StorageService storageService, 
+            ITemporaryStorageMetadataService temporaryStorage) =>
+        {
             var bucketExists = await storageService.BucketExistAsync(temporaryBucketName);
 
             if (!bucketExists)
@@ -29,9 +34,12 @@ public static class Files
                 await storageService.CreateBucketAsync(temporaryBucketName);
             }
             
-            await storageService.PutFileInBucketAsync(file.OpenReadStream(), fileName, temporaryBucketName);
+            foreach (var file in files)
+            {
+                await storageService.PutFileInBucketAsync(file.OpenReadStream(), file.FileName, temporaryBucketName);
+            }
 
-            var counterKey = $"{bucketName}-counter";
+            var counterKey = $"{movieId}-counter";
             await temporaryStorage.SetStringAsync("2", counterKey, 60);
 
             return Ok();

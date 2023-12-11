@@ -6,7 +6,7 @@ public interface IMovieMetaDataService
 
     Task UpdateMetaDataAsync<TMetaData>(int movieId, Guid metaDataId, string metaDataType, TMetaData metaData);
 
-    Task<IEnumerable<Guid>> AddMetaDataAsync<TMetaData>(int movieId, string metaDataType, IEnumerable<TMetaData> metadata);
+    Task AddMetaDataAsync<TMetaData>(int movieId, string metaDataType, IEnumerable<TMetaData> metadata);
 
     Task DeleteMetaDataAsync(Guid metaDataId);
 

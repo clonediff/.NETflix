@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Guid } from 'js-guid'
 
 export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelete, peopleToDelete, 
     trailersToDelete, postersToDelete, trailersMetaDataToDelete, postersMetaDataToDelete) => {
@@ -42,22 +43,22 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
     })
     trailersToDelete.concat(postersToDelete).forEach(f => formData.append('filesToDelete[]', f))
     newFilmData.trailersMetaData
-        ?.map((m, i) => ({ 
-            id: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) ? oldFilmData.trailersMetaData[i].id : undefined,
+        ?.map(m => ({
+            id: m.id,
             language: m.language.value ?? m.language,
             resolution: m.resolution.value ?? m.resolution,
             name: m.name,
-            fileName: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) ? `${oldFilmData.trailersMetaData[i].id}.${(m.video?.file?.name?.split('.')?.splice(-1) ?? oldFilmData.trailersMetaData[i].fileName.split('.').splice(-1))[0]}` : `.${m.video.file.name.split('.').splice(-1)[0]}`,
-            onlyVideoChanged: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) && m.video && oldFilmData.trailersMetaData.every(old => {
+            fileName: m.fileName ?? Guid.newGuid(),
+            onlyVideoChanged: m.id && m.video && oldFilmData.trailersMetaData.some(old => {
                 const oldDate = new Date(old.data)
-                return old.name === m.name && old.fileName.endsWith(`.${m.video.file.name.split('.').splice(-1)[0]}`) && oldDate.getFullYear() === m.date.year() && oldDate.getMonth() === m.date.month() && oldDate.getDate() === m.date.date() && old.language === m.language && old.resolution === m.resolution
+                return old.name === m.name && oldDate.getFullYear() === m.date.year() && oldDate.getMonth() === m.date.month() && oldDate.getDate() === m.date.date() && old.language === m.language && old.resolution === m.resolution
             }),
             date: m.date,
             video: m.video
         }))
         .filter(t => !t.id || t.onlyVideoChanged || oldFilmData.trailersMetaData.every(old => {
             const oldDate = new Date(old.date)
-            return old.name !== t.name || old.fileName !== t.fileName || oldDate.getFullYear() !== t.date.year() || oldDate.getMonth() !== t.date.month() || oldDate.getDate() !== t.date.date() || old.language !== t.language || old.resolution !== t.resolution
+            return old.name !== t.name || oldDate.getFullYear() !== t.date.year() || oldDate.getMonth() !== t.date.month() || oldDate.getDate() !== t.date.date() || old.language !== t.language || old.resolution !== t.resolution
         }))
         .forEach((m, index) => {
             (m.id && !m.onlyVideoChanged) && formData.append(`trailersMetaData[${index}][id]`, m.id)
@@ -70,17 +71,17 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
             m.video && formData.append('filesToAdd[]', m.fileName)
         })
     newFilmData.postersMetaData
-        ?.map((m, i) => ({
-            id: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) ? oldFilmData.postersMetaData[i].id : undefined,
+        ?.map(m => ({
+            id: m.id,
             name: m.name,
-            fileName: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) ? `${oldFilmData.postersMetaData[i].id}.${(m.picture?.file?.name?.split('.')?.splice(-1) ?? oldFilmData.postersMetaData[i].fileName.split('.').splice(-1))[0]}` : `.${m.picture.file.name.split('.').splice(-1)[0]}`,
-            onlyPictureChanged: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) && m.picture && oldFilmData.postersMetaData.every(old => {
-                return old.name === m.name && old.fileName.endsWith(`.${m.picture.file.name.split('.').splice(-1)[0]}`) && old.resolution === m.resolution
+            fileName: m.fileName ?? Guid.newGuid(),
+            onlyPictureChanged: m.id && m.picture && oldFilmData.postersMetaData.some(old => {
+                return old.name === m.name && old.resolution === m.resolution
             }),
             resolution: m.resolution,
             picture: m.picture
         }))
-        .filter(p => !p.id || p.onlyPictureChanged || oldFilmData.postersMetaData.every(old => old.name !== p.name || old.fileName !== p.filmName || old.resolution !== p.resolution))
+        .filter(p => !p.id || p.onlyPictureChanged || oldFilmData.postersMetaData.every(old => old.name !== p.name || old.resolution !== p.resolution))
         .forEach((m, index) => {
             (m.id && !m.onlyPictureChanged) && formData.append(`postersMetaData[${index}][id]`, m.id)
             !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][name]`, m.name)
@@ -141,7 +142,7 @@ export const initForm = (film) => {
         countries: film.countries.map(c => ({ label: c.name, value: c.id })),
         seasons: film.seasons.map(s => ({ number: s.number, episodesCount: s.episodesCount })),
         people: film.filmCrew.map(fc => ({ id: { label: fc.name, value: fc.id }, professionId: { label: fc.professionName, value: fc.professionId }})),
-        trailersMetaData: film.trailersMetaData.map(tmd => ({ name: tmd.name, date: moment(tmd.date), language: { label: tmd.language, value: tmd.language }, resolution: { label: tmd.resolution, value: tmd.resolution } })),
-        postersMetaData: film.postersMetaData.map(pmd => ({ name: pmd.name, resolution: pmd.resolution }))
+        trailersMetaData: film.trailersMetaData.map(tmd => ({ id: tmd.id, name: tmd.name, fileName: tmd.fileName, date: moment(tmd.date), language: { label: tmd.language, value: tmd.language }, resolution: { label: tmd.resolution, value: tmd.resolution } })),
+        postersMetaData: film.postersMetaData.map(pmd => ({ id: pmd.id, name: pmd.name, fileName: pmd.fileName, resolution: pmd.resolution }))
     }
 }

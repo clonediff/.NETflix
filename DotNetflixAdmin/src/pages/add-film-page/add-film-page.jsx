@@ -3,6 +3,7 @@ import { axiosInstance } from '../../axiosInstance'
 import { useForm } from 'antd/es/form/Form'
 import { Button, Form, Input, InputNumber, Modal, Select, Space, Upload, Image, DatePicker } from 'antd'
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { Guid } from 'js-guid'
 import ReactPlayer from 'react-player'
 import './add-film-page.css'
 import '../../data-layout/form-styles.css'
@@ -48,12 +49,11 @@ const AddFilmPage = () => {
                         Object.entries(i).forEach(([iKey, iValue]) => {
                             if (iValue && (key !== 'trailersMetaData' || ['name', 'date', 'language', 'resolution'].includes(iKey))
                                 && (key !== 'postersMetaData' || ['name', 'resolution'].includes(iKey))) {
-                                formData.append(`${key}[${index}][${iKey}]`, 
-                                    iKey === 'name' ? `${iValue}.${(i.video ?? i.picture).file.name.split('.').splice(-1)[0]}` : iValue)
+                                formData.append(`${key}[${index}][${iKey}]`, iValue)
                             }
                         })
                         if (key == 'trailersMetaData' || key == 'postersMetaData') {
-                            formData.append(`${key}[${index}][fileName]`, `.${(i.video ?? i.picture).file.name.split('.').splice(-1)[0]}`)
+                            formData.append(`${key}[${index}][fileName]`, Guid.newGuid())
                         }
                     }
                 })
@@ -668,6 +668,8 @@ export const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps,
                     </Form.Item>
                 ))
             }
+            <Form.Item hidden name={[baseName, 'id']}><Input /></Form.Item>
+            <Form.Item hidden name={[baseName, 'fileName']}><Input /></Form.Item>
             <Button icon={ <MinusCircleOutlined /> } onClick={ removeHandler } className='form-item'>
                 Убрать { mediaName }
             </Button>

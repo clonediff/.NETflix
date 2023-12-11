@@ -29,4 +29,4 @@ public record AddFilmCommand(
     AddSeasonDto[]? Seasons, 
     AddOrUpdateFilmCrewDto[] People,
     IEnumerable<TrailerMetaDataDto> TrailersMetaData,
-    IEnumerable<PosterMetaDataDto> PostersMetaData) : ICommand<AddFilmCommandResponse>;
+    IEnumerable<PosterMetaDataDto> PostersMetaData) : ICommand<int>;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
 
-internal class AddFilmCommandHandler : ICommandHandler<AddFilmCommand, AddFilmCommandResponse>
+internal class AddFilmCommandHandler : ICommandHandler<AddFilmCommand, int>
 {
     private readonly DbContext _dbContext;
     private readonly IMovieMetaDataService _movieMetaDataService;
@@ -17,7 +17,7 @@ internal class AddFilmCommandHandler : ICommandHandler<AddFilmCommand, AddFilmCo
         _movieMetaDataService = movieMetaDataService;
     }
 
-    public async Task<AddFilmCommandResponse> Handle(AddFilmCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(AddFilmCommand request, CancellationToken cancellationToken)
     {
         var movie = request.ToMovieInfo();
         
@@ -25,19 +25,16 @@ internal class AddFilmCommandHandler : ICommandHandler<AddFilmCommand, AddFilmCo
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var trailerIds = Enumerable.Empty<Guid>();
-        var posterIds = Enumerable.Empty<Guid>();
-
         if (request.TrailersMetaData.Any())
         {
-            trailerIds = await _movieMetaDataService.AddMetaDataAsync(movie.Id, "trailers", request.TrailersMetaData);
+            await _movieMetaDataService.AddMetaDataAsync(movie.Id, "trailers", request.TrailersMetaData);
         }
 
         if (request.PostersMetaData.Any())
         {
-            posterIds = await _movieMetaDataService.AddMetaDataAsync(movie.Id, "posters", request.PostersMetaData);
+            await _movieMetaDataService.AddMetaDataAsync(movie.Id, "posters", request.PostersMetaData);
         }
 
-        return new AddFilmCommandResponse(movie.Id, trailerIds, posterIds);
+        return movie.Id;
     }
 }

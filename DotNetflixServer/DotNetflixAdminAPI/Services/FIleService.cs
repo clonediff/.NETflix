@@ -13,13 +13,15 @@ public class FIleService : IFileService
 
     public async Task AddFilesAsync(int movieId, IEnumerable<IFormFile> files, List<string> fileNames)
     {
-        await Task.WhenAll(files
-            .Select((f, i) =>
+        var content = files
+            .Aggregate((Content: new MultipartFormDataContent(), Index: 0), (acc, cur) => 
             {
-                var content = new MultipartFormDataContent();
-                content.Add(new StreamContent(f.OpenReadStream()), "file", fileNames[i]);
-                return _httpClient.PostAsync($"/api/files/{movieId}/{fileNames[i]}", content);
-            }));
+                acc.Content.Add(new StreamContent(cur.OpenReadStream()), "files", fileNames[acc.Index]);
+                acc.Index++;
+                return acc;
+            }).Content;
+
+        await _httpClient.PostAsync($"/api/files/{movieId}", content);
     }
 
     public async Task DeleteFilesAsync(int movieId, IEnumerable<string> fileNames)
