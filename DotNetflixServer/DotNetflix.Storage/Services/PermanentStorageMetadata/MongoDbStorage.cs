@@ -24,9 +24,6 @@ public class MongoDbStorage<TEntity> : IPermanentStorageMetadata<TEntity> where 
 	public async Task DeleteByMovieIdAsync(int movieId) =>
 		await _mongoCollection.DeleteManyAsync(x => x.MovieId == movieId);
 
-	public async Task DeleteByMovieIdAsync(int movieId) =>
-		await _mongoCollection.DeleteManyAsync(x => x.MovieId == movieId);
-
 	public async Task DeleteAsync(Guid id) =>
 		await _mongoCollection.DeleteOneAsync(x => x.Id == id);
 }
