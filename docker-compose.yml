@@ -19,6 +19,7 @@ services:
       - MinioS3__SecretKey=minioadmin
       - MinioS3__Timeout=5000
       - MinioS3__Endpoint=minio:9000
+      - TemporaryBucketName=temp
       - RabbitMqConfig__Username=admin
       - RabbitMqConfig__Password=admin
       - RabbitMqConfig__Hostname=RabbitMq
@@ -29,10 +30,14 @@ services:
     image: mongo:6-jammy
     container_name: mongodb
     restart: always
+    ports:
+      - "27017:27017"
   RedisStorage:
     container_name: storageRedis
     image: redis:7.2.3-alpine3.18
     restart: always
+    ports:
+      - "6379:6379"
     command: redis-server --save 20 1 --loglevel warning --requirepass ${StorageRedisPassword}
   MinioS3:
     image: minio/minio
