@@ -20,7 +20,7 @@ public class MongoDbStorage<TEntity> : IPermanentStorageMetadata<TEntity> where 
 
 	public async Task UpdateAsync(TEntity entity) =>
 		await _mongoCollection.ReplaceOneAsync(x => x.Id == entity.Id, entity);
-
+	
 	public async Task DeleteByMovieIdAsync(int movieId) =>
 		await _mongoCollection.DeleteManyAsync(x => x.MovieId == movieId);
 

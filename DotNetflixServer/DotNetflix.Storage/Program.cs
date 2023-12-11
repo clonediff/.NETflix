@@ -9,9 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 
-builder.Services.AddStackExchangeRedisCache(options =>
-    options.Configuration = builder.Configuration.GetConnectionString("Redis"));
-
 builder.Services.AddMasstransitRabbitMq(rabbitMqConfig);
 
 builder.Services.AddMinio(configuration =>
@@ -23,6 +20,11 @@ builder.Services.AddMinio(configuration =>
         builder.Configuration["MinioS3:AccessKey"]!,
         builder.Configuration["MinioS3:SecretKey"]!);
 });
+
+builder.Services
+    .AddRedis(builder.Configuration)
+    .AddHostedServices()
+    .AddStoragesInteractionServices();
 
 builder.Services.AddMongoDb(builder.Configuration);
 

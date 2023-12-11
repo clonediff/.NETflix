@@ -4,4 +4,5 @@ public interface IMongoDbEntity
 {
 	public Guid Id { get; set; }
 	public int MovieId { get; set; }
+	public string FileName { get; set; }
 }
