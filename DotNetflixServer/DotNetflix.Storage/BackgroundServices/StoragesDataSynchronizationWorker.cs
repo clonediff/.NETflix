@@ -39,17 +39,20 @@ public partial class StoragesDataSynchronizationWorker : BackgroundService
             {
                 if (!_metadataPattern.IsMatch(key.ToString(), 0)) continue;
                 var transactionKey = $"{_metadataPattern.Replace(key.ToString(), string.Empty)}-counter";
+                var movieId = _metadataPattern.Replace(key.ToString(), string.Empty);
                 var value = await _temporaryMetadataStorage.GetStringAsync(transactionKey);
                 _ = value switch
                 {
-                    "2" => await _storagesSynchronizationService.SynchronizeStorages(key.ToString(), transactionKey),
-                    "3" => await _temporaryStoragesCleaner.ClearStorages(key.ToString(), transactionKey),
+                    "2" => await _storagesSynchronizationService.SynchronizeStorages(movieId, transactionKey),
+                    "3" => await _temporaryStoragesCleaner.ClearStorages(movieId, transactionKey),
                     _ => false
                 };
             }
+
+            await Task.Delay(3000);
         }
     }
 
-    [GeneratedRegex("-poster|-trailer")]
+    [GeneratedRegex("-posters|-trailers")]
     private static partial Regex MetadataKey();
 }

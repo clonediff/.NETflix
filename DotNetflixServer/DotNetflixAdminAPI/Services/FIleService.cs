@@ -26,12 +26,12 @@ public class FIleService : IFileService
     {
         foreach (var fileName in fileNames)
         {
-            await _httpClient.DeleteAsync($"/api/files/{movieId}/{fileName}");
+            await _httpClient.DeleteAsync($"/api/files/film-{movieId}/{fileName}");
         }
     }
 
     public async Task DeleteAllMovieFilesAsync(int movieId)
     {
-        await _httpClient.DeleteAsync($"/api/files/{movieId}");
+        await _httpClient.DeleteAsync($"/api/files/film-{movieId}");
     }
 }

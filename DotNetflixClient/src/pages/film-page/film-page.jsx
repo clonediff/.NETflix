@@ -96,7 +96,7 @@ const FilmPageInfo = ({ film }) => {
                                 film.trailersMetaData.map(tmd => 
                                     <div className="metadata-frame" key={tmd.id}>
                                         <ReactPlayer controls width="70%"
-                                                     url={[{src: `http://localhost:7126/api/files/film-${film.id}/${tmd.fileName}`}]}/>
+                                                     url={[{src: `https://localhost:7126/api/files/film-${film.id}/${tmd.fileName}`}]}/>
                                         <div className="metadata-table">
                                             <span>Название: {tmd.name}</span>
                                             <span>Дата выхода: {formatDate(tmd.date)}</span>
@@ -116,7 +116,7 @@ const FilmPageInfo = ({ film }) => {
                             {
                                 film.postersMetaData.map(tmd =>
                                 <div className="metadata-frame" key={tmd.id}>
-                                    <Image controls width="70%" src={`http://localhost:7126/api/files/film-${film.id}/${tmd.fileName}`}/>
+                                    <Image controls width="70%" src={`https://localhost:7126/api/files/film-${film.id}/${tmd.fileName}`}/>
                                     <div className="metadata-table">
                                         <span>Название: {tmd.name}</span>
                                         <span>Разрешение: {tmd.resolution}</span>
