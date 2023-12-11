@@ -1,4 +1,5 @@
-﻿using Configuration.Shared.RabbitMq;
+﻿using Configuration.Shared;
+using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
 using DotNetflix.Application;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
+using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAPI.Extensions;
@@ -135,6 +137,10 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddTransient<GlobalExceptionHandlingMiddleware>();
         services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
+        });
+        services.AddHttpClient<IMovieMetaDataService, MovieMetaDataService>(client =>
         {
             client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
         });

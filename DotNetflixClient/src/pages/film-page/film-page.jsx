@@ -4,8 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../AxiosInstance'
 import { PosterSkeleton, TextSkeleton } from '../../libs/film-skeleton/film-skeleton'
-import { Modal } from 'antd'
+import {Image, Modal} from 'antd'
 import './film-page.css'
+import ReactPlayer from "react-player";
 
 const FilmPage = () => {
 
@@ -87,6 +88,45 @@ const FilmPageInfo = ({ film }) => {
                     : null
                 }
                 {
+                    film.trailersMetaData.length !== 0
+                    ? 
+                        <>
+                            <b>Трейлеры</b>
+                            {
+                                film.trailersMetaData.map(tmd => 
+                                    <div className="metadata-frame" key={tmd.id}>
+                                        <ReactPlayer controls width="70%"
+                                                     url={[{src: `http://localhost:7126/api/files/film-${film.id}/${tmd.fileName}`}]}/>
+                                        <div className="metadata-table">
+                                            <span>Название: {tmd.name}</span>
+                                            <span>Дата выхода: {formatDate(tmd.date)}</span>
+                                            <span>Язык: {tmd.language}</span>
+                                            <span>Качество: {tmd.resolution}</span>
+                                        </div>
+                                    </div>)
+                            }
+                        </>
+                    : null
+                }
+                {
+                    film.postersMetaData.length !== 0
+                    ?
+                        <>
+                            <b>Постеры</b>
+                            {
+                                film.postersMetaData.map(tmd =>
+                                <div className="metadata-frame" key={tmd.id}>
+                                    <Image controls width="70%" src={`http://localhost:7126/api/files/film-${film.id}/${tmd.fileName}`}/>
+                                    <div className="metadata-table">
+                                        <span>Название: {tmd.name}</span>
+                                        <span>Разрешение: {tmd.resolution}</span>
+                                    </div>
+                                </div>)
+                            }
+                        </>
+                    : null
+                }
+                {
                     Object.entries(film.professions).map(prof => 
                         <div className='film-page-people-container' key={ prof[0] }>
                             <b className='film-page-profession-name'>{ prof[0] }</b>
@@ -101,6 +141,10 @@ const FilmPageInfo = ({ film }) => {
             </div>
         </>
     )
+}
+
+function formatDate(date){
+    return new Date(date).toLocaleDateString('ru-ru')
 }
 
 const SeasonsInfo = ({ seasonsInfo }) => {

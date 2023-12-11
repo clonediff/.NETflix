@@ -1,13 +1,12 @@
-﻿using Configuration.Shared.Constants;
-using DataAccess;
+﻿using DataAccess;
 using Domain.Entities;
 using DotNetflix.Admin.Application;
 using DotNetflixAdminAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure.EmailService;
+using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
-using static Configuration.Shared.Constants.HttpClientNames;
 
 namespace DotNetflixAdminAPI.Extensions;
 
@@ -52,16 +51,15 @@ public static class ProgramConfigurationExtensions
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IEmailService, EmailService>();
-        services.AddTransient<IFileService, FIleService>();
         services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
         {
             client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
         });
-        services.AddHttpClient(FileHttpClientName, client =>
+        services.AddHttpClient<IFileService, FIleService>(client =>
         {
             client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
         });
-        services.AddHttpClient(MetaDataHttpClientName, client =>
+        services.AddHttpClient<IMovieMetaDataService, MovieMetaDataService>(client =>
         {
             client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
         });

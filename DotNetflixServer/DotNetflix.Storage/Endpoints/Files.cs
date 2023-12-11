@@ -11,9 +11,8 @@ public static class Files
     {
         var temporaryBucketName = configuration["TemporaryBucketName"]!;
         
-        app.MapGet("api/files/{movieId:int}/{fileName}", async (int movieId, string fileName, IS3StorageService storageService) =>
+        app.MapGet("api/files/{bucketName}/{fileName}", async (string bucketName, string fileName, IS3StorageService storageService) =>
         {
-            var bucketName = $"film-{movieId}";
             var stream = await storageService.GetFileFromBucketAsync(fileName, bucketName);
 
             return stream is not null

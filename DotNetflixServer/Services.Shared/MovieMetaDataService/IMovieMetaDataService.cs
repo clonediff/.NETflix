@@ -1,4 +1,4 @@
-﻿namespace DotNetflix.Admin.Application.Features.Films.Services;
+﻿namespace Services.Shared.MovieMetaDataService;
 
 public interface IMovieMetaDataService
 {

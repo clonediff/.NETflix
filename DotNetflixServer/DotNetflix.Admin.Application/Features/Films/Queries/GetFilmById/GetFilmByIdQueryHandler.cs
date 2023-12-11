@@ -1,10 +1,10 @@
 ﻿using Contracts.Shared;
 using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
-using DotNetflix.Admin.Application.Features.Films.Services;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared.MovieMetaDataService;
 
 namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
 

@@ -418,7 +418,7 @@ const UpdateFilmPage = () => {
                                             defaultFile={ index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) ? {} : form.getFieldValue(['trailersMetaData', field.name, 'video'])?.file }
                                             getUploadProps={ (detacher) => getUploadProps(trailersEnd, detacher,
                                                 () => removeTrailerHandler(field.name, index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index].fileName),
-                                                index < film.trailersMetaData.length && <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/${location.pathname.split('/')[3]}/${film.trailersMetaData[index].fileName}` }]} />,
+                                                index < film.trailersMetaData.length && <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/film-${location.pathname.split('/')[3]}/${film.trailersMetaData[index].fileName}` }]} />,
                                                 url => (<ReactPlayer controls width='70%' height='70%' url={ url } />)) }
                                             formFields={[
                                                 {
@@ -479,7 +479,7 @@ const UpdateFilmPage = () => {
                                                 () => removePosterHandler(field.name, index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index].fileName),
                                                 index < film.postersMetaData.length &&
                                                 <div style={{ marginBottom: 4 }}>
-                                                    <Image width='70%' src={ `https://localhost:7126/api/files/${location.pathname.split('/')[3]}/${film.postersMetaData[index].fileName}` } />
+                                                    <Image width='70%' src={ `https://localhost:7126/api/files/film-${location.pathname.split('/')[3]}/${film.postersMetaData[index].fileName}` } />
                                                 </div>,
                                                 url => (<div style={{ marginBottom: 4 }}>
                                                             <Image width='70%' src={ url } />

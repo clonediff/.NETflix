@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Configuration.Shared;
 using Contracts.Shared;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;

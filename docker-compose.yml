@@ -84,7 +84,7 @@ services:
       - RabbitMqConfig__Port=5672
       - FrontendBaseUrl=http://localhost:3000
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - StorageApiBaseUrl=http://dotnetflixs3
+      - StorageApiBaseUrl=http://dotnetflixstorage
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - OAuth__ApiOAuth=http://localhost:7289/api/oauth/google
@@ -108,7 +108,7 @@ services:
       - "7298:443"
     environment:
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - StorageApiBaseUrl=http://dotnetflixs3
+      - StorageApiBaseUrl=http://dotnetflixstorage
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - ASPNETCORE_ENVIRONMENT:Production
