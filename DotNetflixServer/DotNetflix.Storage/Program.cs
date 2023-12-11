@@ -1,8 +1,6 @@
 using Configuration.Shared.RabbitMq;
 using DotNetflix.Storage.Endpoints;
 using DotNetflix.Storage.Extensions;
-using DotNetflix.Storage.Services.PermanentStorageMetadata;
-using DotNetflix.Storage.Services.PermanentStorageMetadata.Models;
 using DotNetflix.Storage.Services.S3;
 using DotNetflix.Storage.Services.TemporaryStorageMetadata;
 using Minio;

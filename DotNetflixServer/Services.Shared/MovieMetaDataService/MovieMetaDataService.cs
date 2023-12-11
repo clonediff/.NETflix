@@ -1,18 +1,17 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Configuration.Shared.Constants.HttpClientNames;
 using static Configuration.Shared.Constants.HttpRequestHeaderNames;
 
-namespace DotNetflix.Admin.Application.Features.Films.Services;
+namespace Services.Shared.MovieMetaDataService;
 
 public class MovieMetaDataService : IMovieMetaDataService
 {
     private readonly HttpClient _httpClient;
 
-    public MovieMetaDataService(IHttpClientFactory httpClientFactory)
+    public MovieMetaDataService(HttpClient httpClient)
     {
-        _httpClient = httpClientFactory.CreateClient(MetaDataHttpClientName);
+        _httpClient = httpClient;
     }
 
     public async Task<IEnumerable<TMetaData>> GetMetaDataAsync<TMetaData>(int movieId, string metaDataType)

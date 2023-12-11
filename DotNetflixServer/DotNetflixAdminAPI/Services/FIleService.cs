@@ -1,14 +1,12 @@
-﻿using static Configuration.Shared.Constants.HttpClientNames;
-
-namespace DotNetflixAdminAPI.Services;
+﻿namespace DotNetflixAdminAPI.Services;
 
 public class FIleService : IFileService
 {
     private readonly HttpClient _httpClient;
 
-    public FIleService(IHttpClientFactory httpClientFactory)
+    public FIleService(HttpClient httpClient)
     {
-        _httpClient = httpClientFactory.CreateClient(FileHttpClientName);
+        _httpClient = httpClient;
     }
 
     public async Task AddFilesAsync(int movieId, IEnumerable<IFormFile> files, List<string> fileNames)

@@ -223,3 +223,13 @@
         gap: 6px;
     }
 }
+.metadata-frame {
+    display: flex;
+    gap: 50px;
+}
+
+.metadata-table {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}

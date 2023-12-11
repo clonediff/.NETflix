@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
-using DotNetflix.Admin.Application.Features.Films.Services;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared.MovieMetaDataService;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.DeleteFilm;
 

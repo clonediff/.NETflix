@@ -12,6 +12,7 @@
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\DotNetflix.CQRS\DotNetflix.CQRS.csproj" />
       <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
+      <ProjectReference Include="..\Services.Shared\Services.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
