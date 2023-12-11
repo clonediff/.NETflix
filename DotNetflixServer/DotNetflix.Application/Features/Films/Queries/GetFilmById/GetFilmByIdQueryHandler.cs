@@ -1,18 +1,22 @@
-﻿using Domain.Entities;
+﻿using Contracts.Shared;
+using Domain.Entities;
 using DotNetflix.Application.Features.Films.Mapping;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared.MovieMetaDataService;
 
 namespace DotNetflix.Application.Features.Films.Queries.GetFilmById;
 
 internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<MovieForMoviePageDto, string>>
 {
     private readonly DbContext _dbContext;
+    private readonly IMovieMetaDataService _movieMetaDataService;
 
-    public GetFilmByIdQueryHandler(DbContext dbContext)
+    public GetFilmByIdQueryHandler(DbContext dbContext, IMovieMetaDataService movieMetaDataService)
     {
         _dbContext = dbContext;
+        _movieMetaDataService = movieMetaDataService;
     }
 
     public async Task<Result<MovieForMoviePageDto, string>> Handle(GetFilmByIdQuery request,
@@ -47,7 +51,10 @@ internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<
         if (movie is null)
             return "Не удалось найти запрашиваемый контент";
 
-        return movie.ToMovieForMoviePageDto();
+        var trailers = await _movieMetaDataService.GetMetaDataAsync<TrailerMetaDataDto>(movie.Id, "trailers");
+        var posters = await _movieMetaDataService.GetMetaDataAsync<PosterMetaDataDto>(movie.Id, "posters");
+        
+        return movie.ToMovieForMoviePageDto(trailers, posters);
     }
 
     private async Task<IEnumerable<int>> GetAvailableFilmIdsAsync(string? userId)

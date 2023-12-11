@@ -1,26 +1,44 @@
 version: "3.9"
 
 services:
-  DotNetflixS3:
-    image: aspnetdotnetflixs3
-    container_name: dotnetflixs3
+  DotNetflixStorage:
+    image: aspnetdotnetflixstorage
+    container_name: dotnetflixstorage
     ports:
       - "7126:80"
     build:
       context: ./DotNetflixServer/
-      dockerfile: DockerfileDotnetflixS3
+      dockerfile: DockerfileDotnetflixStorage
     depends_on:
       - MinioS3
       - RabbitMq
+      - MongoStorage
+      - RedisStorage
     environment:
       - MinioS3__AccessKey=minioadmin
       - MinioS3__SecretKey=minioadmin
       - MinioS3__Timeout=5000
       - MinioS3__Endpoint=minio:9000
+      - TemporaryBucketName=temp
       - RabbitMqConfig__Username=admin
       - RabbitMqConfig__Password=admin
       - RabbitMqConfig__Hostname=RabbitMq
       - RabbitMqConfig__Port=5672
+      - ConnectionStrings__Redis=storageRedis:6379
+      - ConnectionStrings__MongoDb=mongodb://mongodb:27017
+  MongoStorage:
+    image: mongo:6-jammy
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    restart: always
+  RedisStorage:
+    image: redis:7.2.3-alpine3.18
+    container_name: storageRedis
+    ports:
+      - "6379:6379"
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
   MinioS3:
     image: minio/minio
     container_name: minio
@@ -66,7 +84,7 @@ services:
       - RabbitMqConfig__Port=5672
       - FrontendBaseUrl=http://localhost:3000
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - MinioApiBaseUrl=http://dotnetflixs3
+      - StorageApiBaseUrl=http://dotnetflixstorage
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - OAuth__ApiOAuth=http://localhost:7289/api/oauth/google
@@ -90,7 +108,7 @@ services:
       - "7298:443"
     environment:
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - MinioApiBaseUrl=http://dotnetflixs3
+      - StorageApiBaseUrl=http://dotnetflixstorage
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - ASPNETCORE_ENVIRONMENT:Production

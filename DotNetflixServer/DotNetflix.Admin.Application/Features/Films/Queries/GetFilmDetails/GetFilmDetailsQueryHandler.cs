@@ -1,18 +1,22 @@
-﻿using Domain.Entities;
+﻿using Contracts.Shared;
+using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared.MovieMetaDataService;
 
 namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmDetails;
 
 internal class GetFilmDetailsQueryHandler : IQueryHandler<GetFilmDetailsQuery, Result<GetFilmDetailsDto, string>>
 {
     private readonly DbContext _dbContext;
+    private readonly IMovieMetaDataService _movieMetaDataService;
 
-    public GetFilmDetailsQueryHandler(DbContext dbContext)
+    public GetFilmDetailsQueryHandler(DbContext dbContext, IMovieMetaDataService movieMetaDataService)
     {
         _dbContext = dbContext;
+        _movieMetaDataService = movieMetaDataService;
     }
 
     public async Task<Result<GetFilmDetailsDto, string>> Handle(GetFilmDetailsQuery request, CancellationToken cancellationToken)
@@ -41,7 +45,10 @@ internal class GetFilmDetailsQueryHandler : IQueryHandler<GetFilmDetailsQuery, R
 
         if (film is null)
             return "Не удалось найти фильм";
+        
+        var trailers = await _movieMetaDataService.GetMetaDataAsync<TrailerMetaDataDto>(request.Id, "trailers");
+        var posters = await _movieMetaDataService.GetMetaDataAsync<PosterMetaDataDto>(request.Id, "posters");
 
-        return film.ToMovieDetailsDto();
+        return film.ToMovieDetailsDto(trailers, posters);
     }
 }

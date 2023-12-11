@@ -1,4 +1,5 @@
-﻿using DotNetflix.Admin.Application.Features.Films.Shared;
+﻿using Contracts.Shared;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 using DotNetflix.Admin.Application.Shared;
 
 namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
@@ -20,4 +21,6 @@ public record GetFilmByIdDto(
     IEnumerable<EnumDto<int>> Genres,
     IEnumerable<EnumDto<int>> Countries,
     IEnumerable<SeasonDto>? Seasons,
-    IEnumerable<GetFilmCrewDto> FilmCrew);
+    IEnumerable<GetFilmCrewDto> FilmCrew,
+    IEnumerable<TrailerMetaDataDto> TrailersMetaData,
+    IEnumerable<PosterMetaDataDto> PostersMetaData);

@@ -1,4 +1,4 @@
-namespace DotNetflix.S3.Services;
+namespace DotNetflix.Storage.Services.S3;
 
 public interface IS3StorageService
 {

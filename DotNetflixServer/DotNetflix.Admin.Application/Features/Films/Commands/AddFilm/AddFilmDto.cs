@@ -1,4 +1,5 @@
-﻿using DotNetflix.Admin.Application.Features.Films.Shared;
+﻿using Contracts.Shared;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
 
@@ -25,4 +26,6 @@ public record AddFilmDto(
     int[] Countries, 
     int[] Genres, 
     AddSeasonDto[]? Seasons, 
-    AddOrUpdateFilmCrewDto[] People);
+    AddOrUpdateFilmCrewDto[] People,
+    IEnumerable<TrailerMetaDataDto>? TrailersMetaData,
+    IEnumerable<PosterMetaDataDto>? PostersMetaData);

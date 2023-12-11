@@ -1,4 +1,5 @@
-﻿using DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
+﻿using Contracts.Shared;
+using DotNetflix.Admin.Application.Features.Films.Commands.AddFilm;
 
 namespace DotNetflix.Admin.Application.Features.Films.Mapping;
 
@@ -29,7 +30,9 @@ public static class AddFilmDtoToCommand
             Countries: dto.Countries,
             Genres: dto.Genres,
             Seasons: dto.Seasons,
-            People: dto.People
+            People: dto.People,
+            TrailersMetaData: dto.TrailersMetaData ?? Enumerable.Empty<TrailerMetaDataDto>(),
+            PostersMetaData: dto.PostersMetaData ?? Enumerable.Empty<PosterMetaDataDto>()
         );
     }
 }

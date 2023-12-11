@@ -1,8 +1,8 @@
 ﻿using Contracts.Shared;
-using DotNetflix.S3.Services;
+using DotNetflix.Storage.Services.S3;
 using MassTransit;
 
-namespace DotNetflix.S3.Consumers;
+namespace DotNetflix.Storage.Consumers;
 
 public class FileMessageConsumer : IConsumer<FileMessage>
 {

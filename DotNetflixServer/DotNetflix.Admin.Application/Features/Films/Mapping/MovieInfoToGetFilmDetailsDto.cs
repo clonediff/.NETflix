@@ -1,11 +1,15 @@
-﻿using Domain.Entities;
+﻿using Contracts.Shared;
+using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmDetails;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 
 namespace DotNetflix.Admin.Application.Features.Films.Mapping;
 
 public static class MovieInfoToGetFilmDetailsDto
 {
-    public static GetFilmDetailsDto ToMovieDetailsDto(this MovieInfo movieInfo)
+    public static GetFilmDetailsDto ToMovieDetailsDto(this MovieInfo movieInfo,
+        IEnumerable<TrailerMetaDataDto> trailersMetaData, 
+        IEnumerable<PosterMetaDataDto> postersMetaData)
     {
         return new GetFilmDetailsDto(
             Name: movieInfo.Name,
@@ -26,7 +30,9 @@ public static class MovieInfoToGetFilmDetailsDto
             Seasons: movieInfo.SeasonsInfo?.Select(s => new GetSeasonDetailsDto(s.Number, s.EpisodesCount)),
             SubscriptionNames: movieInfo.Subscriptions.Select(s => s.Name),
             FilmCrew: movieInfo.Proffessions
-                .Select(p => new GetPersonDetailsDto(p.Person.Name, p.Person.Photo, p.Profession.Name))
+                .Select(p => new GetPersonDetailsDto(p.Person.Name, p.Person.Photo, p.Profession.Name)),
+            TrailersMetaData: trailersMetaData,
+            PostersMetaData: postersMetaData
         );
     }
 

@@ -1,4 +1,5 @@
-﻿using DotNetflix.Admin.Application.Features.Films.Shared;
+﻿using Contracts.Shared;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 
 namespace DotNetflix.Admin.Application.Features.Films.Commands.UpdateFilm;
 
@@ -20,6 +21,11 @@ public record UpdateFilmDto(
     IEnumerable<int> Countries,
     IEnumerable<int> Genres,
     IEnumerable<SeasonDto>? Seasons,
-    List<int> SeasonsToDelete,
-    IEnumerable<AddOrUpdateFilmCrewDto> PeopleToAdd,
-    List<DeletePersonFromFilmDto> PeopleToDelete);
+    List<int>? SeasonsToDelete,
+    IEnumerable<AddOrUpdateFilmCrewDto>? PeopleToAdd,
+    List<DeletePersonFromFilmDto>? PeopleToDelete,
+    IEnumerable<string>? FilesToAdd,
+    IEnumerable<string>? FilesToDelete,
+    IEnumerable<TrailerMetaDataDto>? TrailersMetaData,
+    IEnumerable<PosterMetaDataDto>? PostersMetaData,
+    IEnumerable<Guid>? MetaDataToDelete);

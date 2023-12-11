@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import ReactPlayer from 'react-player'
+import { Image } from 'antd'
 import { axiosInstance } from '../../axiosInstance'
 import CustomSpin from '../../custom-spin/custom-spin'
 
@@ -13,7 +15,6 @@ const FilmDetailsPage = () => {
         setIsLoading(true)
         axiosInstance.get(`api/films/getfilmdetails?id=${location.pathname.split('/')[3]}`)
             .then(({ data }) => {
-                console.log(data)
                 setFilm(data)
                 setIsLoading(false)
             })
@@ -88,6 +89,50 @@ const FilmDetailsPage = () => {
                 {
                     film.subscriptionNames.length !== 0
                         ? film.subscriptionNames.join(', ')
+                        : '—'
+                }
+            </div>
+            <div>
+                <b>Трейлеры: </b>
+                {
+                    film.trailersMetaData.length !== 0
+                        ? 
+                        film.trailersMetaData.map(tmd => (
+                            <div key={ tmd.id }>
+                                <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/film-${location.pathname.split('/')[3]}/${tmd.fileName}` }]} />
+                                <div>
+                                    <b>Название: </b> { tmd.name }
+                                </div>
+                                <div>
+                                    <b>Дата выхода: </b> { new Date(tmd.date).toLocaleDateString() }
+                                </div>
+                                <div>
+                                    <b>Язык: </b> { tmd.language }
+                                </div>
+                                <div>
+                                    <b>Разрешение: </b> { tmd.resolution }
+                                </div>
+                            </div>
+                        ))
+                        : '—'
+                }
+            </div>
+            <div>
+                <b>Постеры: </b>
+                {
+                    film.postersMetaData.length !== 0
+                        ? 
+                        film.postersMetaData.map(pmd => (
+                            <div key={ pmd.id }>
+                                <Image width='70%' src={ `https://localhost:7126/api/files/film-${location.pathname.split('/')[3]}/${pmd.fileName}` } />
+                                <div>
+                                    <b>Название: </b> { pmd.name }
+                                </div>
+                                <div>
+                                    <b>Разрешение: </b> { pmd.resolution }
+                                </div>
+                            </div>
+                        ))
                         : '—'
                 }
             </div>
