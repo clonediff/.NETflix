@@ -3,6 +3,7 @@ import { axiosInstance } from '../../axiosInstance'
 import { useForm } from 'antd/es/form/Form'
 import { Button, Form, Input, InputNumber, Modal, Select, Space, Upload, Image, DatePicker } from 'antd'
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { Guid } from 'js-guid'
 import ReactPlayer from 'react-player'
 import './add-film-page.css'
 import '../../data-layout/form-styles.css'
@@ -51,6 +52,9 @@ const AddFilmPage = () => {
                                 formData.append(`${key}[${index}][${iKey}]`, iValue)
                             }
                         })
+                        if (key == 'trailersMetaData' || key == 'postersMetaData') {
+                            formData.append(`${key}[${index}][fileName]`, Guid.newGuid())
+                        }
                     }
                 })
             } else if (value) {
@@ -59,6 +63,7 @@ const AddFilmPage = () => {
         })
         values.trailersMetaData?.forEach(x => formData.append('trailers', x.video.file))
         values.postersMetaData?.forEach(x => formData.append('posters', x.picture.file))
+
         axiosInstance.post('api/films/addFilm', formData)
             .then(_ => {
                 modal.success({
@@ -663,6 +668,8 @@ export const MediaSpace = ({ baseName, mediaName, mediaFormName, getUploadProps,
                     </Form.Item>
                 ))
             }
+            <Form.Item hidden name={[baseName, 'id']}><Input /></Form.Item>
+            <Form.Item hidden name={[baseName, 'fileName']}><Input /></Form.Item>
             <Button icon={ <MinusCircleOutlined /> } onClick={ removeHandler } className='form-item'>
                 Убрать { mediaName }
             </Button>

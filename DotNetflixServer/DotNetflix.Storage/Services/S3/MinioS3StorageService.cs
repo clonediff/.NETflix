@@ -1,3 +1,4 @@
+using System.Reactive.Linq;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
@@ -23,10 +24,27 @@ public class MinioS3StorageService : IS3StorageService
 
     public async Task RemoveBucketAsync(string bucketIdentifier)
     {
-        var args = new RemoveBucketArgs()
+        var listObjectsArgs = new ListObjectsArgs()
             .WithBucket(bucketIdentifier);
 
-        await _minioClient.RemoveBucketAsync(args);
+        var objectNames = await _minioClient
+            .ListObjectsAsync(listObjectsArgs)
+            .Select(x => x.Key)
+            .ToList();
+
+        if (objectNames.Any())
+        {
+            var removeObjectsArgs = new RemoveObjectsArgs()
+                .WithBucket(bucketIdentifier)
+                .WithObjects(objectNames);
+
+            await _minioClient.RemoveObjectsAsync(removeObjectsArgs);
+        }
+        
+        var removeBucketArgs = new RemoveBucketArgs()
+            .WithBucket(bucketIdentifier);
+
+        await _minioClient.RemoveBucketAsync(removeBucketArgs);
     }
 
     public async Task<bool> BucketExistAsync(string bucketIdentifier)

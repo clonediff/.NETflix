@@ -11,9 +11,8 @@ public interface IPermanentStorageMetadata<TEntity> where TEntity : IMongoDbEnti
 	/// <summary>
 	/// Получить сущность
 	/// </summary>
-	/// <param name="id">id</param>
-	/// <returns>null если не найден</returns>
-	public Task<TEntity?> GetByIdAsync(Guid id);
+	/// <param name="movieId">movieId</param>
+	public Task<IEnumerable<TEntity>> GetByMovieIdAsync(int movieId);
 
 	/// <summary>
 	/// Вставить сушность
@@ -28,8 +27,15 @@ public interface IPermanentStorageMetadata<TEntity> where TEntity : IMongoDbEnti
 	public Task UpdateAsync(TEntity entity);
 
 	/// <summary>
+	/// Удалить сущности
+	/// </summary>
+	/// <param name="movieId">id</param>
+	public Task DeleteByMovieIdAsync(int movieId);
+
+	/// <summary>
 	/// Удалить сущность
 	/// </summary>
-	/// <param name="id">id</param>
+	/// <param name="id"></param>
+	/// <returns></returns>
 	public Task DeleteAsync(Guid id);
 }

@@ -143,7 +143,7 @@ const UpdateFilmPage = () => {
                 }
             },
             itemRender: (_, file, __, { remove }) => {
-                const url = (!!file.originFileObj || Object.entries(file).length > 0) && URL.createObjectURL(file.originFileObj ?? file)
+                const url = (!!file.originFileObj || Object.entries(file).length > 1) && URL.createObjectURL(file.originFileObj ?? file)
                 return (
                     <div style={{ marginTop: 8 }}>
                         { url ? nodeFactory(url) : node }
@@ -413,12 +413,12 @@ const UpdateFilmPage = () => {
                                             mediaName='трейлер'
                                             mediaFormName='video'
                                             removeHandler={ () => removeTrailerHandler(field.name, 
-                                                index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index]?.name,
-                                                index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index]?.id, remove) }
+                                                index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index].fileName,
+                                                index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index].id, remove) }
                                             defaultFile={ index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) ? {} : form.getFieldValue(['trailersMetaData', field.name, 'video'])?.file }
                                             getUploadProps={ (detacher) => getUploadProps(trailersEnd, detacher,
-                                                () => removeTrailerHandler(field.name, index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index].name),
-                                                index < film.trailersMetaData.length && <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/${film.name}/${film.trailersMetaData[index].name}` }]} />,
+                                                () => removeTrailerHandler(field.name, index < ((film.trailersMetaData?.length ?? 0) - trailersToDelete.length) && film.trailersMetaData[index].fileName),
+                                                index < film.trailersMetaData.length && <ReactPlayer controls width='70%' height='70%' url={[{ src: `https://localhost:7126/api/files/${location.pathname.split('/')[3]}/${film.trailersMetaData[index].fileName}` }]} />,
                                                 url => (<ReactPlayer controls width='70%' height='70%' url={ url } />)) }
                                             formFields={[
                                                 {
@@ -472,14 +472,14 @@ const UpdateFilmPage = () => {
                                             mediaName='постер'
                                             mediaFormName='picture'
                                             removeHandler={ () => removePosterHandler(field.name, 
-                                                index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index]?.name,
-                                                index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index]?.id, remove) }
+                                                index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index].fileName,
+                                                index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index].id, remove) }
                                             defaultFile={ index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) ? {} : form.getFieldValue(['postersMetaData', field.name, 'picture'])?.file }
                                             getUploadProps={ (detacher) => getUploadProps(postersEnd, detacher, 
-                                                () => removePosterHandler(field.name, index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index].name),
+                                                () => removePosterHandler(field.name, index < ((film.postersMetaData?.length ?? 0) - postersToDelete.length) && film.postersMetaData[index].fileName),
                                                 index < film.postersMetaData.length &&
                                                 <div style={{ marginBottom: 4 }}>
-                                                    <Image width='70%' src={ `https://localhost:7126/api/files/${film.name}/${film.postersMetaData[index].name}` } />
+                                                    <Image width='70%' src={ `https://localhost:7126/api/files/${location.pathname.split('/')[3]}/${film.postersMetaData[index].fileName}` } />
                                                 </div>,
                                                 url => (<div style={{ marginBottom: 4 }}>
                                                             <Image width='70%' src={ url } />

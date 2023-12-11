@@ -24,7 +24,7 @@ public static class UpdateFilmCommandToMovieInfo
             CategoryId = command.Category,
             Budget = GetCurrencyValue(command.Budget),
             Fees = GetFees(command.Fees),
-            SeasonsInfo = (command.Seasons ?? Enumerable.Empty<SeasonDto>()).ToEntities(x => new SeasonsInfo { Id = x.Id, Number = x.Number, EpisodesCount = x.EpisodesCount }),
+            SeasonsInfo = command.Seasons.ToEntities(x => new SeasonsInfo { Id = x.Id, Number = x.Number, EpisodesCount = x.EpisodesCount }),
             Proffessions = command.PeopleToAdd.ToEntities(x => x.ToPersonProfession())
         };
     }

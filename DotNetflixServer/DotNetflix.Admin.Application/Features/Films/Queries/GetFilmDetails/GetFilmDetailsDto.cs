@@ -1,4 +1,5 @@
-﻿using DotNetflix.Admin.Application.Features.Films.Shared;
+﻿using Contracts.Shared;
+using DotNetflix.Admin.Application.Features.Films.Shared;
 
 namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmDetails;
 

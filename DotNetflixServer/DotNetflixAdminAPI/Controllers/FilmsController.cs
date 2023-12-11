@@ -7,6 +7,7 @@ using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmDetails;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsCount;
 using DotNetflix.Admin.Application.Features.Films.Queries.GetFilmsFiltered;
 using DotNetflix.Admin.Application.Shared;
+using DotNetflixAdminAPI.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,12 @@ namespace DotNetflixAdminAPI.Controllers;
 public class FilmsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IFileService _fileService;
 
-    public FilmsController(IMediator mediator)
+    public FilmsController(IMediator mediator, IFileService fileService)
     {
         _mediator = mediator;
+        _fileService = fileService;
     }
 
     [HttpGet("[action]")]
@@ -39,12 +42,22 @@ public class FilmsController : ControllerBase
         [FromForm] IEnumerable<IFormFile> posters)
     {
         var command = dto.ToAddFilmCommand();
-        await _mediator.Send(command);
+        var movieId = await _mediator.Send(command);
+
+        await _fileService.AddFilesAsync(movieId, trailers.Concat(posters),
+            command.TrailersMetaData
+                .Select(x => x.FileName)
+                .Concat(command.PostersMetaData.Select(x => x.FileName))
+                .ToList());
+        
         return Ok();
     }
 
     [HttpGet("[action]")]
-    public async Task<PaginationDataDto<EnumDto<int>>> GetFilmsFilteredAsync([FromQuery] string? name, [FromQuery] int? page = 1, [FromQuery] int? size = 25)
+    public async Task<PaginationDataDto<EnumDto<int>>> GetFilmsFilteredAsync(
+        [FromQuery] string? name, 
+        [FromQuery] int? page = 1, 
+        [FromQuery] int? size = 25)
     {
         var query = new GetFilmsFilteredQuery(name, page!.Value, size!.Value);
         return await _mediator.Send(query);
@@ -66,6 +79,9 @@ public class FilmsController : ControllerBase
     {
         var command = new DeleteFilmCommand(id);
         await _mediator.Send(command);
+
+        await _fileService.DeleteAllMovieFilesAsync(id);
+        
         return Ok();
     }
 
@@ -77,6 +93,11 @@ public class FilmsController : ControllerBase
     {
         var command = dto.ToUpdateFilmCommand();
         await _mediator.Send(command);
+
+        await _fileService.DeleteFilesAsync(dto.Id, (dto.FilesToDelete ?? Enumerable.Empty<string>()).ToList());
+        await _fileService.AddFilesAsync(dto.Id, trailers.Concat(posters), 
+            (dto.FilesToAdd ?? Enumerable.Empty<string>()).ToList());
+        
         return Ok();
     }
 
