@@ -2,5 +2,5 @@
 
 public interface ITemporaryStoragesCleaner
 {
-    Task<bool> ClearStorages(string metadataKey, string transactionKey);
+    Task<bool> ClearStorages(string movieId, string transactionKey);
 }

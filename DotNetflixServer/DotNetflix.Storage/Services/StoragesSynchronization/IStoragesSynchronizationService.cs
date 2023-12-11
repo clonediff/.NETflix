@@ -2,5 +2,5 @@
 
 public interface IStoragesSynchronizationService
 {
-    Task<bool> SynchronizeStorages(string metadataKey, string transactionKey);
+    Task<bool> SynchronizeStorages(string movieId, string transactionKey);
 }
