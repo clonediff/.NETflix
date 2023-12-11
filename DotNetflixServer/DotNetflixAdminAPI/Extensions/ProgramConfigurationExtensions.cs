@@ -1,9 +1,11 @@
 ﻿using DataAccess;
 using Domain.Entities;
 using DotNetflix.Admin.Application;
+using DotNetflixAdminAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure.EmailService;
+using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
 
 namespace DotNetflixAdminAPI.Extensions;
@@ -51,7 +53,15 @@ public static class ProgramConfigurationExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
         {
-            client.BaseAddress = new Uri(configuration["MinioApiBaseUrl"]!);
+            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
+        });
+        services.AddHttpClient<IFileService, FIleService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
+        });
+        services.AddHttpClient<IMovieMetaDataService, MovieMetaDataService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
         });
         services.AddApplicationServices();
 

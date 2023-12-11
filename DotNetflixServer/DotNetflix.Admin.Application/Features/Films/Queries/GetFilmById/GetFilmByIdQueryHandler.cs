@@ -1,19 +1,22 @@
-﻿using Domain.Entities;
+﻿using Contracts.Shared;
+using Domain.Entities;
 using DotNetflix.Admin.Application.Features.Films.Mapping;
-using DotNetflix.Admin.Application.Features.Films.Shared;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared.MovieMetaDataService;
 
 namespace DotNetflix.Admin.Application.Features.Films.Queries.GetFilmById;
 
 internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<GetFilmByIdDto, string>>
 {
     private readonly DbContext _dbContext;
+    private readonly IMovieMetaDataService _movieMetaDataService;
 
-    public GetFilmByIdQueryHandler(DbContext dbContext)
+    public GetFilmByIdQueryHandler(DbContext dbContext, IMovieMetaDataService movieMetaDataService)
     {
         _dbContext = dbContext;
+        _movieMetaDataService = movieMetaDataService;
     }
 
     public async Task<Result<GetFilmByIdDto, string>> Handle(GetFilmByIdQuery request, CancellationToken cancellationToken)
@@ -42,15 +45,8 @@ internal class GetFilmByIdQueryHandler : IQueryHandler<GetFilmByIdQuery, Result<
         if (film is null)
             return "Не удалось найти фильм";
 
-        var trailers = new List<TrailerMetaDataDto>
-        {
-            new TrailerMetaDataDto($"{request.Id}-{Guid.NewGuid()}", "test", DateTime.Now, "Русский", "720")
-        };
-
-        var posters = new List<PosterMetaDataDto>
-        {
-            new PosterMetaDataDto($"{request.Id}-{Guid.NewGuid()}", "test", "1920x1080")
-        };
+        var trailers = await _movieMetaDataService.GetMetaDataAsync<TrailerMetaDataDto>(request.Id, "trailers");
+        var posters = await _movieMetaDataService.GetMetaDataAsync<PosterMetaDataDto>(request.Id, "posters");
 
         return film.ToGetFilmByIdDto(trailers, posters);
     }

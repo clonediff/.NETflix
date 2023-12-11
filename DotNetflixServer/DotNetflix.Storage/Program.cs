@@ -1,4 +1,5 @@
 using Configuration.Shared.RabbitMq;
+using DotNetflix.Storage.Endpoints;
 using DotNetflix.Storage.Extensions;
 using DotNetflix.Storage.Services.S3;
 using DotNetflix.Storage.Services.TemporaryStorageMetadata;
@@ -32,13 +33,7 @@ builder.Services.AddSingleton<ITemporaryStorageMetadataService, RedisStorageServ
 
 var app = builder.Build();
 
-app.MapGet("api/files/{bucketName}/{fileName}", async (string bucketName, string fileName, IS3StorageService storageService) =>
-{
-    var stream = await storageService.GetFileFromBucketAsync(fileName, bucketName);
-
-    return stream is not null
-        ? Results.Stream(stream)
-        : Results.NotFound();
-});
+app.MapFileEndpoints(builder.Configuration);
+app.MapMetadataEndpoints();
 
 app.Run();

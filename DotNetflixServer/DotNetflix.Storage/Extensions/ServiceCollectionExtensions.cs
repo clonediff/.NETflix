@@ -34,7 +34,7 @@ public static class ServiceCollectionExtensions
 	{
 		var client = new MongoClient(configuration.GetConnectionString("MongoDb"));
 		var database = client.GetDatabase("main");
-		
+    
 		serviceCollection.AddSingleton<IPermanentStorageMetadata<MovieTrailerMetadata>>(
 			new MongoDbStorage<MovieTrailerMetadata>(
 				database.GetCollection<MovieTrailerMetadata>(nameof(MovieTrailerMetadata))));

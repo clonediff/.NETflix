@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Guid } from 'js-guid'
 
 export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelete, peopleToDelete, 
     trailersToDelete, postersToDelete, trailersMetaDataToDelete, postersMetaDataToDelete) => {
@@ -25,7 +26,7 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
             formData.append(`seasons[${index}][id]`, s.id)
             formData.append(`seasons[${index}][number]`, s.number)
             formData.append(`seasons[${index}][episodesCount]`, s.episodesCount)
-        }),
+        })
     newFilmData.people
         .filter(p => oldFilmData.filmCrew.every(old => (old.id !== p.id?.value ?? p.id) && (old.professionId !== p.professionId.value ?? p.professionId)))
         .map(p => ({ id: p.id?.value ?? p.id, name: p.name, photo: p.photo, professionId: p.professionId.value ?? p.professionId }))
@@ -41,28 +42,53 @@ export const initUpdatedFilm = (filmId, newFilmData, oldFilmData, seasonsToDelet
         formData.append(`peopleToDelete[${index}][professionId]`, p.professionId)
     })
     trailersToDelete.concat(postersToDelete).forEach(f => formData.append('filesToDelete[]', f))
-    newFilmData.trailersMetaData?.map((m, i) => ({ id: i < ((oldFilmData.trailersMetaData?.length ?? 0) - trailersMetaDataToDelete.length) ? oldFilmData.trailersMetaData[i].id : undefined, language: m.language.value ?? m.language, resolution: m.resolution.value ?? m.resolution, name: m.name, date: m.date, video: m.video }))
-        .filter(t => oldFilmData.trailersMetaData.every(old => {
+    newFilmData.trailersMetaData
+        ?.map(m => ({
+            id: m.id,
+            language: m.language.value ?? m.language,
+            resolution: m.resolution.value ?? m.resolution,
+            name: m.name,
+            fileName: m.fileName ?? Guid.newGuid(),
+            onlyVideoChanged: m.id && m.video && oldFilmData.trailersMetaData.some(old => {
+                const oldDate = new Date(old.data)
+                return old.name === m.name && oldDate.getFullYear() === m.date.year() && oldDate.getMonth() === m.date.month() && oldDate.getDate() === m.date.date() && old.language === m.language && old.resolution === m.resolution
+            }),
+            date: m.date,
+            video: m.video
+        }))
+        .filter(t => !t.id || t.onlyVideoChanged || oldFilmData.trailersMetaData.every(old => {
             const oldDate = new Date(old.date)
-            return !t.id || old.name !== t.name || oldDate.getFullYear() !== t.date.year() || oldDate.getMonth() !== t.date.month() || oldDate.getDate() !== t.date.date() || old.language !== t.language || old.resolution !== t.resolution
+            return old.name !== t.name || oldDate.getFullYear() !== t.date.year() || oldDate.getMonth() !== t.date.month() || oldDate.getDate() !== t.date.date() || old.language !== t.language || old.resolution !== t.resolution
         }))
         .forEach((m, index) => {
-            m.id && formData.append(`trailersMetaData[${index}][id]`, m.id)
-            formData.append(`trailersMetaData[${index}][name]`, m.name)
-            formData.append(`trailersMetaData[${index}][date]`, m.date.format('YYYY-MM-DD'))
-            formData.append(`trailersMetaData[${index}][language]`, m.language)
-            formData.append(`trailersMetaData[${index}][resolution]`, m.resolution)
+            (m.id && !m.onlyVideoChanged) && formData.append(`trailersMetaData[${index}][id]`, m.id)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][name]`, m.name)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][fileName]`, m.fileName)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][date]`, m.date.format('YYYY-MM-DD'))
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][language]`, m.language)
+            !m.onlyVideoChanged && formData.append(`trailersMetaData[${index}][resolution]`, m.resolution)
             m.video && formData.append('trailers', m.video.file)
-            m.video && formData.append('filesToAdd[]', m.name)
+            m.video && formData.append('filesToAdd[]', m.fileName)
         })
-    newFilmData.postersMetaData?.map((m, i) => ({ id: i < ((oldFilmData.postersMetaData?.length ?? 0) - postersMetaDataToDelete.length) ? oldFilmData.postersMetaData[i].id : undefined, name: m.name, resolution: m.resolution, picture: m.picture }))
-        .filter(p => oldFilmData.postersMetaData.every(old => !p.id || old.name !== p.name || old.resolution !== p.resolution))
+    newFilmData.postersMetaData
+        ?.map(m => ({
+            id: m.id,
+            name: m.name,
+            fileName: m.fileName ?? Guid.newGuid(),
+            onlyPictureChanged: m.id && m.picture && oldFilmData.postersMetaData.some(old => {
+                return old.name === m.name && old.resolution === m.resolution
+            }),
+            resolution: m.resolution,
+            picture: m.picture
+        }))
+        .filter(p => !p.id || p.onlyPictureChanged || oldFilmData.postersMetaData.every(old => old.name !== p.name || old.resolution !== p.resolution))
         .forEach((m, index) => {
-            m.id && formData.append(`postersMetaData[${index}][id]`, m.id)
-            formData.append(`postersMetaData[${index}][name]`, m.name)
-            formData.append(`postersMetaData[${index}][resolution]`, m.resolution)
+            (m.id && !m.onlyPictureChanged) && formData.append(`postersMetaData[${index}][id]`, m.id)
+            !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][name]`, m.name)
+            !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][fileName]`, m.fileName)
+            !m.onlyPictureChanged && formData.append(`postersMetaData[${index}][resolution]`, m.resolution)
             m.picture && formData.append('posters', m.picture.file)
-            m.picture && formData.append('filesToAdd[]', m.name)
+            m.picture && formData.append('filesToAdd[]', m.fileName)
         })
     trailersMetaDataToDelete.concat(postersMetaDataToDelete).forEach(m => formData.append('metaDataToDelete[]', m))
 
@@ -116,7 +142,7 @@ export const initForm = (film) => {
         countries: film.countries.map(c => ({ label: c.name, value: c.id })),
         seasons: film.seasons.map(s => ({ number: s.number, episodesCount: s.episodesCount })),
         people: film.filmCrew.map(fc => ({ id: { label: fc.name, value: fc.id }, professionId: { label: fc.professionName, value: fc.professionId }})),
-        trailersMetaData: film.trailersMetaData.map(tmd => ({ name: tmd.name, date: moment(tmd.date), language: { label: tmd.language, value: tmd.language }, resolution: { label: tmd.resolution, value: tmd.resolution } })),
-        postersMetaData: film.postersMetaData.map(pmd => ({ name: pmd.name, resolution: pmd.resolution }))
+        trailersMetaData: film.trailersMetaData.map(tmd => ({ id: tmd.id, name: tmd.name, fileName: tmd.fileName, date: moment(tmd.date), language: { label: tmd.language, value: tmd.language }, resolution: { label: tmd.resolution, value: tmd.resolution } })),
+        postersMetaData: film.postersMetaData.map(pmd => ({ id: pmd.id, name: pmd.name, fileName: pmd.fileName, resolution: pmd.resolution }))
     }
 }

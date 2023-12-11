@@ -36,6 +36,6 @@ public interface IPermanentStorageMetadata<TEntity> where TEntity : IMongoDbEnti
 	/// Удалить сущность
 	/// </summary>
 	/// <param name="id"></param>
-	/// <returns></returns>>
+	/// <returns></returns>
 	public Task DeleteAsync(Guid id);
 }
