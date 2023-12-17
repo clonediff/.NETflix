@@ -1,0 +1,13 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetflix-storage
+spec:
+  selector:
+    app: dotnetflix-storage
+  ports:
+    - protocol: TCP
+      port: 7126
+      targetPort: 7126
+  type: NodePort
+  
