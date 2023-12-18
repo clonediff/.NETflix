@@ -1,0 +1,35 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetflix-admin-front-depl
+  labels:
+    app: dotnetflix-admin-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetflix-admin-front
+  template:
+    metadata:
+      labels:
+        app: dotnetflix-admin-front
+    spec:
+      containers:
+        - name: dotnetflix-admin-front
+          image: dotnetflix/admin-front
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetflix-admin-front-srv
+spec:
+  selector:
+    app: dotnetflix-admin-front
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+  type: LoadBalancer
