@@ -1,7 +1,53 @@
-﻿apiVersion: v1
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetflix-storage-depl
+  labels:
+    app: dotnetflix-storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetflix-storage
+  template:
+    metadata:
+      labels:
+        app: dotnetflix-storage
+    spec:
+      containers:
+        - name: dotnetflix-storage
+          image: dotnetflix/storage
+          imagePullPolicy: Always
+          env:
+            - name: RabbitMqConfig__Username
+              value: admin
+            - name: RabbitMqConfig__Password
+              value: admin
+            - name: RabbitMqConfig__Hostname
+              value: rabbitmq-srv
+            - name: RabbitMqConfig__Port
+              value: "5672"
+            - name: MinioS3__AccessKey
+              value: minioadmin
+            - name: MinioS3__SecretKey
+              value: minioadmin
+            - name: MinioS3__Timeout
+              value: "5000"
+            - name: MinioS3__Endpoint
+              value: minio-srv:9000
+            - name: TemporaryBucketName
+              value: temp
+            - name: ConnectionStrings__Redis
+              value: redis-srv:6379
+            - name: ConnectionStrings__MongoDb
+              value: mongodb://mongo-srv:27017
+          ports:
+            - containerPort: 7126
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: dotnetflix-storage
+  name: dotnetflix-storage-srv
 spec:
   selector:
     app: dotnetflix-storage
@@ -9,5 +55,5 @@ spec:
     - protocol: TCP
       port: 7126
       targetPort: 7126
-  type: NodePort
+  type: LoadBalancer
   

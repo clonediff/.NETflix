@@ -1,4 +1,44 @@
-﻿apiVersion: v1
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetflix-admin-api-depl
+  labels:
+    app: dotnetflix-admin-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetflix-admin-api
+  template:
+    metadata:
+      labels:
+        app: dotnetflix-admin-api
+    spec:
+      containers:
+        - name: dotnetflix-admin-api
+          image: dotnetflix/admin-api
+          imagePullPolicy: Always
+          env:
+            - name: SAPassword
+              value: pmwPmN1Hgh0SDd2f1TfX!
+            - name: StorageApiBaseUrl
+              value: http://dotnetflix-storage-srv
+            - name: SmtpSetting__FromPassword
+              value: gomlmldthveiefjr
+            - name: ConnectionStrings__DefaultConnection
+              value: Data Source=mssql-srv;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: https://+:443
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              value: strPassQW
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: /https/aspnetapp.pfx
+          ports:
+            - containerPort: 7298
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: dotnetflix-admin-api
@@ -9,5 +49,5 @@ spec:
     - protocol: TCP
       port: 7298
       targetPort: 7298 
-  type: NodePort
+  type: LoadBalancer
   

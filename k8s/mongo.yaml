@@ -1,7 +1,30 @@
-﻿apiVersion: v1
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-depl
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6-jammy
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 27017
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
+  name: mongo-srv
 spec:
   selector:
     app: mongo
@@ -9,5 +32,5 @@ spec:
     - protocol: TCP
       port: 27017
       targetPort: 27017
-  type: NodePort
+  type: LoadBalancer
   
