@@ -16,8 +16,6 @@ spec:
     spec:
       containers:
         - name: redis
-          command:
-            - redis-server --save 20 1 --loglevel warning
           image: redis:7.2.3-alpine3.18
           imagePullPolicy: Always
           ports:

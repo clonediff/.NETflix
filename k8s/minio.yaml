@@ -16,14 +16,15 @@ spec:
     spec:
       containers:
         - name: minio
-          command:
-            - server --console-address ":9001" /data/
           image: minio/minio
+          args:
+            - server
+            - /data
           imagePullPolicy: Always
           ports:
-            - containerPort: 9001
-              name: minio-api-port
             - containerPort: 9000
+              name: minio-api-port
+            - containerPort: 9001
               name: minio-mgmt-port
 ---
 apiVersion: v1
