@@ -41,13 +41,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dotnetflix-admin-api
+  name: dotnetflix-admin-api-srv
 spec:
   selector:
     app: dotnetflix-admin-api
   ports:
     - protocol: TCP
       port: 7298
-      targetPort: 7298 
+      targetPort: 443 
   type: LoadBalancer
   

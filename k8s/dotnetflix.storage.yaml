@@ -54,6 +54,6 @@ spec:
   ports:
     - protocol: TCP
       port: 7126
-      targetPort: 7126
+      targetPort: 80
   type: LoadBalancer
   
