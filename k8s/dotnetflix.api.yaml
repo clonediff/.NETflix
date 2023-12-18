@@ -1,0 +1,13 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetflix-api
+spec:
+  selector:
+    app: dotnetflix-api
+  ports:
+    - protocol: TCP
+      port: 7289
+      targetPort: 7289
+  type: NodePort
+  
