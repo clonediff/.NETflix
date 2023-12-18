@@ -1,0 +1,49 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetflix-support-chat-depl
+  labels:
+    app: dotnetflix-support-chat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetflix-support-chat
+  template:
+    metadata:
+      labels:
+        app: dotnetflix-support-chat
+    spec:
+      containers:
+        - name: dotnetflix-support-chat
+          image: dotnetflix/support-chat
+          imagePullPolicy: Always
+          env:
+            - name: RabbitMqConfig__Username
+              value: admin
+            - name: RabbitMqConfig__Password
+              value: admin
+            - name: RabbitMqConfig__Hostname
+              value: rabbitmq-srv
+            - name: RabbitMqConfig__Port
+              value: "5672"
+            - name: SAPassword
+              value: pmwPmN1Hgh0SDd2f1TfX!
+            - name: ConnectionStrings__DefaultConnection
+              value: Data Source=mssql-srv;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+          ports:
+            - containerPort: 7280
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetflix-support-chat-srv
+spec:
+  selector:
+    app: dotnetflix-support-chat
+  ports:
+    - protocol: TCP
+      port: 7280
+      targetPort: 80
+  type: LoadBalancer
+  

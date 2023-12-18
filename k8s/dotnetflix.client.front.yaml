@@ -1,0 +1,36 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetflix-client-front-depl
+  labels:
+    app: dotnetflix-client-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetflix-client-front
+  template:
+    metadata:
+      labels:
+        app: dotnetflix-client-front
+    spec:
+      containers:
+        - name: dotnetflix-client-front
+          image: dotnetflix/main-front
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetflix-client-front-srv
+spec:
+  selector:
+    app: dotnetflix-client-front
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+  
