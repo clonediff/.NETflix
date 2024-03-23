@@ -2,16 +2,21 @@
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared;
 
 namespace DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 
 internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubscriptionCommand, Result<int, string>>
 {
     private readonly DbContext _dbContext;
+    private readonly PaymentService.PaymentServiceClient _paymentServiceClient;
 
-    public PurchaseSubscriptionCommandHandler(DbContext dbContext)
+    public PurchaseSubscriptionCommandHandler(
+        DbContext dbContext,
+        PaymentService.PaymentServiceClient paymentServiceClient)
     {
         _dbContext = dbContext;
+        _paymentServiceClient = paymentServiceClient;
     }
 
     public async Task<Result<int, string>> Handle(PurchaseSubscriptionCommand request, CancellationToken cancellationToken)
@@ -36,7 +41,31 @@ internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubs
                 ? null
                 : DateTime.Now.AddDays(subscription.PeriodInDays.Value)
         });
+        
+        var cardData = new CardData()
+        {
+            Cvv = request.CardDataDto.CVV_CVC.ToString(),
+            CardHolder = request.CardDataDto.Cardholder,
+            Number = request.CardDataDto.CardNumber
+        };
 
-        return await _dbContext.SaveChangesAsync(cancellationToken);
+        var response = await _paymentServiceClient.PayAsync(cardData, cancellationToken: cancellationToken);
+        
+        if (!response.Success) 
+            return "Оплата не прошла";
+
+        int result;
+        
+        try
+        {
+            result = await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception)
+        {
+            _paymentServiceClient.RefundAsync(cardData, cancellationToken: cancellationToken);
+            throw;
+        }
+
+        return result;
     }
 }
