@@ -1,7 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using Configuration.Shared.RabbitMq;
-using DotNetflixAPI;
+using Services.Shared;
 using DotNetflixAPI.Middleware;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;

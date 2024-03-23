@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "DotNetflixAPI";
+option csharp_namespace = "Services.Shared";
 
 service PaymentService {
   rpc Pay (CardData) returns (Response);
