@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "DotNetflixAPI";
+
+service PaymentService {
+  rpc Pay (CardData) returns (Response);
+  rpc Refund (CardData) returns (Response);
+}
+
+message CardData {
+  string Number = 1;
+  string CardHolder = 2;
+  string Cvv = 3;
+}
+
+message Response {
+  bool Success = 1;
+}
