@@ -62,7 +62,7 @@ internal class PurchaseSubscriptionCommandHandler : ICommandHandler<PurchaseSubs
         }
         catch (Exception)
         {
-            _paymentServiceClient.RefundAsync(cardData, cancellationToken: cancellationToken);
+            await _paymentServiceClient.RefundAsync(cardData, cancellationToken: cancellationToken);
             throw;
         }
 
