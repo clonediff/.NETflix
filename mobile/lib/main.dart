@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/main_page.dart';
+import 'package:mobile/dotnetflix_app.dart';
 
 void main() {
-  runApp(MainPage());
+  runApp(const DotNetflixApp());
 }

@@ -27,7 +27,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () { },
         ),
       ],
-      backgroundColor: NetflixColors.headerBackgroundColor,
+      backgroundColor: DotNetflixColors.headerBackgroundColor,
     );
   }
 
