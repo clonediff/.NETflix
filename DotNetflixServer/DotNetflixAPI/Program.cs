@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using Configuration.Shared.RabbitMq;
+using Services.Shared;
 using DotNetflixAPI.Middleware;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
@@ -12,6 +13,11 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddSignalR(options =>
 {
 	options.MaximumReceiveMessageSize = 10 * 1024 * 1024;
+});
+
+builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
+{
+	options.Address = new Uri(builder.Configuration["PaymentGrpcAddress"]!);
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
