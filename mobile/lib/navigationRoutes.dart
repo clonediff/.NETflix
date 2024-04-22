@@ -7,4 +7,5 @@ class NavigationRoutes {
   static const String movies = '/movies';
   static const String chat = '/chat';
   static const String subscriptions = '/subscriptions';
+  static const String movie = '/movie';
 }
