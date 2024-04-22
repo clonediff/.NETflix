@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:mobile/constants/colors.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';
-import 'package:mobile/pages/profile_page_routes.dart';
+import 'package:mobile/pages/profile_page/profile_page_routes.dart';
 import 'package:provider/provider.dart';
 
 class ChangeUSettingsForm extends StatefulWidget {

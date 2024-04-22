@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/profile_page/functions/Gen2FACodeSendField.dart';
+import 'package:mobile/pages/profile_page/functions/gen_2fa_code_send_field.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
-import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';
-import 'package:provider/provider.dart';
 
 class ChangePassForm extends StatefulWidget {
   const ChangePassForm({super.key});

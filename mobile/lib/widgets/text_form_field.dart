@@ -6,9 +6,9 @@ class DotNetflixTextFormField extends StatelessWidget{
   final Icon icon;
   final Function(String? value) validator;
   final bool hideText;
-  TextEditingController? controller;
+  final TextEditingController? controller;
 
-  DotNetflixTextFormField({
+  const DotNetflixTextFormField({
     super.key,
     required this.fieldName,
     required this.icon,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/navigation.dart';
 import 'package:mobile/pages/main_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/widgets/bottom_navigation.dart';

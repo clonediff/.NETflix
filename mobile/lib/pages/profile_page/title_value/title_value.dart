@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/profile_page/user_data.dart';
 
 class TitleValue extends StatelessWidget {
   final String title;

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/widgets/change_email_form.dart';
 import 'package:mobile/pages/profile_page/widgets/change_pass_form.dart';
-import 'package:mobile/pages/profile_page_routes.dart';
+import 'package:mobile/pages/profile_page/profile_page_routes.dart';
 import 'package:mobile/pages/profile_page/enable2fa/enable2fa.dart';
 import 'package:mobile/pages/profile_page/title_value/title_value.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';

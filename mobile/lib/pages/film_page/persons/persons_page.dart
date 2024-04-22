@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/constants/styles.dart';
 import 'package:mobile/mocks/film_info.dart';
-import 'package:mobile/widgets/header.dart';
 
 class PersonsPage extends StatefulWidget{
   final Map<String, List<Person>> persons;
