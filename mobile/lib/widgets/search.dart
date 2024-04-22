@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
-import 'package:mobile/mocks/film.dart';
+import 'package:mobile/models/film.dart';
 
 class SearchDialog extends StatefulWidget {
   const SearchDialog({ super.key });

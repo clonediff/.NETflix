@@ -5,10 +5,16 @@ using Services.Shared;
 using DotNetflixAPI.Middleware;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
+using DotNetflixAPI.GraphQL.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services
+	.AddGraphQLServer()
+	.ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
+	.AddQueryType<FilmQuery>();
 
 builder.Services.AddSignalR(options =>
 {
@@ -74,6 +80,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseHttpsRedirection();
+
+app.MapGraphQL(new PathString("/graphql"));
 
 app.MapHub<ChatHub>("/chatHub");
 app.MapHub<SupportChatHub>("/supportChatHub");

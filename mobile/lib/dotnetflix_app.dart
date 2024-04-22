@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/loading/bloc.dart';
 import 'package:mobile/pages/main_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/widgets/bottom_navigation.dart';
@@ -13,7 +15,7 @@ class DotNetflixApp extends StatefulWidget {
 
 class _DotNetflixAppState extends State<DotNetflixApp> {
 
-  final List<Widget> _pages = [MainPage(), SearchPage()];
+  final List<Widget> _pages = [const MainPage(), const SearchPage()];
   int selectedPage = 0;
 
   void updatePage(int pageNumber) {
@@ -24,11 +26,14 @@ class _DotNetflixAppState extends State<DotNetflixApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: const Header(),
-        body: _pages[selectedPage],
-        bottomNavigationBar: BottomNavigation(callback: updatePage)
-      ),
+      home: BlocProvider(
+        create: (_) => LoadingBloc(),
+        child: Scaffold(
+          appBar: const Header(),
+          body: _pages[selectedPage],
+          bottomNavigationBar: BottomNavigation(callback: updatePage)
+        ),
+      )
     );
   }
 }

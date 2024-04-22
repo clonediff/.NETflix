@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/mocks/film.dart';
+import 'package:mobile/models/film.dart';
 import 'package:mobile/widgets/film_card.dart';
 
 class CategorizedFilms extends StatelessWidget {
@@ -9,7 +9,7 @@ class CategorizedFilms extends StatelessWidget {
     required this.category
   });
 
-  final List<Film> films;
+  final List<FilmForMainPage> films;
   final String category;
   
   @override
