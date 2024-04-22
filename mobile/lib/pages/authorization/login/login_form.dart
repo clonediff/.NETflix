@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/styles.dart';
+import 'package:mobile/navigationRoutes.dart';
 import 'package:mobile/widgets/text_form_field.dart';
 
 class LoginForm extends StatelessWidget{
@@ -63,7 +64,9 @@ class LoginForm extends StatelessWidget{
                     if (formKey.currentState!.validate()) {
                       var email = _emailController.text;
                       var password = _passwordController.text;
-
+                      Navigator.of(context)
+                        ..pop()
+                        ..pushNamed(NavigationRoutes.main);
                       //todo Process data and navigate
                     }
                   },
@@ -73,8 +76,8 @@ class LoginForm extends StatelessWidget{
               ),
             ),
             InkWell(
-              child: const Text('Неn аккаунта?', style: DotNetflixTextStyles.mainTextStyle),
-              onTap: () => onSelectedPage(1),
+              child: const Text('Нет аккаунта?', style: DotNetflixTextStyles.mainTextStyle),
+              onTap: () => onSelectedPage(0),
             )
           ],
         ),

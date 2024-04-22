@@ -108,7 +108,7 @@ class RegistrationForm extends StatelessWidget{
             ),
             InkWell(
               child: const Text('Есть аккаунт?', style: DotNetflixTextStyles.mainTextStyle),
-              onTap: () => onSelectedPage(0),
+              onTap: () => onSelectedPage(1),
             )
           ],
         ),

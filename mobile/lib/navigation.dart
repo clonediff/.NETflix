@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/dotnetflix_app.dart';
 import 'package:mobile/navigationRoutes.dart';
 import 'package:mobile/pages/film_page/film/film_page.dart';
 import 'package:mobile/pages/main_page.dart';
@@ -9,7 +10,7 @@ MaterialPageRoute? buildRoutes(RouteSettings settings) {
   switch (settings.name) {
     case NavigationRoutes.main:
       return MaterialPageRoute(builder: (context) {
-        return MainPage();
+        return const DotNetflixApp();
       });
     case NavigationRoutes.profile:
       return MaterialPageRoute(builder: (context) {

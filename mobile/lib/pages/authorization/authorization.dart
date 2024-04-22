@@ -3,8 +3,6 @@ import 'package:mobile/constants/colors.dart';
 import 'package:mobile/pages/authorization/login/login_form.dart';
 import 'registration/registration_form.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 class Authorization extends StatefulWidget{
   const Authorization({super.key});
 
@@ -14,10 +12,11 @@ class Authorization extends StatefulWidget{
 
 class _AuthorizationState extends State<Authorization>{
   late int selectedPage = 0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late var forms = [
-    LoginForm(formKey: _formKey, onSelectedPage: onSelectedPage,),
-    RegistrationForm(formKey: _formKey, onSelectedPage: onSelectedPage)
+    RegistrationForm(formKey: _formKey, onSelectedPage: onSelectedPage),
+    LoginForm(formKey: _formKey, onSelectedPage: onSelectedPage,)
   ];
 
   onSelectedPage(int page) {

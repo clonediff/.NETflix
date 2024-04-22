@@ -37,7 +37,6 @@ class _PersonsPageState extends State<PersonsPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Header(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: FloatingActionButton(
         backgroundColor: DotNetflixColors.floatingButtonColor,
@@ -70,6 +69,7 @@ class PersonsList extends StatelessWidget{
       children: [
         Text(title, style: DotNetflixTextStyles.personsTitleStyle),
         ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             return Row(
