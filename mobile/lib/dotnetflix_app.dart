@@ -24,13 +24,10 @@ class _DotNetflixAppState extends State<DotNetflixApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateRoute: buildRoutes,
-      home: Scaffold(
-        appBar: const Header(),
-        body: _pages[selectedPage],
-        bottomNavigationBar: BottomNavigation(callback: updatePage)
-      ),
+    return Scaffold(
+      appBar: const Header(),
+      body: _pages[selectedPage],
+      bottomNavigationBar: BottomNavigation(callback: updatePage)
     );
   }
 }
