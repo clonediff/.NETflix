@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile/navigationRoutes.dart';
+import 'package:mobile/navigation_routes.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';

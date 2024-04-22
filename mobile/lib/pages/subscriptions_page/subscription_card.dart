@@ -1,10 +1,6 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mobile/constants/colors.dart';
-import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
+import 'package:mobile/pages/subscriptions_page/payment_form.dart';
 import 'package:mobile/pages/subscriptions_page/subscriptions_page.dart';
 
 class SubscriptionCard extends StatelessWidget {
@@ -84,19 +80,21 @@ class SubscriptionCard extends StatelessWidget {
                     const Text('Подключаемые фильмы',
                         style: TextStyle(color: Colors.white, fontSize: 15)),
                     ...subscription.filmNames.indexed.take(3).expand(
-                      (e) => [
-                        SizedBox(
-                          height: 50,
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(e.$2,
-                                style: const TextStyle(color: Colors.white)),
-                          ),
+                          (e) => [
+                            SizedBox(
+                              height: 50,
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(e.$2,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                              ),
+                            ),
+                            if (e.$1 != subscription.filmNames.length - 1)
+                              const Divider(
+                                  height: 1, color: Color(0xff414146)),
+                          ],
                         ),
-                        if (e.$1 != subscription.filmNames.length - 1)
-                          const Divider(height: 1, color: Color(0xff414146)),
-                      ],
-                    ),
                     const Divider(height: 1, color: Color(0xff414146)),
                     SizedBox(
                       height: 50,
@@ -116,6 +114,11 @@ class SubscriptionCard extends StatelessWidget {
                     subscription.belongsToUser)
                 ? () {
                     print('Купить подписку');
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          PaymentForm(subscription: subscription),
+                    );
                   }
                 : null,
             style: ButtonStyle(

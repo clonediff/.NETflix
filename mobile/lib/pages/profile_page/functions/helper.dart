@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 
 class Helper {
-  static String formatDate(DateTime? date) {
+  static String formatDate(DateTime? date, [String format = 'dd.MM.yyyy']) {
     if (date == null) return '';
-    return DateFormat('dd.MM.yyyy').format(date);
+    return DateFormat(format).format(date);
   }
 
-  static DateTime parseDate(String str) {
-    return DateFormat('dd.MM.yyyy').parse(str);
+  static DateTime parseDate(String str, [String format = 'dd.MM.yyyy']) {
+    return DateFormat(format).parse(str);
   }
 }
