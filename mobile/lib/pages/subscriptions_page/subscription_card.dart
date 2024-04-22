@@ -18,9 +18,9 @@ class SubscriptionCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: NetflixColors.headerBackgroundColor,
+        color: DotNetflixColors.headerBackgroundColor,
         border: Border.all(
-          color: NetflixColors.headerBackgroundColor,
+          color: DotNetflixColors.headerBackgroundColor,
           width: 2,
           style: BorderStyle.solid,
         ),
@@ -57,7 +57,7 @@ class SubscriptionCard extends StatelessWidget {
                       spreadRadius: 0,
                     ),
                   ],
-                  color: NetflixColors.searchBackgroundColor,
+                  color: DotNetflixColors.searchBackgroundColor,
                 ),
                 padding:
                     const EdgeInsets.symmetric(vertical: 30, horizontal: 25),

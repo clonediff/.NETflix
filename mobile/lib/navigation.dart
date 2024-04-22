@@ -8,7 +8,7 @@ MaterialPageRoute? buildRoutes(RouteSettings settings) {
   switch (settings.name) {
     case NavigationRoutes.main:
       return MaterialPageRoute(builder: (context) {
-        return const MainPage();
+        return MainPage();
       });
     case NavigationRoutes.profile:
       return MaterialPageRoute(builder: (context) {

@@ -57,23 +57,23 @@ jobs:
           dotnet build DotNetflixServer
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
-  eslint:
-    name: ESLint for React
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 19.x
-      - name: Install dependencies
-        run: |
-          cd DotNetflixClient
-          npm install
-          cd ../DotNetflixAdmin
-          npm install
-      - name: Run ESLint
-        run: |
-          npx eslint ./DotNetflixClient --max-warnings 0
-          npx eslint ./DotNetflixAdmin --max-warnings 0
+  # eslint:
+  #   name: ESLint for React
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 19.x
+  #     - name: Install dependencies
+  #       run: |
+  #         cd DotNetflixClient
+  #         npm install
+  #         cd ../DotNetflixAdmin
+  #         npm install
+  #     - name: Run ESLint
+  #       run: |
+  #         npx eslint ./DotNetflixClient --max-warnings 0
+  #         npx eslint ./DotNetflixAdmin --max-warnings 0

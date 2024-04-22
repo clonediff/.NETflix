@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/navigationRoutes.dart';
+import 'package:mobile/widgets/search.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
@@ -24,13 +25,18 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.search, size: 26),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context, 
+              builder: (context) => const SearchDialog()
+            );
+          },
         ),
       ],
-      backgroundColor: NetflixColors.headerBackgroundColor,
+      backgroundColor: DotNetflixColors.headerBackgroundColor,
       iconTheme: const IconThemeData(
         color: Colors.white,
-      ),
+      )
     );
   }
 

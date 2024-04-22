@@ -65,7 +65,7 @@ class _MainInfoState extends State<MainInfo> {
                                     vertical: 5, horizontal: 10),
                               ),
                               backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => NetflixColors.headerBackgroundColor,
+                                (states) => DotNetflixColors.headerBackgroundColor,
                               ),
                               foregroundColor: MaterialStateProperty.resolveWith(
                                 (states) => Colors.white,

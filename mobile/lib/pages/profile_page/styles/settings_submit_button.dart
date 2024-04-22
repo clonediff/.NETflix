@@ -13,7 +13,7 @@ ButtonStyle settingsSubmitButton([bool Function()? isDisabled]) {
     ),
     backgroundColor: MaterialStateProperty.resolveWith(
           (states) => isDisabled == null || !isDisabled()
-          ? NetflixColors.headerBackgroundColor
+          ? DotNetflixColors.headerBackgroundColor
           : const Color.fromARGB(40, 0, 0, 0),
     ),
     foregroundColor: MaterialStateProperty.resolveWith(

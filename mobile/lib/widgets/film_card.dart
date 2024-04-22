@@ -18,13 +18,16 @@ class FilmCard extends StatelessWidget {
             width: 120,
           )
         ),
-        Text(
-          film.name,
-          style: const TextStyle(
+        SizedBox(
+          width: 120,
+          child: Text(
+            film.name,
             overflow: TextOverflow.ellipsis,
-            color: Colors.white,
-            fontWeight: FontWeight.w600
-          ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600
+            )
+          )
         ),
         Row(
           children: [

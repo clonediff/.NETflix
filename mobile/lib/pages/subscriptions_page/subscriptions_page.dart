@@ -52,7 +52,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     return Scaffold(
       appBar: const Header(),
       body: Container(
-        color: NetflixColors.mainBackgroundColor,
+        color: DotNetflixColors.mainBackgroundColor,
         alignment: Alignment.center,
         child: ListView.builder(
           itemBuilder: (context, index) =>

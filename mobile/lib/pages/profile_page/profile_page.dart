@@ -48,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage>
               image: AssetImage('assets/dotnetflix-bgi.jpg'),
               fit: BoxFit.cover,
             ),
-            color: NetflixColors.mainBackgroundColor,
+            color: DotNetflixColors.mainBackgroundColor,
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
                       top: Radius.circular(30),
                     ),
                   ),
-                  color: NetflixColors.headerBackgroundColor,
+                  color: DotNetflixColors.headerBackgroundColor,
                   child: TabBar(
                     controller: _tabController,
                     labelColor: Colors.red,
