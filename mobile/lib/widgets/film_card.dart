@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/mocks/film.dart';
-import 'package:mobile/navigationRoutes.dart';
+import 'package:mobile/navigation_routes.dart';
 
 class FilmCard extends StatelessWidget {
   const FilmCard({ super.key, required this.film });

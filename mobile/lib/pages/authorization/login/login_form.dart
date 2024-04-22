@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/styles.dart';
-import 'package:mobile/navigationRoutes.dart';
+import 'package:mobile/navigation_routes.dart';
 import 'package:mobile/widgets/text_form_field.dart';
 
 class LoginForm extends StatelessWidget{
