@@ -4,6 +4,7 @@ import 'package:mobile/pages/profile_page/user_data.dart';
 
 class TitleValue extends StatelessWidget {
   final String title;
+  final TextStyle? titleStyle;
   final Widget value;
   final IconData? icon;
 
@@ -12,13 +13,17 @@ class TitleValue extends StatelessWidget {
     required this.title,
     required this.value,
     this.icon,
+    this.titleStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: icon == null ? null : Icon(icon),
-      title: Text(title),
+      title: Text(
+        title,
+        style: titleStyle,
+      ),
       subtitle: value,
     );
   }
