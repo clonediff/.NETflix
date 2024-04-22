@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/navigation.dart';
 import 'package:mobile/pages/main_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/widgets/bottom_navigation.dart';
@@ -24,6 +25,7 @@ class _DotNetflixAppState extends State<DotNetflixApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: buildRoutes,
       home: Scaffold(
         appBar: const Header(),
         body: _pages[selectedPage],

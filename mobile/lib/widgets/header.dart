@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
+import 'package:mobile/navigation_routes.dart';
 import 'package:mobile/widgets/search.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
-  const Header({ super.key });
+  const Header({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +12,15 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       title: const Text(
         '.Netflix',
         style: TextStyle(
-          color: Colors.red,
-          fontWeight: FontWeight.w700,
-          fontSize: 26
-        ),
+            color: Colors.red, fontWeight: FontWeight.w700, fontSize: 26),
       ),
       actions: [
         IconButton(
           icon: const Icon(Icons.person, size: 26),
           color: Colors.white,
-          onPressed: () { },
+          onPressed: () {
+            Navigator.of(context).pushNamed(NavigationRoutes.profile);
+          },
         ),
         IconButton(
           icon: const Icon(Icons.search, size: 26),
@@ -34,6 +34,9 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
       backgroundColor: DotNetflixColors.headerBackgroundColor,
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      )
     );
   }
 
