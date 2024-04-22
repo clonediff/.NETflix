@@ -25,8 +25,6 @@ class SubscriptionCard extends StatelessWidget {
           style: BorderStyle.solid,
         ),
       ),
-      width: 344,
-      height: 500,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,20 +83,19 @@ class SubscriptionCard extends StatelessWidget {
                   children: [
                     const Text('Подключаемые фильмы',
                         style: TextStyle(color: Colors.white, fontSize: 15)),
-                    SizedBox(
-                      height: 50 * min(subscription.filmNames.length.toDouble(), 3),
-                      child: ListView.separated(
-                          itemBuilder: (context, index) => SizedBox(
-                            height: 50,
-                            child: Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(subscription.filmNames[index],
-                                  style: const TextStyle(color: Colors.white)),
-                            ),
+                    ...subscription.filmNames.indexed.take(3).expand(
+                      (e) => [
+                        SizedBox(
+                          height: 50,
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(e.$2,
+                                style: const TextStyle(color: Colors.white)),
                           ),
-                          separatorBuilder: (context, index) =>
-                              const Divider(height: 1, color: Color(0xff414146)),
-                          itemCount: min(subscription.filmNames.length, 3)),
+                        ),
+                        if (e.$1 != subscription.filmNames.length - 1)
+                          const Divider(height: 1, color: Color(0xff414146)),
+                      ],
                     ),
                     const Divider(height: 1, color: Color(0xff414146)),
                     SizedBox(
