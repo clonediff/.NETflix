@@ -1,20 +1,18 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using API.Shared;
 using Configuration.Shared.RabbitMq;
+using DataAccess;
+using Domain.Entities;
 using Services.Shared;
-using DotNetflixAPI.Middleware;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
-using DotNetflixAPI.GraphQL.Queries;
+using Microsoft.AspNetCore.Identity;
+using static API.Shared.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
-
-builder.Services
-	.AddGraphQLServer()
-	.ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
-	.AddQueryType<FilmQuery>();
 
 builder.Services.AddSignalR(options =>
 {
@@ -34,10 +32,14 @@ builder.Services
 	.AddCors()
 	.ConfigureOptions(builder.Configuration)
 	.AddMassTransitRabbitMq(rabbitMqConfig)
-	.AddApplicationDb(connectionString, builder.Environment)
+	.AddApplicationDb(connectionString, builder.Environment.IsDevelopment())
+	.AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
+	.AddEntityFrameworkStores<ApplicationDBContext>()
+	.AddDefaultTokenProviders().Services
 	.AddAuth()
 	.AddGoogleOAuth(builder.Configuration)
 	.RegisterServices(builder.Configuration)
+	.AddHttpContextAccessor()
 	.AddControllers()
 	.AddJsonOptions(options => 
 	{
@@ -80,8 +82,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseHttpsRedirection();
-
-app.MapGraphQL(new PathString("/graphql"));
 
 app.MapHub<ChatHub>("/chatHub");
 app.MapHub<SupportChatHub>("/supportChatHub");

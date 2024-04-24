@@ -1,7 +1,7 @@
 using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
 using MediatR;
 
-namespace DotNetflixAPI.GraphQL.Queries;
+namespace DotNetflixMobileAPI.GraphQL.Queries;
 
 public class FilmQuery
 {

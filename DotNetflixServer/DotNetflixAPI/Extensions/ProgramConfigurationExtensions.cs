@@ -1,20 +1,11 @@
-﻿using Configuration.Shared;
-using Configuration.Shared.RabbitMq;
-using DataAccess;
+﻿using Configuration.Shared.RabbitMq;
 using Domain.Entities;
-using DotNetflix.Application;
-using DotNetflixAPI.Middleware;
-using IdentityPasswordGenerator;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure.EmailService;
-using Services.Infrastructure.GoogleOAuth;
 using Services.Infrastructure.GoogleOAuth.Google;
-using Services.Shared.MovieMetaDataService;
-using Services.Shared.SupportChatService;
 
 namespace DotNetflixAPI.Extensions;
 
@@ -31,37 +22,6 @@ public static class ProgramConfigurationExtensions
                 cfg.ConfigureEndpoints(ctx);
             });
         });
-        
-        return services;
-    }
-
-    public static IServiceCollection AddApplicationDb(this IServiceCollection services,
-        string? connectionString, IWebHostEnvironment environment)
-    {
-        services.AddDbContext<ApplicationDBContext>(options =>
-            {
-                options.LogTo(Console.WriteLine);
-                options.UseSqlServer(connectionString);
-            })
-            .AddIdentity<User, IdentityRole>(options =>
-            {
-                if (environment.IsDevelopment())
-                {
-                    options.User.RequireUniqueEmail = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequiredLength = 5;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.SignIn.RequireConfirmedEmail = false;
-                    options.SignIn.RequireConfirmedAccount = false;
-                    options.SignIn.RequireConfirmedPhoneNumber = false;
-                }
-            })
-            .AddEntityFrameworkStores<ApplicationDBContext>()
-            .AddDefaultTokenProviders();
-
-        services.AddScoped<DbContext, ApplicationDBContext>();
         
         return services;
     }
@@ -127,27 +87,6 @@ public static class ProgramConfigurationExtensions
     {
         services.Configure<EmailConfig>(configuration.GetSection("SmtpSetting"));
         services.Configure<GoogleSecrets>(configuration.GetSection("GoogleOAuth"));
-        
-        return services;
-    }
-
-    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddMemoryCache();
-        services.AddScoped<IEmailService, EmailService>();
-        services.AddTransient<GlobalExceptionHandlingMiddleware>();
-        services.AddHttpClient<ISupportChatService, SupportChatService>(client =>
-        {
-            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
-        });
-        services.AddHttpClient<IMovieMetaDataService, MovieMetaDataService>(client =>
-        {
-            client.BaseAddress = new Uri(configuration["StorageApiBaseUrl"]!);
-        });
-        services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
-        services.AddHttpContextAccessor();
-        services.AddScoped<IPasswordGenerator, PasswordGenerator>();
-        services.AddApplicationServices();
         
         return services;
     }

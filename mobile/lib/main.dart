@@ -10,7 +10,7 @@ final getit = GetIt.instance;
 void setup() {
   getit.registerSingleton<GraphQLClient>(
     GraphQLClient(
-      link: HttpLink('http://192.168.43.135:5088/graphql'), 
+      link: HttpLink('http://192.168.43.135:5130/graphql'), 
       cache: GraphQLCache()
     )
   );
