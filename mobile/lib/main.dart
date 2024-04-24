@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:mobile/dotnetflix_app.dart';
 import 'package:mobile/services/film_service.dart';
+import 'package:mobile/navigation/navigation.dart';
+import 'package:mobile/pages/authorization/authorization.dart';
 
 final getit = GetIt.instance;
 
@@ -18,5 +19,8 @@ void setup() {
 
 void main() {
   setup();
-  runApp(const DotNetflixApp());
+  runApp(const MaterialApp(
+    onGenerateRoute: buildRoutes,
+    home: Authorization()
+  ));
 }
