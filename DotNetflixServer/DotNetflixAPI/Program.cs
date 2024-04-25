@@ -32,7 +32,7 @@ builder.Services
 	.AddCors()
 	.ConfigureOptions(builder.Configuration)
 	.AddMassTransitRabbitMq(rabbitMqConfig)
-	.AddApplicationDb(connectionString, builder.Environment.IsDevelopment())
+	.AddApplicationDb(connectionString)
 	.AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
 	.AddEntityFrameworkStores<ApplicationDBContext>()
 	.AddDefaultTokenProviders().Services

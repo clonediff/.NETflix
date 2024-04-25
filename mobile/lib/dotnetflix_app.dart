@@ -15,12 +15,15 @@ class DotNetflixApp extends StatefulWidget {
 
 class _DotNetflixAppState extends State<DotNetflixApp> {
 
-  final List<Widget> _pages = [const MainPage(), const SearchPage()];
-  int selectedPage = 0;
+  int _selectedPage = 0;
+  List<Widget> _pages = [const MainPage(), const SearchPage(type: '')];
 
-  void updatePage(int pageNumber) {
-    if (pageNumber == selectedPage) return;
-    setState(() => selectedPage = pageNumber);
+  void updatePage(int pageNumber, String type) {
+    if (pageNumber == _selectedPage) return;
+    if (type != '') {
+      setState(() => _pages = [_pages[0], SearchPage(type: type)]);
+    }
+    setState(() => _selectedPage = pageNumber);
   }
 
   @override
@@ -30,7 +33,7 @@ class _DotNetflixAppState extends State<DotNetflixApp> {
         create: (_) => LoadingBloc(),
         child: Scaffold(
           appBar: const Header(),
-          body: _pages[selectedPage],
+          body: _pages[_selectedPage == 0 ? 0 : 1],
           bottomNavigationBar: BottomNavigation(callback: updatePage)
         ),
       )

@@ -27,7 +27,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services
     .AddCors()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
-    .AddApplicationDb(connectionString, builder.Environment.IsDevelopment())
+    .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders().Services

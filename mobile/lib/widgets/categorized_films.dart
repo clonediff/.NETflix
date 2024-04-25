@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/film.dart';
+import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/widgets/film_card.dart';
 
 class CategorizedFilms extends StatelessWidget {

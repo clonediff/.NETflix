@@ -15,5 +15,15 @@ class Queries {
     }
   ''';
 
-
+  static const filmsBySearchQueryName = 'filmsBySearch';
+  static const filmsBySearchQuery = '''
+    query $filmsBySearchQueryName(\$dto: MovieSearchDtoInput!) {
+      $filmsBySearchQueryName(dto: \$dto) {
+        id,
+        name,
+        rating,
+        posterUrl
+      }
+    }
+  ''';
 }

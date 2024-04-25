@@ -6,10 +6,16 @@ import 'package:mobile/services/film_service.dart';
 
 class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
   LoadingBloc() : super(LoadingState()) {
-    on<LoadingEvent>((event, emit) async {
+    on<LoadingAllFilmsEvent>((event, emit) async {
       emit(LoadingState());
       final service = getit<FilmService>();
       final films = await service.getAllFilmsAsync();
+      emit(LoadedState(data: films));
+    });
+    on<LoadingSearchedFilmsEvent>((event, emit) async {
+      emit(LoadingState());
+      final service = getit<FilmService>();
+      final films = await service.getFilmsBySearchAsync(event.params);
       emit(LoadedState(data: films));
     });
   }

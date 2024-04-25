@@ -28,7 +28,7 @@ public static class Startup
     }
     
     public static IServiceCollection AddApplicationDb(this IServiceCollection services,
-        string? connectionString, bool isDevelopment)
+        string? connectionString)
     {
         services.AddDbContext<ApplicationDBContext>(options =>
         {

@@ -2,10 +2,4 @@
 
 namespace DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 
-public record GetFilmsBySearchQuery(string? Type, 
-    string? Name, 
-    int? Year, 
-    string? Country, 
-    string[]? Genres, 
-    string[]? Actors, 
-    string? Director) : IQuery<IEnumerable<MovieForSearchPageDto>>;
+public record GetFilmsBySearchQuery(MovieSearchDto Dto) : IQuery<List<MovieForSearchPageDto>>;

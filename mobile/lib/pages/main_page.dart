@@ -11,7 +11,7 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LoadingBloc>().add(LoadingEvent());
+    context.read<LoadingBloc>().add(LoadingAllFilmsEvent());
     return Container(
       padding: const EdgeInsets.only(left: 12, right: 12),
       color: DotNetflixColors.mainBackgroundColor,
