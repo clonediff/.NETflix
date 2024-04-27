@@ -44,3 +44,14 @@ class CategorizedFilms extends StatelessWidget {
     );
   }
 }
+
+ListView buildAllCategorizedFilms(Map<String, List<FilmForMainPage>> films) {
+  return ListView(
+    children: films.entries
+      .map((x) => CategorizedFilms(
+        films: x.value, 
+        category: x.key
+      ))
+      .toList()
+  );
+}

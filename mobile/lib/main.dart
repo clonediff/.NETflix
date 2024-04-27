@@ -14,7 +14,7 @@ void setup() {
       cache: GraphQLCache()
     )
   );
-  getit.registerSingleton<FilmService>(FilmService());
+  getit.registerSingleton<FilmServiceBase>(FilmService());
 }
 
 void main() {

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/loading/bloc.dart';
+import 'package:mobile/bloc/loading/events.dart';
+import 'package:mobile/bloc/loading/state_parser.dart';
+import 'package:mobile/bloc/loading/states.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 
@@ -11,7 +16,7 @@ class SearchDialog extends StatefulWidget {
 
 class _SearchDialogState extends State<SearchDialog> {
 
-  final Map<String, String> formData = {};
+  final Map<String, dynamic> formData = {};
   int selectedPage = 0;
 
   void updatePage(int pageNumber) {
@@ -22,26 +27,24 @@ class _SearchDialogState extends State<SearchDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
-      title: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Поиск',
-            style: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.w600
-            )
-          ),
-          Text(
-            'Введите название фильма или один из дополнительных параметров',
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 12
-            ),
-          )
-        ],
+      title: const Text(
+        'Поиск',
+        style: TextStyle(
+          color: Colors.red,
+          fontWeight: FontWeight.w600
+        )
       ),
-      content: selectedPage == 0 ? SearchForm(callback: updatePage) : SearchResults(formData: formData),
+      content: selectedPage == 0 
+        ? SearchForm(callback: (x) {
+            if (x != 0) {
+              context.read<LoadingBloc>().add(LoadingSearchedFilmsEvent(
+                params: formData,
+                builder: (films) => SearchResults(films: films)
+              ));
+            }
+            updatePage(x);
+          }) 
+        : const BlocBuilder<LoadingBloc, LoadingStateBase>(builder: parseState),
       backgroundColor: DotNetflixColors.headerBackgroundColor,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))
     );
@@ -70,8 +73,8 @@ class _SearchFormState extends State<SearchForm> {
       child: Column(
         children: [
           SearchFormField(
-            label: Names.name,
-            onSaved: (value) => ancestor.formData[Names.name] = value!,
+            label: 'Название',
+            onSaved: (value) => ancestor.formData['name'] = value!,
             validator: (value) {
               return ancestor.formData.entries.every((x) => x.value.toString().isEmpty)
                 ? 'Введите название фильма'
@@ -87,8 +90,8 @@ class _SearchFormState extends State<SearchForm> {
             collapsedIconColor: Colors.red,
             children: [
               SearchFormField(
-                label: Names.year,
-                onSaved: (value) => ancestor.formData[Names.year] = value!,
+                label: 'Год выхода',
+                onSaved: (value) => ancestor.formData['year'] = int.tryParse(value!),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   final parsed = int.tryParse(value!);
@@ -97,10 +100,10 @@ class _SearchFormState extends State<SearchForm> {
                     : null;
                 },
               ),
-              SearchFormField(label: Names.country, onSaved: (value) => ancestor.formData[Names.country] = value!),
-              SearchFormField(label: Names.genre, onSaved: (value) => ancestor.formData[Names.genre] = value!),
-              SearchFormField(label: Names.actor, onSaved: (value) => ancestor.formData[Names.actor] = value!),
-              SearchFormField(label: Names.director, onSaved: (value) => ancestor.formData[Names.director] = value!)
+              SearchFormField(label: 'Страна производства', onSaved: (value) => ancestor.formData['country'] = value!),
+              SearchFormField(label: 'Жанры', onSaved: (value) => ancestor.formData['genres'] = value!),
+              SearchFormField(label: 'Актёры', onSaved: (value) => ancestor.formData['actors'] = value!),
+              SearchFormField(label: 'Режиссёр', onSaved: (value) => ancestor.formData['director'] = value!)
             ]
           ),
           TextButton(
@@ -156,22 +159,18 @@ class SearchFormField extends StatelessWidget {
 }
 
 class SearchResults extends StatelessWidget {
-  SearchResults({ super.key, required this.formData });
   
-  final Map<String, String> formData;
-  final film = Film(
-    image: 'https://st.kp.yandex.net/images/film_big/404900.jpg', 
-    name: 'Во все тяжкие', 
-    rating: 9.5
-  );
+  final List<FilmForMainPage> films;
+
+  const SearchResults({ super.key, required this.films });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 450,
       child: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) => SearchResultsEntry(film: film),
+        itemCount: films.length,
+        itemBuilder: (context, index) => SearchResultsEntry(film: films[index]),
       )
     );
   }
@@ -180,7 +179,7 @@ class SearchResults extends StatelessWidget {
 class SearchResultsEntry extends StatelessWidget {
   const SearchResultsEntry({ super.key, required this.film });
   
-  final Film film;
+  final FilmForMainPage film;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +189,23 @@ class SearchResultsEntry extends StatelessWidget {
           margin: const EdgeInsets.only(right: 8, bottom: 4),
           child: Column(
             children: [
-              Image.network(film.image, width: 48),
+              Image.network(
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return SizedBox(
+                    width: 48,
+                    height: 60,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!,
+                      ),
+                    )
+                  );
+                },
+                film.posterUrl,
+                width: 48,
+              ),
               Row(
                 children: [
                   Text(
@@ -215,13 +230,4 @@ class SearchResultsEntry extends StatelessWidget {
       ],
     );
   }
-}
-
-class Names {
-  static const String name = 'Название'; 
-  static const String year = 'Год выхода'; 
-  static const String country = 'Страна производства'; 
-  static const String genre = 'Жанр'; 
-  static const String actor = 'Актёр'; 
-  static const String director = 'Режиссёр'; 
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/loading/bloc.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/navigation/navigation_routes.dart';
 import 'package:mobile/widgets/search.dart';
@@ -28,7 +30,10 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             showDialog(
               context: context, 
-              builder: (context) => const SearchDialog()
+              builder: (context) => BlocProvider(
+                create: (_) => LoadingBloc(),
+                child: const SearchDialog()
+              )
             );
           },
         ),

@@ -8,15 +8,21 @@ class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
   LoadingBloc() : super(LoadingState()) {
     on<LoadingAllFilmsEvent>((event, emit) async {
       emit(LoadingState());
-      final service = getit<FilmService>();
-      final films = await service.getAllFilmsAsync();
-      emit(LoadedState(data: films));
+      final service = getit<FilmServiceBase>();
+      final result = await service.getAllFilmsAsync();
+      result.match(
+        (s) => emit(LoadedState(data: s, builder: event.builder)),
+        (f) => emit(ErrorState(error: f))
+      );
     });
     on<LoadingSearchedFilmsEvent>((event, emit) async {
       emit(LoadingState());
-      final service = getit<FilmService>();
-      final films = await service.getFilmsBySearchAsync(event.params);
-      emit(LoadedState(data: films));
+      final service = getit<FilmServiceBase>();
+      final result = await service.getFilmsBySearchAsync(event.params);
+      result.match(
+        (s) => emit(LoadedState(data: s, builder: event.builder)),
+        (f) => emit(ErrorState(error: f))
+      );
     });
   }
 }
