@@ -15,7 +15,10 @@ MaterialPageRoute? buildRoutes(RouteSettings settings) {
         child: const MainPage()
       ),
       NavigationRoutes.profile => const ProfilePage(),
-      NavigationRoutes.subscriptions => const SubscriptionsPage(),
+      NavigationRoutes.subscriptions => BlocProvider(
+        create: (_) => LoadingBloc(),
+        child: const SubscriptionsPage()
+      ),
       NavigationRoutes.movie => const FilmPage(),
       _ => throw Error()
     };

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 
-internal class GetFilmsBySearchQueryHandler : IQueryHandler<GetFilmsBySearchQuery, List<MovieForSearchPageDto>>
+internal class GetFilmsBySearchQueryHandler : IQueryHandler<GetFilmsBySearchQuery, IEnumerable<MovieForSearchPageDto>>
 {
     private readonly DbContext _dbContext;
 
@@ -14,7 +14,7 @@ internal class GetFilmsBySearchQueryHandler : IQueryHandler<GetFilmsBySearchQuer
         _dbContext = dbContext;
     }
 
-    public Task<List<MovieForSearchPageDto>> Handle(GetFilmsBySearchQuery request,
+    public Task<IEnumerable<MovieForSearchPageDto>> Handle(GetFilmsBySearchQuery request,
         CancellationToken cancellationToken)
     {
         if (request.Dto.Type is not null)
@@ -23,7 +23,7 @@ internal class GetFilmsBySearchQueryHandler : IQueryHandler<GetFilmsBySearchQuer
                 .Include(m => m.Type)
                 .Where(m => m.Type.Name == request.Dto.Type)
                 .Select(m => m.ToMovieForSearchPageDto())
-                .ToList()
+                .AsEnumerable()
             );
         }
 
@@ -80,6 +80,6 @@ internal class GetFilmsBySearchQueryHandler : IQueryHandler<GetFilmsBySearchQuer
             }
         }
 
-        return Task.FromResult(result!.Select(m => m.ToMovieForSearchPageDto()).ToList());
+        return Task.FromResult(result!.Select(m => m.ToMovieForSearchPageDto()).AsEnumerable());
     }
 }
