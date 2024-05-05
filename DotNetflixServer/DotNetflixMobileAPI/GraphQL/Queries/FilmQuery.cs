@@ -1,4 +1,6 @@
+using Contracts.Shared;
 using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
+using DotNetflix.Application.Features.Films.Queries.GetFilmById;
 using DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 using MediatR;
 
@@ -31,5 +33,17 @@ public class FilmQuery
         var query = new GetFilmsBySearchQuery(dto);
         var result = await mediator.Send(query);
         return result;
+    }
+
+    public async Task<MovieForGqlDto<MovieForMoviePageDto>> GetFilmById(int filmId, string? userId)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        var query = new GetFilmByIdQuery(filmId, userId);
+        var result = await mediator.Send(query);
+        return result.Match(success: dto => new MovieForGqlDto<MovieForMoviePageDto>(dto, null), 
+            failure: error => new MovieForGqlDto<MovieForMoviePageDto>(null, error));
     }
 }

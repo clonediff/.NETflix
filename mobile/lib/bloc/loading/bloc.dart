@@ -24,5 +24,14 @@ class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
         (f) => emit(ErrorState(error: f))
       );
     });
+    on<LoadingFilmByIdEvent>((event, emit) async {
+      emit(LoadingState());
+      final result = await event.filmService.getFilmById(event.filmId, event.userId);
+      result.match(
+        (s) => emit(LoadedState(data: s, builder: event.builder)),
+        (f) => emit(ErrorState(error: f))
+      );
+    });
+
   }
 }
