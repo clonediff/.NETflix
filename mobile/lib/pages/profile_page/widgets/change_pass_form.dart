@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/all_for_freezed.dart';
 import 'package:mobile/pages/profile_page/functions/gen_2fa_code_send_field.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';
+import 'package:mobile/services/token_service.dart';
+import 'package:mobile/services/user_service.dart';
 
 class ChangePassForm extends StatefulWidget {
   const ChangePassForm({super.key});
@@ -20,16 +24,19 @@ class _ChangePassFormState extends State<ChangePassForm> {
   void sendEnableRequest(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      print(_formData);
+      getit<UserServiceBase>()
+          .changePassword(UserChangePasswordDtoInput.fromJson(_formData))
+          .then(
+            (value) => value.match(
+              (s) {
+                mySnackBar(context, s);
 
-      // TODO: запросить обновление на сервере
-      mySnackBar(
-        context,
-        'Пароль изменён!',
-      );
-
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              (f) => mySnackBar(context, f),
+            ),
+          );
     }
   }
 
@@ -50,7 +57,8 @@ class _ChangePassFormState extends State<ChangePassForm> {
                 if (value?.isEmpty ?? true) {
                   return 'Пожалуйста, введите пароль!';
                 }
-                if (_formData['code'] == null && _codeController.text.isEmpty) {
+                if (_formData['token'] == null &&
+                    _codeController.text.isEmpty) {
                   return 'Сначала надо ввести код';
                 }
 
@@ -77,8 +85,9 @@ class _ChangePassFormState extends State<ChangePassForm> {
               onSaved: (val) => _formData['confirm'] = val,
             ),
             Gen2FACodeSendFields(
-              set2FACode: (code) => _formData['code'] = code,
-              codeType: 'SendChangePasswordToken',
+              set2FACode: (code) => _formData['token'] = code,
+              sendCodeFunc: () =>
+                  getit<TokenServiceBase>().sendChangePasswordToken(),
               controller: _codeController,
             ),
             ElevatedButton(

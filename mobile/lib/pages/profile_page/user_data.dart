@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/profile_page/profile_page.dart';
+import 'package:mobile/models/all_for_freezed.dart';
 
 class UserData extends ChangeNotifier {
-  final User? user;
+  UserDto? user;
 
   UserData({required this.user});
 
-  void modifyUser(void Function(User) changeUser) {
+  void modifyUser(UserDto Function(UserDto) changeUser) {
     if (user == null) return;
-    changeUser(user!);
+    user = changeUser(user!);
     notifyListeners();
   }
 }

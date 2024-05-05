@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/get_all_user_subscriptions/bloc.dart';
+import 'package:mobile/bloc/get_user/bloc.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/pages/profile_page/main_info/main_info.dart';
 import 'package:mobile/pages/profile_page/subscriptions/subscription_info.dart';
@@ -31,31 +34,31 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserData>(
-      create: (context) => UserData(
-        user: User(
-          login: 'Rail',
-          email: 'railbariev1@gmail.com',
-          birthdate: DateTime(2003, 10, 6),
-          enabled2FA: false,
-        ),
-      ),
-      child: Scaffold(
-        appBar: const Header(),
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/dotnetflix-bgi.jpg'),
-              fit: BoxFit.cover,
-            ),
-            color: DotNetflixColors.mainBackgroundColor,
+    return Scaffold(
+      appBar: const Header(),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/dotnetflix-bgi.jpg'),
+            fit: BoxFit.cover,
           ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            margin: const EdgeInsets.symmetric(
-              vertical: 20,
-              horizontal: 5,
-            ),
+          color: DotNetflixColors.mainBackgroundColor,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          margin: const EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 5,
+          ),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<GetUserBloc>(
+                create: (context) => GetUserBloc(),
+              ),
+              BlocProvider<GetAllUserSubscriptionsBloc>(
+                create: (context) => GetAllUserSubscriptionsBloc(),
+              )
+            ],
             child: Column(
               children: [
                 Material(
@@ -107,27 +110,4 @@ class _ProfilePageState extends State<ProfilePage>
       ),
     );
   }
-}
-
-class User {
-  String email;
-  String login;
-  DateTime birthdate;
-  bool enabled2FA;
-
-  User({
-    required this.login,
-    required this.email,
-    required this.birthdate,
-    required this.enabled2FA,
-  });
-
-  @override
-  bool operator ==(Object other) {
-    if (other is! User) return false;
-    return (other.login == login);
-  }
-
-  @override
-  int get hashCode => Object.hash(login, email);
 }

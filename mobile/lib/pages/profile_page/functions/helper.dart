@@ -7,6 +7,6 @@ class Helper {
   }
 
   static DateTime parseDate(String str, [String format = 'dd.MM.yyyy']) {
-    return DateFormat(format).parse(str);
+    return DateFormat(format).parse(str).toUtc();
   }
 }

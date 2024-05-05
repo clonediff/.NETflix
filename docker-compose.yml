@@ -5,10 +5,15 @@ services:
     image: aspnetdotnetflixmobileapi
     container_name: dotnetflixmobilemobileapi
     ports:
-      - "5130:80"
+      - "5130:8080"
     build:
       context: ./DotNetflixServer/
       dockerfile: DockerfileDotNetflixMobileAPI
+    depends_on: 
+      - mssql
+      - DotNetflixAdminAPI
+      - DotNetflixStorage
+      - DotNetflixPayment
     environment:
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
@@ -19,7 +24,7 @@ services:
     image: aspnetdotnetflixpayment
     container_name: dotnetflixpayment
     ports:
-      - "7192:80"
+      - "7192:8080"
     build:
       context: ./DotNetflixServer/
       dockerfile: DockerfileDotNetflixPayment
@@ -27,7 +32,7 @@ services:
     image: aspnetdotnetflixstorage
     container_name: dotnetflixstorage
     ports:
-      - "7126:80"
+      - "7126:8080"
     build:
       context: ./DotNetflixServer/
       dockerfile: DockerfileDotnetflixStorage

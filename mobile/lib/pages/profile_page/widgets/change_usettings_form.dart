@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/all_for_freezed.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';
 import 'package:mobile/pages/profile_page/profile_page_routes.dart';
+import 'package:mobile/services/user_service.dart';
 import 'package:provider/provider.dart';
 
 class ChangeUSettingsForm extends StatefulWidget {
-  final void Function(String routeName) navigatorPushNamed;
-
-  const ChangeUSettingsForm({
-    super.key,
-    required this.navigatorPushNamed,
-  });
+  const ChangeUSettingsForm({super.key});
 
   @override
   State<ChangeUSettingsForm> createState() => _ChangeUSettingsFormState();
@@ -31,18 +29,30 @@ class _ChangeUSettingsFormState extends State<ChangeUSettingsForm> {
       _formKey.currentState?.save();
       print(_formData);
 
-      // TODO: запросить обновление на сервере
-      userData.modifyUser((user) {
-        user.birthdate = Helper.parseDate(_formData['birthday']);
-        user.login = _formData['username'];
+      getit<UserServiceBase>()
+          .changeUserData(
+        UserChangeOrdinaryDtoInput(
+          birthdate: _formData['birthdate'],
+          userName: _formData['username'],
+        ),
+      )
+          .then((value) {
+        value.match(
+          (s) {
+            userData.modifyUser(
+              (user) => user.copyWith(
+                birthdate: _formData['birthdate'],
+                login: _formData['username'],
+              ),
+            );
+
+            mySnackBar(context, s);
+
+            Navigator.of(context).pop();
+          },
+          (f) => mySnackBar(context, f),
+        );
       });
-
-      mySnackBar(
-        context,
-        'Базовые данные пользователя изменены',
-      );
-
-      Navigator.of(context).pop();
     }
   }
 
@@ -75,8 +85,10 @@ class _ChangeUSettingsFormState extends State<ChangeUSettingsForm> {
                   decoration: const InputDecoration(
                     labelText: 'Дата рождения',
                   ),
-                  onSaved: (val) => _formData['birthday'] = val,
+                  onSaved: (val) =>
+                      _formData['birthdate'] = Helper.parseDate(val!),
                   onTap: () async {
+                    // TODO: fix showDatePicker
                     FocusScope.of(context).requestFocus(FocusNode());
                     final DateTime? picked = await showDatePicker(
                       context: context,
@@ -99,16 +111,16 @@ class _ChangeUSettingsFormState extends State<ChangeUSettingsForm> {
                 ),
                 if (userData.user?.enabled2FA ?? false) ...[
                   InkWell(
-                    onTap: () => widget.navigatorPushNamed(
-                        ProfilePageNavigationRoutes.changeEmail),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(ProfilePageNavigationRoutes.changeEmail),
                     child: const Text(
                       'Изменить почту',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                   InkWell(
-                    onTap: () => widget.navigatorPushNamed(
-                        ProfilePageNavigationRoutes.changePass),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(ProfilePageNavigationRoutes.changePass),
                     child: const Text(
                       'Изменить пароль',
                       style: TextStyle(color: Colors.white),

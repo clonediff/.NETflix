@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/main.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
+import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
+import 'package:mobile/services/user_service.dart';
+import 'package:mobile/utils/result.dart';
 
 class Gen2FACodeSendFields extends StatefulWidget {
   final void Function(String code) set2FACode;
-  final String codeType;
-  final String? newEmail;
+  final Future<Result<String, String>> Function() sendCodeFunc;
   final TextEditingController? controller;
 
   const Gen2FACodeSendFields({
     super.key,
     required this.set2FACode,
-    required this.codeType,
-    this.newEmail,
+    required this.sendCodeFunc,
     this.controller,
   });
 
@@ -24,21 +26,35 @@ class _Gen2FACodeSendFieldsState extends State<Gen2FACodeSendFields> {
   bool codeSend = false;
 
   void sendCode() {
-    // TODO: запросить код для 2FA
     setState(() {
       codeSend = true;
       remainedToResend = 120;
       countdownRemainedToResend();
     });
-    print(
-        'Код с типом ${widget.codeType} ${widget.newEmail != null ? 'для ${widget.newEmail}' : ''} запрошен ');
+    widget.sendCodeFunc().then(
+          (value) => value.match(
+            (s) => mySnackBar(context, s),
+            (f) {
+              setState(() {
+                codeSend = false;
+                remainedToResend = 0;
+              });
+
+              mySnackBar(context, f);
+            },
+          ),
+        );
   }
 
   Future<void> countdownRemainedToResend() async {
-    while (remainedToResend > 0) {
+    while (remainedToResend > 0 && mounted) {
       await Future.delayed(
         const Duration(seconds: 1),
-        () => setState(() => remainedToResend--),
+        () {
+          if (mounted) {
+            setState(() => remainedToResend--);
+          }
+        },
       );
     }
   }
