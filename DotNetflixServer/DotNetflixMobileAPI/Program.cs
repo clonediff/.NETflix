@@ -23,7 +23,6 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 
 builder.Services
     .AddGraphQLServer()
-    .AddAuthorization()
     .ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
     .AddMutationType<Mutations>()
     .AddQueryType<Queries>()
