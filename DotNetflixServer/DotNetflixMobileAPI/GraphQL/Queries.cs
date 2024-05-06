@@ -1,6 +1,8 @@
 using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
+using DotNetflix.Application.Features.Films.Queries.GetFilmById;
 using DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
 using DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;
+using DotNetflixMobileAPI.GraphQL.Models;
 using MediatR;
 
 namespace DotNetflixMobileAPI.GraphQL;
@@ -47,5 +49,16 @@ public class Queries
         var result = await mediator.Send(getAllSubscriptionsForUserQuery);
 
         return result.ToList();
+    }
+
+    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(int filmId, string? userId)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var query = new GetFilmByIdQuery(filmId, userId);
+        var result = await mediator.Send(query);
+
+        return result;
     }
 }

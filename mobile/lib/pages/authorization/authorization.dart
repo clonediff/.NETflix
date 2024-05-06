@@ -15,8 +15,8 @@ class _AuthorizationState extends State<Authorization>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late var forms = [
+    LoginForm(formKey: _formKey, onSelectedPage: onSelectedPage),
     RegistrationForm(formKey: _formKey, onSelectedPage: onSelectedPage),
-    LoginForm(formKey: _formKey, onSelectedPage: onSelectedPage,)
   ];
 
   onSelectedPage(int page) {

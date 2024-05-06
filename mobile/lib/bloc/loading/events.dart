@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/film_for_main_page.dart';
+import 'package:mobile/models/film_info.dart';
 import 'package:mobile/models/subscription.dart';
 
 class LoadingEventBase { }
@@ -22,4 +23,11 @@ class LoadingSearchedFilmsEvent extends GenericLoadingEventBase<List<FilmForMain
 
 class LoadingAllSubscriptionsEvent extends GenericLoadingEventBase<List<Subscription>> {
   LoadingAllSubscriptionsEvent({ required super.builder });
+}
+
+class LoadingFilmByIdEvent extends GenericLoadingEventBase<FilmInfo> {
+  final int filmId;
+  String? userId;
+
+  LoadingFilmByIdEvent({required super.builder, required this.filmId, this.userId});
 }
