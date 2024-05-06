@@ -56,11 +56,15 @@ public class Queries
         return result.ToList();
     }
 
-    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(int filmId, string? userId)
+    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(HttpContext context, int filmId, string? userId)
     {
         using var scope = _serviceScopeFactory.CreateScope();
         
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        
+        var getUserIdQuery = new GetUserIdQuery(context.User);
+        userId = await mediator.Send(getUserIdQuery);
+        
         var query = new GetFilmByIdQuery(filmId, userId);
         var result = await mediator.Send(query);
 

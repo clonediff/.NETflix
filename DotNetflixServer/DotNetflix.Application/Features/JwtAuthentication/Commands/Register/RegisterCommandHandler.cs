@@ -19,7 +19,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<st
 
     public async Task<Result<string, string>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var user = new User();
+        var user = new User()
+        {
+            Email = request.Email,
+            Birthday = request.Birthday,
+            
+        };
         
         await _userStore.SetUserNameAsync(user, request.UserName, cancellationToken);
         
