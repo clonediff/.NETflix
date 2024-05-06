@@ -5,7 +5,6 @@ using DataAccess;
 using Domain.Entities;
 using DotNetflix.Application.Features.Authentication.Commands.Login;
 using DotNetflixMobileAPI.GraphQL;
-using DotNetflixMobileAPI.GraphQL.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,21 +24,23 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 builder.Services
     .AddGraphQLServer()
     .ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
-    .AddQueryType<Query>()
-    .AddMutationType<Mutation>()
-    .AddErrorFilter<ExceptionToErrorHandler>();
+    .AddMutationType<Mutations>()
+    .AddQueryType<Queries>()
+    .AddErrorFilter<ExceptionToErrorHandler>()
+    .AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
     .AddCors()
+    .AddAuthorization()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders().Services
     .RegisterServices(builder.Configuration)
-    .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-    .ConfigureHttpJsonOptions(options =>
+    .AddHttpContextAccessor()
+    .ConfigureHttpJsonOptions(options => 
     {
         options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
@@ -87,6 +88,11 @@ app.MapGet("/auth_test", async ([FromServices] IMediator mediator, [FromQuery] s
     return result.Match(success: Results.Ok,
         failure: Results.BadRequest);
 });
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 app.MapGraphQL(new PathString("/graphql"));
 
 app.Run();

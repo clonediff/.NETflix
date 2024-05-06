@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/constants/styles.dart';
-import 'package:mobile/mocks/film_info.dart';
+import 'package:mobile/models/film_info.dart';
 
 class PersonsPage extends StatefulWidget{
   final Map<String, List<Person>> persons;
@@ -16,7 +16,7 @@ class PersonsPage extends StatefulWidget{
 
 class _PersonsPageState extends State<PersonsPage>{
 
-  void goToSelectedPage(BuildContext context, int page){
+  void goToSelectedPage(int page){
     widget.onSelectedPage(page);
   }
 
@@ -24,7 +24,7 @@ class _PersonsPageState extends State<PersonsPage>{
   {
     var personsWidgets = persons
         .entries
-        .map((element) => PersonsList(persons: element.value, title: element.key))
+        .map((element) => PersonsList(persons: element.value, title: element.key.toUpperCase()))
         .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,7 +40,7 @@ class _PersonsPageState extends State<PersonsPage>{
       floatingActionButton: FloatingActionButton(
         backgroundColor: DotNetflixColors.floatingButtonColor,
         onPressed: () {
-          goToSelectedPage(context, 0);
+          goToSelectedPage(0);
         },
         child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
       ),
@@ -81,7 +81,8 @@ class PersonsList extends StatelessWidget{
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(persons[index].name, style: DotNetflixTextStyles.mainTextStyle),
-                    Text(persons[index].profession, style: DotNetflixTextStyles.subtitleStyle)
+                    Text('${persons[index].profession[0].toUpperCase()}${persons[index].profession.substring(1)}',
+                        style: DotNetflixTextStyles.subtitleStyle)
                   ],
                 ),
               ],

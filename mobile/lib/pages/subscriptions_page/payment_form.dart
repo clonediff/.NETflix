@@ -1,36 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/subscription.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/title_value/title_value.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
-import 'package:mobile/pages/subscriptions_page/subscriptions_page.dart';
+import 'package:mobile/services/subscription_service.dart';
 
 class PaymentForm extends StatefulWidget {
   final Subscription subscription;
+  final void Function() onBuy;
 
-  const PaymentForm({super.key, required this.subscription});
+  const PaymentForm({super.key, required this.subscription, required this.onBuy});
 
   @override
   State<PaymentForm> createState() => _PaymentFormState();
 }
 
 class _PaymentFormState extends State<PaymentForm> {
+  final SubscriptionServiceBase _subscriptionService = getit<SubscriptionServiceBase>();
   final Map<String, dynamic> _formData = {};
-  final TextEditingController _expirationDateController =
-      TextEditingController();
+  final TextEditingController _expirationDateController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  void onFormSubmit(BuildContext context) {
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState!.save();
+  Future<void> onFormSubmit(BuildContext context) async {
+    if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
+      return;
+    }
+    
+    _formKey.currentState!.save();
 
-      // TODO: Отправка запроса на покупку
-      print(_formData);
-      print('Кто-то купил ${widget.subscription.name}');
+    final response = await _subscriptionService.performSubscriptionActionAsync(
+      widget.subscription.belongsToUser ? SubscriptionActionType.extend : SubscriptionActionType.purchase,
+      widget.subscription.id,
+      _formData
+    );
 
+    if (context.mounted) {
       Navigator.of(context).pop();
+      mySnackBar(context, !response.hasError ? 'Операция прошла успешна' : response.error!);
+    }
 
-      mySnackBar(context, 'Подписка успешно оформлена');
+    if (!response.hasError && !widget.subscription.belongsToUser) {
+      widget.onBuy();
     }
   }
 
@@ -52,7 +64,7 @@ class _PaymentFormState extends State<PaymentForm> {
               validator: (value) => (value?.isEmpty ?? true)
                   ? 'Пожалуйста, введите номер вашей карты!'
                   : null,
-              onSaved: (val) => _formData['cardnumber'] = val,
+              onSaved: (val) => _formData['cardNumber'] = val,
               keyboardType: TextInputType.number,
             ),
             TextFormField(
@@ -106,7 +118,7 @@ class _PaymentFormState extends State<PaymentForm> {
                 }
                 return null;
               },
-              onSaved: (val) => _formData['CVV_CVC'] = val,
+              onSaved: (val) => _formData['cvv_CVC'] = int.parse(val!),
               keyboardType: TextInputType.number,
             ),
             TitleValue(

@@ -11,6 +11,7 @@
         <PackageReference Include="Grpc.AspNetCore" Version="2.61.0" />
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.7.1" />
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.9.0" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.9.0" />
         <PackageReference Include="MediatR" Version="12.1.1" />
     </ItemGroup>

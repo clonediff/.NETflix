@@ -3,12 +3,15 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile/graphql/queries.dart';
 import 'package:mobile/main.dart';
+import 'package:mobile/models/film_failure.dart';
 import 'package:mobile/models/film_for_main_page.dart';
+import 'package:mobile/models/film_info.dart';
 import 'package:mobile/utils/result.dart';
 
 abstract class FilmServiceBase {
   Future<Result<Map<String, List<FilmForMainPage>>, String>> getAllFilmsAsync();
   Future<Result<List<FilmForMainPage>, String>> getFilmsBySearchAsync(Map<String, dynamic> params);
+  Future<Result<FilmInfo, GetFilmFailure>> getFilmById(int filmId, String? userId);
 }
 
 class FilmService implements FilmServiceBase {
@@ -60,5 +63,22 @@ class FilmService implements FilmServiceBase {
             .map((x) => FilmForMainPage.fromDynamic(x))
             .toList()
         );
+  }
+
+  @override
+  Future<Result<FilmInfo, GetFilmFailure>> getFilmById(int filmId, String? userId) async {
+
+    final result = await _client.query(
+        QueryOptions(
+            document: gql(Queries.filmByIdQuery),
+            variables: { 'filmId': filmId, 'userId': userId }
+        )
+    );
+
+    return result.hasException
+        ? Result.fromFailure(GetFilmFailure(failure: "Не удалось загрузить контент"))
+        : result.data![Queries.filmByIdQueryName]['hasError']
+          ? Result.fromFailure(GetFilmFailure(failure: result.data![Queries.filmByIdQueryName]['error']))
+          : Result.fromSuccess(FilmInfo.fromDynamic(result.data![Queries.filmByIdQueryName]['data']));
   }
 }

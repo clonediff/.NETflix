@@ -1,19 +1,21 @@
 using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
+using DotNetflix.Application.Features.Films.Queries.GetFilmById;
 using DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
+using DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;
 using DotNetflix.Application.Features.Users.Queries.GetAllUserSubscriptions;
 using DotNetflix.Application.Features.Users.Queries.GetUser;
 using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using DotNetflix.Application.Shared;
-using HotChocolate.Authorization;
+using DotNetflixMobileAPI.GraphQL.Models;
 using MediatR;
 
-namespace DotNetflixMobileAPI.GraphQL.Queries;
+namespace DotNetflixMobileAPI.GraphQL;
 
-public class Query
+public class Queries
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public Query(IServiceScopeFactory serviceScopeFactory)
+    public Queries(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }
@@ -31,10 +33,36 @@ public class Query
     public async Task<IEnumerable<MovieForSearchPageDto>> GetFilmsBySearch(MovieSearchDto dto)
     {
         using var scope = _serviceScopeFactory.CreateScope();
-
+        
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var query = new GetFilmsBySearchQuery(dto);
         var result = await mediator.Send(query);
+
+        return result.ToList();
+    }
+
+    public async Task<IEnumerable<AvailableSubscriptionDto>> GetAllSubscriptions()
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        
+        var httpContext = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+        var userId = httpContext!.Request.Headers.Authorization.ToString();
+
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var getAllSubscriptionsForUserQuery = new GetAllSubscriptionsForUserQuery(userId);
+        var result = await mediator.Send(getAllSubscriptionsForUserQuery);
+
+        return result.ToList();
+    }
+
+    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(int filmId, string? userId)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var query = new GetFilmByIdQuery(filmId, userId);
+        var result = await mediator.Send(query);
+
         return result;
     }
 

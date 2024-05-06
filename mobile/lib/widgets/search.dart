@@ -6,6 +6,7 @@ import 'package:mobile/bloc/loading/state_parser.dart';
 import 'package:mobile/bloc/loading/states.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/models/film_for_main_page.dart';
+import 'package:mobile/navigation/navigation_routes.dart';
 
 class SearchDialog extends StatefulWidget {
   const SearchDialog({ super.key });
@@ -187,36 +188,39 @@ class SearchResultsEntry extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(right: 8, bottom: 4),
-          child: Column(
-            children: [
-              Image.network(
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return SizedBox(
-                    width: 48,
-                    height: 60,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!,
-                      ),
-                    )
-                  );
-                },
-                film.posterUrl,
-                width: 48,
-              ),
-              Row(
-                children: [
-                  Text(
-                    film.rating.toString(), 
-                    overflow: TextOverflow.ellipsis, 
-                    style: const TextStyle(color: Colors.white, fontSize: 12)
-                  ),
-                  const Icon(Icons.star, color: Colors.amber, size: 12)
-                ]
-              )
-            ]
+          child: InkWell(
+            onTap: () => Navigator.of(context).pushNamed(NavigationRoutes.movie, arguments: film.id),
+            child: Column(
+              children: [
+                Image.network(
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: 48,
+                      height: 60,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!,
+                        ),
+                      )
+                    );
+                  },
+                  film.posterUrl,
+                  width: 48,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      film.rating.toString(), 
+                      overflow: TextOverflow.ellipsis, 
+                      style: const TextStyle(color: Colors.white, fontSize: 12)
+                    ),
+                    const Icon(Icons.star, color: Colors.amber, size: 12)
+                  ]
+                )
+              ]
+            ),
           )
         ),
         SizedBox(

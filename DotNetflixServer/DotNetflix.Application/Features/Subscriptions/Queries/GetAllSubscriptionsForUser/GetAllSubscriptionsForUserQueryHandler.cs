@@ -17,7 +17,7 @@ internal class GetAllSubscriptionsForUserQueryHandler : IQueryHandler<GetAllSubs
     {
         var userSubscriptionIds = Enumerable.Empty<int>();
             
-        if (request.UserId is not null)
+        if (!string.IsNullOrEmpty(request.UserId))
         {
             userSubscriptionIds = _dbContext.Set<User>()
                 .Where(u => u.Id == request.UserId)
