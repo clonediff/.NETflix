@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/main.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
-import 'package:mobile/services/user_service.dart';
 import 'package:mobile/utils/result.dart';
 
 class Gen2FACodeSendFields extends StatefulWidget {

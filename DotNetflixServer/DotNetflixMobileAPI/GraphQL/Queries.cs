@@ -7,6 +7,7 @@ using DotNetflix.Application.Features.Users.Queries.GetUser;
 using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using DotNetflix.Application.Shared;
 using DotNetflixMobileAPI.GraphQL.Models;
+using HotChocolate.Authorization;
 using MediatR;
 
 namespace DotNetflixMobileAPI.GraphQL;
@@ -66,12 +67,12 @@ public class Queries
         return result;
     }
 
-    public async Task<UserDto> GetUser()
+    [Authorize]
+    public async Task<UserDto> GetUser(HttpContext context)
     {
         using var scope = _serviceScopeFactory.CreateScope();
 
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-        var context = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!;
 
         var query = new GetUserQuery(context.User);
         return await mediator.Send(query);

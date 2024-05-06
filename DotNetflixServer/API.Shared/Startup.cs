@@ -12,7 +12,6 @@ using Services.Infrastructure.GoogleOAuth;
 using Services.Shared.JwtGenerator;
 using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Shared;

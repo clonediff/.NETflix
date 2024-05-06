@@ -5,9 +5,7 @@ import 'package:mobile/bloc/get_user/bloc.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/pages/profile_page/main_info/main_info.dart';
 import 'package:mobile/pages/profile_page/subscriptions/subscription_info.dart';
-import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/widgets/header.dart';
-import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

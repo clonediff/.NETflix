@@ -12,7 +12,7 @@ import 'package:mobile/services/subscription_service.dart';
 import 'package:mobile/services/session_service.dart';
 
 final getit = GetIt.instance;
-const String apiBaseUrl = 'http://192.168.1.5:5130';
+const String apiBaseUrl = 'http://192.168.43.146:5130';
 
 void setup() {
   var sessionDataProvider = SessionDataProvider(const FlutterSecureStorage());

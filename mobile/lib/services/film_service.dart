@@ -6,7 +6,6 @@ import 'package:mobile/main.dart';
 import 'package:mobile/dto/film_failure.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/models/film_info.dart';
-import 'package:mobile/services/session_service.dart';
 import 'package:mobile/utils/result.dart';
 
 abstract class FilmServiceBase {
