@@ -1,5 +1,7 @@
 using Contracts.Shared;
 using Domain.Entities;
+using DotNetflix.Application.Features.JwtAuthentication.Commands.Login;
+using DotNetflix.Application.Features.JwtAuthentication.Commands.Register;
 using DotNetflix.Application.Features.Subscriptions.Commands.ExtendSubscription;
 using DotNetflix.Application.Features.Subscriptions.Commands.PurchaseSubscription;
 using DotNetflix.Application.Features.Subscriptions.Shared;
@@ -7,10 +9,11 @@ using DotNetflix.Application.Features.TwoFactorAuthorization.Commands.EnableTwoF
 using DotNetflix.Application.Features.Users.Commands.SetUserData;
 using DotNetflix.Application.Features.Users.Commands.SetUserMail;
 using DotNetflix.Application.Features.Users.Commands.SetUserPassword;
+using DotNetflix.Application.Features.Users.Queries.GetUserId;
 using DotNetflix.CQRS;
 using DotNetflix.CQRS.Abstractions;
 using DotNetflixMobileAPI.GraphQL.Models;
-using GraphQL;
+using HotChocolate.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Services.Infrastructure.EmailService;
@@ -37,15 +40,17 @@ public class Mutations
     {
         using var scope = _serviceScopeFactory.CreateScope();
 
-        var httpContext = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
-        var userId = httpContext!.Request.Headers.Authorization.ToString();
+        var httpContext = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!;
+        var user = httpContext.User;
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var getUserIdQuery = new GetUserIdQuery(user);
+        var userId = await mediator.Send(getUserIdQuery);
 
         if (userId is null)
         {
             return "Неверный идентификатор пользователя";
         }
 
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         ICommand<Result<int, string>> command = type switch
         {
             SubscriptionActionType.Purchase => new PurchaseSubscriptionCommand(new UserSubscriptionDto(userId, subscriptionId), cardDataDto),
@@ -167,5 +172,25 @@ public class Mutations
         await emailService.SendEmailAsync(user!.Email!, $"Код для изменения почты с {user.Email} на {newEmail}", code);
 
         return $"Код для изменения почты с {user.Email} на {newEmail} отправлен на почту {user.Email}";
+    }
+
+    public async Task<GraphQLResponse<string>> Login(LoginForm form)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var command = new JwtLoginCommand(form.UserName, form.Password, form.Remember);
+        var result = await mediator.Send(command);
+        return result;
+    }
+
+    public async Task<GraphQLResponse> Register(RegisterForm form)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var command = new RegisterCommand(form.Email, form.Birthday, form.UserName, form.Password, form.ConfirmPassword);
+        var result = await mediator.Send(command);
+        return result.Match(_ => new GraphQLResponse(false), f => new GraphQLResponse(true, f));
     }
 }

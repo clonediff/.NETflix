@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:mobile/graphql/mutations.dart';
 import 'package:mobile/graphql/queries.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/models/all_for_freezed.dart';
 import 'package:mobile/utils/result.dart';
-import 'package:http/http.dart' as http;
 
 
 abstract class UserServiceBase {
@@ -29,15 +27,9 @@ class UserService implements UserServiceBase {
 
   @override
   Future<Result<UserDto, String>> getUser() async {
-    // TODO: вытаскивать из Storage, когда авторизация будет готова
-    var cookie = await authTestUser();
-    log(cookie.toString());
     var response = await _client.query(
       QueryOptions(
         document: gql(Queries.userQuery),
-        context: Context.fromList(
-          [HttpLinkHeaders(headers: cookie)],
-        ),
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
@@ -51,16 +43,10 @@ class UserService implements UserServiceBase {
   @override
   Future<Result<List<UserSubscriptionDto>, String>>
       getAllUserSubscriptions() async {
-    // TODO: вытаскивать из Storage, когда авторизация будет готова
-    var cookie = await authTestUser();
-    log(cookie.toString());
     var response = await _client.query(
       QueryOptions(
         document: gql(Queries.allUserSubscriptionsQuery),
-        context: Context.fromList(
-          [HttpLinkHeaders(headers: cookie)],
-        ),
-        fetchPolicy: FetchPolicy.networkOnly,
+        fetchPolicy: FetchPolicy.networkOnly
       ),
     );
 
@@ -76,18 +62,18 @@ class UserService implements UserServiceBase {
   Future<Result<String, String>> enable2FA(EnableTwoFactorAuthDtoInput dto) =>
       _changeUser(
         queryDto: dto,
-        queryDtoName: Queries.enable2FAMutationDtoName,
-        query: Queries.enable2FAMutation,
-        queryName: Queries.enable2FAMutationName,
+        queryDtoName: Mutations.enable2FAMutationDtoName,
+        query: Mutations.enable2FAMutation,
+        queryName: Mutations.enable2FAMutationName,
       );
 
   @override
   Future<Result<String, String>> changeEmail(UserChangeMailDtoInput chMail) =>
       _changeUser(
         queryDto: chMail,
-        queryDtoName: Queries.changeEmailMutationDtoName,
-        query: Queries.changeEmailMutation,
-        queryName: Queries.changeEmailMutationName,
+        queryDtoName: Mutations.changeEmailMutationDtoName,
+        query: Mutations.changeEmailMutation,
+        queryName: Mutations.changeEmailMutationName,
       );
 
   @override
@@ -95,9 +81,9 @@ class UserService implements UserServiceBase {
           UserChangePasswordDtoInput chPass) =>
       _changeUser(
         queryDto: chPass,
-        queryDtoName: Queries.changePasswordMutationDtoName,
-        query: Queries.changePasswordMutation,
-        queryName: Queries.changePasswordMutationName,
+        queryDtoName: Mutations.changePasswordMutationDtoName,
+        query: Mutations.changePasswordMutation,
+        queryName: Mutations.changePasswordMutationName,
       );
 
   @override
@@ -105,9 +91,9 @@ class UserService implements UserServiceBase {
           UserChangeOrdinaryDtoInput chOrdinary) =>
       _changeUser(
         queryDto: chOrdinary,
-        queryDtoName: Queries.changeUserDataMutationDtoName,
-        query: Queries.changeUserDataMutation,
-        queryName: Queries.changeUserDataMutationName,
+        queryDtoName: Mutations.changeUserDataMutationDtoName,
+        query: Mutations.changeUserDataMutation,
+        queryName: Mutations.changeUserDataMutationName,
       );
 
   Future<Result<String, String>> _changeUser({
@@ -116,20 +102,10 @@ class UserService implements UserServiceBase {
     required String query,
     required String queryName,
   }) async {
-    // TODO: вытаскивать из Storage, когда авторизация будет готова
-    var cookie = await authTestUser();
-    log(cookie.toString());
-    log('dto: ${queryDto.toString()}');
-    log('dtoName: ${queryDtoName.toString()}');
-    log('query: ${query.toString()}');
-    log('queryName: ${queryName.toString()}');
     var response = await _client.query(
       QueryOptions(
         document: gql(query),
         fetchPolicy: FetchPolicy.networkOnly,
-        context: Context.fromList(
-          [HttpLinkHeaders(headers: cookie)],
-        ),
         variables: {queryDtoName: queryDto.toJson()},
       ),
     );
@@ -142,13 +118,5 @@ class UserService implements UserServiceBase {
                 .message
                 .toString())
         : Result.fromSuccess(response.data![queryName]);
-  }
-
-  // TODO: удалить, когда авторизация будет готова
-  static Future<Map<String, String>> authTestUser() async {
-    final response = await http.get(Uri.parse(
-        '$apiBaseUrl/auth_test?username=someuser&password=somePassword&remember=true'));
-    final authCookie = response.headers['set-cookie']!;
-    return {'Cookie': authCookie};
   }
 }

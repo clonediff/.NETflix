@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:mobile/graphql/queries.dart';
+import 'package:mobile/graphql/mutations.dart';
 import 'package:mobile/main.dart';
-import 'package:mobile/services/user_service.dart';
 import 'package:mobile/utils/result.dart';
 
 abstract class TokenServiceBase {
@@ -19,22 +16,22 @@ class TokenService implements TokenServiceBase {
 
   @override
   Future<Result<String, String>> send2FAToken() => _sendToken(
-        query: Queries.send2FATokenMutation,
-        queryName: Queries.send2FATokenMutationName,
+        query: Mutations.send2FATokenMutation,
+        queryName: Mutations.send2FATokenMutationName,
       );
 
   @override
   Future<Result<String, String>> sendChangeMailToken(String newEmail) =>
       _sendToken(
-        query: Queries.sendChangeMailTokenMutation,
-        queryName: Queries.sendChangeMailTokenMutationName,
-        variables: {Queries.sendChangeMailTokenMutationDtoName: newEmail},
+        query: Mutations.sendChangeMailTokenMutation,
+        queryName: Mutations.sendChangeMailTokenMutationName,
+        variables: {Mutations.sendChangeMailTokenMutationDtoName: newEmail},
       );
 
   @override
   Future<Result<String, String>> sendChangePasswordToken() => _sendToken(
-        query: Queries.sendChangePasswordTokenMutation,
-        queryName: Queries.sendChangePasswordTokenMutationName,
+        query: Mutations.sendChangePasswordTokenMutation,
+        queryName: Mutations.sendChangePasswordTokenMutationName,
       );
 
   Future<Result<String, String>> _sendToken({
@@ -42,16 +39,10 @@ class TokenService implements TokenServiceBase {
     required String queryName,
     Map<String, dynamic> variables = const {},
   }) async {
-    // TODO: вытаскивать из Storage, когда авторизация будет готова
-    var cookie = await UserService.authTestUser();
-    log(cookie.toString());
     var response = await _client.query(
       QueryOptions(
         document: gql(query),
         fetchPolicy: FetchPolicy.networkOnly,
-        context: Context.fromList(
-          [HttpLinkHeaders(headers: cookie)],
-        ),
         variables: variables,
       ),
     );
