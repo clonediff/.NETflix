@@ -1,5 +1,4 @@
 class Queries {
-
   static const allFilmsQueryName = 'allFilms';
   static const allFilmsQuery = '''
     query {
@@ -101,5 +100,29 @@ class Queries {
         filmNames
       }
     }
+  ''';
+
+  static const userQueryName = 'user';
+  static const userQuery = '''
+    query {
+      $userQueryName {
+        login
+        email
+        birthdate
+        enabled2FA
+      }
+    }
+  ''';
+
+  static const allUserSubscriptionsQueryName = 'allUserSubscriptions';
+  static const allUserSubscriptionsQuery = '''
+    query{
+      $allUserSubscriptionsQueryName {
+        id
+        subscriptionName
+        cost
+        expires
+      }
+    } 
   ''';
 }

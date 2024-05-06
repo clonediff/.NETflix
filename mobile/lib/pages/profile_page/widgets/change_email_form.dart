@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/all_for_freezed.dart';
 import 'package:mobile/pages/profile_page/functions/gen_2fa_code_send_field.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';
+import 'package:mobile/services/token_service.dart';
+import 'package:mobile/services/user_service.dart';
 import 'package:provider/provider.dart';
 
 class ChangeEmailForm extends StatefulWidget {
@@ -22,26 +26,25 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
   void sendEnableRequest(BuildContext context, UserData userData) {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      print(_formData);
 
-      // TODO: запросить обновление на сервере
-      userData.modifyUser((user) {
-        user.email = _formData['email'];
-      });
+      getit<UserServiceBase>()
+          .changeEmail(UserChangeMailDtoInput.fromJson(_formData))
+          .then((value) => value.match((s) {
+                userData.modifyUser(
+                  (user) => user.copyWith(email: _formData['email']),
+                );
 
-      mySnackBar(
-        context,
-        'Почта изменена!',
-      );
+                mySnackBar(context, s);
 
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              }, (f) => mySnackBar(context, f)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_emailController.text.isEmpty){
+    if (_emailController.text.isEmpty) {
       _emailController.text = Provider.of<UserData>(context).user?.email ?? '';
     }
     return Consumer<UserData>(
@@ -63,7 +66,8 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
                       .hasMatch(value!)) {
                     return 'Введённые данные не соответствуют электронной почте!';
                   }
-                  if (_formData['code'] == null && _codeController.text.isEmpty) {
+                  if (_formData['token'] == null &&
+                      _codeController.text.isEmpty) {
                     return 'Сначала надо ввести код';
                   }
 
@@ -73,9 +77,8 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
                 controller: _emailController,
               ),
               Gen2FACodeSendFields(
-                set2FACode: (code) => _formData['code'] = code,
-                codeType: 'SendChangeMailToken',
-                newEmail: _emailController.text,
+                set2FACode: (code) => _formData['token'] = code,
+                sendCodeFunc: () => getit<TokenServiceBase>().sendChangeMailToken(_emailController.text),
                 controller: _codeController,
               ),
               ElevatedButton(
@@ -85,7 +88,9 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
                 style: settingsSubmitButton(),
                 child: const Text('Применить изменения'),
               ),
-              USettingsFooter(linkText: 'Вернуться к основным настройкам', navTo: () => Navigator.of(context).pop())
+              USettingsFooter(
+                  linkText: 'Вернуться к основным настройкам',
+                  navTo: () => Navigator.of(context).pop())
             ],
           ),
         ),

@@ -3,8 +3,11 @@ using System.Text.Json.Serialization;
 using API.Shared;
 using DataAccess;
 using Domain.Entities;
+using DotNetflix.Application.Features.Authentication.Commands.Login;
 using DotNetflixMobileAPI.GraphQL;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Services.Infrastructure.EmailService;
 using Services.Shared;
 using static API.Shared.Startup;
@@ -23,28 +26,47 @@ builder.Services
     .ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
     .AddMutationType<Mutations>()
     .AddQueryType<Queries>()
+    .AddErrorFilter<ExceptionToErrorHandler>()
     .AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
     .AddCors()
-    .AddAuthorization()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
     .AddApplicationDb(connectionString)
-    .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
+    .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders().Services
     .RegisterServices(builder.Configuration)
     .AddHttpContextAccessor()
+    .AddJwtAuthorization(builder.Configuration)
     .ConfigureHttpJsonOptions(options => 
     {
         options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("User", pb => pb
+        .RequireRole("user", "manager", "admin"));
+    options.AddPolicy("Manager", pb => pb
+        .RequireRole("manager", "admin"));
+    options.AddPolicy("Admin", pb => pb
+        .RequireRole("admin"));
+}).ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseCors(pb => 
 	pb
@@ -55,10 +77,10 @@ app.UseCors(pb =>
 		{
 			if (string.IsNullOrWhiteSpace(origin)) return false;
 
-			// Only add this to allow testing with localhost, remove this line in production!
-			
-			return origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost");
-		})
+            // Only add this to allow testing with localhost, remove this line in production!
+
+            return origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost");
+        })
 );
 
 app.UseAuthentication();

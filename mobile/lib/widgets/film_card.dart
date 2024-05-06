@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/bloc/loading/bloc.dart';
-import 'package:mobile/bloc/loading/events.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/navigation/navigation_routes.dart';
-import 'package:mobile/pages/film_page/film/film_page_builder.dart';
 
 class FilmCard extends StatelessWidget {
   const FilmCard({ super.key, required this.film });

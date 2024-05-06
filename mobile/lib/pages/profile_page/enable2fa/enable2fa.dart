@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/all_for_freezed.dart';
 import 'package:mobile/pages/profile_page/styles/settings_submit_button.dart';
 import 'package:mobile/pages/profile_page/title_value/title_value.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
+import 'package:mobile/pages/profile_page/widgets/my_snack_bar.dart';
 import 'package:mobile/pages/profile_page/widgets/usettings_footer.dart';
+import 'package:mobile/services/token_service.dart';
+import 'package:mobile/services/user_service.dart';
 import 'package:provider/provider.dart';
 
 class Enable2FA extends StatefulWidget {
-  final void Function(String routeName)
-      navigatorPushNamed;
-
-  const Enable2FA({
-    super.key,
-    required this.navigatorPushNamed,
-  });
+  const Enable2FA({super.key});
 
   @override
   State<Enable2FA> createState() => _Enable2FAState();
@@ -26,47 +25,54 @@ class _Enable2FAState extends State<Enable2FA> {
   int remainedToResend = 0;
 
   Future<void> countdownRemainedToResend() async {
-    while (remainedToResend > 0) {
+    while (remainedToResend > 0 && mounted) {
       await Future.delayed(
         const Duration(seconds: 1),
-        () => setState(() => remainedToResend--),
+        () {
+          if (mounted) {
+            setState(() => remainedToResend--);
+          }
+        },
       );
     }
   }
 
   void sendCode() {
-    // TODO: запросить код для 2FA
     setState(() {
       codeSend = true;
       remainedToResend = 120;
       countdownRemainedToResend();
     });
-    print('Код запрошен');
+    getit<TokenServiceBase>().send2FAToken().then((value) {
+      value.match((s) => mySnackBar(context, s), (f) {
+        setState(() {
+          codeSend = false;
+          remainedToResend = 0;
+        });
+        mySnackBar(context, f);
+      });
+    });
   }
 
   void sendEnableRequest(BuildContext context, UserData userData) {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      print('Хочу подключить 2FA, код: $formDataCode');
 
       // TODO: подтвердить 2FA на сервере
-      userData.modifyUser((user) {
-        user.enabled2FA = true;
+      getit<UserServiceBase>().enable2FA(
+        EnableTwoFactorAuthDtoInput(token: formDataCode),
+      ).then((value) {
+        value.match((s) {
+          userData.modifyUser(
+                (user) => user.copyWith(enabled2FA: true),
+          );
+          mySnackBar(context, s);
+
+          handleOk(context);
+        }, (f) =>
+            mySnackBar(context, f));
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          duration: Duration(seconds: 5),
-          content: Text(
-            'Двухфакторная аутентификация подключена',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
-        ),
-      );
-      handleOk(context);
       // showDialog(
       //   context: context,
       //   builder: (context) {

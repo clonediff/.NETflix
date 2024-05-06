@@ -37,7 +37,7 @@ class CategorizedFilms extends StatelessWidget {
               itemBuilder: (context, index) => FilmCard(film: films[index]),
               separatorBuilder: (context, index) => const Divider(indent: 8),
               itemCount: films.length,
-            )
+            ),
           )
         ]
       )
