@@ -1,23 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/styles.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/login_form_model.dart';
 import 'package:mobile/navigation/navigation_routes.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/session_service.dart';
 import 'package:mobile/widgets/text_form_field.dart';
 
-class LoginForm extends StatelessWidget{
-  final GlobalKey<FormState> formKey;
+class LoginForm extends StatefulWidget{
+
   final Function(int pageNumber) onSelectedPage;
-  final TextEditingController _emailController = TextEditingController();
+
+  const LoginForm({super.key, required this.onSelectedPage});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>(debugLabel: "login");
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthServiceBase _authService = getit<AuthServiceBase>();
+  final SessionDataProvider _sessionDataProvider = getit<SessionDataProvider>();
+  String loginError = "";
 
-  LoginForm({super.key, required this.formKey, required this.onSelectedPage});
-
-  String? validateEmail(String? email){
-    if(email == null || email.isEmpty) {
-      return 'Email-почта не должна быть пустой';
+  Future<void> onFormSubmit(BuildContext context) async {
+    if (formKey.currentState == null || !formKey.currentState!.validate()) {
+      return;
     }
-    if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email)){
-      return 'Введённые данные не соответствуют электронной почте!';
+
+    var userName = _userNameController.text;
+    var password = _passwordController.text;
+
+    var loginFormDto = LoginFormDto(userName: userName, password: password, remember: true);
+
+    var response = await _authService.login(loginFormDto);
+
+    response.match(
+            (token) => onSuccess(token),
+            (error) => onFailure(error)
+    );
+  }
+
+  onSuccess(String token){
+      _sessionDataProvider.setJwtToken(token);
+      Navigator.of(context)
+        ..pop()
+        ..pushNamed(NavigationRoutes.main);
+  }
+
+  onFailure(String error){
+    setState(() {
+      loginError = error;
+    });
+  }
+
+  String? validateUserName(String? userName){
+    if(userName == null || userName.isEmpty) {
+      return 'Имя пользователя не должно быть пустым';
     }
     return null;
   }
@@ -43,10 +84,10 @@ class LoginForm extends StatelessWidget{
           children: [
             const Text('Вход', style: DotNetflixTextStyles.loginStyle),
             DotNetflixTextFormField(
-              fieldName: 'Email',
+              fieldName: 'Имя пользователя',
               icon: const Icon(Icons.email, color: Colors.red),
-              validator: validateEmail,
-              controller: _emailController,
+              validator: validateUserName,
+              controller: _userNameController,
               hideText: false,
             ),
             DotNetflixTextFormField(
@@ -56,21 +97,12 @@ class LoginForm extends StatelessWidget{
               controller: _passwordController,
               hideText: true,
             ),
+            Text(loginError, style: const TextStyle(fontSize: 18.0, color: Colors.red),),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      var email = _emailController.text;
-                      var password = _passwordController.text;
-                      print("aadfsdfs");
-                      Navigator.of(context)
-                        ..pop()
-                        ..pushNamed(NavigationRoutes.main);
-                      //todo Process data and navigate
-                    }
-                  },
+                  onPressed: () => onFormSubmit(context),
                   style: DotNetflixButtonStyles.submitButtonStyle,
                   child: const Text('Submit', style: DotNetflixTextStyles.loginStyle,),
                 ),
@@ -78,7 +110,7 @@ class LoginForm extends StatelessWidget{
             ),
             InkWell(
               child: const Text('Нет аккаунта?', style: DotNetflixTextStyles.mainTextStyle),
-              onTap: () => onSelectedPage(0),
+              onTap: () => widget.onSelectedPage(1),
             )
           ],
         ),

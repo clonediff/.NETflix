@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/mocks/film.dart';
+import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/widgets/film_card.dart';
 
 class CategorizedFilms extends StatelessWidget {
@@ -9,7 +9,7 @@ class CategorizedFilms extends StatelessWidget {
     required this.category
   });
 
-  final List<Film> films;
+  final List<FilmForMainPage> films;
   final String category;
   
   @override
@@ -37,10 +37,21 @@ class CategorizedFilms extends StatelessWidget {
               itemBuilder: (context, index) => FilmCard(film: films[index]),
               separatorBuilder: (context, index) => const Divider(indent: 8),
               itemCount: films.length,
-            )
+            ),
           )
         ]
       )
     );
   }
+}
+
+ListView buildAllCategorizedFilms(Map<String, List<FilmForMainPage>> films) {
+  return ListView(
+    children: films.entries
+      .map((x) => CategorizedFilms(
+        films: x.value, 
+        category: x.key
+      ))
+      .toList()
+  );
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/navigation/navigation_routes.dart';
 import 'package:mobile/pages/authorization/login/login_form.dart';
+import 'package:mobile/services/session_service.dart';
 import 'registration/registration_form.dart';
 
 class Authorization extends StatefulWidget{
@@ -12,11 +15,10 @@ class Authorization extends StatefulWidget{
 
 class _AuthorizationState extends State<Authorization>{
   late int selectedPage = 0;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late var forms = [
-    RegistrationForm(formKey: _formKey, onSelectedPage: onSelectedPage),
-    LoginForm(formKey: _formKey, onSelectedPage: onSelectedPage,)
+    LoginForm(onSelectedPage: onSelectedPage),
+    RegistrationForm(onSelectedPage: onSelectedPage),
   ];
 
   onSelectedPage(int page) {
@@ -25,24 +27,45 @@ class _AuthorizationState extends State<Authorization>{
     });
   }
 
+  navigateIfTokenExists(BuildContext context, VoidCallback onSuccess) async {
+    var sessionDataProvider = getit<SessionDataProvider>();
+    var token = await sessionDataProvider.getJwtToken();
+    if(token != null && token.isNotEmpty){
+      onSuccess.call();
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: DotNetflixColors.mainBackgroundColor,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('.Netflix',
-          style: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.w700,
-              fontSize: 26
+    return FutureBuilder(
+      future: navigateIfTokenExists(context, () {
+        if(!mounted) {
+          return;
+        }
+        Navigator.of(context)
+          ..pop()
+          ..pushNamed(NavigationRoutes.main);
+      }),
+      builder: (context, snapshot) {
+        return Scaffold(
+          backgroundColor: DotNetflixColors.mainBackgroundColor,
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('.Netflix',
+              style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 26
+              ),
+            ),
+            backgroundColor: DotNetflixColors.headerBackgroundColor,
           ),
-        ),
-        backgroundColor: DotNetflixColors.headerBackgroundColor,
-      ),
-      body: SingleChildScrollView(
-          child: forms[selectedPage]
-      ),
+          body: SingleChildScrollView(
+              child: forms[selectedPage]
+          ),
+        );
+      },
+      
     );
   }
 }

@@ -1,18 +1,56 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/styles.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/models/register_form_model.dart';
+import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/widgets/date_form_field.dart';
 import 'package:mobile/widgets/text_form_field.dart';
 
-class RegistrationForm extends StatelessWidget{
-  final GlobalKey<FormState> formKey;
+class RegistrationForm extends StatefulWidget{
   final Function(int pageNumber) onSelectedPage;
+
+  const RegistrationForm({super.key, required this.onSelectedPage});
+
+  @override
+  State<RegistrationForm> createState() => _RegistrationFormState();
+}
+
+class _RegistrationFormState extends State<RegistrationForm> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>(debugLabel: 'register');
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final AuthServiceBase _authService = getit<AuthServiceBase>();
+  String registrationError = "";
 
-  RegistrationForm({super.key, required this.formKey, required this.onSelectedPage});
+  Future<void> onFormSubmit(BuildContext context) async {
+    if (formKey.currentState == null || !formKey.currentState!.validate()) {
+      return;
+    }
+
+    var email = _emailController.text;
+    var userName = _userNameController.text;
+    var password = _passwordController.text;
+    var confirmPassword = _confirmPasswordController.text;
+    var birthday =  DateTime.parse(_dateController.text);
+
+    var registerFormDto = RegisterFormDto(userName: userName, password: password,
+        confirmPassword: confirmPassword, birthday: birthday, email: email);
+
+    var response = await _authService.register(registerFormDto);
+
+    if(response.hasError) {
+      setState(() {
+        registrationError = response.error!;
+      });
+    }
+    else {
+      widget.onSelectedPage(0);
+    }
+  }
 
   String? validateEmail(String? email){
     if(email == null || email.isEmpty) {
@@ -77,14 +115,14 @@ class RegistrationForm extends StatelessWidget{
               fieldName: 'Подтвердите пароль',
               icon: const Icon(Icons.key, color: Colors.red),
               validator: validatePasswords,
-              controller: null,
+              controller: _confirmPasswordController,
               hideText: true,
             ),
             DotNetflixTextFormField(
               fieldName: 'Имя пользователь',
               icon: const Icon(Icons.person, color: Colors.red),
               validator: validateUserName,
-              controller: _usernameController,
+              controller: _userNameController,
               hideText: false,
             ),
             DotNetflixDateFormField(
@@ -92,15 +130,12 @@ class RegistrationForm extends StatelessWidget{
                 icon: const Icon(Icons.date_range, color: Colors.red),
                 controller: _dateController
             ),
+            Text(registrationError, style: const TextStyle(fontSize: 18.0, color: Colors.red),),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      //todo Process data and navigate.
-                    }
-                  },
+                  onPressed: () => onFormSubmit(context),
                   style: DotNetflixButtonStyles.submitButtonStyle,
                   child: const Text('Submit', style: DotNetflixTextStyles.loginStyle,),
                 ),
@@ -108,7 +143,7 @@ class RegistrationForm extends StatelessWidget{
             ),
             InkWell(
               child: const Text('Есть аккаунт?', style: DotNetflixTextStyles.mainTextStyle),
-              onTap: () => onSelectedPage(1),
+              onTap: () => widget.onSelectedPage(0),
             )
           ],
         ),

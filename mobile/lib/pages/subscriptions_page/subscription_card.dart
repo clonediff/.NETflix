@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
+import 'package:mobile/models/subscription.dart';
 import 'package:mobile/pages/subscriptions_page/payment_form.dart';
-import 'package:mobile/pages/subscriptions_page/subscriptions_page.dart';
 
-class SubscriptionCard extends StatelessWidget {
+class SubscriptionCard extends StatefulWidget {
   final Subscription subscription;
 
   const SubscriptionCard({super.key, required this.subscription});
+
+  @override
+  State<SubscriptionCard> createState() => _SubscriptionCardState();
+}
+
+class _SubscriptionCardState extends State<SubscriptionCard> {
+
+  void markSubscriptionAsBought() {
+    setState(() => widget.subscription.belongsToUser = true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,7 @@ class SubscriptionCard extends StatelessWidget {
                 children: [
                   const Text('Подписка ',
                       style: TextStyle(fontSize: 20, color: Colors.white)),
-                  Text(subscription.name,
+                  Text(widget.subscription.name,
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -60,12 +70,12 @@ class SubscriptionCard extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 22),
                 child: Column(
                   children: [
-                    Text('${subscription.cost} ₽',
+                    Text('${widget.subscription.cost} ₽',
                         style:
                             const TextStyle(color: Colors.white, fontSize: 24)),
                     Text(
-                      subscription.periodInDays != null
-                          ? 'на ${subscription.periodInDays} дней'
+                      widget.subscription.periodInDays != null
+                          ? 'на ${widget.subscription.periodInDays} дней'
                           : 'навсегда',
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
@@ -79,7 +89,7 @@ class SubscriptionCard extends StatelessWidget {
                   children: [
                     const Text('Подключаемые фильмы',
                         style: TextStyle(color: Colors.white, fontSize: 15)),
-                    ...subscription.filmNames.indexed.take(3).expand(
+                    ...widget.subscription.filmNames.indexed.take(3).expand(
                           (e) => [
                             SizedBox(
                               height: 50,
@@ -90,7 +100,7 @@ class SubscriptionCard extends StatelessWidget {
                                         const TextStyle(color: Colors.white)),
                               ),
                             ),
-                            if (e.$1 != subscription.filmNames.length - 1)
+                            if (e.$1 != widget.subscription.filmNames.length - 1)
                               const Divider(
                                   height: 1, color: Color(0xff414146)),
                           ],
@@ -110,14 +120,15 @@ class SubscriptionCard extends StatelessWidget {
             ],
           ),
           ElevatedButton(
-            onPressed: !(subscription.periodInDays == null &&
-                    subscription.belongsToUser)
+            onPressed: !(widget.subscription.periodInDays == null && widget.subscription.belongsToUser)
                 ? () {
-                    print('Купить подписку');
+                    debugPrint('Купить подписку');
                     showDialog(
                       context: context,
-                      builder: (context) =>
-                          PaymentForm(subscription: subscription),
+                      builder: (context) => PaymentForm(
+                        subscription: widget.subscription,
+                        onBuy: markSubscriptionAsBought,
+                      ),
                     );
                   }
                 : null,
@@ -126,8 +137,8 @@ class SubscriptionCard extends StatelessWidget {
                 (states) => Colors.white,
               ),
               backgroundColor: MaterialStateProperty.resolveWith(
-                (states) => !(subscription.periodInDays == null &&
-                        subscription.belongsToUser)
+                (states) => !(widget.subscription.periodInDays == null &&
+                        widget.subscription.belongsToUser)
                     ? const Color(0xff1677ff)
                     : const Color(0x04000000),
               ),
@@ -138,8 +149,8 @@ class SubscriptionCard extends StatelessWidget {
               shape: MaterialStateProperty.resolveWith(
                 (states) => RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
-                  side: !(subscription.periodInDays == null &&
-                          subscription.belongsToUser)
+                  side: !(widget.subscription.periodInDays == null &&
+                          widget.subscription.belongsToUser)
                       ? const BorderSide()
                       : const BorderSide(
                           color: Color(0xffd9d9d9),
@@ -150,7 +161,7 @@ class SubscriptionCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              subscription.belongsToUser ? 'Продлить' : 'Оформить',
+              widget.subscription.belongsToUser ? 'Продлить' : 'Оформить',
             ),
           ),
         ],

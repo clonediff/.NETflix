@@ -1,10 +1,14 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using API.Shared;
 using Configuration.Shared.RabbitMq;
+using DataAccess;
+using Domain.Entities;
 using Services.Shared;
-using DotNetflixAPI.Middleware;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
+using Microsoft.AspNetCore.Identity;
+using static API.Shared.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +32,14 @@ builder.Services
 	.AddCors()
 	.ConfigureOptions(builder.Configuration)
 	.AddMassTransitRabbitMq(rabbitMqConfig)
-	.AddApplicationDb(connectionString, builder.Environment)
+	.AddApplicationDb(connectionString)
+	.AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
+	.AddEntityFrameworkStores<ApplicationDBContext>()
+	.AddDefaultTokenProviders().Services
 	.AddAuth()
 	.AddGoogleOAuth(builder.Configuration)
 	.RegisterServices(builder.Configuration)
+	.AddHttpContextAccessor()
 	.AddControllers()
 	.AddJsonOptions(options => 
 	{

@@ -1,7 +1,10 @@
 ﻿using System.Net;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace DotNetflixAPI.Middleware;
+namespace API.Shared;
 
 public class GlobalExceptionHandlingMiddleware : IMiddleware
 {
@@ -19,7 +22,7 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
             await next(context);
         }
         /*
-           Возможно тут нужно будет сделать обработку ошибок, возникающих при oauth => свой кастомный Exception 
+           Возможно тут нужно будет сделать обработку ошибок, возникающих при oauth => свой кастомный Exception
         */
         catch (Exception ex)
         {
@@ -51,6 +54,10 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
             Detail = exception.Message
         };
 
-        await response.WriteAsJsonAsync(problemDetails);
+        try
+        {
+            await JsonSerializer.SerializeAsync(response.Body, problemDetails);
+        }
+        catch (OperationCanceledException) { }
     }
 }
