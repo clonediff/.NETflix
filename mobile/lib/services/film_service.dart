@@ -77,8 +77,8 @@ class FilmService implements FilmServiceBase {
 
     return result.hasException
         ? Result.fromFailure(GetFilmFailure(failure: "Не удалось загрузить контент"))
-        : result.data![Queries.filmByIdQueryName]['error'] != null
+        : result.data![Queries.filmByIdQueryName]['hasError']
           ? Result.fromFailure(GetFilmFailure(failure: result.data![Queries.filmByIdQueryName]['error']))
-          : Result.fromSuccess((FilmInfo.fromDynamic(result.data![Queries.filmByIdQueryName]['movie'])));
+          : Result.fromSuccess(FilmInfo.fromDynamic(result.data![Queries.filmByIdQueryName]['data']));
   }
 }

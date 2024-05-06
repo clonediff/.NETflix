@@ -29,9 +29,9 @@ class FilmInfo{
         description = object['description'],
         shortDescription = object['shortDescription'],
         slogan = object['slogan'],
-        rating = object['rating'].toDouble(),
+        rating = (object['rating'] ?? 0).toDouble(),
         movieLength = object['movieLength'],
-        ageRating = object['ageRating'],
+        ageRating = object['ageRating'] ?? 0,
         posterUrl = object['posterUrl'],
         type = object['type'],
         category = object['category'],
@@ -115,5 +115,5 @@ class TrailerMetaData {
         fileName = object['fileName'],
         resolution = object['resolution'],
         language = object['language'],
-        date = object['date'];
+        date = DateTime.parse(object['date']);
 }

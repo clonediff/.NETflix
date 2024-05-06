@@ -4,11 +4,11 @@ class Queries {
   static const allFilmsQuery = '''
     query {
       $allFilmsQueryName {
-        key,
+        key
         value {
-          id,
-          name,
-          rating,
+          id
+          name
+          rating
           posterUrl
         }
       }
@@ -19,20 +19,21 @@ class Queries {
   static const filmsBySearchQuery = '''
     query $filmsBySearchQueryName(\$dto: MovieSearchDtoInput!) {
       $filmsBySearchQueryName(dto: \$dto) {
-        id,
-        name,
-        rating,
+        id
+        name
+        rating
         posterUrl
       }
     }
   ''';
 
   static const filmByIdQueryName = 'filmById';
-  static const error = 'error';
   static const filmByIdQuery = '''
   query $filmByIdQueryName(\$filmId: Int!, \$userId: String) {
     $filmByIdQueryName(filmId: \$filmId, userId: \$userId) {
-       movie {
+      hasError
+      error
+      data {
         id
         name
         year
@@ -70,22 +71,35 @@ class Queries {
             }
         }
         trailersMetaData {
-          id,
-          name,
-          fileName,
-          date,
-          language,
+          id
+          name
+          fileName
+          date
+          language
           resolution
         }
         postersMetaData {
-          id,
-          name,
-          fileName,
+          id
+          name
+          fileName
           resolution
         }
       }
-      $error
     }
   }
+  ''';
+
+  static const allSubscriptionsQueryName = 'allSubscriptions';
+  static const allSubscriptionsQuery = '''
+    query {
+      $allSubscriptionsQueryName {
+        id
+        name
+        cost
+        periodInDays
+        belongsToUser
+        filmNames
+      }
+    }
   ''';
 }

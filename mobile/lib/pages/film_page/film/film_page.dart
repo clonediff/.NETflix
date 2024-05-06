@@ -121,6 +121,7 @@ class MainInfo extends StatelessWidget{
       'Россия' => FlagsCode.RU,
       'США' => FlagsCode.US,
       'Англия' => FlagsCode.GB,
+      'Франция' => FlagsCode.FR,
       'СССР' => FlagsCode.RU,
       _ => FlagsCode.US
     };

@@ -4,17 +4,19 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile/services/film_service.dart';
 import 'package:mobile/navigation/navigation.dart';
 import 'package:mobile/pages/authorization/authorization.dart';
+import 'package:mobile/services/subscription_service.dart';
 
 final getit = GetIt.instance;
 
 void setup() {
   getit.registerSingleton<GraphQLClient>(
     GraphQLClient(
-      link: HttpLink('http://192.168.43.135:5130/graphql'), 
+      link: AuthLink(getToken: () => 'Bearer token').concat(HttpLink('http://192.168.43.135:5130/graphql')), 
       cache: GraphQLCache()
     )
   );
   getit.registerSingleton<FilmServiceBase>(FilmService());
+  getit.registerSingleton<SubscriptionServiceBase>(SubscriptionService());
 }
 
 void main() {

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using API.Shared;
 using DataAccess;
 using Domain.Entities;
-using DotNetflixMobileAPI.GraphQL.Queries;
+using DotNetflixMobileAPI.GraphQL;
 using Microsoft.AspNetCore.Identity;
 using Services.Infrastructure.EmailService;
 using Services.Shared;
@@ -21,17 +21,21 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 builder.Services
     .AddGraphQLServer()
     .ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
-    .AddQueryType<FilmQuery>();
+    .AddMutationType<Mutations>()
+    .AddQueryType<Queries>()
+    .AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
     .AddCors()
+    .AddAuthorization()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders().Services
     .RegisterServices(builder.Configuration)
+    .AddHttpContextAccessor()
     .ConfigureHttpJsonOptions(options => 
     {
         options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -56,6 +60,10 @@ app.UseCors(pb =>
 			return origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost");
 		})
 );
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapGraphQL(new PathString("/graphql"));
 

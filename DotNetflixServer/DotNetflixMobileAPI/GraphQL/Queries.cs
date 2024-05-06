@@ -1,16 +1,17 @@
-using Contracts.Shared;
 using DotNetflix.Application.Features.Films.Queries.GetAllFilms;
 using DotNetflix.Application.Features.Films.Queries.GetFilmById;
 using DotNetflix.Application.Features.Films.Queries.GetFilmsBySearch;
+using DotNetflix.Application.Features.Subscriptions.Queries.GetAllSubscriptionsForUser;
+using DotNetflixMobileAPI.GraphQL.Models;
 using MediatR;
 
-namespace DotNetflixMobileAPI.GraphQL.Queries;
+namespace DotNetflixMobileAPI.GraphQL;
 
-public class FilmQuery
+public class Queries
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public FilmQuery(IServiceScopeFactory serviceScopeFactory)
+    public Queries(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }
@@ -32,18 +33,32 @@ public class FilmQuery
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var query = new GetFilmsBySearchQuery(dto);
         var result = await mediator.Send(query);
-        return result;
+
+        return result.ToList();
     }
 
-    public async Task<MovieForGqlDto<MovieForMoviePageDto>> GetFilmById(int filmId, string? userId)
+    public async Task<IEnumerable<AvailableSubscriptionDto>> GetAllSubscriptions()
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        
+        var httpContext = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+        var userId = httpContext!.Request.Headers.Authorization.ToString();
+
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var getAllSubscriptionsForUserQuery = new GetAllSubscriptionsForUserQuery(userId);
+        var result = await mediator.Send(getAllSubscriptionsForUserQuery);
+
+        return result.ToList();
+    }
+
+    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(int filmId, string? userId)
     {
         using var scope = _serviceScopeFactory.CreateScope();
         
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
         var query = new GetFilmByIdQuery(filmId, userId);
         var result = await mediator.Send(query);
-        return result.Match(success: dto => new MovieForGqlDto<MovieForMoviePageDto>(dto, null), 
-            failure: error => new MovieForGqlDto<MovieForMoviePageDto>(null, error));
+
+        return result;
     }
 }
