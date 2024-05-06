@@ -1,14 +1,19 @@
-﻿using DataAccess;
+﻿using System.Text;
+using DataAccess;
 using DotNetflix.Application;
 using IdentityPasswordGenerator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth;
+using Services.Shared.JwtGenerator;
 using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Shared;
 
@@ -55,7 +60,36 @@ public static class Startup
         });
         services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
+        services.AddScoped<IJwtGenerator, JwtGenerator>();
         services.AddApplicationServices();
+        
+        return services;
+    }
+
+    public static IServiceCollection AddJwtAuthorization(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidAudience = configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true, //Todo надо ли это и нужно ли делать refresh для этого?
+                    ValidateIssuerSigningKey = true
+                };
+            });
+
+        services.AddAuthorizationBuilder();
         
         return services;
     }

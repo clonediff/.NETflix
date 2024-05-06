@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/bloc/loading/states.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/constants/styles.dart';
-import 'package:mobile/models/film_failure.dart';
+import 'package:mobile/dto/film_failure.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/models/film_info.dart';
 import 'package:mobile/navigation/navigation_routes.dart';

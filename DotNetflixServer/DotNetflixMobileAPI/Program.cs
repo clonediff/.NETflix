@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using API.Shared;
 using DataAccess;
 using Domain.Entities;
+using DotNetflixMobileAPI.GraphQL.Mutations;
 using DotNetflixMobileAPI.GraphQL.Queries;
 using Microsoft.AspNetCore.Identity;
 using Services.Infrastructure.EmailService;
@@ -20,8 +21,10 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 
 builder.Services
     .AddGraphQLServer()
+    .AddAuthorization()
     .ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
-    .AddQueryType<FilmQuery>();
+    .AddQueryType<FilmQuery>()
+    .AddMutationType<AuthorizationMutation>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
@@ -32,6 +35,7 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders().Services
     .RegisterServices(builder.Configuration)
+    .AddJwtAuthorization(builder.Configuration)
     .ConfigureHttpJsonOptions(options => 
     {
         options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -41,7 +45,8 @@ builder.Services
 var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors(pb => 
 	pb
 		.AllowCredentials()
