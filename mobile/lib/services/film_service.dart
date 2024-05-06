@@ -3,9 +3,10 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile/graphql/queries.dart';
 import 'package:mobile/main.dart';
-import 'package:mobile/models/film_failure.dart';
+import 'package:mobile/dto/film_failure.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/models/film_info.dart';
+import 'package:mobile/services/session_service.dart';
 import 'package:mobile/utils/result.dart';
 
 abstract class FilmServiceBase {
@@ -20,6 +21,7 @@ class FilmService implements FilmServiceBase {
 
   @override
   Future<Result<Map<String, List<FilmForMainPage>>, String>> getAllFilmsAsync() async {
+
     final result = await _client.query(
       QueryOptions(document: gql(Queries.allFilmsQuery))
     );

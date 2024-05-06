@@ -23,6 +23,7 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 
 builder.Services
     .AddGraphQLServer()
+    .AddAuthorization()
     .ModifyRequestOptions(x => x.IncludeExceptionDetails = true)
     .AddMutationType<Mutations>()
     .AddQueryType<Queries>()
@@ -32,7 +33,6 @@ builder.Services
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
     .AddCors()
-    .AddAuthorization()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
@@ -40,6 +40,7 @@ builder.Services
     .AddDefaultTokenProviders().Services
     .RegisterServices(builder.Configuration)
     .AddHttpContextAccessor()
+    .AddJwtAuthorization(builder.Configuration)
     .ConfigureHttpJsonOptions(options => 
     {
         options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -65,29 +66,23 @@ var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
-app.UseCors(pb =>
-    pb
-        .AllowCredentials()
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .SetIsOriginAllowed(origin =>
-        {
-            if (string.IsNullOrWhiteSpace(origin)) return false;
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseCors(pb => 
+	pb
+		.AllowCredentials()
+		.AllowAnyHeader()
+		.AllowAnyMethod()
+		.SetIsOriginAllowed(origin =>
+		{
+			if (string.IsNullOrWhiteSpace(origin)) return false;
 
             // Only add this to allow testing with localhost, remove this line in production!
 
             return origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost");
         })
 );
-
-app.MapGet("/auth_test", async ([FromServices] IMediator mediator, [FromQuery] string username,
-    [FromQuery] string password, [FromQuery] bool remember) =>
-{
-    var loginCommand = new LoginCommand(username, password, remember);
-    var result = await mediator.Send(loginCommand);
-    return result.Match(success: Results.Ok,
-        failure: Results.BadRequest);
-});
 
 app.UseAuthentication();
 
