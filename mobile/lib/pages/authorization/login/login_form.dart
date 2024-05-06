@@ -64,7 +64,7 @@ class LoginForm extends StatelessWidget{
                     if (formKey.currentState!.validate()) {
                       var email = _emailController.text;
                       var password = _passwordController.text;
-                      print("aadfsdfs");
+
                       Navigator.of(context)
                         ..pop()
                         ..pushNamed(NavigationRoutes.main);

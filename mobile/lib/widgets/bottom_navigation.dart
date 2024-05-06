@@ -4,7 +4,7 @@ import 'package:mobile/constants/colors.dart';
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({ super.key, required this.callback });
 
-  final void Function(int) callback;
+  final void Function(int, String) callback;
 
   @override
   State<StatefulWidget> createState() => _BottomNavigationState();
@@ -13,12 +13,13 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
 
   int _selectedIndex = 0;
+  final _types = ['movie', 'tv-series', 'cartoon', 'anime'];
 
-  void updateSelectedIndex(int value) {
+  void updateSelectedIndex(int index) {
     setState(() {
-      _selectedIndex = value;
+      _selectedIndex = index;
     });
-    widget.callback(value == 0 ? value : 1);
+    widget.callback(index, index != 0 ? _types[index - 1] : '');
   }
 
   @override

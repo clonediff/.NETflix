@@ -29,8 +29,7 @@ public class FilmsController : ControllerBase
     [HttpGet("[action]")]
     public async Task<IEnumerable<MovieForSearchPageDto>> GetFilmsBySearchAsync([FromQuery] MovieSearchDto dto)
     {
-        var query = new GetFilmsBySearchQuery(dto.Type, dto.Name, dto.Year, dto.Country, dto.Genres, dto.Actors,
-            dto.Director);
+        var query = new GetFilmsBySearchQuery(dto);
         var result = await _mediator.Send(query);
         return result;
     }

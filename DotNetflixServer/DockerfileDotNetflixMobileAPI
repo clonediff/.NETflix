@@ -1,0 +1,32 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["DotNetflixMobileAPI/DotNetflixMobileAPI.csproj", "DotNetflixMobileAPI/"]
+COPY ["DotNetflix.Application/DotNetflix.Application.csproj", "DotNetflix.Application/"]
+COPY ["Configuration.Shared/Configuration.Shared.csproj", "Configuration.Shared/"]
+COPY ["Contracts.Shared/Contracts.Shared.csproj", "Contracts.Shared/"]
+COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["DotNetflix.CQRS/DotNetflix.CQRS.csproj", "DotNetflix.CQRS/"]
+COPY ["Services.Shared/Services.Shared.csproj", "Services.Shared/"]
+COPY ["Services.Infrastructure/Services.Infrastructure.csproj", "Services.Infrastructure/"]
+COPY ["API.Shared/API.Shared.csproj", "API.Shared/"]
+RUN dotnet restore "DotNetflixMobileAPI/DotNetflixMobileAPI.csproj"
+COPY . .
+WORKDIR "/src/DotNetflixMobileAPI"
+RUN dotnet build "DotNetflixMobileAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "DotNetflixMobileAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DotNetflixMobileAPI.dll"]

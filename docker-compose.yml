@@ -1,6 +1,20 @@
 version: "3.9"
 
 services:
+  DotNetflixMobileAPI:
+    image: aspnetdotnetflixmobileapi
+    container_name: dotnetflixmobilemobileapi
+    ports:
+      - "5130:80"
+    build:
+      context: ./DotNetflixServer/
+      dockerfile: DockerfileDotNetflixMobileAPI
+    environment:
+      - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+      - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
+      - SmtpSetting__FromPassword=gomlmldthveiefjr
+      - StorageApiBaseUrl=http://dotnetflixstorage
+      - PaymentGrpcAddress=http://dotnetflixpayment
   DotNetflixPayment:
     image: aspnetdotnetflixpayment
     container_name: dotnetflixpayment
