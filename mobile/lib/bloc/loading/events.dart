@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/film_for_main_page.dart';
+import 'package:mobile/models/subscription.dart';
 
 class LoadingEventBase { }
 
@@ -17,4 +18,8 @@ class LoadingSearchedFilmsEvent extends GenericLoadingEventBase<List<FilmForMain
   final Map<String, dynamic> params;
 
   LoadingSearchedFilmsEvent({ required this.params, required super.builder });
+}
+
+class LoadingAllSubscriptionsEvent extends GenericLoadingEventBase<List<Subscription>> {
+  LoadingAllSubscriptionsEvent({ required super.builder });
 }

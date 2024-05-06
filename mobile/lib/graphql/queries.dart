@@ -4,11 +4,11 @@ class Queries {
   static const allFilmsQuery = '''
     query {
       $allFilmsQueryName {
-        key,
+        key
         value {
-          id,
-          name,
-          rating,
+          id
+          name
+          rating
           posterUrl
         }
       }
@@ -19,10 +19,24 @@ class Queries {
   static const filmsBySearchQuery = '''
     query $filmsBySearchQueryName(\$dto: MovieSearchDtoInput!) {
       $filmsBySearchQueryName(dto: \$dto) {
-        id,
-        name,
-        rating,
+        id
+        name
+        rating
         posterUrl
+      }
+    }
+  ''';
+
+  static const allSubscriptionsQueryName = 'allSubscriptions';
+  static const allSubscriptionsQuery = '''
+    query {
+      $allSubscriptionsQueryName {
+        id
+        name
+        cost
+        periodInDays
+        belongsToUser
+        filmNames
       }
     }
   ''';
