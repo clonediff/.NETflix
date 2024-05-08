@@ -8,7 +8,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.61.0" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.7.1" />
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
         <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.9.0" />
@@ -20,6 +20,10 @@
         <ProjectReference Include="..\API.Shared\API.Shared.csproj" />
         <ProjectReference Include="..\DotNetflix.Application\DotNetflix.Application.csproj" />
         <ProjectReference Include="..\Services.Infrastructure\Services.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\chat.proto" GrpcServices="Server" />
     </ItemGroup>
 
 </Project>

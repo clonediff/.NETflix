@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "DotNetflixMobileAPI";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+service ChatService {
+    rpc SendTextMessage (TextMessageRequest) returns (Empty); 
+    rpc SendFileMessage (FileMessageRequest) returns (Empty);
+    rpc ReceiveMessage (ReceiveRequest) returns (stream MessageResponse);
+}
+
+message TextMessageRequest {
+    string content = 1;
+    string roomId = 2;
+}
+
+message FileMessageRequest {
+    bytes content = 1;
+    string roomId = 2;
+}
+
+message ReceiveRequest {
+    string roomId = 1;
+}
+
+message MessageResponse {
+    string roomId = 1;
+    ContentType contentType = 2;
+    google.protobuf.Any content = 3;
+    string senderName = 4;
+    google.protobuf.Timestamp sendingDate = 5;
+    bool belongsToSender = 6;
+}
+
+enum ContentType {
+    text = 0;
+    file = 1;
+}
+
+message Empty {}

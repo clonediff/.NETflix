@@ -3,11 +3,9 @@ using System.Text.Json.Serialization;
 using API.Shared;
 using DataAccess;
 using Domain.Entities;
-using DotNetflix.Application.Features.Authentication.Commands.Login;
 using DotNetflixMobileAPI.GraphQL;
-using MediatR;
+using DotNetflixMobileAPI.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Services.Infrastructure.EmailService;
 using Services.Shared;
 using static API.Shared.Startup;
@@ -15,6 +13,8 @@ using static API.Shared.Startup;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddGrpc();
 
 builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 {
@@ -83,10 +83,7 @@ app.UseCors(pb =>
         })
 );
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.MapGraphQL(new PathString("/graphql"));
+app.MapGrpcService<ChatService>();
 
 app.Run();

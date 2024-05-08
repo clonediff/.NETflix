@@ -5,7 +5,8 @@ services:
     image: aspnetdotnetflixmobileapi
     container_name: dotnetflixmobilemobileapi
     ports:
-      - "5130:8080"
+      - "5130:5130"
+      - "5131:5131"
     build:
       context: ./DotNetflixServer/
       dockerfile: DockerfileDotNetflixMobileAPI
