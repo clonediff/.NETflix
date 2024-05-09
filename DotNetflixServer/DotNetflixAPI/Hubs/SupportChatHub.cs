@@ -22,29 +22,30 @@ public class SupportChatHub : Hub<ISupportChatClient>
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
         var sendingDate = DateTime.Now;
         
-        await SendAsync(groupName, sendingDate, dto.Message, dto, x => x);
+        await SendAsync(groupName, sendingDate, dto.Message, dto, x => x, SupportChatMessageType.Text);
     }
 
     public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType)
     {
-        var groupName = dto.RoomId ?? Context.UserIdentifier!;
+        var roomId = dto.RoomId ?? Context.UserIdentifier!;
         var sendingDate = DateTime.Now;
         var fileExtension = contentType.Split('/')[1];
-        var content = $"file_{groupName}_{sendingDate:s}.{fileExtension}_{contentType}";
+        var content = $"file_{roomId}_{sendingDate:s}.{fileExtension}_{contentType}";
         var buffer = dto.Message.Select(x => (byte) x).ToArray();
         var image = new ImageDto($"data:{contentType};base64,", buffer);
 
-        await SendAsync(groupName, sendingDate, content, dto, _ => image);
+        await SendAsync(roomId, sendingDate, content, dto, _ => image, SupportChatMessageType.File);
         
-        await _bus.Publish(new FileMessage(buffer, $"{sendingDate:s}.{fileExtension}", groupName));
+        await _bus.Publish(new FileMessage(buffer, $"{sendingDate:s}.{fileExtension}", roomId));
     }
 
-    private async Task SendAsync<TInMessage, TOutMessage>(string groupName, DateTime sendingDate, string content,
+    private async Task SendAsync<TInMessage, TOutMessage>(string groupName, DateTime sendingDate, string contentToPersist,
         SendMessageDto<TInMessage> dto, 
-        Func<TInMessage, TOutMessage> transformer)
+        Func<TInMessage, TOutMessage> transformer,
+        SupportChatMessageType messageType)
     {
         var userName = Context.User?.Identity?.Name ?? AdminName;
-        var messageForSender = new SupportChatMessageDto<TOutMessage>(groupName, transformer(dto.Message), userName, sendingDate, true);
+        var messageForSender = new SupportChatMessageDto<TOutMessage>(groupName, messageType, transformer(dto.Message), userName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         var (adminMessage, userMessage) = (messageForReceiver, messageForSender);
@@ -55,7 +56,7 @@ public class SupportChatHub : Hub<ISupportChatClient>
         await Clients.User(groupName).ReceiveAsync(userMessage);
 
         await _bus.Publish(new SupportChatMessage(
-            Content: content,
+            Content: contentToPersist,
             SendingDate: sendingDate,
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,

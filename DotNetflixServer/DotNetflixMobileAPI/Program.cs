@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using API.Shared;
+using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
 using DotNetflixMobileAPI.GraphQL;
@@ -29,10 +30,12 @@ builder.Services
     .AddErrorFilter<ExceptionToErrorHandler>()
     .AddAuthorization();
 
+var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
     .AddCors()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
+    .AddMassTransitRabbitMq(rabbitMqConfig)
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
     .AddEntityFrameworkStores<ApplicationDBContext>()
@@ -84,6 +87,6 @@ app.UseCors(pb =>
 );
 
 app.MapGraphQL(new PathString("/graphql"));
-app.MapGrpcService<ChatService>();
+app.MapGrpcService<SupportChatService>();
 
 app.Run();

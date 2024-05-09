@@ -13,11 +13,28 @@ using Services.Shared.JwtGenerator;
 using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Configuration.Shared.RabbitMq;
+using MassTransit;
 
 namespace API.Shared;
 
 public static class Startup
 {
+    public static IServiceCollection AddMassTransitRabbitMq(this IServiceCollection services,
+        RabbitMqConfig rabbitMqConfig)
+    {
+        services.AddMassTransit(configurator =>
+        {
+            configurator.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(rabbitMqConfig.FullHostname);
+                cfg.ConfigureEndpoints(ctx);
+            });
+        });
+        
+        return services;
+    }
+
     public static void SetupDevelopmentIdentityOptions(IdentityOptions options)
     {
         options.User.RequireUniqueEmail = false;

@@ -5,10 +5,11 @@ option csharp_namespace = "DotNetflixMobileAPI";
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
-service ChatService {
+service SupportChatService {
     rpc SendTextMessage (TextMessageRequest) returns (Empty); 
     rpc SendFileMessage (FileMessageRequest) returns (Empty);
     rpc ReceiveMessage (ReceiveRequest) returns (stream MessageResponse);
+    rpc History (HistoryRequest) returns (stream MessageResponse);
 }
 
 message TextMessageRequest {
@@ -19,6 +20,7 @@ message TextMessageRequest {
 message FileMessageRequest {
     bytes content = 1;
     string roomId = 2;
+    string contentType = 3;
 }
 
 message ReceiveRequest {
@@ -27,16 +29,20 @@ message ReceiveRequest {
 
 message MessageResponse {
     string roomId = 1;
-    ContentType contentType = 2;
+    MessageType messageType = 2;
     google.protobuf.Any content = 3;
     string senderName = 4;
     google.protobuf.Timestamp sendingDate = 5;
     bool belongsToSender = 6;
 }
 
-enum ContentType {
+enum MessageType {
     text = 0;
     file = 1;
+}
+
+message HistoryRequest {
+    string roomId = 1;
 }
 
 message Empty {}

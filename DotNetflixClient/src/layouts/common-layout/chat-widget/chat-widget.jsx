@@ -171,10 +171,7 @@ const ChatWidget = () => {
                             messages.map((m, i) => (
                                 <Message
                                     key={ i }
-                                    senderName={ m.senderName }
-                                    message={ m.message }
-                                    date={ m.sendingDate }
-                                    belongsToSender={ m.belongsToSender } />
+                                    message={ m } />
                             ))
                         }
                         <div ref={ messagesEnd }></div>
@@ -229,20 +226,20 @@ const ChatWidget = () => {
         </>);
 }
 
-const Message = ({ senderName, message, date, belongsToSender }) => {
+const Message = ({ message }) => {
 
     return (
-        <div className='message-wrapper' style={{ flexDirection: belongsToSender ? 'row-reverse' : 'row' }}>
-            <div className='message' style={{ backgroundColor: belongsToSender ? 'var(--search-bg-color)' : 'var(--header-bg-color)' }}>
-                <div><strong>{ senderName }</strong></div>    
+        <div className='message-wrapper' style={{ flexDirection: message.belongsToSender ? 'row-reverse' : 'row' }}>
+            <div className='message' style={{ backgroundColor: message.belongsToSender ? 'var(--search-bg-color)' : 'var(--header-bg-color)' }}>
+                <div><strong>{ message.senderName }</strong></div>    
                     {
-                        typeof message === 'string'
-                            ? <div>{ message }</div>
-                            : <Image src={ `${message.header}${message.bytes}` } />
+                        message.messageType === 0
+                            ? <div>{ message.content }</div>
+                            : <Image src={ `${message.content.header}${message.content.bytes}` } />
                     }
                 <div>
                     {
-                        new Date(date).toLocaleString()
+                        new Date(message.sendingDate).toLocaleString()
                     }
                 </div>
             </div>
