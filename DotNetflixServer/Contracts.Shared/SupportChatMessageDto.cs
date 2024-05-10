@@ -1,13 +1,13 @@
 ﻿namespace Contracts.Shared;
 
-public record SupportChatMessageDto<TMessage>(
+public record SupportChatMessageDto<TContent>(
     string RoomId, 
     SupportChatMessageType MessageType,
-    TMessage Content, 
+    TContent Content, 
     string SenderName, 
     DateTime SendingDate,
     bool BelongsToSender
-) : MessageDto<TMessage>(Content, SenderName, SendingDate, BelongsToSender);
+) : MessageDto<TContent>(Content, SenderName, SendingDate, BelongsToSender);
 
 public enum SupportChatMessageType
 {
