@@ -5,7 +5,6 @@ using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MassTransit;
-using Microsoft.AspNetCore.WebUtilities;
 using Services.Shared.SupportChatService;
 using static DotNetflixMobileAPI.Services.SupportChatServiceUtils;
 
@@ -13,7 +12,7 @@ namespace DotNetflixMobileAPI.Services;
 
 public class SupportChatService : DotNetflixMobileAPI.SupportChatService.SupportChatServiceBase
 {
-    private static readonly ConcurrentDictionary<string, List<(string, IServerStreamWriter<MessageResponse>)>> _rooms = [];
+    private static readonly ConcurrentDictionary<string, List<(string userName, IServerStreamWriter<MessageResponse> stream)>> _rooms = [];
     private const string AdminName = "Администратор";
     private readonly ISupportChatService _supportChatService;
     private readonly IBus _bus;
@@ -124,5 +123,15 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
                 BelongsToSender = message.BelongsToSender
             });
         }
+    }
+
+    public override async Task<Empty> ForwardMessage(MessageResponse request, ServerCallContext context)
+    {
+        foreach (var (_, stream) in _rooms[request.RoomId].Where(x => x.userName == request.SenderName))
+        {
+            await stream.WriteAsync(request);
+        }
+
+        return new Empty();
     }
 }
