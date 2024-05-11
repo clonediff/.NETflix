@@ -21,10 +21,15 @@ namespace API.Shared;
 public static class Startup
 {
     public static IServiceCollection AddMassTransitRabbitMq(this IServiceCollection services,
-        RabbitMqConfig rabbitMqConfig)
+        RabbitMqConfig rabbitMqConfig, params Type[] consumers)
     {
         services.AddMassTransit(configurator =>
         {
+            foreach (var consumer in consumers)
+            {
+                configurator.AddConsumer(consumer);
+            }
+     
             configurator.UsingRabbitMq((ctx, cfg) =>
             {
                 cfg.Host(rabbitMqConfig.FullHostname);

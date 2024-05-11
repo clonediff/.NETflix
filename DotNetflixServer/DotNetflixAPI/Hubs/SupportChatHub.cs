@@ -44,8 +44,8 @@ public class SupportChatHub : Hub<ISupportChatClient>
         Func<TInMessage, TOutMessage> transformer,
         SupportChatMessageType messageType)
     {
-        var userName = Context.User?.Identity?.Name ?? AdminName;
-        var messageForSender = new SupportChatMessageDto<TOutMessage>(roomId, messageType, transformer(dto.Message), userName, sendingDate, true);
+        var senderName = Context.User?.Identity?.Name ?? AdminName;
+        var messageForSender = new SupportChatMessageDto<TOutMessage>(roomId, messageType, transformer(dto.Message), senderName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         var (adminMessage, userMessage) = (messageForReceiver, messageForSender);
@@ -61,11 +61,11 @@ public class SupportChatHub : Hub<ISupportChatClient>
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,
             RoomId: roomId));
-    }
 
-    public async Task ForwardToUserAsync(SupportChatMessageDto<dynamic> dto)
-    {
-        await Clients.User(dto.RoomId!).ReceiveAsync(dto);
+        if (senderName != AdminName)
+        {
+            await _bus.Publish(new GrpcSynchronizationMessage<TOutMessage>(messageForSender));
+        }
     }
 
     public override Task OnConnectedAsync()

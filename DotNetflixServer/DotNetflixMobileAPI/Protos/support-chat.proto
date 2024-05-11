@@ -10,7 +10,6 @@ service SupportChatService {
     rpc SendFileMessage (FileMessageRequest) returns (Empty);
     rpc ReceiveMessage (ReceiveRequest) returns (stream MessageResponse);
     rpc History (HistoryRequest) returns (stream MessageResponse);
-    rpc ForwardMessage (MessageResponse) returns (Empty);
 }
 
 message TextMessageRequest {

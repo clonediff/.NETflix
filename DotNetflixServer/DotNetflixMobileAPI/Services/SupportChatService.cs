@@ -12,7 +12,7 @@ namespace DotNetflixMobileAPI.Services;
 
 public class SupportChatService : DotNetflixMobileAPI.SupportChatService.SupportChatServiceBase
 {
-    private static readonly ConcurrentDictionary<string, List<(string userName, IServerStreamWriter<MessageResponse> stream)>> _rooms = [];
+    internal static readonly ConcurrentDictionary<string, List<(string userName, IServerStreamWriter<MessageResponse> stream)>> Rooms = [];
     private const string AdminName = "Администратор";
     private readonly ISupportChatService _supportChatService;
     private readonly IBus _bus;
@@ -28,10 +28,7 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
         var roomId = GetUserId(context) ?? request.RoomId;
         var sendingDate = DateTime.UtcNow;
 
-        await SendAsync(roomId, sendingDate, context, request.Content, MessageType.Text, new Any 
-        { 
-            Value = ByteString.CopyFromUtf8(request.Content)
-        });
+        await SendAsync(roomId, sendingDate, context, request.Content, MessageType.Text, request.Content);
 
         return new Empty();
     }
@@ -45,27 +42,29 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
         var buffer = request.Content.ToByteArray();
         var image = new ImageDto($"data:{request.ContentType};base64,", buffer);
 
-        await SendAsync(roomId, sendingDate, context, contentToPersist, MessageType.File, new Any
-        {
-            Value = ByteString.CopyFromUtf8(JsonSerializer.Serialize(image))
-        });
+        await SendAsync(roomId, sendingDate, context, contentToPersist, MessageType.File, image);
 
         await _bus.Publish(new FileMessage(buffer, $"{sendingDate:s}.{fileExtension}", roomId));
 
         return new Empty();
     }
 
-    private async Task SendAsync(string roomId, DateTime sendingDate, ServerCallContext context, string contentToPersist, MessageType contentType, Any content)
+    private async Task SendAsync<TContent>(string roomId, DateTime sendingDate, ServerCallContext context, string contentToPersist, MessageType messageType, TContent content)
     {
         var senderName = GetUserName(context) ?? AdminName;
 
-        foreach (var (userName, stream) in _rooms[roomId])
+        foreach (var (userName, stream) in Rooms[roomId])
         {
             await stream.WriteAsync(new MessageResponse
             {
                 RoomId = roomId,
-                Content = content,
-                MessageType = contentType,
+                Content = new Any
+                {
+                    Value = messageType == MessageType.Text
+                        ? ByteString.CopyFromUtf8(content as string)
+                        : ByteString.CopyFromUtf8(JsonSerializer.Serialize(content))
+                },
+                MessageType = messageType,
                 SenderName = senderName,
                 SendingDate = Timestamp.FromDateTime(sendingDate),
                 BelongsToSender = userName == senderName
@@ -79,13 +78,25 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
             IsFromAdmin: senderName == AdminName,
             RoomId: roomId
         ));
+
+        if (senderName != AdminName)
+        {
+            await _bus.Publish(new SignalRSynchronizationMessage<TContent>(new SupportChatMessageDto<TContent>(
+                RoomId: roomId,
+                MessageType: ToSupportChatMessageType(messageType),
+                Content: content,
+                SenderName: senderName,
+                SendingDate: sendingDate,
+                BelongsToSender: true
+            )));
+        }
     }
 
     public override Task ReceiveMessage(ReceiveRequest request, IServerStreamWriter<MessageResponse> responseStream, ServerCallContext context)
     {
         var userName = GetUserName(context) ?? AdminName;
 
-        _rooms.AddOrUpdate(
+        Rooms.AddOrUpdate(
             key: request.RoomId,
             addValueFactory: x => [(userName, responseStream)],
             updateValueFactory: (_, room) =>
@@ -97,7 +108,7 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
 
         while (!context.CancellationToken.IsCancellationRequested) {}
 
-        _rooms[request.RoomId].Remove((userName, responseStream));
+        Rooms[request.RoomId].Remove((userName, responseStream));
 
         return Task.CompletedTask;
     }
@@ -114,7 +125,7 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
                 Content = new Any
                 {
                     Value = message.MessageType == SupportChatMessageType.Text
-                        ? ByteString.CopyFromUtf8(message.Message)
+                        ? ByteString.CopyFromUtf8(message.Content)
                         : ByteString.CopyFromUtf8(JsonSerializer.Serialize(message.Content))
                 },
                 MessageType = ToMessageType(message.MessageType),
@@ -123,15 +134,5 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
                 BelongsToSender = message.BelongsToSender
             });
         }
-    }
-
-    public override async Task<Empty> ForwardMessage(MessageResponse request, ServerCallContext context)
-    {
-        foreach (var (_, stream) in _rooms[request.RoomId].Where(x => x.userName == request.SenderName))
-        {
-            await stream.WriteAsync(request);
-        }
-
-        return new Empty();
     }
 }

@@ -32,4 +32,15 @@ internal static class SupportChatServiceUtils
             _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
     }
+
+    internal static SupportChatMessageType ToSupportChatMessageType(MessageType type)
+    {
+        return type switch
+        {
+            MessageType.Text => SupportChatMessageType.Text,
+            MessageType.File => SupportChatMessageType.File,
+            _ => throw new ArgumentOutOfRangeException(nameof(type))
+        };
+
+    }
 }

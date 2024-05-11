@@ -8,6 +8,7 @@ using Services.Shared;
 using DotNetflixAPI.Extensions;
 using DotNetflixAPI.Hubs;
 using Microsoft.AspNetCore.Identity;
+using DotNetflixAPI.Consumers;
 using static API.Shared.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +32,7 @@ builder.Services
 	.AddSwaggerGen()
 	.AddCors()
 	.ConfigureOptions(builder.Configuration)
-	.AddMassTransitRabbitMq(rabbitMqConfig)
+	.AddMassTransitRabbitMq(rabbitMqConfig, typeof(SignalRSynchronizationConsumer))
 	.AddApplicationDb(connectionString)
 	.AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
 	.AddEntityFrameworkStores<ApplicationDBContext>()
