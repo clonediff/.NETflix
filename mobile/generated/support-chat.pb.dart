@@ -9,13 +9,12 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'google/protobuf/any.pb.dart' as $0;
-import 'google/protobuf/timestamp.pb.dart' as $1;
+import 'google/protobuf/any.pb.dart' as $1;
+import 'google/protobuf/timestamp.pb.dart' as $2;
 import 'support-chat.pbenum.dart';
 
 export 'support-chat.pbenum.dart';
@@ -216,9 +215,9 @@ class MessageResponse extends $pb.GeneratedMessage {
   factory MessageResponse({
     $core.String? roomId,
     MessageType? messageType,
-    $0.Any? content,
+    $1.Any? content,
     $core.String? senderName,
-    $1.Timestamp? sendingDate,
+    $2.Timestamp? sendingDate,
     $core.bool? belongsToSender,
   }) {
     final $result = create();
@@ -249,9 +248,9 @@ class MessageResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MessageResponse', createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'roomId', protoName: 'roomId')
     ..e<MessageType>(2, _omitFieldNames ? '' : 'messageType', $pb.PbFieldType.OE, protoName: 'messageType', defaultOrMaker: MessageType.text, valueOf: MessageType.valueOf, enumValues: MessageType.values)
-    ..aOM<$0.Any>(3, _omitFieldNames ? '' : 'content', subBuilder: $0.Any.create)
+    ..aOM<$1.Any>(3, _omitFieldNames ? '' : 'content', subBuilder: $1.Any.create)
     ..aOS(4, _omitFieldNames ? '' : 'senderName', protoName: 'senderName')
-    ..aOM<$1.Timestamp>(5, _omitFieldNames ? '' : 'sendingDate', protoName: 'sendingDate', subBuilder: $1.Timestamp.create)
+    ..aOM<$2.Timestamp>(5, _omitFieldNames ? '' : 'sendingDate', protoName: 'sendingDate', subBuilder: $2.Timestamp.create)
     ..aOB(6, _omitFieldNames ? '' : 'belongsToSender', protoName: 'belongsToSender')
     ..hasRequiredFields = false
   ;
@@ -296,15 +295,15 @@ class MessageResponse extends $pb.GeneratedMessage {
   void clearMessageType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $0.Any get content => $_getN(2);
+  $1.Any get content => $_getN(2);
   @$pb.TagNumber(3)
-  set content($0.Any v) { setField(3, v); }
+  set content($1.Any v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasContent() => $_has(2);
   @$pb.TagNumber(3)
   void clearContent() => clearField(3);
   @$pb.TagNumber(3)
-  $0.Any ensureContent() => $_ensure(2);
+  $1.Any ensureContent() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.String get senderName => $_getSZ(3);
@@ -316,15 +315,15 @@ class MessageResponse extends $pb.GeneratedMessage {
   void clearSenderName() => clearField(4);
 
   @$pb.TagNumber(5)
-  $1.Timestamp get sendingDate => $_getN(4);
+  $2.Timestamp get sendingDate => $_getN(4);
   @$pb.TagNumber(5)
-  set sendingDate($1.Timestamp v) { setField(5, v); }
+  set sendingDate($2.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasSendingDate() => $_has(4);
   @$pb.TagNumber(5)
   void clearSendingDate() => clearField(5);
   @$pb.TagNumber(5)
-  $1.Timestamp ensureSendingDate() => $_ensure(4);
+  $2.Timestamp ensureSendingDate() => $_ensure(4);
 
   @$pb.TagNumber(6)
   $core.bool get belongsToSender => $_getBF(5);
@@ -416,24 +415,6 @@ class Empty extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static Empty getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Empty>(create);
   static Empty? _defaultInstance;
-}
-
-class SupportChatServiceApi {
-  $pb.RpcClient _client;
-  SupportChatServiceApi(this._client);
-
-  $async.Future<Empty> sendTextMessage($pb.ClientContext? ctx, TextMessageRequest request) =>
-    _client.invoke<Empty>(ctx, 'SupportChatService', 'SendTextMessage', request, Empty())
-  ;
-  $async.Future<Empty> sendFileMessage($pb.ClientContext? ctx, FileMessageRequest request) =>
-    _client.invoke<Empty>(ctx, 'SupportChatService', 'SendFileMessage', request, Empty())
-  ;
-  $async.Future<MessageResponse> receiveMessage($pb.ClientContext? ctx, ReceiveRequest request) =>
-    _client.invoke<MessageResponse>(ctx, 'SupportChatService', 'ReceiveMessage', request, MessageResponse())
-  ;
-  $async.Future<MessageResponse> history($pb.ClientContext? ctx, HistoryRequest request) =>
-    _client.invoke<MessageResponse>(ctx, 'SupportChatService', 'History', request, MessageResponse())
-  ;
 }
 
 

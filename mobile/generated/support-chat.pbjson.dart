@@ -13,9 +13,6 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import 'google/protobuf/any.pbjson.dart' as $0;
-import 'google/protobuf/timestamp.pbjson.dart' as $1;
-
 @$core.Deprecated('Use messageTypeDescriptor instead')
 const MessageType$json = {
   '1': 'MessageType',
@@ -111,33 +108,4 @@ const Empty$json = {
 /// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
     'CgVFbXB0eQ==');
-
-const $core.Map<$core.String, $core.dynamic> SupportChatServiceBase$json = {
-  '1': 'SupportChatService',
-  '2': [
-    {'1': 'SendTextMessage', '2': '.TextMessageRequest', '3': '.Empty'},
-    {'1': 'SendFileMessage', '2': '.FileMessageRequest', '3': '.Empty'},
-    {'1': 'ReceiveMessage', '2': '.ReceiveRequest', '3': '.MessageResponse', '6': true},
-    {'1': 'History', '2': '.HistoryRequest', '3': '.MessageResponse', '6': true},
-  ],
-};
-
-@$core.Deprecated('Use supportChatServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> SupportChatServiceBase$messageJson = {
-  '.TextMessageRequest': TextMessageRequest$json,
-  '.Empty': Empty$json,
-  '.FileMessageRequest': FileMessageRequest$json,
-  '.ReceiveRequest': ReceiveRequest$json,
-  '.MessageResponse': MessageResponse$json,
-  '.google.protobuf.Any': $0.Any$json,
-  '.google.protobuf.Timestamp': $1.Timestamp$json,
-  '.HistoryRequest': HistoryRequest$json,
-};
-
-/// Descriptor for `SupportChatService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List supportChatServiceDescriptor = $convert.base64Decode(
-    'ChJTdXBwb3J0Q2hhdFNlcnZpY2USLgoPU2VuZFRleHRNZXNzYWdlEhMuVGV4dE1lc3NhZ2VSZX'
-    'F1ZXN0GgYuRW1wdHkSLgoPU2VuZEZpbGVNZXNzYWdlEhMuRmlsZU1lc3NhZ2VSZXF1ZXN0GgYu'
-    'RW1wdHkSNQoOUmVjZWl2ZU1lc3NhZ2USDy5SZWNlaXZlUmVxdWVzdBoQLk1lc3NhZ2VSZXNwb2'
-    '5zZTABEi4KB0hpc3RvcnkSDy5IaXN0b3J5UmVxdWVzdBoQLk1lc3NhZ2VSZXNwb25zZTAB');
 
