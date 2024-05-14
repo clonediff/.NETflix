@@ -114,10 +114,7 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
                             messages.map((m, i) => (
                                 <Message
                                     key={ i }
-                                    senderName={ m.senderName }
-                                    message={ m.message }
-                                    date={ m.sendingDate }
-                                    belongsToSender={ m.belongsToSender } />
+                                    message={ m } />
                             ))
                         }
                         <div ref={ messagesEnd }></div>
@@ -153,20 +150,20 @@ const SupportChatRoomComponent = ({ roomId, connection, onLoad, updateLatestMess
     )
 }
 
-const Message = ({ senderName, message, date, belongsToSender }) => {
+const Message = ({ message }) => {
 
     return (
-        <div className='message-wrapper' style={{ flexDirection: belongsToSender ? 'row-reverse' : 'row' }}>
-            <div className='message' style={{ backgroundColor: belongsToSender ? 'var(--sidebarBgColor)' : 'var(--headerBgColor)' }}>
-                <div><strong>{ senderName }</strong></div>    
+        <div className='message-wrapper' style={{ flexDirection: message.belongsToSender ? 'row-reverse' : 'row' }}>
+            <div className='message' style={{ backgroundColor: message.belongsToSender ? 'var(--sidebarBgColor)' : 'var(--headerBgColor)' }}>
+                <div><strong>{ message.senderName }</strong></div>    
                     {
-                        typeof message === 'string' || !message
-                            ? <div>{ message }</div>
-                            : <Image width={ '100%' } src={ `${message.header}${message.bytes}` } />
+                        !message.content || message.messageType === 0
+                            ? <div>{ message.content }</div>
+                            : <Image width={ '100%' } src={ `${message.content.header}${message.content.bytes}` } />
                     }
                 <div>
                     {
-                        new Date(date).toLocaleString()
+                        new Date(message.sendingDate).toLocaleString()
                     }
                 </div>
             </div>

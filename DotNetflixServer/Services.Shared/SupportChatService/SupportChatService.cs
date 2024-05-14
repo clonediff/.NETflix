@@ -36,7 +36,14 @@ public partial class SupportChatService : ISupportChatService
             return await CreateFileMessageAsync(roomId, message, belongsToSender);
         }
         
-        return new SupportChatMessageDto<string>(roomId, message.Content, message.IsFromAdmin ? AdminName : message.User.UserName!, message.SendingDate, belongsToSender);
+        return new SupportChatMessageDto<string>(
+            roomId, 
+            SupportChatMessageType.Text, 
+            message.Content, 
+            message.IsFromAdmin ? AdminName : message.User.UserName!, 
+            message.SendingDate, 
+            belongsToSender
+        );
     }
 
     private async Task<SupportChatMessageDto<ImageDto>> CreateFileMessageAsync(string roomId, Message message, bool belongsToSender)
@@ -52,7 +59,14 @@ public partial class SupportChatService : ISupportChatService
 
         var image = new ImageDto($"data:{contentType};base64,", memoryStream.ToArray());
             
-        return new SupportChatMessageDto<ImageDto>(roomId, image, message.IsFromAdmin ? AdminName : message.User.UserName!, message.SendingDate, belongsToSender);
+        return new SupportChatMessageDto<ImageDto>(
+            roomId, 
+            SupportChatMessageType.File,
+            image, 
+            message.IsFromAdmin ? AdminName : message.User.UserName!, 
+            message.SendingDate, 
+            belongsToSender
+        );
     }
 
     [GeneratedRegex(@"file_.+_.+_.+\/.+")]

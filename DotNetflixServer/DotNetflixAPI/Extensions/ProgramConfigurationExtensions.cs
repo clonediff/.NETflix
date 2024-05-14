@@ -1,5 +1,4 @@
-﻿using Configuration.Shared.RabbitMq;
-using Domain.Entities;
+﻿using Domain.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,21 +10,6 @@ namespace DotNetflixAPI.Extensions;
 
 public static class ProgramConfigurationExtensions
 {
-    public static IServiceCollection AddMassTransitRabbitMq(this IServiceCollection services,
-        RabbitMqConfig rabbitMqConfig)
-    {
-        services.AddMassTransit(configurator =>
-        {
-            configurator.UsingRabbitMq((ctx, cfg) =>
-            {
-                cfg.Host(rabbitMqConfig.FullHostname);
-                cfg.ConfigureEndpoints(ctx);
-            });
-        });
-        
-        return services;
-    }
-
     public static IServiceCollection AddAuth(this IServiceCollection services)
     {
         services.AddAuthorization(options =>

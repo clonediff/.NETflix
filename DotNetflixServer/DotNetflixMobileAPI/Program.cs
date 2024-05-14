@@ -1,13 +1,14 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using API.Shared;
+using Configuration.Shared.RabbitMq;
+using Contracts.Shared;
 using DataAccess;
 using Domain.Entities;
-using DotNetflix.Application.Features.Authentication.Commands.Login;
+using DotNetflixMobileAPI.Consumers;
 using DotNetflixMobileAPI.GraphQL;
-using MediatR;
+using DotNetflixMobileAPI.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Services.Infrastructure.EmailService;
 using Services.Shared;
 using static API.Shared.Startup;
@@ -15,6 +16,8 @@ using static API.Shared.Startup;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddGrpc();
 
 builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 {
@@ -29,10 +32,12 @@ builder.Services
     .AddErrorFilter<ExceptionToErrorHandler>()
     .AddAuthorization();
 
+var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
     .AddCors()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
+    .AddMassTransitRabbitMq(rabbitMqConfig, typeof(GrpcSynchronizationConsumer))
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
     .AddEntityFrameworkStores<ApplicationDBContext>()
@@ -83,10 +88,7 @@ app.UseCors(pb =>
         })
 );
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.MapGraphQL(new PathString("/graphql"));
+app.MapGrpcService<SupportChatService>();
 
 app.Run();
