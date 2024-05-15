@@ -53,7 +53,7 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
     {
         var senderName = GetUserName(context) ?? AdminName;
 
-        foreach (var (userName, stream) in Rooms[roomId])
+        foreach (var (userName, stream) in Rooms[roomId].Concat(Rooms.TryGetValue("", out var admins) ? admins : []))
         {
             await stream.WriteAsync(new MessageResponse
             {
@@ -115,7 +115,8 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
 
     public override async Task History(HistoryRequest request, IServerStreamWriter<MessageResponse> responseStream, ServerCallContext context)
     {
-        var history = await _supportChatService.GetHistoryAsync(request.RoomId, false);
+        var roomId = GetUserId(context) ?? request.RoomId;
+        var history = await _supportChatService.GetHistoryAsync(roomId, false);
 
         foreach (var message in history)
         {

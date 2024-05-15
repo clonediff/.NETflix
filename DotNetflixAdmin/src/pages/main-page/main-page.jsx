@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import CustomSpin from '../../custom-spin/custom-spin'
 import './main-page.css'
 

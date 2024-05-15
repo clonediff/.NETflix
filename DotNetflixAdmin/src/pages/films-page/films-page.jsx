@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import Film from './film'
 import DataLayout from '../../data-layout/data-layout'
 import './films-page.css'

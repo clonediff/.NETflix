@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import { Button, Form, Input, Modal } from 'antd'
 
 const SettingsModal = ({ openSettings, hideSettingsModal, subscription, onChange }) => {

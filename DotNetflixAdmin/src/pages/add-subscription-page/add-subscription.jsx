@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal } from 'antd'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import '../../data-layout/form-styles.css'
 
 const AddSubscriptionPage = () => {

@@ -1,6 +1,15 @@
 version: "3.9"
 
 services:
+  envoy:
+    image: envoy
+    container_name: envoy
+    ports:
+      - "8080:8080"
+      - "9901:9901"
+    build:
+      context: ./DotNetflixAdmin
+      dockerfile: DockerfileEnvoy
   DotNetflixMobileAPI:
     image: aspnetdotnetflixmobileapi
     container_name: dotnetflixmobilemobileapi
@@ -20,8 +29,8 @@ services:
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
       - SmtpSetting__FromPassword=gomlmldthveiefjr
-      - StorageApiBaseUrl=http://dotnetflixstorage
-      - PaymentGrpcAddress=http://dotnetflixpayment
+      - StorageApiBaseUrl=http://dotnetflixstorage:8080
+      - PaymentGrpcAddress=http://dotnetflixpayment:8080
       - RabbitMqConfig__Username=admin
       - RabbitMqConfig__Password=admin
       - RabbitMqConfig__Hostname=RabbitMq
@@ -118,8 +127,8 @@ services:
       - RabbitMqConfig__Port=5672
       - FrontendBaseUrl=http://localhost:3000
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - StorageApiBaseUrl=http://dotnetflixstorage
-      - PaymentGrpcAddress=http://dotnetflixpayment
+      - StorageApiBaseUrl=http://dotnetflixstorage:8080
+      - PaymentGrpcAddress=http://dotnetflixpayment:8080
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - OAuth__ApiOAuth=http://localhost:7289/api/oauth/google
@@ -143,7 +152,7 @@ services:
       - "7298:443"
     environment:
       - SAPassword=pmwPmN1Hgh0SDd2f1TfX!
-      - StorageApiBaseUrl=http://dotnetflixstorage
+      - StorageApiBaseUrl=http://dotnetflixstorage:8080
       - SmtpSetting__FromPassword=gomlmldthveiefjr
       - ConnectionStrings__DefaultConnection=Data Source=mssql;Initial Catalog=DotNetflixDB;User=sa;Password=pmwPmN1Hgh0SDd2f1TfX!;Connect Timeout=300;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
       - ASPNETCORE_ENVIRONMENT:Production
