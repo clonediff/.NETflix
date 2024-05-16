@@ -32,6 +32,7 @@ builder.Services
 	.AddCors()
 	.ConfigureOptions(builder.Configuration)
 	.AddMassTransitRabbitMq(rabbitMqConfig)
+	.AddFilmVisits(rabbitMqConfig)
 	.AddApplicationDb(connectionString)
 	.AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => {})
 	.AddEntityFrameworkStores<ApplicationDBContext>()
@@ -82,6 +83,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseHttpsRedirection();
+
+app.UseFilmVisits();
 
 app.MapHub<ChatHub>("/chatHub");
 app.MapHub<SupportChatHub>("/supportChatHub");

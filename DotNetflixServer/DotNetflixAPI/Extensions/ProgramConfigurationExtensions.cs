@@ -1,31 +1,16 @@
-﻿using Configuration.Shared.RabbitMq;
-using Domain.Entities;
+﻿using Domain.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Services.Infrastructure.EmailService;
 using Services.Infrastructure.GoogleOAuth.Google;
+using Services.Shared.FilmVisitsService;
 
 namespace DotNetflixAPI.Extensions;
 
 public static class ProgramConfigurationExtensions
 {
-    public static IServiceCollection AddMassTransitRabbitMq(this IServiceCollection services,
-        RabbitMqConfig rabbitMqConfig)
-    {
-        services.AddMassTransit(configurator =>
-        {
-            configurator.UsingRabbitMq((ctx, cfg) =>
-            {
-                cfg.Host(rabbitMqConfig.FullHostname);
-                cfg.ConfigureEndpoints(ctx);
-            });
-        });
-        
-        return services;
-    }
-
     public static IServiceCollection AddAuth(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
@@ -89,5 +74,27 @@ public static class ProgramConfigurationExtensions
         services.Configure<GoogleSecrets>(configuration.GetSection("GoogleOAuth"));
         
         return services;
+    }
+
+    public static IApplicationBuilder UseFilmVisits(this WebApplication app)
+    {
+        app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/films/GetFilmById"), application =>
+        {
+            using var scope = application.ApplicationServices.CreateScope();
+            var filmVisitsService = scope.ServiceProvider.GetRequiredService<IFilmVisitsService>();
+
+            application.Use(async (context, next) =>
+            {
+                await next(context);
+                
+                if (context.Response.StatusCode == 200)
+                {
+                    var filmId = int.Parse(context.Request.Query["id"]!);
+                    await filmVisitsService.HandleFilmVisitAsync(filmId, false);
+                }
+            });
+        });
+
+        return app;
     }
 }

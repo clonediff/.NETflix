@@ -1,13 +1,11 @@
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using API.Shared;
+using Configuration.Shared.RabbitMq;
 using DataAccess;
 using Domain.Entities;
-using DotNetflix.Application.Features.Authentication.Commands.Login;
 using DotNetflixMobileAPI.GraphQL;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Services.Infrastructure.EmailService;
 using Services.Shared;
 using static API.Shared.Startup;
@@ -30,9 +28,12 @@ builder.Services
     .AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 builder.Services
     .AddCors()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
+    .AddMassTransitRabbitMq(rabbitMqConfig)
+    .AddFilmVisits(rabbitMqConfig)
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
     .AddEntityFrameworkStores<ApplicationDBContext>()
@@ -82,10 +83,6 @@ app.UseCors(pb =>
             return origin.ToLower().StartsWith("http://localhost") || origin.ToLower().StartsWith("https://localhost");
         })
 );
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapGraphQL(new PathString("/graphql"));
 

@@ -13,11 +13,35 @@ using Services.Shared.JwtGenerator;
 using Services.Shared.MovieMetaDataService;
 using Services.Shared.SupportChatService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Configuration.Shared.RabbitMq;
+using MassTransit;
+using Services.Shared.FilmVisitsService;
+using RabbitMQ.Client;
 
 namespace API.Shared;
 
 public static class Startup
 {
+    public static IServiceCollection AddMassTransitRabbitMq(this IServiceCollection services,
+        RabbitMqConfig rabbitMqConfig, params Type[] consumers)
+    {
+        services.AddMassTransit(configurator =>
+        {
+            foreach (var consumer in consumers)
+            {
+                configurator.AddConsumer(consumer);
+            }
+     
+            configurator.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(rabbitMqConfig.FullHostname);
+                cfg.ConfigureEndpoints(ctx);
+            });
+        });
+
+        return services;
+    }
+
     public static void SetupDevelopmentIdentityOptions(IdentityOptions options)
     {
         options.User.RequireUniqueEmail = false;
@@ -60,6 +84,7 @@ public static class Startup
         services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
         services.AddScoped<IJwtGenerator, JwtGenerator>();
+        services.AddScoped<IFilmVisitsService, FilmVisitsService>();
         services.AddApplicationServices();
         
         return services;
@@ -90,6 +115,26 @@ public static class Startup
 
         services.AddAuthorizationBuilder();
         
+        return services;
+    }
+
+    public static IServiceCollection AddFilmVisits(this IServiceCollection services, RabbitMqConfig config)
+    {
+        services.AddSingleton(_ =>
+        {
+            var factory = new ConnectionFactory
+            {
+                HostName = config.Hostname,
+                CredentialsProvider = new BasicCredentialsProvider(config.Username, config.Password)
+            };
+            var connection = factory.CreateConnection();
+            var channel = connection.CreateModel();
+
+            channel.ExchangeDeclare(FilmVisitsService.ExchangeName, ExchangeType.Direct);
+
+            return channel;
+        });
+
         return services;
     }
 }
