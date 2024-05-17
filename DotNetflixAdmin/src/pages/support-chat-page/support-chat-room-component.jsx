@@ -135,6 +135,7 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
             message.setContent(bytes);
             message.setRoomid(roomId);
             message.setContenttype(file.type);
+            message.setUniquekey(uniqueKey)
         }
         reader.readAsArrayBuffer(file)
     }
