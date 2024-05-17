@@ -1,5 +1,5 @@
 import { Button, Form, Modal, Select, Space } from 'antd'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import '../../data-layout/buttons-styles.css'
 import '../../data-layout/data-layout.css'
 import '../../data-layout/border-styles.css'

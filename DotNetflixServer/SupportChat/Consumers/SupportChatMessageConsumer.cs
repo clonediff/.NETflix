@@ -16,12 +16,12 @@ public class SupportChatMessageConsumer : IConsumer<SupportChatMessage>
 
     public async Task Consume(ConsumeContext<SupportChatMessage> context)
     {
-        var isMessageDuplicated = await _context
+        var isMessageDuplicated = _context
             .Set<Message>()
-            .AnyAsync(x => x.UserId == context.Message.RoomId
-                && x.Content == context.Message.Content
-                && $"{x.SendingDate:s}" == $"{context.Message.SendingDate:s}"
-            );
+            .Where(x => x.UserId == context.Message.RoomId
+                && x.Content == context.Message.Content)
+                .AsEnumerable()
+            .Any(x => $"{x.SendingDate:s}" == $"{context.Message.SendingDate:s}");
 
         if (isMessageDuplicated) return;
 

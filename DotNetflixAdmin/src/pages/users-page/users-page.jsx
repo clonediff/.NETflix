@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import DataLayout from '../../data-layout/data-layout'
 import User from './user'
 import '../../data-layout/data-layout.css'

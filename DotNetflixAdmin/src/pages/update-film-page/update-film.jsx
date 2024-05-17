@@ -4,7 +4,7 @@ import { MediaSpace, PeopleSpace, SeasonsSpace } from '../add-film-page/add-film
 import { Button, Form, Input, Modal, Select, Image } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import ReactPlayer from 'react-player'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import { initForm, initUpdatedFilm } from './helpers'
 import CustomSpin from '../../custom-spin/custom-spin'
 

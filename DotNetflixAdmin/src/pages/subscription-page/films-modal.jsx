@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import { Button, Checkbox, Modal } from 'antd'
 import DataLayout from '../../data-layout/data-layout'
 import '../../data-layout/data-layout.css'
