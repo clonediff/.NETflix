@@ -22,6 +22,8 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
             connection.off('ReceiveAsync')
             connection.on('ReceiveAsync', (message) => {
                 updateLatestMessage(message.roomId, message.senderName, message.content, () => message.messageType === MessageType.TEXT)
+                console.log('SignalR data:')
+                console.log(message)
                 if (message.roomId === roomId)
                     setMessages(prevState => 
                         prevState.some(x => JSON.stringify(x.content) === JSON.stringify(message.content)
@@ -37,8 +39,12 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
                 let content =
                     (message.getMessagetype() === MessageType.TEXT 
                         ? (x) => x 
-                        : (x) => JSON.parse(x))(new TextDecoder('utf-8').decode(message.getContent().getValue()));
-                    
+                        : (x) => JSON.parse(
+                            x.replace(
+                                /("[^"])([^"]*":)/g,
+                                (all, head, tail) => head.toLowerCase() + tail
+                            )
+                        ))(new TextDecoder('utf-8').decode(message.getContent().getValue()));
                 let newMessage = {
                     belongsToSender: message.getBelongstosender(),
                     content: content,
@@ -48,6 +54,7 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
                     senderName: message.getSendername(),
                     sendingDate: new Date(message.getSendingdate().getSeconds() * 1000)
                 }
+                console.log('grpc data:')
                 console.log(newMessage)
                 setMessages(prevState => {
                     if (prevState.some(x => JSON.stringify(x.content) === JSON.stringify(newMessage.content)
@@ -117,6 +124,9 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
         const uniqueKey = getRandomString()
         reader.onloadend = () => {
             const bytes = new Uint8Array(reader.result)
+            // TODO: connection не успевает запуститься до invoke
+            if (connection.state !== "Connected")
+                connection.start()
             connection.invoke('SendFilesAsync', {
                 message: Array.from(bytes),
                 roomId: roomId
@@ -125,11 +135,11 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
             message.setContent(bytes);
             message.setRoomid(roomId);
             message.setContenttype(file.type);
-            message.setUniquekey(uniqueKey);
         }
         reader.readAsArrayBuffer(file)
     }
 
+    // TODO: добавить проверку типов файлов, размер и т.д.
     const uploadProps = {
         multiple: true,
         listType: 'picture',
