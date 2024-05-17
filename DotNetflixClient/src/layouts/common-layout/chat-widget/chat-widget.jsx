@@ -67,7 +67,7 @@ const ChatWidget = () => {
         connection.invoke('SendMessageAsync', {
             message: values.message,
             roomId: null
-        });
+        }, null);
     }
 
     window.onclick = (event) => {
@@ -95,7 +95,7 @@ const ChatWidget = () => {
             connection.invoke('SendFilesAsync', {
                 message: Array.from(bytes),
                 roomId: null
-            }, file.type)
+            }, file.type, null)
         }
         reader.readAsArrayBuffer(file)
     }

@@ -17,29 +17,31 @@ public class SupportChatHub : Hub<ISupportChatClient>
         _bus = bus;
     }
 
-    public async Task SendMessageAsync(SendMessageDto<string> dto)
+    public async Task SendMessageAsync(SendMessageDto<string> dto, string uniqueKey)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
         var sendingDate = DateTime.UtcNow;
         
-        await SendAsync(groupName, sendingDate, dto.Message, dto, x => x, SupportChatMessageType.Text);
+        await SendAsync(groupName, sendingDate, dto.Message, uniqueKey, dto, x => x, SupportChatMessageType.Text);
     }
 
-    public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType)
+    public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType, string uniqueKey)
     {
         var roomId = dto.RoomId ?? Context.UserIdentifier!;
         var sendingDate = DateTime.UtcNow;
         var fileExtension = contentType.Split('/')[1];
-        var content = $"file_{roomId}_{sendingDate:s}.{fileExtension}_{contentType}";
+        var fileName = string.IsNullOrEmpty(uniqueKey) ? sendingDate.ToString("s") : uniqueKey;
+        var content = $"file_{roomId}_{fileName}.{fileExtension}_{contentType}";
         var buffer = dto.Message.Select(x => (byte) x).ToArray();
         var image = new ImageDto($"data:{contentType};base64,", buffer);
 
-        await SendAsync(roomId, sendingDate, content, dto, _ => image, SupportChatMessageType.File);
+        await SendAsync(roomId, sendingDate, content, uniqueKey, dto, _ => image, SupportChatMessageType.File);
         
-        await _bus.Publish(new FileMessage(buffer, $"{sendingDate:s}.{fileExtension}", roomId));
+        await _bus.Publish(new FileMessage(buffer, $"{fileName}.{fileExtension}", roomId));
     }
 
     private async Task SendAsync<TInMessage, TOutMessage>(string roomId, DateTime sendingDate, string contentToPersist,
+        string uniqueKey,
         SendMessageDto<TInMessage> dto, 
         Func<TInMessage, TOutMessage> transformer,
         SupportChatMessageType messageType)
@@ -60,7 +62,9 @@ public class SupportChatHub : Hub<ISupportChatClient>
             SendingDate: sendingDate,
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,
-            RoomId: roomId));
+            RoomId: roomId,
+            UniqueKey: uniqueKey
+        ));
 
         if (senderName != AdminName)
         {
