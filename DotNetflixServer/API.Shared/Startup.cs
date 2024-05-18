@@ -17,6 +17,7 @@ using Configuration.Shared.RabbitMq;
 using MassTransit;
 using Services.Shared.FilmVisitsService;
 using RabbitMQ.Client;
+using static Configuration.Shared.Constants.QueueExchanges;
 
 namespace API.Shared;
 
@@ -130,7 +131,7 @@ public static class Startup
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
 
-            channel.ExchangeDeclare(FilmVisitsService.ExchangeName, ExchangeType.Direct);
+            channel.ExchangeDeclare(FilmVisitsExchangeName, ExchangeType.Direct);
 
             return channel;
         });

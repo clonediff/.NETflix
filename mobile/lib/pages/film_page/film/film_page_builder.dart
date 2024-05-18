@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dart_amqp/dart_amqp.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/loading/bloc.dart';
 import 'package:mobile/bloc/loading/events.dart';
@@ -25,7 +26,14 @@ class FilmPageBuilder extends StatelessWidget {
 
 class FilmPage extends StatefulWidget{
   final FilmInfo film;
-  const FilmPage({super.key, required this.film});
+  final Client client = Client(
+    settings: ConnectionSettings(
+      host: '192.168.137.1',
+      authProvider: const PlainAuthenticator('admin', 'admin')
+    )
+  );
+
+  FilmPage({super.key, required this.film});
 
   @override
   State<StatefulWidget> createState() => _FilmPageState();
@@ -33,8 +41,9 @@ class FilmPage extends StatefulWidget{
 
 class _FilmPageState extends State<FilmPage>{
   int selectedPage = 0;
+  bool firstLaunch = true;
   late List<Widget> pages = [
-    MainFilmPage(film: widget.film, onSelectedPage: onSelectedPage),
+    MainFilmPage(film: widget.film, onSelectedPage: onSelectedPage, client: widget.client, isFirstLaunch: () => firstLaunch),
     PersonsPage(
         persons: Map.fromEntries(widget.film.persons.entries.where((element) => element.key == 'актеры' || element.key == 'актеры дубляжа')),
         title: 'Актёры',
@@ -48,6 +57,7 @@ class _FilmPageState extends State<FilmPage>{
   onSelectedPage(int page) {
     setState(() {
       selectedPage = page;
+      firstLaunch = false;
     });
   }
 

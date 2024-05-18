@@ -5,7 +5,7 @@ services:
     image: aspnetdotnetflixanalytics
     container_name: dotnetflixanalytics
     ports:
-      - "5142:8080"
+      - "5142:5142"
     build:
       context: ./DotNetflixServer
       dockerfile: DockerfileDotNetflixAnalytics

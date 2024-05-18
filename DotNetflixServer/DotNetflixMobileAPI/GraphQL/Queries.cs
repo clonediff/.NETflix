@@ -59,7 +59,7 @@ public class Queries
         return result.ToList();
     }
 
-    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(HttpContext context, int filmId, string? userId, bool receiveVisitUpdates, [FromServices] IFilmVisitsService filmVisitsService)
+    public async Task<GraphQLResponse<MovieForMoviePageDto>> GetFilmById(HttpContext context, int filmId, string? userId, [FromServices] IFilmVisitsService filmVisitsService)
     {
         using var scope = _serviceScopeFactory.CreateScope();
         
@@ -71,17 +71,10 @@ public class Queries
         var query = new GetFilmByIdQuery(filmId, userId);
         var result = await mediator.Send(query);
 
-        if (receiveVisitUpdates)
-        {
-            await result.Match(
-                async _ =>
-                {
-                    var queueName = await filmVisitsService.HandleFilmVisitAsync(filmId, true);
-                    context.Response.Headers.Append(FilmVisitsQueueHeaderName, queueName);
-                },
-                _ => Task.CompletedTask
-            );
-        }
+        await result.Match(
+            _ => filmVisitsService.HandleFilmVisitAsync(filmId),
+            _ => Task.CompletedTask
+        );
 
         return result;
     }

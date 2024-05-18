@@ -3,13 +3,12 @@ using System.Text.Json;
 using Contracts.Shared;
 using MassTransit;
 using RabbitMQ.Client;
+using static Configuration.Shared.Constants.QueueExchanges;
 
 namespace Services.Shared.FilmVisitsService;
 
 public class FilmVisitsService : IFilmVisitsService
 {
-    public const string ExchangeName = "film-visits";
-
     private readonly IBus _bus;
     private readonly IModel _channel;
 
@@ -19,25 +18,15 @@ public class FilmVisitsService : IFilmVisitsService
         _channel = channel;
     }
 
-    public async Task<string> HandleFilmVisitAsync(int filmId, bool declareQueue)
+    public async Task HandleFilmVisitAsync(int filmId)
     {
         await _bus.Publish(new PersistFilmVisitMessage(filmId));
 
-        var queueName = "";
-
-        if (declareQueue)
-        {
-            queueName = _channel.QueueDeclare(exclusive: false).QueueName;
-            _channel.QueueBind(queueName, ExchangeName, filmId.ToString());
-        }
-
         _channel.BasicPublish(
-            exchange: ExchangeName,
+            exchange: FilmVisitsExchangeName,
             routingKey: filmId.ToString(),
             basicProperties: null,
             body: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new FilmVisitMessage()))
         );
-
-        return queueName;
     }
 }

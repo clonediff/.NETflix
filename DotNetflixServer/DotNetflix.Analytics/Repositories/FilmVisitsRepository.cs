@@ -71,7 +71,7 @@ public class FilmVisitsRepository : IFilmVisitsRepository
 
         if (reader["Visits"] is null)
         {
-            return -1;
+            return 0;
         }
 
         return (int) (uint) reader["Visits"];

@@ -23,11 +23,11 @@ abstract class UserServiceBase {
 }
 
 class UserService implements UserServiceBase {
-  final _client = getit<GraphQLClient>();
+  final _apiClient = getit<GraphQLClient>(instanceName: 'api');
 
   @override
   Future<Result<UserDto, String>> getUser() async {
-    var response = await _client.query(
+    var response = await _apiClient.query(
       QueryOptions(
         document: gql(Queries.userQuery),
         fetchPolicy: FetchPolicy.networkOnly,
@@ -43,7 +43,7 @@ class UserService implements UserServiceBase {
   @override
   Future<Result<List<UserSubscriptionDto>, String>>
       getAllUserSubscriptions() async {
-    var response = await _client.query(
+    var response = await _apiClient.query(
       QueryOptions(
         document: gql(Queries.allUserSubscriptionsQuery),
         fetchPolicy: FetchPolicy.networkOnly
@@ -102,7 +102,7 @@ class UserService implements UserServiceBase {
     required String query,
     required String queryName,
   }) async {
-    var response = await _client.query(
+    var response = await _apiClient.query(
       QueryOptions(
         document: gql(query),
         fetchPolicy: FetchPolicy.networkOnly,

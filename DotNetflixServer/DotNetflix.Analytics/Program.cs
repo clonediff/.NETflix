@@ -32,6 +32,7 @@ builder.Services.AddTransient(sp =>
 var rabbitMqConfig = builder.Configuration.GetSection(RabbitMqConfig.SectionName).Get<RabbitMqConfig>()!;
 builder.Services
     .AddMassTransitRabbitMq(rabbitMqConfig, typeof(PersistFilmVisitMessageConsumer))
+    .AddFilmVisits(rabbitMqConfig)
     .AddTransient<IFilmVisitsRepository, FilmVisitsRepository>();
 
 var app = builder.Build();

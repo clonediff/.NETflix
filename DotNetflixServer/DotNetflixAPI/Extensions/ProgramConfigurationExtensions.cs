@@ -90,7 +90,7 @@ public static class ProgramConfigurationExtensions
                 if (context.Response.StatusCode == 200)
                 {
                     var filmId = int.Parse(context.Request.Query["id"]!);
-                    await filmVisitsService.HandleFilmVisitAsync(filmId, false);
+                    await filmVisitsService.HandleFilmVisitAsync(filmId);
                 }
             });
         });
