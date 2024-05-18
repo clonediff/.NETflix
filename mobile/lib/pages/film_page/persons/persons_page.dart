@@ -2,23 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/constants/styles.dart';
 import 'package:mobile/models/film_info.dart';
+import 'package:mobile/widgets/header.dart';
 
-class PersonsPage extends StatefulWidget{
-  final Map<String, List<Person>> persons;
-  final Function(int pageNumber) onSelectedPage;
-  final String title;
+class PersonsPage extends StatelessWidget{
 
-  const PersonsPage({super.key, required this.persons, required this.title, required this.onSelectedPage});
-
-  @override
-  State<StatefulWidget> createState() => _PersonsPageState();
-}
-
-class _PersonsPageState extends State<PersonsPage>{
-
-  void goToSelectedPage(int page){
-    widget.onSelectedPage(page);
-  }
+  const PersonsPage({super.key});
 
   Widget getPersonsWidgets(Map<String, List<Person>> persons)
   {
@@ -35,22 +23,16 @@ class _PersonsPageState extends State<PersonsPage>{
 
   @override
   Widget build(BuildContext context) {
+    var persons = ModalRoute.of(context)?.settings.arguments as Map<String, List<Person>>;
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: DotNetflixColors.floatingButtonColor,
-        onPressed: () {
-          goToSelectedPage(0);
-        },
-        child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
-      ),
+      appBar: const Header(),
       body: Container(
-        padding: const EdgeInsets.only(left: 12, right: 12, top: 5),
-        color: DotNetflixColors.mainBackgroundColor,
-        child: SingleChildScrollView(
-          child: getPersonsWidgets(widget.persons)
+          padding: const EdgeInsets.only(left: 12, right: 12, top: 5),
+          color: DotNetflixColors.mainBackgroundColor,
+          child: SingleChildScrollView(
+            child: getPersonsWidgets(persons)
+          ),
         ),
-      ),
     );
   }
 }
@@ -80,9 +62,17 @@ class PersonsList extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(persons[index].name, style: DotNetflixTextStyles.mainTextStyle),
+                    SizedBox(
+                      width: 200,
+                      child: Text(persons[index].name,
+                        style: DotNetflixTextStyles.mainTextStyle,
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
                     Text('${persons[index].profession[0].toUpperCase()}${persons[index].profession.substring(1)}',
-                        style: DotNetflixTextStyles.subtitleStyle)
+                      style: DotNetflixTextStyles.subtitleStyle,
+                      textAlign: TextAlign.end,
+                    )
                   ],
                 ),
               ],

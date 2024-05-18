@@ -96,8 +96,10 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
     {
         var userName = GetUserName(context) ?? AdminName;
 
+        var roomId = GetUserId(context) ?? request.RoomId;
+        
         Rooms.AddOrUpdate(
-            key: request.RoomId,
+            key: roomId,
             addValueFactory: x => [(userName, responseStream)],
             updateValueFactory: (_, room) =>
             {
@@ -108,7 +110,7 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
 
         while (!context.CancellationToken.IsCancellationRequested) {}
 
-        Rooms[request.RoomId].Remove((userName, responseStream));
+        Rooms[roomId].Remove((userName, responseStream));
 
         return Task.CompletedTask;
     }
