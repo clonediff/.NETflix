@@ -191,7 +191,8 @@ proto.TextMessageRequest.prototype.toObject = function(opt_includeInstance) {
 proto.TextMessageRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     content: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    roomid: jspb.Message.getFieldWithDefault(msg, 2, "")
+    roomid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    uniquekey: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -236,6 +237,10 @@ proto.TextMessageRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setRoomid(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUniquekey(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -279,6 +284,13 @@ proto.TextMessageRequest.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getUniquekey();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -318,6 +330,24 @@ proto.TextMessageRequest.prototype.setRoomid = function(value) {
 };
 
 
+/**
+ * optional string uniqueKey = 3;
+ * @return {string}
+ */
+proto.TextMessageRequest.prototype.getUniquekey = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.TextMessageRequest} returns this
+ */
+proto.TextMessageRequest.prototype.setUniquekey = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
 
 
 
@@ -352,7 +382,8 @@ proto.FileMessageRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     content: msg.getContent_asB64(),
     roomid: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    contenttype: jspb.Message.getFieldWithDefault(msg, 3, "")
+    contenttype: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    uniquekey: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -401,6 +432,10 @@ proto.FileMessageRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setContenttype(value);
       break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUniquekey(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -448,6 +483,13 @@ proto.FileMessageRequest.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getUniquekey();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
       f
     );
   }
@@ -529,6 +571,24 @@ proto.FileMessageRequest.prototype.getContenttype = function() {
  */
 proto.FileMessageRequest.prototype.setContenttype = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string uniqueKey = 4;
+ * @return {string}
+ */
+proto.FileMessageRequest.prototype.getUniquekey = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.FileMessageRequest} returns this
+ */
+proto.FileMessageRequest.prototype.setUniquekey = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

@@ -15,12 +15,14 @@ service SupportChatService {
 message TextMessageRequest {
     string content = 1;
     string roomId = 2;
+    string uniqueKey = 3;
 }
 
 message FileMessageRequest {
     bytes content = 1;
     string roomId = 2;
     string contentType = 3;
+    string uniqueKey = 4;
 }
 
 message ReceiveRequest {

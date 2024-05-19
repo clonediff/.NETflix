@@ -5,6 +5,7 @@ import {axiosInstance, supportChatClient} from '../../clients'
 import CustomSpin from '../../custom-spin/custom-spin'
 import './support-chat-room-component.css'
 import {ReceiveRequest, MessageType, TextMessageRequest, FileMessageRequest} from "../../Protos/support-chat_pb";
+import { getRandomString } from './random-string-generator'
 
 const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessage}) => {
 
@@ -56,8 +57,8 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
                 console.log('grpc data:')
                 console.log(newMessage)
                 setMessages(prevState => {
-                    if (prevState.some(x => JSON.stringify(x.content) === JSON.stringify(message.content)
-                        && message.sendingDate.toLocaleString() === x.sendingDate.toLocaleString())) {
+                    if (prevState.some(x => JSON.stringify(x.content) === JSON.stringify(newMessage.content)
+                        && newMessage.sendingDate.toLocaleString() === x.sendingDate.toLocaleString())) {
                         console.log('duplicate found')
                         return prevState
                     }
@@ -90,6 +91,7 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
     }
 
     const sendForm = (values) => {
+        const uniqueKey = getRandomString()
         if (values.message === '') {
             return
         }
@@ -98,11 +100,12 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
         connection.invoke('SendMessageAsync', {
             message: values.message,
             roomId: roomId
-        })
+        }, uniqueKey)
         const message = new TextMessageRequest();
         message.setContent(values.message);
         message.setRoomid(roomId);
-        supportChatClient.sendTextMessage(message, null, (_, __) => console.log('text message sent'));
+        message.setUniquekey(uniqueKey)
+        supportChatClient.sendTextMessage(message, null, (_, __) => console.log('message sent'));
         form.setFieldValue('message', '')
     }
     
@@ -118,6 +121,7 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
 
     const sendFile = (file) => {
         const reader = new FileReader()
+        const uniqueKey = getRandomString()
         reader.onloadend = () => {
             const bytes = new Uint8Array(reader.result)
             // TODO: connection не успевает запуститься до invoke
@@ -126,11 +130,12 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
             connection.invoke('SendFilesAsync', {
                 message: Array.from(bytes),
                 roomId: roomId
-            }, file.type)
+            }, file.type, uniqueKey)
             const message = new FileMessageRequest();
             message.setContent(bytes);
             message.setRoomid(roomId);
             message.setContenttype(file.type);
+            message.setUniquekey(uniqueKey)
             supportChatClient.sendFileMessage(message, null, (_, __) => console.log('file message sent'));
         }
         reader.readAsArrayBuffer(file)
