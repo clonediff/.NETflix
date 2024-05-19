@@ -54,7 +54,7 @@ class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
       emit(LoadingState());
 
       var token = 'Bearer ${await _sessionDataProvider.getJwtToken()}';
-      final history = _grpcSupportChatClient.history(grpc_models.HistoryRequest(roomId: ""), options: $grpc.CallOptions(metadata: {"Authorization": token}));
+      final history = await _grpcSupportChatClient.history(grpc_models.HistoryRequest(roomId: ""), options: $grpc.CallOptions(metadata: {"Authorization": token}));
 
       final receive = _grpcSupportChatClient.receiveMessage(ReceiveRequest(roomId: ""), options: $grpc.CallOptions(metadata: {"Authorization": token}));
 

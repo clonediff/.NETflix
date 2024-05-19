@@ -119,14 +119,15 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
         return Task.CompletedTask;
     }
 
-    public override async Task History(HistoryRequest request, IServerStreamWriter<MessageResponse> responseStream, ServerCallContext context)
+    public override async Task<HistoryResponse> History(HistoryRequest request, ServerCallContext context)
     {
         var roomId = GetUserId(context) ?? request.RoomId;
         var history = await _supportChatService.GetHistoryAsync(roomId, false);
 
-        foreach (var message in history)
-        {
-            await responseStream.WriteAsync(new MessageResponse
+        var response = new HistoryResponse();
+
+        response.Messages.AddRange(
+            history.Select(message => new MessageResponse
             {
                 RoomId = request.RoomId,
                 Content = new Any
@@ -139,7 +140,9 @@ public class SupportChatService : DotNetflixMobileAPI.SupportChatService.Support
                 SenderName = message.SenderName,
                 SendingDate = Timestamp.FromDateTime(message.SendingDate.ToUniversalTime()),
                 BelongsToSender = message.BelongsToSender
-            });
-        }
+            })
+        );
+
+        return response;
     }
 }

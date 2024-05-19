@@ -17,14 +17,14 @@ public class NonDuplicatedMessagesHandler : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(TimeSpan.FromMinutes(2));
+            await Task.Delay(TimeSpan.FromSeconds(10));
 
             using var scope = _serviceScopeFactory.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
 
             var keys = DuplicatedMessages.Where(kvp => 
                 kvp.Value.count == 1 && 
-                DateTime.Now - kvp.Value.message.SendingDate > TimeSpan.FromMinutes(1)
+                DateTime.Now - kvp.Value.message.SendingDate > TimeSpan.FromSeconds(5)
             );
 
             foreach (var key in keys.Select(kvp => kvp.Key))

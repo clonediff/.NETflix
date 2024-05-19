@@ -88,6 +88,19 @@ final $typed_data.Uint8List messageResponseDescriptor = $convert.base64Decode(
     'FtZRI8CgtzZW5kaW5nRGF0ZRgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSC3Nl'
     'bmRpbmdEYXRlEigKD2JlbG9uZ3NUb1NlbmRlchgGIAEoCFIPYmVsb25nc1RvU2VuZGVy');
 
+@$core.Deprecated('Use historyResponseDescriptor instead')
+const HistoryResponse$json = {
+  '1': 'HistoryResponse',
+  '2': [
+    {'1': 'messages', '3': 1, '4': 3, '5': 11, '6': '.MessageResponse', '10': 'messages'},
+  ],
+};
+
+/// Descriptor for `HistoryResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List historyResponseDescriptor = $convert.base64Decode(
+    'Cg9IaXN0b3J5UmVzcG9uc2USLAoIbWVzc2FnZXMYASADKAsyEC5NZXNzYWdlUmVzcG9uc2VSCG'
+    '1lc3NhZ2Vz');
+
 @$core.Deprecated('Use historyRequestDescriptor instead')
 const HistoryRequest$json = {
   '1': 'HistoryRequest',

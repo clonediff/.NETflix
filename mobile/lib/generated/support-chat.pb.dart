@@ -335,6 +335,50 @@ class MessageResponse extends $pb.GeneratedMessage {
   void clearBelongsToSender() => clearField(6);
 }
 
+class HistoryResponse extends $pb.GeneratedMessage {
+  factory HistoryResponse({
+    $core.Iterable<MessageResponse>? messages,
+  }) {
+    final $result = create();
+    if (messages != null) {
+      $result.messages.addAll(messages);
+    }
+    return $result;
+  }
+  HistoryResponse._() : super();
+  factory HistoryResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory HistoryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'HistoryResponse', createEmptyInstance: create)
+    ..pc<MessageResponse>(1, _omitFieldNames ? '' : 'messages', $pb.PbFieldType.PM, subBuilder: MessageResponse.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  HistoryResponse clone() => HistoryResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  HistoryResponse copyWith(void Function(HistoryResponse) updates) => super.copyWith((message) => updates(message as HistoryResponse)) as HistoryResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static HistoryResponse create() => HistoryResponse._();
+  HistoryResponse createEmptyInstance() => create();
+  static $pb.PbList<HistoryResponse> createRepeated() => $pb.PbList<HistoryResponse>();
+  @$core.pragma('dart2js:noInline')
+  static HistoryResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<HistoryResponse>(create);
+  static HistoryResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<MessageResponse> get messages => $_getList(0);
+}
+
 class HistoryRequest extends $pb.GeneratedMessage {
   factory HistoryRequest({
     $core.String? roomId,

@@ -1,7 +1,6 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -55,7 +54,6 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void dispose() {
     widget.chat.receive.cancel();
-    widget.chat.history.cancel();
 
     super.dispose();
   }
@@ -73,45 +71,24 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: widget.chat.history,
-      builder: (context, history) {
-        return StreamBuilder(
-          stream: widget.chat.receive,
-          builder: (context, receive) {
-            List<Widget> children = [];
-            if (history.connectionState == ConnectionState.waiting) {
-              children = [
-                const Center(child: CircularProgressIndicator(color: Colors.white)),
-                ChatInput(onTextSend: onTextSend, onFileSend: onFileSend)];
-            }
-            if(history.connectionState == ConnectionState.done){
-              children = [
-                ChatMessagesList(messages: messages),
-                ChatInput(onTextSend: onTextSend, onFileSend: onFileSend)
-              ];
-            }
-            if(history.hasError) {
-              children = [
-                const Center(child: Text('Не удалось загрузить данные', style: TextStyle(color: Colors.white))),
-                ChatInput(onTextSend: onTextSend, onFileSend: onFileSend)
-              ];
-            }
-            if(history.hasData) {
-              messages.add(history.data!);
-            }
-            if(receive.hasData) {
-              messages.add(receive.data!);
-            }
-            return Scaffold(
-              appBar: const Header(),
-              backgroundColor: DotNetflixColors.mainBackgroundColor,
-              body: Stack(
-                children: children,
-              ),
-            );
-          },
+      stream: widget.chat.receive,
+      builder: (context, receive) {
+        messages.addAll(widget.chat.history.messages);
+        List<Widget> children = [
+          ChatMessagesList(messages: widget.chat.history.messages),
+          ChatInput(onTextSend: onTextSend, onFileSend: onFileSend)
+        ];
+        if(receive.hasData) {
+          messages.add(receive.data!);
+        }
+        return Scaffold(
+          appBar: const Header(),
+          backgroundColor: DotNetflixColors.mainBackgroundColor,
+          body: Stack(
+            children: children,
+          ),
         );
-      }
+      },
     );
   }
 }

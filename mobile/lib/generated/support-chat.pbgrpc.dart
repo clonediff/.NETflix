@@ -33,10 +33,10 @@ class SupportChatServiceClient extends $grpc.Client {
       '/SupportChatService/ReceiveMessage',
       ($0.ReceiveRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.MessageResponse.fromBuffer(value));
-  static final _$history = $grpc.ClientMethod<$0.HistoryRequest, $0.MessageResponse>(
+  static final _$history = $grpc.ClientMethod<$0.HistoryRequest, $0.HistoryResponse>(
       '/SupportChatService/History',
       ($0.HistoryRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.MessageResponse.fromBuffer(value));
+      ($core.List<$core.int> value) => $0.HistoryResponse.fromBuffer(value));
 
   SupportChatServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -56,8 +56,8 @@ class SupportChatServiceClient extends $grpc.Client {
     return $createStreamingCall(_$receiveMessage, $async.Stream.fromIterable([request]), options: options);
   }
 
-  $grpc.ResponseStream<$0.MessageResponse> history($0.HistoryRequest request, {$grpc.CallOptions? options}) {
-    return $createStreamingCall(_$history, $async.Stream.fromIterable([request]), options: options);
+  $grpc.ResponseFuture<$0.HistoryResponse> history($0.HistoryRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$history, request, options: options);
   }
 }
 
@@ -87,13 +87,13 @@ abstract class SupportChatServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $0.ReceiveRequest.fromBuffer(value),
         ($0.MessageResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.HistoryRequest, $0.MessageResponse>(
+    $addMethod($grpc.ServiceMethod<$0.HistoryRequest, $0.HistoryResponse>(
         'History',
         history_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) => $0.HistoryRequest.fromBuffer(value),
-        ($0.MessageResponse value) => value.writeToBuffer()));
+        ($0.HistoryResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.Empty> sendTextMessage_Pre($grpc.ServiceCall call, $async.Future<$0.TextMessageRequest> request) async {
@@ -108,12 +108,12 @@ abstract class SupportChatServiceBase extends $grpc.Service {
     yield* receiveMessage(call, await request);
   }
 
-  $async.Stream<$0.MessageResponse> history_Pre($grpc.ServiceCall call, $async.Future<$0.HistoryRequest> request) async* {
-    yield* history(call, await request);
+  $async.Future<$0.HistoryResponse> history_Pre($grpc.ServiceCall call, $async.Future<$0.HistoryRequest> request) async {
+    return history(call, await request);
   }
 
   $async.Future<$0.Empty> sendTextMessage($grpc.ServiceCall call, $0.TextMessageRequest request);
   $async.Future<$0.Empty> sendFileMessage($grpc.ServiceCall call, $0.FileMessageRequest request);
   $async.Stream<$0.MessageResponse> receiveMessage($grpc.ServiceCall call, $0.ReceiveRequest request);
-  $async.Stream<$0.MessageResponse> history($grpc.ServiceCall call, $0.HistoryRequest request);
+  $async.Future<$0.HistoryResponse> history($grpc.ServiceCall call, $0.HistoryRequest request);
 }

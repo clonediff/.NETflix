@@ -6,7 +6,6 @@ import 'package:mobile/constants/styles.dart';
 import 'package:mobile/dto/chat_dto.dart';
 import 'package:mobile/dto/film_failure.dart';
 import 'package:mobile/generated/support-chat.pb.dart';
-import 'package:mobile/models/chat_message.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/models/film_info.dart';
 import 'package:mobile/models/subscription.dart';

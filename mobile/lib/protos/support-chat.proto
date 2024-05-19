@@ -7,7 +7,7 @@ service SupportChatService {
     rpc SendTextMessage (TextMessageRequest) returns (Empty);
     rpc SendFileMessage (FileMessageRequest) returns (Empty);
     rpc ReceiveMessage (ReceiveRequest) returns (stream MessageResponse);
-    rpc History (HistoryRequest) returns (stream MessageResponse);
+    rpc History (HistoryRequest) returns (HistoryResponse);
 }
 
 message TextMessageRequest {
@@ -32,6 +32,10 @@ message MessageResponse {
     string senderName = 4;
     google.protobuf.Timestamp sendingDate = 5;
     bool belongsToSender = 6;
+}
+
+message HistoryResponse {
+    repeated MessageResponse messages = 1;
 }
 
 enum MessageType {
