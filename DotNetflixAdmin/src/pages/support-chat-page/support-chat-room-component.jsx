@@ -136,6 +136,7 @@ const SupportChatRoomComponent = ({roomId, connection, onLoad, updateLatestMessa
             message.setRoomid(roomId);
             message.setContenttype(file.type);
             message.setUniquekey(uniqueKey)
+            supportChatClient.sendFileMessage(message, null, (_, __) => console.log('file message sent'));
         }
         reader.readAsArrayBuffer(file)
     }
