@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import { Button } from 'antd'
 import SettingsModal from './settings-modal'
 import FilmsModal from './films-modal'

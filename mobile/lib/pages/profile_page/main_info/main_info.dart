@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/get_user/bloc.dart';
 import 'package:mobile/constants/colors.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/navigation/navigation_routes.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/widgets/change_email_form.dart';
 import 'package:mobile/pages/profile_page/widgets/change_pass_form.dart';
@@ -12,6 +14,7 @@ import 'package:mobile/pages/profile_page/enable2fa/enable2fa.dart';
 import 'package:mobile/pages/profile_page/title_value/title_value.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/change_usettings_form.dart';
+import 'package:mobile/services/session_service.dart';
 import 'package:provider/provider.dart';
 
 class MainInfo extends StatefulWidget {
@@ -115,6 +118,20 @@ class _MainInfoState extends State<MainInfo> {
                                     title: 'Age',
                                     value:
                                         Text(getAge(userData.user?.birthdate))),
+                                // TitleValue(
+                                //     title: "Выход",
+                                //     value: InkWell(
+                                //       onTap: () async {
+                                //         var sessionStorage = getit<SessionDataProvider>();
+                                //         await sessionStorage.deleteJwtToken();
+                                //         //_navigatorKey.currentState!.popUntil((route) => !route.isFirst);
+                                //         _navigatorKey.currentState!
+                                //           ..popUntil((route) => !route.isFirst)
+                                //           ..pushNamed(NavigationRoutes.login);
+                                //
+                                //       },
+                                //     )
+                                // ),
                                 if (userData.user?.enabled2FA ?? false)
                                   const Text(
                                     'Двухфакторная аутентификация подключена',
@@ -135,7 +152,7 @@ class _MainInfoState extends State<MainInfo> {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
-                                  )
+                                  ),
                               ],
                             ),
                           ),

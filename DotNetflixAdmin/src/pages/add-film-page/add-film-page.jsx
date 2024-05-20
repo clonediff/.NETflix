@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import { useForm } from 'antd/es/form/Form'
 import { Button, Form, Input, InputNumber, Modal, Select, Space, Upload, Image, DatePicker } from 'antd'
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
