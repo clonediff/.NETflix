@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflixMobileAPI", "DotN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Shared", "API.Shared\API.Shared.csproj", "{B333C89F-B978-4ADD-A780-C4CD56567846}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetflix.Analytics", "DotNetflix.Analytics\DotNetflix.Analytics.csproj", "{3AAE3014-E9AE-4757-9848-CD35209C1C9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{B333C89F-B978-4ADD-A780-C4CD56567846}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B333C89F-B978-4ADD-A780-C4CD56567846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B333C89F-B978-4ADD-A780-C4CD56567846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AAE3014-E9AE-4757-9848-CD35209C1C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AAE3014-E9AE-4757-9848-CD35209C1C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AAE3014-E9AE-4757-9848-CD35209C1C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AAE3014-E9AE-4757-9848-CD35209C1C9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

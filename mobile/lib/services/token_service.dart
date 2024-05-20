@@ -12,7 +12,7 @@ abstract class TokenServiceBase {
 }
 
 class TokenService implements TokenServiceBase {
-  final _client = getit<GraphQLClient>();
+  final _apiClient = getit<GraphQLClient>(instanceName: 'api');
 
   @override
   Future<Result<String, String>> send2FAToken() => _sendToken(
@@ -39,7 +39,7 @@ class TokenService implements TokenServiceBase {
     required String queryName,
     Map<String, dynamic> variables = const {},
   }) async {
-    var response = await _client.query(
+    var response = await _apiClient.query(
       QueryOptions(
         document: gql(query),
         fetchPolicy: FetchPolicy.networkOnly,

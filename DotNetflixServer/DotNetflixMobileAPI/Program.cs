@@ -2,7 +2,6 @@ using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using API.Shared;
 using Configuration.Shared.RabbitMq;
-using Contracts.Shared;
 using DataAccess;
 using Domain.Entities;
 using DotNetflixMobileAPI.Consumers;
@@ -38,6 +37,7 @@ builder.Services
     .AddCors()
     .Configure<EmailConfig>(builder.Configuration.GetSection("SmtpSetting"))
     .AddMassTransitRabbitMq(rabbitMqConfig, typeof(GrpcSynchronizationConsumer))
+    .AddFilmVisits(rabbitMqConfig)
     .AddApplicationDb(connectionString)
     .AddIdentity<User, IdentityRole>(builder.Environment.IsDevelopment() ? SetupDevelopmentIdentityOptions : _ => { })
     .AddEntityFrameworkStores<ApplicationDBContext>()

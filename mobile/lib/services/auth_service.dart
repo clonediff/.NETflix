@@ -12,7 +12,7 @@ abstract class AuthServiceBase {
 }
 
 class AuthService implements AuthServiceBase{
-  final _client = getit<GraphQLClient>();
+  final _apiClient = getit<GraphQLClient>(instanceName: 'api');
 
   @override
   Future<Result<String, String>> login(LoginFormDto dto) async {
@@ -20,7 +20,7 @@ class AuthService implements AuthServiceBase{
         document: gql(Mutations.loginMutation),
         variables: {'form': dto.toJson() }
     );
-    final result = await _client.mutate(options);
+    final result = await _apiClient.mutate(options);
 
     return result.hasException
         ? const Result.fromFailure("Не удалось войти в аккаунт")
@@ -32,7 +32,7 @@ class AuthService implements AuthServiceBase{
 
   @override
   Future<MaybeErrorResponse> register(RegisterFormDto dto) async{
-    final result = await _client.mutate(
+    final result = await _apiClient.mutate(
         MutationOptions(
             document: gql(Mutations.registerMutation),
             variables: {'form': dto.toJson() }

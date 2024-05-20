@@ -201,6 +201,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  dart_amqp:
+    dependency: "direct main"
+    description:
+      name: dart_amqp
+      sha256: "22347a6b57034c44dd3e0c8f00bd397bb5c5211a976a7d4e03b5664e89a7224d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   dart_style:
     dependency: transitive
     description:

@@ -13,11 +13,11 @@ abstract class SubscriptionServiceBase {
 
 class SubscriptionService implements SubscriptionServiceBase {
 
-  final _client = getit<GraphQLClient>();
+  final _apiClient = getit<GraphQLClient>(instanceName: 'api');
 
   @override
   Future<MaybeErrorResponse> performSubscriptionActionAsync(SubscriptionActionType type, int subscriptionId, Map<String, dynamic> cardData) async {
-    final result = await _client.mutate(
+    final result = await _apiClient.mutate(
       MutationOptions(
         document: gql(Mutations.subscriptionActionMutation),
         variables: {
@@ -35,7 +35,7 @@ class SubscriptionService implements SubscriptionServiceBase {
   
   @override
   Future<Result<List<models.Subscription>, String>> getAllSubscriptionsAsync() async {
-    final result = await _client.query(
+    final result = await _apiClient.query(
       QueryOptions(document: gql(Queries.allSubscriptionsQuery))
     );
 

@@ -15,6 +15,9 @@ using Services.Shared.SupportChatService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Configuration.Shared.RabbitMq;
 using MassTransit;
+using Services.Shared.FilmVisitsService;
+using RabbitMQ.Client;
+using static Configuration.Shared.Constants.QueueExchanges;
 
 namespace API.Shared;
 
@@ -36,7 +39,7 @@ public static class Startup
                 cfg.ConfigureEndpoints(ctx);
             });
         });
-        
+
         return services;
     }
 
@@ -82,6 +85,7 @@ public static class Startup
         services.AddHttpClient<IGoogleOAuth, GoogleOAuthService>();
         services.AddScoped<IPasswordGenerator, PasswordGenerator>();
         services.AddScoped<IJwtGenerator, JwtGenerator>();
+        services.AddScoped<IFilmVisitsService, FilmVisitsService>();
         services.AddApplicationServices();
         
         return services;
@@ -112,6 +116,26 @@ public static class Startup
 
         services.AddAuthorizationBuilder();
         
+        return services;
+    }
+
+    public static IServiceCollection AddFilmVisits(this IServiceCollection services, RabbitMqConfig config)
+    {
+        services.AddSingleton(_ =>
+        {
+            var factory = new ConnectionFactory
+            {
+                HostName = config.Hostname,
+                CredentialsProvider = new BasicCredentialsProvider(config.Username, config.Password)
+            };
+            var connection = factory.CreateConnection();
+            var channel = connection.CreateModel();
+
+            channel.ExchangeDeclare(FilmVisitsExchangeName, ExchangeType.Direct);
+
+            return channel;
+        });
+
         return services;
     }
 }

@@ -4,7 +4,7 @@ using DotNetflix.Storage.Services.PermanentStorageMetadata;
 using DotNetflix.Storage.Services.PermanentStorageMetadata.Models;
 using DotNetflix.Storage.Services.TemporaryStorageMetadata;
 using Microsoft.AspNetCore.Mvc;
-using static Configuration.Shared.Constants.HttpRequestHeaderNames;
+using static Configuration.Shared.Constants.HttpHeaderNames;
 using static Microsoft.AspNetCore.Http.Results;
 using static DotNetflix.Storage.Helpers.MetaDataProcessor;
 

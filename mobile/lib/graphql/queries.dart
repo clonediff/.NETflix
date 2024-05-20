@@ -125,4 +125,18 @@ class Queries {
       }
     } 
   ''';
+
+  static const filmVisitsQueryName = 'filmVisits';
+  static const filmVisitsQuery = '''
+    query $filmVisitsQueryName(\$filmId: Int!) {
+      $filmVisitsQueryName(filmId: \$filmId)
+    }
+  ''';
+
+  static const connectQueryName = 'connect';
+  static const connectQuery = '''
+    query $connectQueryName(\$filmId: Int!) {
+      $connectQueryName(filmId: \$filmId)
+    }
+  ''';
 }

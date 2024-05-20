@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/get_user/bloc.dart';
 import 'package:mobile/constants/colors.dart';
-import 'package:mobile/main.dart';
-import 'package:mobile/navigation/navigation_routes.dart';
 import 'package:mobile/pages/profile_page/functions/helper.dart';
 import 'package:mobile/pages/profile_page/widgets/change_email_form.dart';
 import 'package:mobile/pages/profile_page/widgets/change_pass_form.dart';
@@ -14,7 +12,6 @@ import 'package:mobile/pages/profile_page/enable2fa/enable2fa.dart';
 import 'package:mobile/pages/profile_page/title_value/title_value.dart';
 import 'package:mobile/pages/profile_page/user_data.dart';
 import 'package:mobile/pages/profile_page/widgets/change_usettings_form.dart';
-import 'package:mobile/services/session_service.dart';
 import 'package:provider/provider.dart';
 
 class MainInfo extends StatefulWidget {

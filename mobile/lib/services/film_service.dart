@@ -16,12 +16,12 @@ abstract class FilmServiceBase {
 
 class FilmService implements FilmServiceBase {
 
-  final _client = getit<GraphQLClient>();
+  final _apiClient = getit<GraphQLClient>(instanceName: 'api');
 
   @override
   Future<Result<Map<String, List<FilmForMainPage>>, String>> getAllFilmsAsync() async {
 
-    final result = await _client.query(
+    final result = await _apiClient.query(
       QueryOptions(document: gql(Queries.allFilmsQuery))
     );
 
@@ -50,7 +50,7 @@ class FilmService implements FilmServiceBase {
         return MapEntry(key, value.trimLeft().trimRight());
       });
 
-    final result = await _client.query(
+    final result = await _apiClient.query(
       QueryOptions(
         document: gql(Queries.filmsBySearchQuery),
         variables: { 'dto': searchDto }
@@ -69,10 +69,12 @@ class FilmService implements FilmServiceBase {
   @override
   Future<Result<FilmInfo, GetFilmFailure>> getFilmById(int filmId, String? userId) async {
 
-    final result = await _client.query(
+    final result = await _apiClient.query(
         QueryOptions(
             document: gql(Queries.filmByIdQuery),
-            variables: { 'filmId': filmId, 'userId': userId }
+            variables: { 'filmId': filmId, 'userId': userId },
+            fetchPolicy: FetchPolicy.noCache,
+            cacheRereadPolicy: CacheRereadPolicy.ignoreAll
         )
     );
 
