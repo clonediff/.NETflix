@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ReactPlayer from 'react-player'
 import { Image } from 'antd'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import CustomSpin from '../../custom-spin/custom-spin'
 
 const FilmDetailsPage = () => {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr'
 import { Button, Pagination } from 'antd'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance, supportChatClient } from '../../clients'
 import CustomSpin from '../../custom-spin/custom-spin'
 import SupportChatRoomComponent from './support-chat-room-component'
 import './support-chat-page.css'
+import {ReceiveRequest, MessageType} from "../../Protos/support-chat_pb"
 
 const SupportChatPage = () => {
 
@@ -23,6 +24,15 @@ const SupportChatPage = () => {
                 })
                 .build()
             setConnection(newConnection)
+            const receiveRequest = new ReceiveRequest();
+            receiveRequest.setRoomid('');
+            const stream = supportChatClient.receiveMessage(receiveRequest);
+            stream.on("data", (message) => {
+                console.log('main grpc');
+                console.log(message.toObject())
+                updateMessagePreview(message.getRoomid(), message.getSendername(), new TextDecoder('utf-8').decode(message.getContent().getValue()), 
+                    () => message.getMessagetype() === MessageType.TEXT)
+            })
         }
         fetchPreviews(1, null)
     }, [])
@@ -37,7 +47,9 @@ const SupportChatPage = () => {
         if (connection && !selectedRoom) {
             connection.off('ReceiveAsync')
             connection.on('ReceiveAsync', (message) => {
-                updateMessagePreview(message.roomId, message.senderName, message.message)
+                updateMessagePreview(message.roomId, message.senderName, message.content, () => message.messageType === MessageType.TEXT)
+                console.log('main SignalR')
+                console.log(message)
             })
         }
     }, [chatPreviewsCount])
@@ -57,7 +69,7 @@ const SupportChatPage = () => {
         setChatPreviews([ ...chatPreviews ])
     }
 
-    const updateMessagePreview = (roomId, userName, latestMessage) => {
+    const updateMessagePreview = (roomId, userName, latestMessage, textChecker) => {
         let newChatPreview = chatPreviews.find(p => p.roomId === roomId)
         if (!newChatPreview) {
             newChatPreview = {
@@ -67,7 +79,7 @@ const SupportChatPage = () => {
             setChatPreviewsCount(x => x + 1)
         }
         newChatPreview.userName = userName
-        newChatPreview.latestMessage = typeof latestMessage === 'string' ? latestMessage : 'файл'
+        newChatPreview.latestMessage = textChecker() ? latestMessage : 'файл'
         if (roomId !== selectedRoom)
             newChatPreview.totalUnReadMessages += 1;
         setChatPreviews([ newChatPreview, ...chatPreviews.filter(x => x !== newChatPreview) ])
@@ -110,7 +122,8 @@ const SupportChatPage = () => {
                     roomId={ selectedRoom } 
                     connection={ connection } 
                     onLoad={ markMessagesAsRead }
-                    updateLatestMessage={ updateMessagePreview } /> 
+                    updateLatestMessage={ updateMessagePreview }
+                    /> 
                 : 
                 null
             }

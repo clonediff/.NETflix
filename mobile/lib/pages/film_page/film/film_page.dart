@@ -11,7 +11,7 @@ import 'package:mobile/widgets/header.dart';
 
 class MainFilmPage extends StatelessWidget{
   final FilmInfo film;
-  final Function(int pageNumber) onSelectedPage;
+  final Function(int pageNumber, BuildContext context) onSelectedPage;
   final bool Function() isFirstLaunch;
   final Client client;
 
@@ -404,7 +404,7 @@ class ShortDescription extends StatelessWidget{
 class Persons extends StatelessWidget{
   final List<Person> persons;
   final String title;
-  final Function(int pageNumber) onSelectedPage;
+  final Function(int pageNumber, BuildContext context) onSelectedPage;
 
   const Persons({
     super.key,
@@ -414,7 +414,7 @@ class Persons extends StatelessWidget{
   });
 
   void goToSelectedPage(BuildContext context, int page){
-    onSelectedPage(page);
+    onSelectedPage(page, context);
   }
 
   @override
@@ -434,7 +434,7 @@ class Persons extends StatelessWidget{
                 child: InkWell(
                   child: const Text('Больше информации >', style: DotNetflixTextStyles.mainTextStyle),
                   onTap: () {
-                    Timer(const Duration(seconds: 1),() => goToSelectedPage(context, title == 'Актёры' ? 1 : 2));
+                    Timer(const Duration(seconds: 1),() => goToSelectedPage(context, title == 'Актёры' ? 0 : 1));
                   },
                 ),
               )

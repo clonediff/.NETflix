@@ -5,6 +5,7 @@ import 'package:mobile/main.dart';
 import 'package:mobile/services/film_service.dart';
 import 'package:mobile/services/subscription_service.dart';
 
+
 class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
 
   final _filmService = getit<FilmServiceBase>();
@@ -43,6 +44,5 @@ class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
         (f) => emit(ErrorState(error: f))
       );
     });
-
   }
 }

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from 'antd'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 
 const Film = ({ film, modal, modalHolder, onDeleteHandler }) => {
 

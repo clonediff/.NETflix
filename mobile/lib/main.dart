@@ -11,10 +11,16 @@ import 'package:mobile/services/token_service.dart';
 import 'package:mobile/services/user_service.dart';
 import 'package:mobile/services/subscription_service.dart';
 import 'package:mobile/services/session_service.dart';
+import 'package:grpc/grpc.dart' as $grpc;
+import 'package:grpc/grpc.dart';
 
 final getit = GetIt.instance;
-const String apiBaseUrl = 'http://192.168.137.1:5130';
-const String analyticsBaseUrl = 'http://192.168.137.1:5142';
+const String apiBaseIp = '192.168.43.135';
+const int apiBasePort = 5130;
+const int apiBaseGrpcPort = 5131;
+const int analyticsBasePort = 5142;
+const String apiBaseUrl = 'http://$apiBaseIp:$apiBasePort';
+const String analyticsBaseUrl = 'http://$apiBaseIp:$analyticsBasePort';
 
 void setup() {
   var sessionDataProvider = SessionDataProvider(const FlutterSecureStorage());
@@ -33,7 +39,19 @@ void setup() {
     ),
     instanceName: 'analytics'
   );
-  getit.registerSingleton<SessionDataProvider>(SessionDataProvider(const FlutterSecureStorage()));
+
+  final channel = $grpc.ClientChannel(
+      apiBaseIp,
+      port: apiBaseGrpcPort,
+      options: const ChannelOptions(
+          credentials: $grpc.ChannelCredentials.insecure(),
+
+      )
+  );
+
+  getit.registerSingleton<$grpc.ClientChannel>(channel);
+
+  getit.registerSingleton<SessionDataProvider>(sessionDataProvider);
   getit.registerSingleton<FilmServiceBase>(FilmService());
   getit.registerSingleton<SubscriptionServiceBase>(SubscriptionService());
   getit.registerSingleton<UserServiceBase>(UserService());

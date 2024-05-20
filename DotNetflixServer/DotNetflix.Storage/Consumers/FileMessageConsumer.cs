@@ -24,6 +24,10 @@ public class FileMessageConsumer : IConsumer<FileMessage>
         {
             await _storageService.CreateBucketAsync(bucketIdentifier);
         }
+
+        var existingFile = await _storageService.GetFileFromBucketAsync(fileIdentifier, bucketIdentifier);
+
+        if (existingFile is not null) return;
             
         await _storageService.PutFileInBucketAsync(stream, fileIdentifier, bucketIdentifier);
     }

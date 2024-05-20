@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/dto/chat_dto.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/models/film_info.dart';
 import 'package:mobile/models/subscription.dart';
@@ -30,4 +31,10 @@ class LoadingFilmByIdEvent extends GenericLoadingEventBase<FilmInfo> {
   String? userId;
 
   LoadingFilmByIdEvent({required super.builder, required this.filmId, this.userId});
+}
+
+class LoadingChatPageEvent extends GenericLoadingEventBase<ChatDto> {
+  final String roomId;
+
+  LoadingChatPageEvent({required super.builder, required this.roomId});
 }

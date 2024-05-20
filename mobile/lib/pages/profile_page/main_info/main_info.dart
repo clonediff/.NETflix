@@ -115,6 +115,20 @@ class _MainInfoState extends State<MainInfo> {
                                     title: 'Age',
                                     value:
                                         Text(getAge(userData.user?.birthdate))),
+                                // TitleValue(
+                                //     title: "Выход",
+                                //     value: InkWell(
+                                //       onTap: () async {
+                                //         var sessionStorage = getit<SessionDataProvider>();
+                                //         await sessionStorage.deleteJwtToken();
+                                //         //_navigatorKey.currentState!.popUntil((route) => !route.isFirst);
+                                //         _navigatorKey.currentState!
+                                //           ..popUntil((route) => !route.isFirst)
+                                //           ..pushNamed(NavigationRoutes.login);
+                                //
+                                //       },
+                                //     )
+                                // ),
                                 if (userData.user?.enabled2FA ?? false)
                                   const Text(
                                     'Двухфакторная аутентификация подключена',
@@ -135,7 +149,7 @@ class _MainInfoState extends State<MainInfo> {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
-                                  )
+                                  ),
                               ],
                             ),
                           ),
