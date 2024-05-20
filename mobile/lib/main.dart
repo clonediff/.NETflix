@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:mobile/services/analytics_service.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/film_service.dart';
 import 'package:mobile/navigation/navigation.dart';
@@ -14,10 +15,12 @@ import 'package:grpc/grpc.dart' as $grpc;
 import 'package:grpc/grpc.dart';
 
 final getit = GetIt.instance;
-const String apiBaseIp = '192.168.1.35';
+const String apiBaseIp = '192.168.43.135';
 const int apiBasePort = 5130;
 const int apiBaseGrpcPort = 5131;
+const int analyticsBasePort = 5142;
 const String apiBaseUrl = 'http://$apiBaseIp:$apiBasePort';
+const String analyticsBaseUrl = 'http://$apiBaseIp:$analyticsBasePort';
 
 void setup() {
   var sessionDataProvider = SessionDataProvider(const FlutterSecureStorage());
@@ -26,7 +29,15 @@ void setup() {
       link: AuthLink(getToken: () async => 'Bearer ${await sessionDataProvider.getJwtToken()}')
           .concat(HttpLink('$apiBaseUrl/graphql')),
       cache: GraphQLCache()
-    )
+    ),
+    instanceName: 'api'
+  );
+  getit.registerSingleton<GraphQLClient>(
+    GraphQLClient(
+      link: HttpLink('$analyticsBaseUrl/graphql'),
+      cache: GraphQLCache()
+    ),
+    instanceName: 'analytics'
   );
 
   final channel = $grpc.ClientChannel(
@@ -46,6 +57,7 @@ void setup() {
   getit.registerSingleton<UserServiceBase>(UserService());
   getit.registerSingleton<TokenServiceBase>(TokenService());
   getit.registerSingleton<AuthServiceBase>(AuthService());
+  getit.registerSingleton<AnalyticsServiceBase>(AnalyticsService());
 }
 
 Future<void> main() async {

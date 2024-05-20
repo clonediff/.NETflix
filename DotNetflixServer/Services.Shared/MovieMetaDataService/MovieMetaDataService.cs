@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Configuration.Shared.Constants.HttpRequestHeaderNames;
+using static Configuration.Shared.Constants.HttpHeaderNames;
 
 namespace Services.Shared.MovieMetaDataService;
 

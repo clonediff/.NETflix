@@ -1,56 +1,73 @@
 import 'dart:async';
+import 'package:dart_amqp/dart_amqp.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/constants/styles.dart';
+import 'package:mobile/main.dart';
 import 'package:mobile/models/film_info.dart';
+import 'package:mobile/services/analytics_service.dart';
 import 'package:mobile/widgets/header.dart';
 
 class MainFilmPage extends StatelessWidget{
   final FilmInfo film;
   final Function(int pageNumber, BuildContext context) onSelectedPage;
+  final bool Function() isFirstLaunch;
+  final Client client;
 
   const MainFilmPage({
     super.key,
     required this.film,
-    required this.onSelectedPage
+    required this.onSelectedPage, 
+    required this.client, 
+    required this.isFirstLaunch, 
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Header(),
-      body: Container(
-          padding: const EdgeInsets.only(left: 12, right: 12, top: 5),
-          color: DotNetflixColors.mainBackgroundColor,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                PosterImage(film: film),
-                Caption(film: film),
-                MainInfo(film: film),
-                MoreInfo(film: film),
-                Persons(persons: film.persons.entries
-                    .where((element) => element.key == 'актеры' || element.key == 'актеры дубляжа')
-                    .map((e) => e.value)
-                    .expand((element) => element)
-                    .take(10)
-                    .toList(),
-                    title: 'Актёры',
-                    onSelectedPage: onSelectedPage),
-                const Padding(padding: EdgeInsets.only(top: 20)),
-                Persons(persons: film.persons.entries
-                    .where((element) => element.key != 'актеры' && element.key != 'актеры дубляжа')
-                    .map((e) => e.value)
-                    .expand((element) => element)
-                    .take(10)
-                    .toList(),
-                    title: 'Съёмочная группа',
-                    onSelectedPage: onSelectedPage),
-              ],
-            ),
-          )
+      body: PopScope(
+        canPop: true,
+        onPopInvoked: (didPop) {
+          client.close();
+          if (didPop) {
+            return;
+          }
+          Navigator.pop(context);
+        },
+        child: Container(
+            padding: const EdgeInsets.only(left: 12, right: 12, top: 5),
+            color: DotNetflixColors.mainBackgroundColor,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  PosterImage(film: film),
+                  Caption(film: film, client: client, isFirstLaunch: isFirstLaunch),
+                  MainInfo(film: film),
+                  MoreInfo(film: film),
+                  Persons(persons: film.persons.entries
+                      .where((element) => element.key == 'актеры' || element.key == 'актеры дубляжа')
+                      .map((e) => e.value)
+                      .expand((element) => element)
+                      .take(10)
+                      .toList(),
+                      title: 'Актёры',
+                      onSelectedPage: onSelectedPage),
+                  const Padding(padding: EdgeInsets.only(top: 20)),
+                  Persons(persons: film.persons.entries
+                      .where((element) => element.key != 'актеры' && element.key != 'актеры дубляжа')
+                      .map((e) => e.value)
+                      .expand((element) => element)
+                      .take(10)
+                      .toList(),
+                      title: 'Съёмочная группа',
+                      onSelectedPage: onSelectedPage),
+                ],
+              ),
+            )
+        ),
       ),
     );
   }
@@ -79,11 +96,57 @@ class PosterImage extends StatelessWidget{
 
 }
 
-class Caption extends StatelessWidget{
+class Caption extends StatefulWidget{
   final FilmInfo film;
+  final Client client;
+  final bool Function() isFirstLaunch;
 
-  const Caption({super.key, required this.film});
+  const Caption({super.key, required this.film, required this.client, required this.isFirstLaunch});
 
+  @override
+  State<Caption> createState() => _CaptionState();
+}
+
+class _CaptionState extends State<Caption> {
+
+  int _visits = 0;
+  final _analyticsService = getit<AnalyticsServiceBase>();
+
+  @override
+  void initState() {
+    setInitialVisits();
+    setupRabbitMq();
+    super.initState();
+  }
+
+  Future<void> setInitialVisits() async {
+    final visits = await _analyticsService.getFilmVisitsAsync(widget.film.id);
+    setState(() => _visits = visits);
+  }
+
+  Future<void> setupRabbitMq() async {
+    if (!widget.isFirstLaunch()) return;
+
+    final queueName = await _analyticsService.connectAsync(widget.film.id);
+
+    if (queueName.isEmpty) return;
+
+    final channel = await widget.client.channel();
+    final exchange = await channel.exchange(
+      'film-visits',
+      ExchangeType.DIRECT
+    );
+    final consumer = await exchange.bindQueueConsumer(
+      queueName,
+      [widget.film.id.toString()],
+      exclusive: false,
+      autoDelete: true,
+      declare: false
+    );
+
+    consumer.listen((_) => setState(() => _visits++));
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -93,17 +156,26 @@ class Caption extends StatelessWidget{
         children: [
           Flexible(
             child: Text(
-              film.name,
+              widget.film.name,
               style: DotNetflixTextStyles.filmNameStyle,
             ),
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(2.0),
             child: Text(
-              '${film.ageRating}+',
+              '${widget.film.ageRating}+',
               style: DotNetflixTextStyles.filmAgeRatingStyle
             ),
           ),
+          Row(
+            children: [
+              const Icon(
+                Icons.remove_red_eye_outlined,
+                color: Colors.white,
+              ),
+              Text(_visits.toString(), style: const TextStyle(color: Colors.white))
+            ],
+          )
         ],
       ),
     );

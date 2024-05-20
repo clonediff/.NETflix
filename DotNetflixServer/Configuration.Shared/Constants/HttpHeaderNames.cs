@@ -1,6 +1,6 @@
 ﻿namespace Configuration.Shared.Constants;
 
-public static class HttpRequestHeaderNames
+public static class HttpHeaderNames
 {
     public const string MetaDataTypeHeaderName = "MetaDataType";
 }

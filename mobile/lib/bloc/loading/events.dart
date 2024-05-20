@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grpc/grpc.dart';
 import 'package:mobile/dto/chat_dto.dart';
-import 'package:mobile/generated/support-chat.pbgrpc.dart';
 import 'package:mobile/models/film_for_main_page.dart';
 import 'package:mobile/models/film_info.dart';
 import 'package:mobile/models/subscription.dart';

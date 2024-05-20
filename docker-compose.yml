@@ -10,6 +10,23 @@ services:
     build:
       context: ./DotNetflixAdmin
       dockerfile: DockerfileEnvoy
+  DotNetflixAnalytics:
+    image: aspnetdotnetflixanalytics
+    container_name: dotnetflixanalytics
+    ports:
+      - "5142:5142"
+    build:
+      context: ./DotNetflixServer
+      dockerfile: DockerfileDotNetflixAnalytics
+    depends_on:
+      - RabbitMq
+      - ClickHouse
+    environment:
+      - ConnectionStrings__ClickHouse=Host=clickhouse;Port=8123
+      - RabbitMqConfig__Username=admin
+      - RabbitMqConfig__Password=admin
+      - RabbitMqConfig__Hostname=RabbitMq
+      - RabbitMqConfig__Port=5672
   DotNetflixMobileAPI:
     image: aspnetdotnetflixmobileapi
     container_name: dotnetflixmobilemobileapi
@@ -68,6 +85,11 @@ services:
       - RabbitMqConfig__Port=5672
       - ConnectionStrings__Redis=storageRedis:6379
       - ConnectionStrings__MongoDb=mongodb://mongodb:27017
+  ClickHouse:
+    image: clickhouse/clickhouse-server:head-alpine
+    container_name: clickhouse
+    ports:
+      - "8123:8123"
   MongoStorage:
     image: mongo:6-jammy
     container_name: mongodb

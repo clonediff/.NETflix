@@ -1,0 +1,30 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 5142
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["DotNetflixAnalytics/DotNetflixAnalytics.csproj", "DotNetflixAnalytics/"]
+COPY ["Contracts.Shared/Contracts.Shared.csproj", "Contracts.Shared/"]
+COPY ["API.Shared/API.Shared.csproj", "API.Shared/"]
+COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
+COPY ["DotNetflix.Application/DotNetflix.Application.csproj", "DotNetflix.Application/"]
+COPY ["Services.Infrastructure/Services.Infrastructure.csproj", "Services.Infrastructure/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["Configuration.Shared/Configuration.Shared.csproj", "Configuration.Shared/"]
+COPY ["DotNetflix.CQRS/DotNetflix.CQRS.csproj", "DotNetflix.CQRS/"]
+COPY ["Services.Shared/Services.Shared.csproj", "Services.Shared/"]
+RUN dotnet restore "DotNetflixAnalytics/DotNetflixAnalytics.csproj"
+COPY . .
+WORKDIR "/src/DotNetflixAnalytics"
+RUN dotnet build "DotNetflixAnalytics.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "DotNetflixAnalytics.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DotNetflixAnalytics.dll"]
