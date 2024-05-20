@@ -58,7 +58,6 @@ class _Enable2FAState extends State<Enable2FA> {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
 
-      // TODO: подтвердить 2FA на сервере
       getit<UserServiceBase>().enable2FA(
         EnableTwoFactorAuthDtoInput(token: formDataCode),
       ).then((value) {

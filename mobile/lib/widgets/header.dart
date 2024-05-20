@@ -18,6 +18,13 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
+          icon: const Icon(Icons.question_answer, size: 26),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.of(context).pushNamed(NavigationRoutes.supportChat, arguments: "RoomId");
+          },
+        ),
+        IconButton(
           icon: const Icon(Icons.person, size: 26),
           color: Colors.white,
           onPressed: () {

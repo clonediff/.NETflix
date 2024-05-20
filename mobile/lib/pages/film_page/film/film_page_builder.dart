@@ -5,7 +5,7 @@ import 'package:mobile/bloc/loading/events.dart';
 import 'package:mobile/bloc/loading/state_parser.dart';
 import 'package:mobile/bloc/loading/states.dart';
 import 'package:mobile/models/film_info.dart';
-import 'package:mobile/pages/film_page/persons/persons_page.dart';
+import 'package:mobile/navigation/navigation_routes.dart';
 import 'film_page.dart';
 
 class FilmPageBuilder extends StatelessWidget {
@@ -32,27 +32,17 @@ class FilmPage extends StatefulWidget{
 }
 
 class _FilmPageState extends State<FilmPage>{
-  int selectedPage = 0;
-  late List<Widget> pages = [
-    MainFilmPage(film: widget.film, onSelectedPage: onSelectedPage),
-    PersonsPage(
-        persons: Map.fromEntries(widget.film.persons.entries.where((element) => element.key == 'актеры' || element.key == 'актеры дубляжа')),
-        title: 'Актёры',
-        onSelectedPage: onSelectedPage),
-    PersonsPage(
-        persons: Map.fromEntries(widget.film.persons.entries.where((element) => element.key != 'актеры' && element.key != 'актеры дубляжа')),
-        title: 'Съёмочная группа',
-        onSelectedPage: onSelectedPage),
+  late List<Map<String, List<Person>>> personsPages = [
+    Map.fromEntries(widget.film.persons.entries.where((element) => element.key == 'актеры' || element.key == 'актеры дубляжа')),
+    Map.fromEntries(widget.film.persons.entries.where((element) => element.key != 'актеры' && element.key != 'актеры дубляжа')),
   ];
 
-  onSelectedPage(int page) {
-    setState(() {
-      selectedPage = page;
-    });
+  onSelectedPage(int page, BuildContext context) {
+    Navigator.of(context).pushNamed(NavigationRoutes.persons, arguments: personsPages[page]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return pages[selectedPage];
+    return MainFilmPage(film: widget.film, onSelectedPage: onSelectedPage);
   }
 }

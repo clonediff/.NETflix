@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Modal } from 'antd'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import Subscription from './subscription'
 import DataLayout from '../../data-layout/data-layout'
 import '../../data-layout/data-layout.css'

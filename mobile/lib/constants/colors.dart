@@ -7,4 +7,6 @@ class DotNetflixColors {
   static const floatingButtonColor = Color.fromRGBO(0, 30, 70, 0.7);
   static const buttonColor = Color.fromRGBO(10, 30, 100, 1.0);
   static const submitButtonColor = Color.fromRGBO(50, 30, 150, 1.0);
+  static const receiverMessageColor = Color.fromRGBO(20, 0, 100, 1.0);
+  static const senderMessageColor = Color.fromRGBO(41, 20, 103, 1.0);
 }

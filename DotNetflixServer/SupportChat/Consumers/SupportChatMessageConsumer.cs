@@ -2,6 +2,7 @@
 using Domain.Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using static SupportChat.DuplicatedMessagesStore;
 
 namespace SupportChat.Consumers;
 
@@ -16,6 +17,17 @@ public class SupportChatMessageConsumer : IConsumer<SupportChatMessage>
 
     public async Task Consume(ConsumeContext<SupportChatMessage> context)
     {
+        if (!string.IsNullOrEmpty(context.Message.UniqueKey))
+        {
+            DuplicatedMessages.AddOrUpdate(
+                key: context.Message.UniqueKey,
+                addValue: (1, context.Message),
+                updateValueFactory: (_, value) => (++value.count, value.message)  
+            );
+
+            if (DuplicatedMessages[context.Message.UniqueKey].count == 1) return;
+        }
+
         var message = new Message
         {
             SendingDate = context.Message.SendingDate,
@@ -27,5 +39,7 @@ public class SupportChatMessageConsumer : IConsumer<SupportChatMessage>
 
         _context.Set<Message>().Add(message);
         await _context.SaveChangesAsync();
+
+        RemoveDuplicates(context.Message.UniqueKey);
     }
 }

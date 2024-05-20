@@ -17,34 +17,37 @@ public class SupportChatHub : Hub<ISupportChatClient>
         _bus = bus;
     }
 
-    public async Task SendMessageAsync(SendMessageDto<string> dto)
+    public async Task SendMessageAsync(SendMessageDto<string> dto, string uniqueKey)
     {
         var groupName = dto.RoomId ?? Context.UserIdentifier!;
-        var sendingDate = DateTime.Now;
+        var sendingDate = DateTime.UtcNow;
         
-        await SendAsync(groupName, sendingDate, dto.Message, dto, x => x);
+        await SendAsync(groupName, sendingDate, dto.Message, uniqueKey, dto, x => x, SupportChatMessageType.Text);
     }
 
-    public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType)
+    public async Task SendFilesAsync(SendMessageDto<int[]> dto, string contentType, string uniqueKey)
     {
-        var groupName = dto.RoomId ?? Context.UserIdentifier!;
-        var sendingDate = DateTime.Now;
+        var roomId = dto.RoomId ?? Context.UserIdentifier!;
+        var sendingDate = DateTime.UtcNow;
         var fileExtension = contentType.Split('/')[1];
-        var content = $"file_{groupName}_{sendingDate:s}.{fileExtension}_{contentType}";
+        var fileName = string.IsNullOrEmpty(uniqueKey) ? sendingDate.ToString("s") : uniqueKey;
+        var content = $"file_{roomId}_{fileName}.{fileExtension}_{contentType}";
         var buffer = dto.Message.Select(x => (byte) x).ToArray();
         var image = new ImageDto($"data:{contentType};base64,", buffer);
 
-        await SendAsync(groupName, sendingDate, content, dto, _ => image);
+        await SendAsync(roomId, sendingDate, content, uniqueKey, dto, _ => image, SupportChatMessageType.File);
         
-        await _bus.Publish(new FileMessage(buffer, $"{sendingDate:s}.{fileExtension}", groupName));
+        await _bus.Publish(new FileMessage(buffer, $"{fileName}.{fileExtension}", roomId));
     }
 
-    private async Task SendAsync<TInMessage, TOutMessage>(string groupName, DateTime sendingDate, string content,
+    private async Task SendAsync<TInMessage, TOutMessage>(string roomId, DateTime sendingDate, string contentToPersist,
+        string uniqueKey,
         SendMessageDto<TInMessage> dto, 
-        Func<TInMessage, TOutMessage> transformer)
+        Func<TInMessage, TOutMessage> transformer,
+        SupportChatMessageType messageType)
     {
-        var userName = Context.User?.Identity?.Name ?? AdminName;
-        var messageForSender = new SupportChatMessageDto<TOutMessage>(groupName, transformer(dto.Message), userName, sendingDate, true);
+        var senderName = Context.User?.Identity?.Name ?? AdminName;
+        var messageForSender = new SupportChatMessageDto<TOutMessage>(roomId, messageType, transformer(dto.Message), senderName, sendingDate, true);
         var messageForReceiver = messageForSender with { BelongsToSender = false };
 
         var (adminMessage, userMessage) = (messageForReceiver, messageForSender);
@@ -52,14 +55,21 @@ public class SupportChatHub : Hub<ISupportChatClient>
             (adminMessage, userMessage) = (messageForSender, messageForReceiver);
 
         await Clients.Clients(AdminConnections).ReceiveAsync(adminMessage);
-        await Clients.User(groupName).ReceiveAsync(userMessage);
+        await Clients.User(roomId).ReceiveAsync(userMessage);
 
         await _bus.Publish(new SupportChatMessage(
-            Content: content,
+            Content: contentToPersist,
             SendingDate: sendingDate,
             IsReadByAdmin: dto.RoomId is not null,
             IsFromAdmin: dto.RoomId is not null,
-            RoomId: groupName));
+            RoomId: roomId,
+            UniqueKey: uniqueKey
+        ));
+
+        if (senderName != AdminName)
+        {
+            await _bus.Publish(new GrpcSynchronizationMessage<TOutMessage>(messageForSender));
+        }
     }
 
     public override Task OnConnectedAsync()

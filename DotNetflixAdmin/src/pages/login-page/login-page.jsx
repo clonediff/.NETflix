@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Form, Input } from 'antd';
 import "./login-page.css"
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../clients'
 import { useState } from "react";
 
 export const LoginPage = () => {
