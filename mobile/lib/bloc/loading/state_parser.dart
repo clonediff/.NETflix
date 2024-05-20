@@ -19,7 +19,6 @@ Widget parseState(BuildContext context, LoadingStateBase state) {
     LoadedState<List<FilmForMainPage>>() => state.builder(state.data),
     LoadedState<FilmInfo>() => state.builder(state.data),
     LoadedState<List<Subscription>>() => state.builder(state.data),
-    LoadedState<ChatDto>() => state.builder(state.data),
     ErrorState<String>() => Center(child: Text(state.error, style: const TextStyle(color: Colors.white))),
     ErrorState<GetFilmFailure>() => getFilmFailureAlertDialog(state),
     _ => Container()

@@ -2,20 +2,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/loading/events.dart';
 import 'package:mobile/bloc/loading/states.dart';
 import 'package:mobile/dto/chat_dto.dart';
-import 'package:mobile/generated/support-chat.pbgrpc.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/services/film_service.dart';
-import 'package:mobile/services/session_service.dart';
 import 'package:mobile/services/subscription_service.dart';
-import 'package:grpc/grpc.dart' as $grpc;
-import 'package:mobile/generated/support-chat.pb.dart' as grpc_models;
+
 
 class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
 
   final _filmService = getit<FilmServiceBase>();
   final _subscriptionService = getit<SubscriptionServiceBase>();
-  final _grpcSupportChatClient = SupportChatServiceClient(getit<$grpc.ClientChannel>());
-  final _sessionDataProvider = getit<SessionDataProvider>();
 
   LoadingBloc() : super(LoadingState()) {
     on<LoadingAllFilmsEvent>((event, emit) async {
@@ -49,16 +44,6 @@ class LoadingBloc extends Bloc<LoadingEventBase, LoadingStateBase> {
         (s) => emit(LoadedState(data: s, builder: event.builder)),
         (f) => emit(ErrorState(error: f))
       );
-    });
-    on<LoadingChatPageEvent>((event, emit) async {
-      emit(LoadingState());
-
-      var token = 'Bearer ${await _sessionDataProvider.getJwtToken()}';
-      final history = await _grpcSupportChatClient.history(grpc_models.HistoryRequest(roomId: ""), options: $grpc.CallOptions(metadata: {"Authorization": token}));
-
-      final receive = _grpcSupportChatClient.receiveMessage(ReceiveRequest(roomId: ""), options: $grpc.CallOptions(metadata: {"Authorization": token}));
-
-      emit(LoadedState(data: ChatDto(history: history, receive:receive), builder: event.builder));
     });
   }
 }

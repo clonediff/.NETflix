@@ -22,10 +22,7 @@ MaterialPageRoute? buildRoutes(RouteSettings settings) {
           create: (_) => LoadingBloc(),
           child: const FilmPageBuilder(),
       ),
-      NavigationRoutes.supportChat => BlocProvider(
-        create: (_) => LoadingBloc(),
-        child: const ChatPageBuilder(),
-      ),
+      NavigationRoutes.supportChat => const ChatPage(),
       NavigationRoutes.subscriptions => BlocProvider(
         create: (_) => LoadingBloc(),
         child: const SubscriptionsPage()

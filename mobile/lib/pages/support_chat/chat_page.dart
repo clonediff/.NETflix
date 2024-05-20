@@ -9,37 +9,16 @@ import 'package:grpc/grpc.dart' as $grpc;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
-import 'package:mobile/bloc/loading/bloc.dart';
-import 'package:mobile/bloc/loading/events.dart';
-import 'package:mobile/bloc/loading/state_parser.dart';
-import 'package:mobile/bloc/loading/states.dart';
+import 'package:mobile/bloc/chat/bloc.dart';
 import 'package:mobile/constants/colors.dart';
 import 'package:mobile/constants/styles.dart';
-import 'package:mobile/dto/chat_dto.dart';
 import 'package:mobile/generated/support-chat.pbgrpc.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/services/session_service.dart';
 import 'package:mobile/widgets/header.dart';
 
-class ChatPageBuilder extends StatelessWidget {
-  const ChatPageBuilder({super.key});
-
-  ChatPage chatPageBuilderBuilder(ChatDto chat) {
-    return ChatPage(chat: chat,);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var roomId = ModalRoute.of(context)?.settings.arguments! as String;
-    context.read<LoadingBloc>().add(LoadingChatPageEvent(builder: chatPageBuilderBuilder, roomId: roomId));
-    return const BlocBuilder<LoadingBloc, LoadingStateBase>(builder: parseState);
-  }
-}
-
 class ChatPage extends StatefulWidget {
-  final ChatDto chat;
-
-  const ChatPage({super.key, required this.chat});
+  const ChatPage({super.key});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -48,15 +27,6 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _sessionDataProvider = getit<SessionDataProvider>();
   final _grpcSupportChatClient = SupportChatServiceClient(getit<$grpc.ClientChannel>());
-  bool loadingCalled = false;
-  List<MessageResponse> messages = [];
-
-  @override
-  void dispose() {
-    widget.chat.receive.cancel();
-
-    super.dispose();
-  }
 
   Future<void> onTextSend(TextMessageRequest message) async {
     var token = 'Bearer ${await _sessionDataProvider.getJwtToken()}';
@@ -70,25 +40,18 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: widget.chat.receive,
-      builder: (context, receive) {
-        messages.addAll(widget.chat.history.messages);
-        List<Widget> children = [
-          ChatMessagesList(messages: widget.chat.history.messages),
-          ChatInput(onTextSend: onTextSend, onFileSend: onFileSend)
-        ];
-        if(receive.hasData) {
-          messages.add(receive.data!);
-        }
-        return Scaffold(
-          appBar: const Header(),
-          backgroundColor: DotNetflixColors.mainBackgroundColor,
-          body: Stack(
-            children: children,
+    return Scaffold(
+      appBar: const Header(),
+      backgroundColor: DotNetflixColors.mainBackgroundColor,
+      body: Stack(
+        children: [
+          BlocProvider<GetSupportChatBloc>(
+            create: (context) => GetSupportChatBloc(),
+            child: const ChatMessagesStreamBuilder(),
           ),
-        );
-      },
+          ChatInput(onTextSend: onTextSend, onFileSend: onFileSend),
+        ],
+      ),
     );
   }
 }
@@ -104,8 +67,8 @@ class ChatInput extends StatefulWidget {
 }
 
 class _ChatInputState extends State<ChatInput> {
-
   final TextEditingController _textController = TextEditingController();
+  final picker = ImagePicker();
   Icon imagesCount = const Icon(Icons.filter, color: Colors.white);
   List<File> images = [];
 
@@ -193,8 +156,7 @@ class _ChatInputState extends State<ChatInput> {
     }
   }
 
-  Future _getImage() async {
-    final picker = ImagePicker();
+  Future<void> _getImage() async {
     final pickedFiles = await picker.pickMultiImage(limit: 5);
     final xFiles = pickedFiles;
     setState(() {
@@ -238,6 +200,53 @@ class _ChatInputState extends State<ChatInput> {
 
 }
 
+class ChatMessagesStreamBuilder extends StatefulWidget {
+  const ChatMessagesStreamBuilder({super.key});
+
+  @override
+  State<ChatMessagesStreamBuilder> createState() => _ChatMessagesStreamBuilderState();
+}
+
+class _ChatMessagesStreamBuilderState extends State<ChatMessagesStreamBuilder> {
+  bool loadingCalled = false;
+  List<MessageResponse> messages = [];
+
+  @override
+  Widget build(BuildContext context) {
+    if(!loadingCalled)
+    {
+      var roomId = ModalRoute.of(context)?.settings.arguments! as String;
+      context.read<GetSupportChatBloc>().add(GetSupportChatEvent.getSupportChatInfo(roomId));
+      setState(() {
+        loadingCalled = true;
+      });
+    }
+    return BlocBuilder<GetSupportChatBloc, GetSupportChatState>(
+      builder: (context, state) => state.when(
+          loading: () => const Center(
+              child: CircularProgressIndicator(color: Colors.white)
+          ),
+          loaded: (chat) {
+            if(messages.isEmpty && chat.history.messages.isNotEmpty) {
+              messages = [...chat.history.messages];
+            }
+            return StreamBuilder(
+              stream: chat.receive,
+              builder: (context, receive) {
+                List<Widget> children = [ChatMessagesList(messages: messages)];
+                if(receive.hasData && !messages.contains(receive.data!)) {
+                  messages.add(receive.data!);
+                }
+                return Stack(children: children,);
+              },
+            );
+          }
+      ),
+    );
+
+  }
+}
+
 class ChatMessagesList extends StatelessWidget {
   final List<MessageResponse> messages;
 
@@ -245,60 +254,64 @@ class ChatMessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      padding: const EdgeInsets.only(top: 10,bottom: 10),
-      shrinkWrap: true,
-      itemCount: messages.length,
-      itemBuilder: (context, index) {
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          padding: const EdgeInsets.only(top: 10,bottom: 10),
+          shrinkWrap: true,
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
 
-        var message = messages[index];
-        var messageText = message.messageType == MessageType.text
-            ? Text(utf8.decode(message.content.value), style: DotNetflixTextStyles.mainTextStyle,)
-            : const Text("");
+            var message = messages[index];
+            var messageText = message.messageType == MessageType.text
+                ? Text(utf8.decode(message.content.value), style: DotNetflixTextStyles.mainTextStyle,)
+                : const Text("");
 
-        var dateFormat = DateFormat('yyyy-MM-dd hh:mm')
-            .format(DateTime.fromMillisecondsSinceEpoch((message.sendingDate.seconds * 1000).toInt()));
+            var dateFormat = DateFormat('yyyy-MM-dd hh:mm')
+                .format(message.sendingDate.toDateTime(toLocal: true));
 
-        Widget image = const Center(child: CircularProgressIndicator(color: Colors.white));
-        if(message.messageType != MessageType.text) {
-          var deserialized = json.decode(utf8.decode(message.content.value));
-          image = Image.memory(base64.decode(deserialized['Bytes']), width: 120, height: 160, fit: BoxFit.cover,);
-        }
-        else {
-          image = const Text('Не удалось загрузить данные', style: TextStyle(color: Colors.white));
-        }
+            Widget image = const Center(child: CircularProgressIndicator(color: Colors.white));
+            if(message.messageType != MessageType.text) {
+              var deserialized = json.decode(utf8.decode(message.content.value));
+              image = Image.memory(base64.decode(deserialized['Bytes']), width: 120, height: 160, fit: BoxFit.cover,);
+            }
+            else {
+              image = const Text('Не удалось загрузить данные', style: TextStyle(color: Colors.white));
+            }
 
+            var content = Column(
+              children: [
+                message.messageType == MessageType.text
+                    ? messageText
+                    : image,
+                Text(
+                  dateFormat,
+                  style: const TextStyle(color: Colors.grey, fontSize: 10),
+                  textAlign: TextAlign.right,
+                )
+              ],
+            );
 
-        var content = Column(
-          children: [
-            message.messageType == MessageType.text
-                ? messageText
-                : image,
-            Text(
-              dateFormat,
-              style: const TextStyle(color: Colors.grey, fontSize: 10),
-              textAlign: TextAlign.right,
-            )
-          ],
-        );
-
-        return Container(
-          padding: const EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
-          child: Align(
-            alignment: (message.belongsToSender ? Alignment.topRight : Alignment.topLeft),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: (message.belongsToSender ? DotNetflixColors.receiverMessageColor : DotNetflixColors.senderMessageColor),
-                border: Border.all(color: Colors.black)
+            return Container(
+              padding: const EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
+              child: Align(
+                alignment: (message.belongsToSender ? Alignment.topRight : Alignment.topLeft),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: (message.belongsToSender ? DotNetflixColors.receiverMessageColor : DotNetflixColors.senderMessageColor),
+                    border: Border.all(color: Colors.black)
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  child: content,
+                ),
               ),
-              padding: const EdgeInsets.all(16),
-              child: content,
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }
